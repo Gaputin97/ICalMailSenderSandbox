@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class EnrollmentServiceImpl implements EnrollmentService {
-
     private TokenService tokenService;
     private RestTemplate restTemplate;
     private EnrollmentConstants enrollmentConstants;
