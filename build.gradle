@@ -23,5 +23,6 @@ dependencies {
     
     compile("org.springframework.boot:spring-boot-starter-web:$springVersion")
     compile("org.springframework.boot:spring-boot-devtools:$springVersion")
+    compile("org.springframework.boot:spring-boot-starter-mail:$springVersion")
     compile("org.springframework.boot:spring-boot-starter-data-mongodb:$springVersion")
 }
