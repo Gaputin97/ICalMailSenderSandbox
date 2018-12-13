@@ -22,13 +22,14 @@ import java.util.List;
 
 @Service
 public class MeetingServiceImpl implements MeetingService {
-
     private TokenService tokenService;
     private MeetingConstants meetingConstants;
     private RestTemplate restTemplate;
 
     @Autowired
-    public MeetingServiceImpl(TokenService tokenService, MeetingConstants meetingConstants, RestTemplate restTemplate) {
+    public MeetingServiceImpl(TokenService tokenService,
+                              MeetingConstants meetingConstants,
+                              RestTemplate restTemplate) {
         this.tokenService = tokenService;
         this.meetingConstants = meetingConstants;
         this.restTemplate = restTemplate;
@@ -42,7 +43,7 @@ public class MeetingServiceImpl implements MeetingService {
         HttpEntity httpEntity = new HttpEntity<>(httpHeaders);
         Meeting meeting;
         try {
-            ResponseEntity<Meeting> meetingResponseEntity = restTemplate.exchange(meetingConstants.getMeetingByIdEndpoint(),
+            ResponseEntity<Meeting> meetingResponseEntity = restTemplate.exchange(meetingConstants.getMeetingEndpointById(),
                     HttpMethod.GET, httpEntity, Meeting.class, id);
             meeting = meetingResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {

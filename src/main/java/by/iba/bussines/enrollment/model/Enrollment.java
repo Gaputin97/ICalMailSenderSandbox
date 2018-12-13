@@ -1,7 +1,6 @@
 package by.iba.bussines.enrollment.model;
 
 public class Enrollment {
-
     private String id;
     private String eventId;
 

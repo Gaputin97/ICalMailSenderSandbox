@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Meeting {
-
     private String description;
     private float duration;
     private String endDateTime;

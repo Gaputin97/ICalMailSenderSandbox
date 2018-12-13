@@ -12,10 +12,12 @@ import org.springframework.context.annotation.Import;
 public class ApplicationConfiguration {
     private MongoConfiguration mongoConfiguration;
     private RestTemplateConfiguration restTemplateConfiguration;
+    private SwaggerConfiguration swaggerConfiguration;
 
     @Autowired
-    public ApplicationConfiguration(MongoConfiguration mongoConfiguration, RestTemplateConfiguration restTemplateConfiguration) {
+    public ApplicationConfiguration(MongoConfiguration mongoConfiguration, RestTemplateConfiguration restTemplateConfiguration, SwaggerConfiguration swaggerConfiguration) {
         this.mongoConfiguration = mongoConfiguration;
         this.restTemplateConfiguration = restTemplateConfiguration;
+        this.swaggerConfiguration = swaggerConfiguration;
     }
 }

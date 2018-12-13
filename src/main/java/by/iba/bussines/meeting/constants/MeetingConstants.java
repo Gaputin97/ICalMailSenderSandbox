@@ -1,30 +1,26 @@
 package by.iba.bussines.meeting.constants;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Scope;
 
-@Component
 @PropertySource("classpath:endpoint.properties")
-@ConfigurationProperties
 public class MeetingConstants {
-
+    @Value("${meeting_by_id_endpoint}")
     private String meetingByIdEndpoint;
+
+    @Value("${all_meetings_endpoint}")
     private String allMeetingsEndpoint;
 
-    public String getMeetingByIdEndpoint() {
-        return meetingByIdEndpoint;
+    @Bean
+    @Scope("prototype")
+    public String getMeetingEndpointById(int meetingId) {
+        return meetingByIdEndpoint + Integer.toString(meetingId);
     }
 
-    public void setMeetingByIdEndpoint(String meetingByIdEndpoint) {
-        this.meetingByIdEndpoint = meetingByIdEndpoint;
-    }
-
+    @Bean
     public String getAllMeetingsEndpoint() {
         return allMeetingsEndpoint;
-    }
-
-    public void setAllMeetingsEndpoint(String allMeetingsEndpoint) {
-        this.allMeetingsEndpoint = allMeetingsEndpoint;
     }
 }

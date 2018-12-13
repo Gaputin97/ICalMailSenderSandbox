@@ -18,9 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class TokenServiceImpl implements TokenService {
-
     private RestTemplate restTemplate;
-
     private TokenConstants tokenConstants;
 
     @Autowired

@@ -7,11 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Event {
-
+    private String id;
     private String description;
     private float duration;
     private String endDateTime;
-    private String id;
     private String chainId;
     private String invitationResourcesTemplate;
     private String invitationTemplate;

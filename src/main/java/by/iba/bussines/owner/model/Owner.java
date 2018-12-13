@@ -1,7 +1,6 @@
 package by.iba.bussines.owner.model;
 
 public class Owner {
-
     private String email;
     private String name;
 
@@ -19,6 +18,14 @@ public class Owner {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Owner{" +
+                "email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
 
