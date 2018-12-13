@@ -2,22 +2,32 @@ package by.iba.bussines.enrollment.model;
 
 public class Enrollment {
 
-    private String id;
-    private String eventId;
+    private float id;
+    private String parentId;
+    private String userEmail;
 
-    public String getId() {
+    public float getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public String getParentId() {
+        return parentId;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setId(float id) {
         this.id = id;
     }
 
-    public String getEventId() {
-        return eventId;
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 
-    public void setEventId(String eventId) {
-        this.eventId = eventId;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
+
 }
