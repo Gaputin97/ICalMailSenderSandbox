@@ -1,4 +1,4 @@
-package by.iba.bussines.time.slot.model;
+package by.iba.bussines.timeslot.model;
 
 import java.util.ArrayList;
 import java.util.List;

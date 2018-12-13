@@ -1,7 +1,7 @@
 package by.iba.bussines.event.model;
 
 import by.iba.bussines.owner.model.Owner;
-import by.iba.bussines.time.slot.model.TimeSlot;
+import by.iba.bussines.timeslot.model.TimeSlot;
 
 import java.util.ArrayList;
 import java.util.List;

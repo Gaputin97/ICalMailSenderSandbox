@@ -43,8 +43,8 @@ public class MeetingServiceImpl implements MeetingService {
         HttpEntity httpEntity = new HttpEntity<>(httpHeaders);
         Meeting meeting;
         try {
-            ResponseEntity<Meeting> meetingResponseEntity = restTemplate.exchange(meetingConstants.getMeetingEndpointById(),
-                    HttpMethod.GET, httpEntity, Meeting.class, id);
+            ResponseEntity<Meeting> meetingResponseEntity = restTemplate.exchange(meetingConstants.getMeetingEndpointById(id),
+                    HttpMethod.GET, httpEntity, Meeting.class);
             meeting = meetingResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             throw new ServiceException(e.getMessage());

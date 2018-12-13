@@ -1,5 +1,8 @@
 package by.iba.bussines.token.model;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class JavaWebToken {
     private String jwt;
 
