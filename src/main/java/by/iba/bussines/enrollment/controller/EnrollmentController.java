@@ -14,10 +14,10 @@ public class EnrollmentController {
     private EnrollmentService enrollmentService;
 
     @ApiOperation(value = "Get enrollment by email and meetingId", response = Enrollment.class)
-    @RequestMapping(value = "/enrollment/get/{meetingId}/{email}", method = RequestMethod.GET)
-    public Enrollment getEnrollmentByEmailAndMeetingId(@PathVariable(value = "meetingId") String meetingId,
-                                                       @PathVariable(value = "email") String email,
+    @RequestMapping(value = "/enrollment/get/{parentId}/{userEmail}", method = RequestMethod.GET)
+    public Enrollment getEnrollmentByEmailAndMeetingId(@PathVariable(value = "parentId") String parentId,
+                                                       @PathVariable(value = "userEmail") String userEmail,
                                                        HttpServletRequest request) {
-        return enrollmentService.getEnrollmentByEmailAndMeeting(request, meetingId, email);
+        return enrollmentService.getEnrollmentByEmailAndMeeting(request, parentId, userEmail);
     }
 }

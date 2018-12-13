@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 @PropertySource("classpath:endpoint.properties")
 @ConfigurationProperties
 public class EnrollmentConstants {
-
     private String enrollmentByEmailAndMeetingId;
 
     public String getEnrollmentByEmailAndMeetingId(String meetingId, String email) {

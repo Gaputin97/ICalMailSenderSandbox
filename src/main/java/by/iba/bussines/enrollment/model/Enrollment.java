@@ -1,9 +1,11 @@
 package by.iba.bussines.enrollment.model;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "enrollment")
 public class Enrollment {
+    @Id
     private float id;
     private String parentId;
     private String userEmail;
