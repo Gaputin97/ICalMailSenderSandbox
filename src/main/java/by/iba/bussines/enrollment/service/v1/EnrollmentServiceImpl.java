@@ -1,12 +1,11 @@
 package by.iba.bussines.enrollment.service.v1;
 
 import by.iba.bussines.enrollment.constants.EnrollmentConstants;
-import by.iba.bussines.enrollment.dao.v1.EnrollmentRepositoryImpl;
+import by.iba.bussines.enrollment.repository.v1.EnrollmentRepositoryImpl;
 import by.iba.bussines.enrollment.model.Enrollment;
 import by.iba.bussines.enrollment.service.EnrollmentService;
 import by.iba.bussines.exception.ServiceException;
 import by.iba.bussines.token.model.JavaWebToken;
-import by.iba.bussines.token.service.TokenService;
 import by.iba.bussines.token.service.v1.TokenServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -39,14 +38,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public Enrollment getEnrollmentByEmailAndMeeting(HttpServletRequest request, String parentId, String email) {
+    public Enrollment getEnrollmentByEmailAndMeetingId(HttpServletRequest request, String parentId, String email) {
         JavaWebToken javaWebToken = tokenService.getJavaWebToken(request);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set(HttpHeaders.AUTHORIZATION, "Bearer " + javaWebToken.getJwt());
         HttpEntity httpEntity = new HttpEntity<>(httpHeaders);
         Enrollment enrollment;
         try {
-            ResponseEntity<Enrollment> enrollmentResponseEntity = restTemplate.exchange(enrollmentConstants.getEnrollmentByEmailAndMeetingId(parentId, email),
+            ResponseEntity<Enrollment> enrollmentResponseEntity = restTemplate.exchange(enrollmentConstants.getEnrollmentEndpointByEmailAndMeetingId(parentId, email),
                     HttpMethod.GET, httpEntity, Enrollment.class);
             enrollment = enrollmentResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
@@ -56,8 +55,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public Enrollment getLocalEnrollmentByEmailAndMeeting(String parentId, String email) {
-        return enrollmentRepository.getByEmailAbdMeetingId(parentId, email);
+    public Enrollment getLocalEnrollmentByEmailAndMeetingId(String parentId, String email) {
+        return enrollmentRepository.getByEmailAndMeetingId(parentId, email);
     }
 
     @Override

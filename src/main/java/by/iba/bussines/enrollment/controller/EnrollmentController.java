@@ -18,15 +18,14 @@ public class EnrollmentController {
     public Enrollment getEnrollmentByEmailAndMeetingId(@PathVariable(value = "parentId") String parentId,
                                                        @PathVariable(value = "userEmail") String userEmail,
                                                        HttpServletRequest request) {
-        return enrollmentService.getEnrollmentByEmailAndMeeting(request, parentId, userEmail);
+        return enrollmentService.getEnrollmentByEmailAndMeetingId(request, parentId, userEmail);
     }
 
-
     @ApiOperation(value = "Get enrollment by email and meetingId from local database", response = Enrollment.class)
-    @RequestMapping(value = "/enrollment/getFromLocal/{parentId}/{userEmail}", method = RequestMethod.GET)
+    @RequestMapping(value = "/enrollment/local/get/{parentId}/{userEmail}", method = RequestMethod.GET)
     public Enrollment getLocalEnrollmentByEmailAndMeetingId(@PathVariable(value = "parentId") String parentId,
                                                             @PathVariable(value = "userEmail") String userEmail) {
-        return enrollmentService.getLocalEnrollmentByEmailAndMeeting(parentId, userEmail);
+        return enrollmentService.getLocalEnrollmentByEmailAndMeetingId(parentId, userEmail);
     }
 
     @ApiOperation(value = "Save enrollment to local database", response = Enrollment.class)

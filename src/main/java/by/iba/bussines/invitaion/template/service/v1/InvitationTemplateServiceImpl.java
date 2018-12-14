@@ -22,14 +22,16 @@ import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class InvitationTemplateServiceImpl implements InvitationTemplateService {
-
     private TokenServiceImpl tokenService;
     private RestTemplate restTemplate;
     private InvitationTemplateConstants invitationTemplateConstants;
     private MeetingServiceImpl meetingService;
 
     @Autowired
-    public InvitationTemplateServiceImpl(TokenServiceImpl tokenService, RestTemplate restTemplate, InvitationTemplateConstants invitationTemplateConstants, MeetingServiceImpl meetingService) {
+    public InvitationTemplateServiceImpl(TokenServiceImpl tokenService,
+                                         RestTemplate restTemplate,
+                                         InvitationTemplateConstants invitationTemplateConstants,
+                                         MeetingServiceImpl meetingService) {
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
         this.invitationTemplateConstants = invitationTemplateConstants;

@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 @PropertySource("classpath:endpoint.properties")
 @ConfigurationProperties
 public class EnrollmentConstants {
-    private String enrollmentByEmailAndMeetingId;
+    private String enrollmentEndpointByEmailAndMeetingIdEndpoint;
 
-    public String getEnrollmentByEmailAndMeetingId(String meetingId, String email) {
-        return enrollmentByEmailAndMeetingId + meetingId + "/" + email;
+    public String getEnrollmentEndpointByEmailAndMeetingId(String parentId, String email) {
+        return enrollmentEndpointByEmailAndMeetingIdEndpoint + parentId + "/" + email;
     }
 
-    public void setEnrollmentByEmailAndMeetingId(String enrollmentByEmailAndMeetingId) {
-        this.enrollmentByEmailAndMeetingId = enrollmentByEmailAndMeetingId;
+    public void setEnrollmentEndpointByEmailAndMeetingIdEndpoint(String enrollmentEndpointByEmailAndMeetingIdEndpoint) {
+        this.enrollmentEndpointByEmailAndMeetingIdEndpoint = enrollmentEndpointByEmailAndMeetingIdEndpoint;
     }
 }

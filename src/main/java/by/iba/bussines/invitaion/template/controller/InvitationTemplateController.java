@@ -20,20 +20,20 @@ public class InvitationTemplateController {
     }
 
     @ApiOperation(value = "Get invitation template by id from template service", response = InvitationTemplate.class)
-    @RequestMapping(value = "/template/getById", method = RequestMethod.POST)
-    public InvitationTemplate getInvitationTemplateById(@RequestParam(value = "id") String id, HttpServletRequest request) {
+    @RequestMapping(value = "/template/get/{id}", method = RequestMethod.POST)
+    public InvitationTemplate getInvitationTemplateById(@PathVariable(value = "id") String id, HttpServletRequest request) {
         return invitationTemplateService.getInvitationTemplateById(request, id);
     }
 
     @ApiOperation(value = "Get invitation template by code from template service", response = InvitationTemplate.class)
-    @RequestMapping(value = "/template/getByCode", method = RequestMethod.POST)
-    public InvitationTemplate getInvitationTemplateByCode(@RequestParam(value = "code") String code, HttpServletRequest request) {
+    @RequestMapping(value = "/template/code/get/{code}", method = RequestMethod.POST)
+    public InvitationTemplate getInvitationTemplateByCode(@PathVariable(value = "code") String code, HttpServletRequest request) {
         return invitationTemplateService.getInvitationTemplateByCode(request, code);
     }
 
     @ApiOperation(value = "Get invitation template by meeting id from template service", response = InvitationTemplate.class)
-    @RequestMapping(value = "/template/getByMeetingId", method = RequestMethod.POST)
-    public InvitationTemplate getInvitationTemplateByMeetingId(@RequestParam(value = "meetingId") String meetingId, HttpServletRequest request) {
+    @RequestMapping(value = "/template/meeting/get/{meetingId}", method = RequestMethod.POST)
+    public InvitationTemplate getInvitationTemplateByMeetingId(@PathVariable(value = "meetingId") String meetingId, HttpServletRequest request) {
         return invitationTemplateService.getInvitationTemplateByMeetingId(request, meetingId);
     }
 
