@@ -1,6 +1,6 @@
-package by.iba.bussines.time.slot.service;
+package by.iba.bussines.timeslot.service;
 
-import by.iba.bussines.time.slot.model.TimeSlot;
+import by.iba.bussines.timeslot.model.TimeSlot;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

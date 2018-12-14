@@ -1,7 +1,7 @@
-package by.iba.bussines.time.slot.controller;
+package by.iba.bussines.timeslot.controller;
 
-import by.iba.bussines.time.slot.model.TimeSlot;
-import by.iba.bussines.time.slot.service.v1.TimeSlotServiceImpl;
+import by.iba.bussines.timeslot.model.TimeSlot;
+import by.iba.bussines.timeslot.service.v1.TimeSlotServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
