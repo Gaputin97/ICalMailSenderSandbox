@@ -2,6 +2,7 @@ package by.iba.bussines.enrollment.controller;
 
 import by.iba.bussines.enrollment.model.Enrollment;
 import by.iba.bussines.enrollment.service.EnrollmentService;
+import by.iba.bussines.status.InsertStatus;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,7 @@ public class EnrollmentController {
 
     @ApiOperation(value = "Save enrollment to local database", response = Enrollment.class)
     @RequestMapping(value = "/enrollment/save", method = RequestMethod.POST)
-    public void saveEnrollment(@RequestBody Enrollment enrollment) {
-        enrollmentService.saveEnrollment(enrollment);
+    public InsertStatus saveEnrollment(@RequestBody Enrollment enrollment) {
+        return enrollmentService.saveEnrollment(enrollment);
     }
 }

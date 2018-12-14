@@ -44,4 +44,5 @@ public class Enrollment {
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
     }
+
 }
