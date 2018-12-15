@@ -1,7 +1,6 @@
 package by.iba.bussines.exception.advice;
 
 public class AdditionalException {
-
     private String message;
 
     public AdditionalException(String message) {
