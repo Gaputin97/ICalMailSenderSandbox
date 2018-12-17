@@ -1,6 +1,6 @@
-package by.iba.bussines.session.service.parser;
+package by.iba.bussines.session.parser;
 
-import by.iba.bussines.sender.algorithm.constants.DateConstants;
+import by.iba.bussines.session.constants.SessionConstants;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
@@ -9,9 +9,10 @@ import java.util.Date;
 
 @Component
 public class SessionParser {
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat(DateConstants.DATE_FORMAT);
 
-    public static Date stringToDate(String date) {
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat(SessionConstants.DATE_FORMAT);
+
+    public Date stringToDate(String date) {
         Date returnedDate;
         try {
             returnedDate = dateFormat.parse(date);

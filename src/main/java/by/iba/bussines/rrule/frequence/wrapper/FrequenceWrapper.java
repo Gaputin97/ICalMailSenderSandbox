@@ -1,26 +1,16 @@
-package by.iba.bussines.sender.algorithm.wrappers;
+package by.iba.bussines.rrule.frequence.wrapper;
 
 
-import by.iba.bussines.sender.algorithm.entity.RruleFreqType;
+import by.iba.bussines.rrule.frequence.model.RruleFreqType;
 
 public class FrequenceWrapper {
 
     private RruleFreqType rruleFreqType;
     private int amountOfDurationMultipleToFreq;
-    private long minimumIntervalOfFreq;
 
-    public FrequenceWrapper(RruleFreqType rruleFreqType, int minimumDuration, long minimumIntervalOfFreq) {
+    public FrequenceWrapper(RruleFreqType rruleFreqType, int minimumDuration) {
         this.rruleFreqType = rruleFreqType;
         this.amountOfDurationMultipleToFreq = minimumDuration;
-        this.minimumIntervalOfFreq = minimumIntervalOfFreq;
-    }
-
-    public long getMinimumIntervalOfFreq() {
-        return minimumIntervalOfFreq;
-    }
-
-    public void setMinimumIntervalOfFreq(long minimumIntervalOfFreq) {
-        this.minimumIntervalOfFreq = minimumIntervalOfFreq;
     }
 
     public RruleFreqType getRruleFreqType() {
