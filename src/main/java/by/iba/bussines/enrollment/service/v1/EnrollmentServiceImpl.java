@@ -4,7 +4,8 @@ import by.iba.bussines.enrollment.constants.EnrollmentConstants;
 import by.iba.bussines.enrollment.repository.v1.EnrollmentRepositoryImpl;
 import by.iba.bussines.enrollment.model.Enrollment;
 import by.iba.bussines.enrollment.service.EnrollmentService;
-import by.iba.bussines.exception.ServiceException;
+import by.iba.exception.ServiceException;
+import by.iba.bussines.status.InsertStatus;
 import by.iba.bussines.token.model.JavaWebToken;
 import by.iba.bussines.token.service.v1.TokenServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public void saveEnrollment(Enrollment enrollment) {
-        enrollmentRepository.save(enrollment);
+    public InsertStatus saveEnrollment(Enrollment enrollment) {
+        return enrollmentRepository.save(enrollment);
     }
 }

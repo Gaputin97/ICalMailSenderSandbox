@@ -2,7 +2,9 @@ package by.iba.bussines.enrollment.repository.v1;
 
 import by.iba.bussines.enrollment.repository.EnrollmentRepository;
 import by.iba.bussines.enrollment.model.Enrollment;
-import by.iba.bussines.exception.ServiceException;
+
+import by.iba.exception.RepositoryException;
+import by.iba.bussines.status.InsertStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -15,18 +17,24 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
     private MongoTemplate mongoTemplate;
 
     @Override
-    public void save(Enrollment enrollment) {
-        mongoTemplate.save(enrollment);
+    public InsertStatus save(Enrollment enrollment) {
+        try {
+            mongoTemplate.save(enrollment);
+        } catch (Exception e) {
+            new RepositoryException(e.getMessage());
+        }
+        InsertStatus enrollmentInsertStatus = new InsertStatus();
+        enrollmentInsertStatus.setMessage("Enrollment was inserted successfully");
+        return enrollmentInsertStatus;
     }
 
     @Override
     public Enrollment getByEmailAndMeetingId(String parentId, String userEmail) {
         Query query = new Query(Criteria.where("parentId").is(parentId).and("userEmail").is(userEmail));
         Enrollment enrollment = mongoTemplate.findOne(query, Enrollment.class);
-        if ((enrollment) != null) {
-            return enrollment;
-        } else {
-            throw new ServiceException("Can't find any enrollment");
+        if (enrollment == null) {
+            throw new RepositoryException("There are no enrollment with parentId " + parentId + " and user email " + userEmail);
         }
+        return enrollment;
     }
 }

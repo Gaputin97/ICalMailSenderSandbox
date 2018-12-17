@@ -1,6 +1,6 @@
 package by.iba.bussines.invitaion.template.service.v1;
 
-import by.iba.bussines.exception.ServiceException;
+import by.iba.exception.ServiceException;
 import by.iba.bussines.invitaion.template.constants.InvitationTemplateConstants;
 import by.iba.bussines.invitaion.template.model.InvitationTemplate;
 import by.iba.bussines.invitaion.template.service.InvitationTemplateService;

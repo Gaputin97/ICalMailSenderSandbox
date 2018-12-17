@@ -1,6 +1,6 @@
 package by.iba.bussines.meeting.service.v1;
 
-import by.iba.bussines.exception.ServiceException;
+import by.iba.exception.ServiceException;
 import by.iba.bussines.meeting.constants.MeetingConstants;
 import by.iba.bussines.meeting.model.Meeting;
 import by.iba.bussines.meeting.service.MeetingService;
