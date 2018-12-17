@@ -4,6 +4,8 @@ import by.iba.bussines.enrollment.model.Enrollment;
 import by.iba.bussines.status.InsertStatus;
 
 public interface EnrollmentRepository {
-    InsertStatus save(Enrollment enrollment);
+
     Enrollment getByEmailAndMeetingId(String parentId, String email);
+
+    InsertStatus save(Enrollment enrollment);
 }
