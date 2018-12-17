@@ -32,11 +32,6 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
     public Enrollment getByEmailAndMeetingId(String parentId, String userEmail) {
         Query query = new Query(Criteria.where("parentId").is(parentId).and("userEmail").is(userEmail));
         Enrollment enrollment = mongoTemplate.findOne(query, Enrollment.class);
-        if ((enrollment) != null) {
-            return enrollment;
-        } else {
-            throw new NotFoundEnrollmentException("Can not find any enrollment");
-        }
         if (enrollment == null) {
             throw new DaoException("There are no enrollment with parentId " + parentId + " and user email " + userEmail);
         }

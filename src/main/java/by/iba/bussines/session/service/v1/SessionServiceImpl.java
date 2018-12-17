@@ -24,5 +24,6 @@ public class SessionServiceImpl implements SessionService {
     public List<Date> getEventSessions(HttpServletRequest request, String meetingId) {
      List<TimeSlot> timeSlots = timeSlotService.getMeetingTimeSlots(request, meetingId);
      List<Date> sessions;
+     return null;
     }
 }
