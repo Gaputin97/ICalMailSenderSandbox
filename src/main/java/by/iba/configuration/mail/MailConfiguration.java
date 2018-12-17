@@ -1,6 +1,6 @@
 package by.iba.configuration.mail;
 
-import by.iba.bussines.sender.constants.SenderConstants;
+import by.iba.configuration.mail.constants.SenderConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,23 +14,19 @@ public class MailConfiguration {
     private SenderConstants senderConstants;
 
     @Bean
-    public JavaMailSender getJavaMailSender() {
+    public JavaMailSender configureJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        String host = senderConstants.getHost();
-        String protocol = senderConstants.getProtocol();
-        int port = senderConstants.getPort();
-        String username = senderConstants.getUsername();
-        String password = senderConstants.getPassword();
-        mailSender.setHost(host);
-        mailSender.setProtocol(protocol);
-        mailSender.setPort(port);
-        mailSender.setUsername(username);
-        mailSender.setPassword(password);
+        mailSender.setUsername(senderConstants.getUsername());
+        mailSender.setPassword(senderConstants.getPassword());
+        mailSender.setHost(senderConstants.getHost());
+        mailSender.setPort(senderConstants.getPort());
+        mailSender.setProtocol(senderConstants.getProtocol());
+
         Properties properties = mailSender.getJavaMailProperties();
-        properties.put("mail.smtp.starttls.enable", "true");
+        properties.setProperty("mail.smtp.auth", "true");
         properties.setProperty("mail.transport.protocol", senderConstants.getProtocol());
         properties.setProperty("mail.debug", "true");
-        properties.put("mail.smtp.starttls.required", "true");
+        properties.setProperty("mail.smtp.starttls.enable", "true");
         return mailSender;
     }
 }

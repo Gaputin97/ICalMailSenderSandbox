@@ -21,36 +21,44 @@ public class TimeSlot {
         return duration;
     }
 
-    public String getEndDateTime() {
-        return endDateTime;
-    }
-
-    public String getFacilityInformation() {
-        return facilityInformation;
-    }
-
-    public float getId() {
-        return id;
-    }
-
-    public String getStartDateTime() {
-        return startDateTime;
-    }
-
     public void setDuration(float duration) {
         this.duration = duration;
+    }
+
+    public String getEndDateTime() {
+        return endDateTime;
     }
 
     public void setEndDateTime(String endDateTime) {
         this.endDateTime = endDateTime;
     }
 
+    public String getFacilityInformation() {
+        return facilityInformation;
+    }
+
     public void setFacilityInformation(String facilityInformation) {
         this.facilityInformation = facilityInformation;
     }
 
+    public float getId() {
+        return id;
+    }
+
     public void setId(float id) {
         this.id = id;
+    }
+
+    public List<String> getResourceEmails() {
+        return resourceEmails;
+    }
+
+    public void setResourceEmails(List<String> resourceEmails) {
+        this.resourceEmails = resourceEmails;
+    }
+
+    public String getStartDateTime() {
+        return startDateTime;
     }
 
     public void setStartDateTime(String startDateTime) {

@@ -41,5 +41,4 @@ public class TokenServiceImpl implements TokenService {
         }
         return javaWebToken;
     }
-
 }

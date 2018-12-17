@@ -2,7 +2,7 @@ package by.iba.bussines.enrollment.repository.v1;
 
 import by.iba.bussines.enrollment.repository.EnrollmentRepository;
 import by.iba.bussines.enrollment.model.Enrollment;
-import by.iba.bussines.exception.database.NotFoundEnrollmentException;
+import by.iba.bussines.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -26,7 +26,7 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
         if ((enrollment) != null) {
             return enrollment;
         } else {
-            throw new NotFoundEnrollmentException("Can not find any enrollment");
+            throw new ServiceException("Can't find any enrollment");
         }
     }
 }
