@@ -8,10 +8,5 @@ import javax.servlet.http.HttpServletRequest;
 public interface EnrollmentService {
     Enrollment getEnrollmentByEmailAndMeetingId(HttpServletRequest request, String parentId, String email);
     Enrollment getLocalEnrollmentByEmailAndMeetingId(String parentId, String email);
-    void saveEnrollment(Enrollment enrollment);
-    Enrollment getEnrollmentByEmailAndMeeting(HttpServletRequest request, String parentId, String email);
-
-    Enrollment getLocalEnrollmentByEmailAndMeeting(String parentId, String email);
-
     InsertStatus saveEnrollment(Enrollment enrollment);
 }
