@@ -2,8 +2,8 @@ package by.iba.bussines.enrollment.repository.v1;
 
 import by.iba.bussines.enrollment.repository.EnrollmentRepository;
 import by.iba.bussines.enrollment.model.Enrollment;
-import by.iba.bussines.exception.database.NotFoundEnrollmentException;
-import by.iba.bussines.exception.DaoException;
+
+import by.iba.exception.RepositoryException;
 import by.iba.bussines.status.InsertStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -21,7 +21,7 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
         try {
             mongoTemplate.save(enrollment);
         } catch (Exception e) {
-            new DaoException(e.getMessage());
+            new RepositoryException(e.getMessage());
         }
         InsertStatus enrollmentInsertStatus = new InsertStatus();
         enrollmentInsertStatus.setMessage("Enrollment was inserted successfully");
@@ -33,7 +33,7 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
         Query query = new Query(Criteria.where("parentId").is(parentId).and("userEmail").is(userEmail));
         Enrollment enrollment = mongoTemplate.findOne(query, Enrollment.class);
         if (enrollment == null) {
-            throw new DaoException("There are no enrollment with parentId " + parentId + " and user email " + userEmail);
+            throw new RepositoryException("There are no enrollment with parentId " + parentId + " and user email " + userEmail);
         }
         return enrollment;
     }

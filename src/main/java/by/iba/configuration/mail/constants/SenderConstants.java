@@ -1,4 +1,4 @@
-package by.iba.bussines.sender.constants;
+package by.iba.configuration.mail.constants;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;

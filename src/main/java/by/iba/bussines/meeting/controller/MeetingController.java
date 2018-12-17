@@ -15,13 +15,13 @@ public class MeetingController {
     private MeetingServiceImpl meetingService;
 
     @ApiOperation(value = "Get meeting by id from meeting service", response = Meeting.class)
-    @RequestMapping(value = "/meeting/get/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/meeting/get/{id}", method = RequestMethod.GET)
     public Meeting getMeetingById(@PathVariable(value = "id") String id, HttpServletRequest request) {
         return meetingService.getMeetingById(request, id);
     }
 
     @ApiOperation(value = "Get all meetings from meeting service", response = Meeting[].class)
-    @RequestMapping(value = "/meeting/get", method = RequestMethod.POST)
+    @RequestMapping(value = "/meeting/get", method = RequestMethod.GET)
     public List<Meeting> getAllMeetings(HttpServletRequest request) {
         return meetingService.getAllMeetings(request);
     }

@@ -1,4 +1,4 @@
-package by.iba.bussines.exception.advice;
+package by.iba.exception.advice;
 
 public class AdditionalException {
     private String message;
