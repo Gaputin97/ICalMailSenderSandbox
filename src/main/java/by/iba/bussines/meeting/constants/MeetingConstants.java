@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties
 public class MeetingConstants {
     private String meetingByIdEndpoint;
-
     private String allMeetingsEndpoint;
 
     public String getMeetingEndpointById(String meetingId) {

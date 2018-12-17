@@ -12,16 +12,12 @@ import java.util.List;
 @RestController
 public class TimeSlotController {
 
+    @Autowired
     private TimeSlotServiceImpl timeSlotService;
 
-    @Autowired
-    public TimeSlotController(TimeSlotServiceImpl timeSlotService) {
-        this.timeSlotService = timeSlotService;
-    }
-
     @ApiOperation(value = "Get time slots of meeting", response = TimeSlot[].class)
-    @RequestMapping(value = "/timeslot/getByMeetingId", method = RequestMethod.POST)
-    public List<TimeSlot> getMeetingTimeSlot(@RequestParam(value = "meetingId") String meetingId, HttpServletRequest request) {
+    @RequestMapping(value = "/timeslot/get/{meetingId}", method = RequestMethod.GET)
+    public List<TimeSlot> getMeetingTimeSlot(@PathVariable(value = "meetingId") String meetingId, HttpServletRequest request) {
         return timeSlotService.getMeetingTimeSlots(request, meetingId);
     }
 }
