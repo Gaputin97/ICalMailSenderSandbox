@@ -1,5 +1,5 @@
 package by.iba.bussines.meeting.type;
 
-public enum MeetingType {
-    SINGLE, COMPLEX, RECCURENCE
+public enum MeetingType{
+    SINGLE, COMPLEX, RECURRENCE
 }
