@@ -1,7 +1,7 @@
 package by.iba.bussines.enrollment.service;
 
 import by.iba.bussines.enrollment.model.Enrollment;
-import by.iba.bussines.status.InsertStatus;
+import by.iba.bussines.status.insert.InsertStatus;
 
 import javax.servlet.http.HttpServletRequest;
 

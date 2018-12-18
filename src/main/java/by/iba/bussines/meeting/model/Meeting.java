@@ -2,25 +2,47 @@ package by.iba.bussines.meeting.model;
 
 import by.iba.bussines.owner.model.Owner;
 import by.iba.bussines.timeslot.model.TimeSlot;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+@Document(collection = "meeting")
 public class Meeting {
+    @Id
+    private BigInteger id;
+    @Field
     private String description;
+    @Field
     private float duration;
+    @Field
     private String endDateTime;
-    private String id;
+    @Field
     private String invitationResourcesTemplate;
+    @Field
     private String invitationTemplate;
+    @Field
     private String location;
+    @Field
     private String locationInfo;
+    @Field
     private Owner owner;
+    @Field
     private String startDateTime;
+    @Field
     private String summary;
+    @Field
     private List<TimeSlot> timeSlots = new ArrayList();
+    @Field
     private String timeZone;
+    @Field
     private String title;
+
+    public Meeting() {
+    }
 
     public String getDescription() {
         return description;
@@ -46,11 +68,11 @@ public class Meeting {
         this.endDateTime = endDateTime;
     }
 
-    public String getId() {
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 
