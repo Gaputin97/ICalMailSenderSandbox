@@ -22,7 +22,7 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
         try {
             mongoTemplate.save(enrollment);
         } catch (Exception e) {
-            new RepositoryException(e.getMessage());
+            throw new RepositoryException(e.getMessage());
         }
         return new InsertStatus("Enrollment was added successfully");
     }
