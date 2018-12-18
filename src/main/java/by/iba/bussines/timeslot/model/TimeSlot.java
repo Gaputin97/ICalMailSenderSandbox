@@ -3,7 +3,7 @@ package by.iba.bussines.timeslot.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TimeSlot {
+public class TimeSlot{
 
     private float duration;
 
@@ -64,4 +64,5 @@ public class TimeSlot {
     public void setStartDateTime(String startDateTime) {
         this.startDateTime = startDateTime;
     }
+
 }

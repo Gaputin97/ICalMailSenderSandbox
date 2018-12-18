@@ -1,4 +1,4 @@
-package by.iba.bussines.sender.algorithm.constants;
+package by.iba.bussines.rrule.constants;
 
 public class EnumConstants {
     public static final int ORDINAL_OF_WEEKLY = 3;

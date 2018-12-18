@@ -1,4 +1,6 @@
-package by.iba.bussines.sender.algorithm.entity;
+package by.iba.bussines.rrule.model;
+
+import by.iba.bussines.rrule.frequence.model.RruleFreqType;
 
 import java.util.ArrayList;
 import java.util.Date;

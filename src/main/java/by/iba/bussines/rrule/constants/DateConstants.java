@@ -1,8 +1,6 @@
-package by.iba.bussines.sender.algorithm.constants;
+package by.iba.bussines.rrule.constants;
 
 public class DateConstants {
-
-    public static final String DATE_FORMAT = "MM/dd/yyyy HH:mm:ss";
 
     public static final long MILLISECONDS_IN_HOUR = 3600000;
     public static final long MILLISECONDS_IN_DAY = 86400000;
