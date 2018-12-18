@@ -4,6 +4,8 @@ import by.iba.bussines.enrollment.repository.EnrollmentRepository;
 import by.iba.bussines.enrollment.model.Enrollment;
 
 import by.iba.exception.RepositoryException;
+
+import by.iba.bussines.status.insert.InsertStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -22,7 +24,6 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
         } catch (Exception e) {
             new RepositoryException(e.getMessage());
         }
-
         return new InsertStatus("Enrollment was added successfully");
     }
 

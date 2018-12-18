@@ -2,32 +2,55 @@ package by.iba.bussines.event.model;
 
 import by.iba.bussines.owner.model.Owner;
 import by.iba.bussines.timeslot.model.TimeSlot;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+@Document(collection = "event")
 public class Event {
-    private String id;
+    @Id
+    private BigInteger id;
+    @Field
     private String description;
+    @Field
     private float duration;
-    private String endDateTime;
-    private String chainId;
-    private String invitationResourcesTemplate;
-    private String invitationTemplate;
-    private String location;
-    private String locationInfo;
-    private Owner owner;
+    @Field
     private String startDateTime;
+    @Field
+    private String endDateTime;
+    @Field
+    private String chainId;
+    @Field
+    private String invitationResourcesTemplate;
+    @Field
+    private String invitationTemplate;
+    @Field
+    private String location;
+    @Field
+    private String locationInfo;
+    @Field
+    private Owner owner;
+    @Field
     private String summary;
+    @Field
     private List<TimeSlot> timeSlots = new ArrayList();
+    @Field
     private String timeZone;
+    @Field
     private String title;
 
-    public String getId() {
+    public Event() {
+    }
+
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 
@@ -45,6 +68,14 @@ public class Event {
 
     public void setDuration(float duration) {
         this.duration = duration;
+    }
+
+    public String getStartDateTime() {
+        return startDateTime;
+    }
+
+    public void setStartDateTime(String startDateTime) {
+        this.startDateTime = startDateTime;
     }
 
     public String getEndDateTime() {
@@ -101,14 +132,6 @@ public class Event {
 
     public void setOwner(Owner owner) {
         this.owner = owner;
-    }
-
-    public String getStartDateTime() {
-        return startDateTime;
-    }
-
-    public void setStartDateTime(String startDateTime) {
-        this.startDateTime = startDateTime;
     }
 
     public String getSummary() {

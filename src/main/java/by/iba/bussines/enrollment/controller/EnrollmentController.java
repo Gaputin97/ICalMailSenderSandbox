@@ -1,8 +1,9 @@
 package by.iba.bussines.enrollment.controller;
 
 import by.iba.bussines.enrollment.model.Enrollment;
-import by.iba.bussines.enrollment.repository.v1.InsertStatus;
 import by.iba.bussines.enrollment.service.EnrollmentService;
+import by.iba.bussines.status.insert.InsertStatus;
+
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
