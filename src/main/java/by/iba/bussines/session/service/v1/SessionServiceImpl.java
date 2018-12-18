@@ -1,5 +1,7 @@
 package by.iba.bussines.session.service.v1;
 
+import by.iba.bussines.meeting.model.Meeting;
+import by.iba.bussines.meeting.service.v1.MeetingServiceImpl;
 import by.iba.bussines.session.model.Session;
 import by.iba.bussines.session.parser.SessionParser;
 import by.iba.bussines.session.service.SessionService;
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,12 +21,14 @@ public class SessionServiceImpl implements SessionService {
     private TimeSlotServiceImpl timeSlotService;
     private SessionParser sessionParser;
     private SessionSorter sessionSorter;
+    private MeetingServiceImpl meetingService;
 
     @Autowired
-    public SessionServiceImpl(TimeSlotServiceImpl timeSlotService, SessionParser sessionParser, SessionSorter sessionSorter) {
+    public SessionServiceImpl(TimeSlotServiceImpl timeSlotService, SessionParser sessionParser, SessionSorter sessionSorter, MeetingServiceImpl meetingService) {
         this.timeSlotService = timeSlotService;
         this.sessionParser = sessionParser;
         this.sessionSorter = sessionSorter;
+        this.meetingService = meetingService;
     }
 
     @Override
@@ -33,9 +36,7 @@ public class SessionServiceImpl implements SessionService {
         List<TimeSlot> timeSlots = timeSlotService.getMeetingTimeSlots(request, meetingId);
         List<Session> sessions = new ArrayList<>(timeSlots.size());
         for (TimeSlot timeSlot : timeSlots) {
-            Date startTimeSlotDate = sessionParser.stringToDate(timeSlot.getStartDateTime());
-            Date endTimeSlotDate = sessionParser.stringToDate(timeSlot.getEndDateTime());
-            Session session = new Session(startTimeSlotDate, endTimeSlotDate);
+            Session session = sessionParser.timeSlotToSession(timeSlot);
             sessions.add(session);
         }
         return sessions;
@@ -45,5 +46,13 @@ public class SessionServiceImpl implements SessionService {
     public List<Session> sortAndGetEventSessions(HttpServletRequest request, String meetingId) {
         List<Session> sessions = getEventSessions(request, meetingId);
         return sessionSorter.sortAndGetSessions(sessions);
+    }
+
+    @Override
+    public boolean doAllSessionsTheSame(HttpServletRequest request, String meetingId) {
+        List<Session> sessions = sessionParser.timeSlotListToSessionList(timeSlotService.getMeetingTimeSlots(request, meetingId));
+        List<Long> sessionDurations = new ArrayList<>(sessions.size());
+        sessions.forEach(x -> sessionDurations.add(x.getDuration()));
+        return sessionDurations.stream().allMatch(sessionDurations.get(0)::equals);
     }
 }

@@ -6,10 +6,12 @@ public class Session implements Comparable<Session> {
 
     private Date startDate;
     private Date endDate;
+    private long duration;
 
     public Session(Date startDate, Date endDate) {
         this.startDate = startDate;
         this.endDate = endDate;
+        duration = endDate.getTime() - startDate.getTime();
     }
 
     public Date getStartDate() {
@@ -26,6 +28,14 @@ public class Session implements Comparable<Session> {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
     }
 
     @Override

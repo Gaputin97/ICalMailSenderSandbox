@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface TimeSlotService {
     List<TimeSlot> getMeetingTimeSlots(HttpServletRequest request, String meetingId);
+
+    int getAmountsOfTimeSlots(HttpServletRequest request, String meetingId);
 }
