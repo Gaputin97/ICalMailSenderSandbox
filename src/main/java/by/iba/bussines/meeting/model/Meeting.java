@@ -19,6 +19,8 @@ public class Meeting {
     @Field
     private float duration;
     @Field
+    private String startDateTime;
+    @Field
     private String endDateTime;
     @Field
     private String invitationResourcesTemplate;
@@ -30,8 +32,6 @@ public class Meeting {
     private String locationInfo;
     @Field
     private Owner owner;
-    @Field
-    private String startDateTime;
     @Field
     private String summary;
     @Field

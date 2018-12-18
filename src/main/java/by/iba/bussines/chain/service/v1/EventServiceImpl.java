@@ -2,7 +2,7 @@ package by.iba.bussines.chain.service.v1;
 
 import by.iba.bussines.chain.model.Chain;
 import by.iba.bussines.chain.service.EventService;
-import by.iba.bussines.sender.algorithm.entity.Event;
+import by.iba.bussines.event.model.Event;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
