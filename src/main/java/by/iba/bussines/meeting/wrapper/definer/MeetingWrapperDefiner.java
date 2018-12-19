@@ -47,29 +47,25 @@ public class MeetingWrapperDefiner {
         this.singleMeetingWrapperBuilder = singleMeetingWrapperBuilder;
     }
 
-    public <T extends MeetingWrapper> T defineMeetingWrapper(Meeting meeting, String meetingId, List<String> recipients) {
+    public <T extends MeetingWrapper> T defineMeetingWrapper(Meeting meeting) {
         MeetingWrapper meetingWrapper;
         int amountOfTimeSlots = meeting.getTimeSlots().size();
         if (amountOfTimeSlots == meetingWrapperConstants.getAmountOfSessionsForSingleEvent()) {
             TimeSlot meetingTimeSlot = meeting.getTimeSlots().get(meetingWrapperConstants.getNumberOfFirstTimeSlot());
             Session meetingSession = sessionParser.timeSlotToSession(meetingTimeSlot);
-            meetingWrapper = singleMeetingWrapperBuilder.setSession(meetingSession)
-                    .setMeetingId(meetingId)
-                    .setRecipients(recipients)
+            meetingWrapper = singleMeetingWrapperBuilder
+                    .setSession(meetingSession)
                     .build();
         } else {
             List<Session> sessions = sessionParser.timeSlotListToSessionList(meeting.getTimeSlots());
             if (sessionChecker.doAllSessionsTheSame(meeting)) {
                 Rrule rrule = rruleDefiner.defineRrule(sessions);
-                meetingWrapper = recurrenceMeetingWrapperBuilder.setRrule(rrule)
-                        .setMeetingId(meetingId)
-                        .setRecipients(recipients)
+                meetingWrapper = recurrenceMeetingWrapperBuilder
+                        .setRrule(rrule)
                         .build();
-
             } else {
-                meetingWrapper = complexMeetingWrapperBuilder.setSessions(sessions)
-                        .setMeetingId(meetingId)
-                        .setRecipients(recipients)
+                meetingWrapper = complexMeetingWrapperBuilder
+                        .setSessions(sessions)
                         .build();
             }
         }

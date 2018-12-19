@@ -19,8 +19,6 @@ public class RecurrenceMeetingWrapperBuilder extends AbstractMeetingWrapperBuild
 
     public RecurrenceMeetingWrapper build() {
         RecurrenceMeetingWrapper reccurenceMeetingWrapper = new RecurrenceMeetingWrapper();
-        reccurenceMeetingWrapper.setMeetingId(super.meetingId);
-        reccurenceMeetingWrapper.setRecipients(super.recipients);
         reccurenceMeetingWrapper.setRrule(rrule);
         return reccurenceMeetingWrapper;
     }

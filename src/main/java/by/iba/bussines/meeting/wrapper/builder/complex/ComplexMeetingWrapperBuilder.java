@@ -22,8 +22,6 @@ public class ComplexMeetingWrapperBuilder extends AbstractMeetingWrapperBuilder<
 
     public ComplexMeetingWrapper build() {
         ComplexMeetingWrapper complexMeetingWrapper = new ComplexMeetingWrapper();
-        complexMeetingWrapper.setMeetingId(super.meetingId);
-        complexMeetingWrapper.setRecipients(super.recipients);
         complexMeetingWrapper.setSessions(sessions);
         return complexMeetingWrapper;
     }

@@ -19,8 +19,6 @@ public class SingleMeetingWrapperBuilder extends AbstractMeetingWrapperBuilder<S
 
     public SingleMeetingWrapper build() {
         SingleMeetingWrapper singleMeetingWrapper = new SingleMeetingWrapper();
-        singleMeetingWrapper.setMeetingId(super.meetingId);
-        singleMeetingWrapper.setRecipients(super.recipients);
         singleMeetingWrapper.setSession(session);
         return singleMeetingWrapper;
     }
