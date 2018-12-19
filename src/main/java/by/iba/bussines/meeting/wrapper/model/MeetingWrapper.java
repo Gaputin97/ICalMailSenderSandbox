@@ -1,6 +1,6 @@
 package by.iba.bussines.meeting.wrapper.model;
 
-import by.iba.bussines.calendar.factory.type.MeetingType;
+import by.iba.bussines.meeting.type.MeetingType;
 
 public class MeetingWrapper {
     protected final MeetingType meetingType;

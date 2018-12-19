@@ -1,9 +1,9 @@
-package by.iba.bussines.calendar.factory.meetings.define.recurrence;
+package by.iba.bussines.calendar.creator.type.recurrence;
 
-import by.iba.bussines.calendar.factory.template.calendar.generator.preparing.CalendarTextFieldBreaker;
+import by.iba.bussines.calendar.creator.text_preparing.CalendarTextFieldBreaker;
 import by.iba.bussines.meeting.model.Meeting;
 import by.iba.bussines.meeting.service.MeetingService;
-import by.iba.bussines.meeting.wrapper.model.single.SingleMeetingWrapper;
+import by.iba.bussines.meeting.wrapper.model.reccurence.RecurrenceMeetingWrapper;
 import by.iba.bussines.session.model.Session;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
@@ -33,11 +33,11 @@ public class RecurrenceCalendarInvitationTemplate {
         this.meetingService = meetingService;
     }
 
-    public Calendar createRecurrenceCalendarInvitationTemplate(SingleMeetingWrapper singleMeetingWrapper, HttpServletRequest request) {
-        Session timeSlot = singleMeetingWrapper.getSession();
+    public Calendar createRecurrenceCalendarInvitationTemplate(RecurrenceMeetingWrapper recurrenceMeetingWrapper, HttpServletRequest request) {
+        Session timeSlot = recurrenceMeetingWrapper.getSession();
         DateTime startDateTime = new DateTime(timeSlot.getStartDate());
         DateTime endDateTime = new DateTime(timeSlot.getEndDate());
-        Meeting meeting = meetingService.getMeetingById(request,singleMeetingWrapper.getMeetingId());
+        Meeting meeting = meetingService.getMeetingById(request, recurrenceMeetingWrapper.getMeetingId());
 
         requestCalendar.getComponents().add(new VEvent(startDateTime, endDateTime,));
         net.fortuna.ical4j.model.Component event = requestCalendar.getComponents().getComponent(net.fortuna.ical4j.model.Component.VEVENT);

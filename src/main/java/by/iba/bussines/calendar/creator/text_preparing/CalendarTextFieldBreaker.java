@@ -1,4 +1,4 @@
-package by.iba.bussines.calendar.factory.template.calendar.generator.preparing;
+package by.iba.bussines.calendar.creator.text_preparing;
 
 import org.springframework.stereotype.Component;
 

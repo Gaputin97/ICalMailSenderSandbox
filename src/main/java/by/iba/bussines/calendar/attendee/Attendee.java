@@ -1,11 +1,10 @@
-package by.iba.bussines.calendar.factory.model;
+package by.iba.bussines.calendar.attendee;
 
 import javax.validation.constraints.Email;
 
-public class AttendeeModel {
+public class Attendee {
     private String commonName;
-    @Email
-    private String email;
+    private @Email String email;
 
     public String getCommonName() {
         return commonName;

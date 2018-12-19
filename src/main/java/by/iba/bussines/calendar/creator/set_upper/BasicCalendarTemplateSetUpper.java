@@ -1,4 +1,4 @@
-package by.iba.bussines.calendar.factory.template.calendar.generator;
+package by.iba.bussines.calendar.creator.set_upper;
 
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.property.CalScale;
@@ -9,35 +9,35 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CalendarTemplateGenerator {
+public class BasicCalendarTemplateSetUpper {
     private static final String PRODUCT_IDENTIFIER = "-//Your Learning//EN";
 
-    private Calendar getDefinedCalendarFields() {
-        Calendar calendar = new Calendar();
-        calendar.getProperties().add(Version.VERSION_2_0);
-        calendar.getProperties().add(CalScale.GREGORIAN);
-        calendar.getProperties().add(new ProdId(PRODUCT_IDENTIFIER));
-        return calendar;
-    }
-
     @Bean("requestCalendar")
-    public Calendar generateRequestMethodCalendar() {
-        Calendar calendar = getDefinedCalendarFields();
+    public Calendar setUpRequestMethod() {
+        Calendar calendar = setUpCommonFields();
         calendar.getProperties().add(Method.REQUEST);
         return calendar;
     }
 
     @Bean("publishCalendar")
-    public Calendar generatePublishMethodCalendar() {
-        Calendar calendar = getDefinedCalendarFields();
+    public Calendar setUpPublishMethod() {
+        Calendar calendar = setUpCommonFields();
         calendar.getProperties().add(Method.PUBLISH);
         return calendar;
     }
 
     @Bean("cancelCalendar")
-    public Calendar generateCancelMethodCalendar() {
-        Calendar calendar = getDefinedCalendarFields();
+    public Calendar setUpCancelMethod() {
+        Calendar calendar = setUpCommonFields();
         calendar.getProperties().add(Method.CANCEL);
+        return calendar;
+    }
+
+    private Calendar setUpCommonFields() {
+        Calendar calendar = new Calendar();
+        calendar.getProperties().add(Version.VERSION_2_0);
+        calendar.getProperties().add(CalScale.GREGORIAN);
+        calendar.getProperties().add(new ProdId(PRODUCT_IDENTIFIER));
         return calendar;
     }
 }

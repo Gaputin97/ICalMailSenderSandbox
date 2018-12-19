@@ -1,6 +1,6 @@
-package by.iba.bussines.calendar.factory.meetings.define.single;
+package by.iba.bussines.calendar.creator.type.single;
 
-import by.iba.bussines.calendar.factory.template.calendar.generator.preparing.CalendarTextFieldBreaker;
+import by.iba.bussines.calendar.creator.text_preparing.CalendarTextFieldBreaker;
 import by.iba.bussines.meeting.model.Meeting;
 import by.iba.bussines.meeting.service.MeetingService;
 import by.iba.bussines.meeting.wrapper.model.single.SingleMeetingWrapper;

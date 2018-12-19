@@ -1,6 +1,5 @@
 package by.iba.bussines.meeting.wrapper.builder.complex;
 
-
 import by.iba.bussines.meeting.wrapper.builder.AbstractMeetingWrapperBuilder;
 import by.iba.bussines.meeting.wrapper.model.complex.ComplexMeetingWrapper;
 import by.iba.bussines.session.model.Session;

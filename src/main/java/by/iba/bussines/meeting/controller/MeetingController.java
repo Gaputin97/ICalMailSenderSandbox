@@ -20,7 +20,7 @@ public class MeetingController {
         return meetingService.getMeetingById(request, id);
     }
 
-    @ApiOperation(value = "Get all meetings from meeting service", response = Meeting[].class)
+    @ApiOperation(value = "Get all fields from meeting service", response = Meeting[].class)
     @RequestMapping(value = "/meeting/get", method = RequestMethod.GET)
     public List<Meeting> getAllMeetings(HttpServletRequest request) {
         return meetingService.getAllMeetings(request);
