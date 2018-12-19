@@ -7,7 +7,6 @@ import by.iba.bussines.session.parser.SessionParser;
 import by.iba.bussines.session.service.SessionService;
 import by.iba.bussines.session.sorter.SessionSorter;
 import by.iba.bussines.timeslot.model.TimeSlot;
-import by.iba.bussines.timeslot.service.v1.TimeSlotServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +17,12 @@ import java.util.List;
 @Service
 public class SessionServiceImpl implements SessionService {
 
-    private TimeSlotServiceImpl timeSlotService;
     private SessionParser sessionParser;
     private SessionSorter sessionSorter;
     private MeetingServiceImpl meetingService;
 
     @Autowired
-    public SessionServiceImpl(TimeSlotServiceImpl timeSlotService, SessionParser sessionParser, SessionSorter sessionSorter, MeetingServiceImpl meetingService) {
-        this.timeSlotService = timeSlotService;
+    public SessionServiceImpl(SessionParser sessionParser, SessionSorter sessionSorter, MeetingServiceImpl meetingService) {
         this.sessionParser = sessionParser;
         this.sessionSorter = sessionSorter;
         this.meetingService = meetingService;
