@@ -11,7 +11,6 @@ import java.util.List;
 
 @Service
 public class MeetingWrapperServiceImpl implements MeetingWrapperService {
-
     private TimeSlotServiceImpl timeSlotService;
     private SessionServiceImpl sessionService;
 

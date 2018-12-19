@@ -1,9 +1,9 @@
-package by.iba.bussines.meeting.type;
+package by.iba.bussines.calendar.factory.type;
 
 import net.fortuna.ical4j.model.property.Method;
 
 public enum MeetingType {
-    SINGLE(Method.REQUEST), COMPLEX(Method.PUBLISH), RECURRENCE(Method.REQUEST);
+    SIMPLE(Method.REQUEST), CANCEL(Method.CANCEL), COMPLEX(Method.PUBLISH);
 
     private Method method;
 

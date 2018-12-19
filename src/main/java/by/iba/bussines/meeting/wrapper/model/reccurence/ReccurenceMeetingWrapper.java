@@ -1,15 +1,14 @@
 package by.iba.bussines.meeting.wrapper.model.reccurence;
 
-import by.iba.bussines.meeting.type.MeetingType;
+import by.iba.bussines.calendar.factory.type.MeetingType;
 import by.iba.bussines.meeting.wrapper.model.AbstractMeetingWrapper;
 import by.iba.bussines.rrule.model.Rrule;
 
 public class ReccurenceMeetingWrapper extends AbstractMeetingWrapper {
-
     private Rrule rrule;
 
     public ReccurenceMeetingWrapper() {
-        super(MeetingType.RECCURENCE);
+        super(MeetingType.SIMPLE);
     }
 
     public Rrule getRrule() {
