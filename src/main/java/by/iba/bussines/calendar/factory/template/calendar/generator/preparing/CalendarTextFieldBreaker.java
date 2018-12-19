@@ -3,7 +3,7 @@ package by.iba.bussines.calendar.factory.template.calendar.generator.preparing;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CalendarTextBreaker {
+public class CalendarTextFieldBreaker {
     public String lineBreak(String stringField) {
         StringBuffer sourceStringBuilder = new StringBuffer(stringField);
         if (stringField.length() > 65) {

@@ -1,7 +1,6 @@
 package by.iba.bussines.calendar.factory.template.calendar.generator;
 
 import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.CalScale;
 import net.fortuna.ical4j.model.property.Method;
 import net.fortuna.ical4j.model.property.ProdId;
@@ -10,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GenerateCalendarTemplate {
+public class CalendarTemplateGenerator {
     private static final String PRODUCT_IDENTIFIER = "-//Your Learning//EN";
 
     private Calendar getDefinedCalendarFields() {

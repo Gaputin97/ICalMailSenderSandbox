@@ -1,8 +1,8 @@
 package by.iba.bussines.calendar.factory.meetings.define;
 
-import by.iba.bussines.calendar.factory.meetings.type.complex.ComplexCalendarInvitationTemplate;
-import by.iba.bussines.calendar.factory.meetings.type.recurrence.RecurrenceCalendarInvitationTemplate;
-import by.iba.bussines.calendar.factory.meetings.type.single.SimpleCalendarInvitationTemplate;
+import by.iba.bussines.calendar.factory.meetings.define.complex.ComplexCalendarInvitationTemplate;
+import by.iba.bussines.calendar.factory.meetings.define.recurrence.RecurrenceCalendarInvitationTemplate;
+import by.iba.bussines.calendar.factory.meetings.define.single.SimpleCalendarInvitationTemplate;
 import by.iba.bussines.meeting.wrapper.model.MeetingWrapper;
 import by.iba.bussines.meeting.wrapper.model.complex.ComplexMeetingWrapper;
 import by.iba.bussines.meeting.wrapper.model.reccurence.RecurrenceMeetingWrapper;
@@ -33,11 +33,11 @@ public class TypeOfMeetingDefiner {
                 break;
             case RECURRENCE:
                 RecurrenceMeetingWrapper recurrenceMeetingWrapper = ((RecurrenceMeetingWrapper) wrapper);
-                simpleCalendarInvitationTemplate.createSingleMeetingInvitationTemplate(recurrenceMeetingWrapper);
+                recurrenceCalendarInvitationTemplate.createRecurrenceCalendarInvitationTemplate(recurrenceMeetingWrapper);
                 break;
             case COMPLEX:
                 ComplexMeetingWrapper complexMeetingWrapper = ((ComplexMeetingWrapper) wrapper);
-                simpleCalendarInvitationTemplate.createSingleMeetingInvitationTemplate(complexMeetingWrapper);
+                complexCalendarInvitationTemplate.createComplexCalendarInvitationTemplate(complexMeetingWrapper);
                 break;
         }
     }
