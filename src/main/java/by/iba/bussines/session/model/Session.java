@@ -3,7 +3,6 @@ package by.iba.bussines.session.model;
 import java.util.Date;
 
 public class Session implements Comparable<Session> {
-
     private Date startDate;
     private Date endDate;
     private long duration;

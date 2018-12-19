@@ -1,6 +1,6 @@
 package by.iba.bussines.calendar.factory.meetings.attendee;
 
-import by.iba.bussines.calendar.attendee.AttendeeModel;
+import by.iba.bussines.calendar.attendee.model.AttendeeModel;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.parameter.Cn;
 import net.fortuna.ical4j.model.parameter.Rsvp;

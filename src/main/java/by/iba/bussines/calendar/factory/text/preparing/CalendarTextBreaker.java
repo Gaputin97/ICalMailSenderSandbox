@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CalendarTextBreaker {
-    public String lineBreakAndGet(String stringField) {
+    public String lineBreak(String stringField) {
         StringBuffer sourceStringBuilder = new StringBuffer(stringField);
         if (stringField.length() > 65) {
             int countOfLines = stringField.length() / 65;

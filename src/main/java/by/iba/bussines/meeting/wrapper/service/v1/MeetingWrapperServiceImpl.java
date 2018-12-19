@@ -9,6 +9,7 @@ import by.iba.bussines.meeting.wrapper.constants.MeetingWrapperConstants;
 import by.iba.bussines.meeting.wrapper.model.AbstractMeetingWrapper;
 import by.iba.bussines.meeting.wrapper.model.complex.ComplexMeetingWrapper;
 import by.iba.bussines.meeting.wrapper.model.reccurence.ReccurenceMeetingWrapper;
+import by.iba.bussines.meeting.wrapper.model.reccurence.RecurrenceMeetingWrapper;
 import by.iba.bussines.meeting.wrapper.model.single.SingleMeetingWrapper;
 import by.iba.bussines.meeting.wrapper.service.MeetingWrapperService;
 import by.iba.bussines.rrule.definer.RruleDefiner;
@@ -60,7 +61,7 @@ public class MeetingWrapperServiceImpl implements MeetingWrapperService {
             TimeSlot meetingTimeSlot = meeting.getTimeSlots().get(meetingWrapperConstants.getNumberOfFirstTimeSlot());
             Session meetingSession = sessionParser.timeSlotToSession(meetingTimeSlot);
             meetingWrapper = new SingleMeetingWrapper();
-            meetingWrapper.setMeetingType(MeetingType.SIMPLE);
+            meetingWrapper.setMeetingType(MeetingType.SINGLE);
             meetingWrapper.setMeetingId(meetingId);
             meetingWrapper.setRecipients(recipients);
             complexMeetingWrapperBuilder.setMeetingId(meetingId);
@@ -69,11 +70,11 @@ public class MeetingWrapperServiceImpl implements MeetingWrapperService {
             List<Session> sessions = sessionParser.timeSlotListToSessionList(meeting.getTimeSlots());
             if (sessionChecker.doAllSessionsTheSame(meeting)) {
                 Rrule rrule = rruleDefiner.defineRrule(sessions);
-                meetingWrapper = new ReccurenceMeetingWrapper();
+                meetingWrapper = new RecurrenceMeetingWrapper();
                 meetingWrapper.setRecipients(recipients);
                 meetingWrapper.setMeetingId(meetingId);
                 meetingWrapper.setMeetingType(MeetingType.RECURRENCE);
-                ((ReccurenceMeetingWrapper) meetingWrapper).setRrule(rrule);
+                ((RecurrenceMeetingWrapper) meetingWrapper).setRrule(rrule);
             } else {
                 meetingWrapper = new ComplexMeetingWrapper();
                 meetingWrapper.setRecipients(recipients);

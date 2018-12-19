@@ -1,10 +1,10 @@
 package by.iba.bussines.sender.service.v1;
 
 import by.iba.bussines.sender.service.InstallationEventSender;
-import by.iba.bussines.sender.service.method.Method;
 import by.iba.bussines.status.send.CalendarSendingStatus;
 import by.iba.exception.CalendarSendingException;
 import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.property.Method;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
