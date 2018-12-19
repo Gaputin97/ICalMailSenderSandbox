@@ -13,4 +13,27 @@ public abstract class AbstractMeetingWrapper {
         this.meetingType = meetingType;
     }
 
+    public MeetingType getMeetingType() {
+        return meetingType;
+    }
+
+    public void setMeetingType(MeetingType meetingType) {
+        this.meetingType = meetingType;
+    }
+
+    public List<String> getRecipients() {
+        return recipients;
+    }
+
+    public void setRecipients(List<String> recipients) {
+        this.recipients = recipients;
+    }
+
+    public String getMeetingId() {
+        return meetingId;
+    }
+
+    public void setMeetingId(String meetingId) {
+        this.meetingId = meetingId;
+    }
 }

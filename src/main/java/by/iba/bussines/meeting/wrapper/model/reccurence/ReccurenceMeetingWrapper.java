@@ -8,7 +8,7 @@ public class ReccurenceMeetingWrapper extends AbstractMeetingWrapper {
     private Rrule rrule;
 
     public ReccurenceMeetingWrapper() {
-        super(MeetingType.SIMPLE);
+        super(MeetingType.RECURRENCE);
     }
 
     public Rrule getRrule() {

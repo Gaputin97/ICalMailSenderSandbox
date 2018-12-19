@@ -33,7 +33,8 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public List<Session> getEventSessions(HttpServletRequest request, String meetingId) {
-        List<TimeSlot> timeSlots = timeSlotService.getMeetingTimeSlots(request, meetingId);
+        Meeting meeting = meetingService.getMeetingById(request, meetingId);
+        List<TimeSlot> timeSlots = meeting.getTimeSlots();
         List<Session> sessions = new ArrayList<>(timeSlots.size());
         for (TimeSlot timeSlot : timeSlots) {
             Session session = sessionParser.timeSlotToSession(timeSlot);
@@ -48,11 +49,5 @@ public class SessionServiceImpl implements SessionService {
         return sessionSorter.sortAndGetSessions(sessions);
     }
 
-    @Override
-    public boolean doAllSessionsTheSame(HttpServletRequest request, String meetingId) {
-        List<Session> sessions = sessionParser.timeSlotListToSessionList(timeSlotService.getMeetingTimeSlots(request, meetingId));
-        List<Long> sessionDurations = new ArrayList<>(sessions.size());
-        sessions.forEach(x -> sessionDurations.add(x.getDuration()));
-        return sessionDurations.stream().allMatch(sessionDurations.get(0)::equals);
-    }
+
 }

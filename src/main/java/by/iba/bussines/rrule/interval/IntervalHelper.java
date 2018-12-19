@@ -2,7 +2,9 @@ package by.iba.bussines.rrule.interval;
 
 import by.iba.bussines.rrule.constants.DateConstants;
 import by.iba.bussines.rrule.frequence.model.RruleFreqType;
+import org.springframework.stereotype.Component;
 
+@Component
 public class IntervalHelper {
 
     public long defineInterval(RruleFreqType rruleFreqType, long timeBetweenSessions, long minimumInterval) {
