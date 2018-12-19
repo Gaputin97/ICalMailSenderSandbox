@@ -1,4 +1,4 @@
-package by.iba.bussines.meeting.wrapper.service;
+package by.iba.bussines.meeting.wrapper.definer;
 
 import by.iba.bussines.meeting.model.Meeting;
 import by.iba.bussines.meeting.service.v1.MeetingServiceImpl;
@@ -65,6 +65,7 @@ public class MeetingWrapperDefiner {
                         .setMeetingId(meetingId)
                         .setRecipients(recipients)
                         .build();
+
             } else {
                 meetingWrapper = complexMeetingWrapperBuilder.setSessions(sessions)
                         .setMeetingId(meetingId)
