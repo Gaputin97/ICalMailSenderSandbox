@@ -1,4 +1,4 @@
-package by.iba.bussines.calendar.attendee.model;
+package by.iba.bussines.calendar.factory.model;
 
 import javax.validation.constraints.Email;
 

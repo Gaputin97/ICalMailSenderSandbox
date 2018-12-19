@@ -5,7 +5,6 @@ import by.iba.bussines.meeting.wrapper.model.reccurence.RecurrenceMeetingWrapper
 import by.iba.bussines.rrule.model.Rrule;
 
 public class RecurrenceMeetingWrapperBuilder extends AbstractMeetingWrapperBuilder<RecurrenceMeetingWrapperBuilder> {
-
     private Rrule rrule;
 
     public RecurrenceMeetingWrapperBuilder(Class<RecurrenceMeetingWrapperBuilder> builderClass) {

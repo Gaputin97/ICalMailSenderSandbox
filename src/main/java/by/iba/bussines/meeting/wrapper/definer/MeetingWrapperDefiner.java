@@ -36,7 +36,10 @@ public class MeetingWrapperDefiner {
                                  MeetingWrapperConstants meetingWrapperConstants,
                                  SessionParser sessionParser,
                                  RruleDefiner rruleDefiner,
-                                 SessionChecker sessionChecker, ComplexMeetingWrapperBuilder complexMeetingWrapperBuilder, RecurrenceMeetingWrapperBuilder recurrenceMeetingWrapperBuilder, SingleMeetingWrapperBuilder singleMeetingWrapperBuilder) {
+                                 SessionChecker sessionChecker,
+                                 ComplexMeetingWrapperBuilder complexMeetingWrapperBuilder,
+                                 RecurrenceMeetingWrapperBuilder recurrenceMeetingWrapperBuilder,
+                                 SingleMeetingWrapperBuilder singleMeetingWrapperBuilder) {
         this.meetingService = meetingService;
         this.meetingWrapperConstants = meetingWrapperConstants;
         this.sessionParser = sessionParser;
@@ -70,7 +73,5 @@ public class MeetingWrapperDefiner {
             }
         }
         return (T) meetingWrapper;
-
     }
-
 }
