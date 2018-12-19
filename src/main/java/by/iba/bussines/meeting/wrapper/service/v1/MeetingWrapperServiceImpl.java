@@ -1,8 +1,8 @@
 package by.iba.bussines.meeting.wrapper.service.v1;
 
+import by.iba.bussines.calendar.factory.type.MeetingType;
 import by.iba.bussines.meeting.model.Meeting;
 import by.iba.bussines.meeting.service.v1.MeetingServiceImpl;
-import by.iba.bussines.meeting.type.MeetingType;
 import by.iba.bussines.meeting.wrapper.builder.AbstractMeetingWrapperBuilder;
 import by.iba.bussines.meeting.wrapper.builder.complex.ComplexMeetingWrapperBuilder;
 import by.iba.bussines.meeting.wrapper.constants.MeetingWrapperConstants;
@@ -16,7 +16,9 @@ import by.iba.bussines.rrule.model.Rrule;
 import by.iba.bussines.session.checker.SessionChecker;
 import by.iba.bussines.session.model.Session;
 import by.iba.bussines.session.parser.SessionParser;
+import by.iba.bussines.session.service.v1.SessionServiceImpl;
 import by.iba.bussines.timeslot.model.TimeSlot;
+import by.iba.bussines.timeslot.service.v1.TimeSlotServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,7 +60,7 @@ public class MeetingWrapperServiceImpl implements MeetingWrapperService {
             TimeSlot meetingTimeSlot = meeting.getTimeSlots().get(meetingWrapperConstants.getNumberOfFirstTimeSlot());
             Session meetingSession = sessionParser.timeSlotToSession(meetingTimeSlot);
             meetingWrapper = new SingleMeetingWrapper();
-            meetingWrapper.setMeetingType(MeetingType.SINGLE);
+            meetingWrapper.setMeetingType(MeetingType.SIMPLE);
             meetingWrapper.setMeetingId(meetingId);
             meetingWrapper.setRecipients(recipients);
             complexMeetingWrapperBuilder.setMeetingId(meetingId);
