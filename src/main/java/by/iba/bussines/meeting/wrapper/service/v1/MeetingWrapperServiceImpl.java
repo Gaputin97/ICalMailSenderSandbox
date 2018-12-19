@@ -59,7 +59,7 @@ public class MeetingWrapperServiceImpl implements MeetingWrapperService {
             meetingWrapper.setMeetingType(MeetingType.SINGLE);
             meetingWrapper.setMeetingId(meetingId);
             meetingWrapper.setRecipients(recipients);
-            complexMeetingWrapperBuilder.setMeetingId()
+            complexMeetingWrapperBuilder.setMeetingId(meetingId);
             ((SingleMeetingWrapper) meetingWrapper).setSession(meetingSession);
         } else {
             List<Session> sessions = sessionParser.timeSlotListToSessionList(meeting.getTimeSlots());
