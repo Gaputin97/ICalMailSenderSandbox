@@ -32,6 +32,8 @@ public class MeetingWrapperServiceImpl implements MeetingWrapperService {
     private RruleDefiner rruleDefiner;
     private SessionChecker sessionChecker;
     private AbstractMeetingWrapperBuilder complexMeetingWrapperBuilder;
+    private TimeSlotServiceImpl timeSlotService;
+    private SessionServiceImpl sessionService;
 
     @Autowired
     public MeetingWrapperServiceImpl(MeetingServiceImpl meetingService,
