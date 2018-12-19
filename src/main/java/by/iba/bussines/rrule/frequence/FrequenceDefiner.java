@@ -5,17 +5,27 @@ import by.iba.bussines.rrule.constants.DateConstants;
 import by.iba.bussines.rrule.constants.EnumConstants;
 import by.iba.bussines.rrule.frequence.model.RruleFreqType;
 import by.iba.bussines.rrule.frequence.wrapper.FrequenceWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class FrequenceDefiner {
+
+    private FrequenceHelper frequenceHelper;
+
+    @Autowired
+    public FrequenceDefiner(FrequenceHelper frequenceHelper) {
+        this.frequenceHelper = frequenceHelper;
+    }
+
 
     public RruleFreqType defineFrequence(List<Date> startDatesOfSessions) {
         final int amountOfDurationsBetweenDates = startDatesOfSessions.size() - 1;
-        FrequenceHelper frequenceHelper = new FrequenceHelper();
         int amountOfDurationsWhichMultipleToMinute = 0;
         int amountOfDurationsWhichMultipleToHour = 0;
         int amountOfDurationsWhichMultipleToDay = 0;

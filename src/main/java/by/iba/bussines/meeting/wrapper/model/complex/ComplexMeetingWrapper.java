@@ -18,7 +18,7 @@ public class ComplexMeetingWrapper extends AbstractMeetingWrapper {
         return session;
     }
 
-    public void setSession(List<Session> session) {
+    public void setSessions(List<Session> session) {
         this.session = session;
     }
 }

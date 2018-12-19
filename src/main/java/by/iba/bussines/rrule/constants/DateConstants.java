@@ -1,7 +1,9 @@
 package by.iba.bussines.rrule.constants;
 
-public class DateConstants {
+import org.springframework.stereotype.Component;
 
+
+public class DateConstants {
     public static final long MILLISECONDS_IN_HOUR = 3600000;
     public static final long MILLISECONDS_IN_DAY = 86400000;
     public static final long MILLISECONDS_IN_WEEK = 604800000;

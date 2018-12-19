@@ -24,16 +24,4 @@ public class TimeSlotServiceImpl implements TimeSlotService {
         this.meetingService = meetingService;
         this.sessionParser = sessionParser;
     }
-
-    @Override
-    public List<TimeSlot> getMeetingTimeSlots(HttpServletRequest request, String meetingId) {
-        Meeting meeting = meetingService.getMeetingById(request, meetingId);
-        return meeting.getTimeSlots();
-    }
-
-    @Override
-    public int getAmountsOfTimeSlots(HttpServletRequest request, String meetingId) {
-        Meeting meeting = meetingService.getMeetingById(request, meetingId);
-        return meeting.getTimeSlots().size();
-    }
 }

@@ -10,5 +10,4 @@ public interface SessionService {
 
     List<Session> sortAndGetEventSessions(HttpServletRequest request, String meetingId);
 
-    boolean doAllSessionsTheSame(HttpServletRequest request, String meetingId);
 }

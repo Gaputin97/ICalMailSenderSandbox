@@ -5,13 +5,26 @@ import by.iba.bussines.rrule.frequence.model.RruleFreqType;
 import by.iba.bussines.rrule.interval.IntervalDefiner;
 import by.iba.bussines.rrule.model.Rrule;
 import by.iba.bussines.session.model.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Component
 public class RruleDefiner {
-    public Rrule defineIntervalAndFrequence(List<Session> sessions) {
-        FrequenceDefiner frequenceDefiner = new FrequenceDefiner();
-        IntervalDefiner intervalDefiner = new IntervalDefiner();
+    private FrequenceDefiner frequenceDefiner;
+    private IntervalDefiner intervalDefiner;
+    private ExDatesDefiner exDatesDefiner;
+
+    @Autowired
+    public RruleDefiner(FrequenceDefiner frequenceDefiner, IntervalDefiner intervalDefiner, ExDatesDefiner exDatesDefiner) {
+        this.frequenceDefiner = frequenceDefiner;
+        this.intervalDefiner = intervalDefiner;
+        this.exDatesDefiner = exDatesDefiner;
+    }
+
+
+    public Rrule defineRrule(List<Session> sessions) {
         Session lastSession = sessions.get(sessions.size() - 1);
         Session firstSession = sessions.get(0);
 
@@ -27,25 +40,8 @@ public class RruleDefiner {
         rrule.setInterval(interval);
         rrule.setRruleFreqType(rruleFreqType);
 
-        defineExDates(rrule, startDateOfFirstSession, startDateOfLastSession, startDatesOfSessions);
+        exDatesDefiner.defineExDates(rrule, startDateOfFirstSession, startDateOfLastSession, startDatesOfSessions);
         return rrule;
     }
 
-    public void defineExDates(Rrule rrule, Date startDateOfFirstSession, Date startDateOfLastSession, List<Date> startDatesOfSessions) {
-        Calendar startCalendar = new GregorianCalendar();
-        startCalendar.setTime(startDateOfFirstSession);
-
-        Calendar endCalendar = new GregorianCalendar();
-        endCalendar.setTime(startDateOfLastSession);
-
-        while (startCalendar.before(endCalendar)) {
-            Date result = startCalendar.getTime();
-            if (!((LinkedList<Date>) startDatesOfSessions).getFirst().equals(result)) {
-                rrule.getExDates().add(result);
-            } else {
-                ((LinkedList<Date>) startDatesOfSessions).removeFirst();
-            }
-            startCalendar.add(rrule.getRruleFreqType().getFrequence(), rrule.getInterval().intValue());
-        }
-    }
 }
