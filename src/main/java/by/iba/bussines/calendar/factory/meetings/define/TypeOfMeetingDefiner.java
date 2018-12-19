@@ -3,7 +3,7 @@ package by.iba.bussines.calendar.factory.meetings.define;
 import by.iba.bussines.calendar.factory.meetings.type.complex.ComplexCalendarInvitationTemplate;
 import by.iba.bussines.calendar.factory.meetings.type.recurrence.RecurrenceCalendarInvitationTemplate;
 import by.iba.bussines.calendar.factory.meetings.type.single.SimpleCalendarInvitationTemplate;
-import by.iba.bussines.meeting.wrapper.model.AbstractMeetingWrapper;
+import by.iba.bussines.meeting.wrapper.model.MeetingWrapper;
 import by.iba.bussines.meeting.wrapper.model.complex.ComplexMeetingWrapper;
 import by.iba.bussines.meeting.wrapper.model.reccurence.RecurrenceMeetingWrapper;
 import by.iba.bussines.meeting.wrapper.model.single.SingleMeetingWrapper;
@@ -25,8 +25,8 @@ public class TypeOfMeetingDefiner {
         this.complexCalendarInvitationTemplate = complexCalendarInvitationTemplate;
     }
 
-    public <T extends AbstractMeetingWrapper> void createSingleMeetingInvitationTemplate(T wrapper) {
-        switch (wrapper.meetingType) {
+    public <T extends MeetingWrapper> void createSingleMeetingInvitationTemplate(T wrapper) {
+        switch (wrapper.getMeetingType()) {
             case SINGLE:
                 SingleMeetingWrapper singleMeetingWrapper = ((SingleMeetingWrapper) wrapper);
                 simpleCalendarInvitationTemplate.createSingleMeetingInvitationTemplate(singleMeetingWrapper);
