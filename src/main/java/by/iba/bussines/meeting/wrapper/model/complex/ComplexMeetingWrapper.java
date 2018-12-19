@@ -1,12 +1,12 @@
 package by.iba.bussines.meeting.wrapper.model.complex;
 
 import by.iba.bussines.calendar.factory.type.MeetingType;
-import by.iba.bussines.meeting.wrapper.model.AbstractMeetingWrapper;
+import by.iba.bussines.meeting.wrapper.model.MeetingWrapper;
 import by.iba.bussines.session.model.Session;
 
 import java.util.List;
 
-public class ComplexMeetingWrapper extends AbstractMeetingWrapper {
+public class ComplexMeetingWrapper extends MeetingWrapper {
     private List<Session> session;
 
     public ComplexMeetingWrapper() {
