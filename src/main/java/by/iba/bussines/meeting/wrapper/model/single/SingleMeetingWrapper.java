@@ -8,7 +8,7 @@ public class SingleMeetingWrapper extends AbstractMeetingWrapper {
     private Session session;
 
     public SingleMeetingWrapper() {
-        super(MeetingType.SIMPLE);
+        super(MeetingType.SINGLE);
     }
 
     public Session getSession() {
