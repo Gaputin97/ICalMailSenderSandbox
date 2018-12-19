@@ -3,7 +3,6 @@ package by.iba.bussines.session.checker;
 import by.iba.bussines.meeting.model.Meeting;
 import by.iba.bussines.session.model.Session;
 import by.iba.bussines.session.parser.SessionParser;
-import by.iba.bussines.timeslot.service.v1.TimeSlotServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,12 +12,10 @@ import java.util.List;
 @Component
 public class SessionChecker {
 
-    private TimeSlotServiceImpl timeSlotService;
     private SessionParser sessionParser;
 
     @Autowired
-    public SessionChecker(TimeSlotServiceImpl timeSlotService, SessionParser sessionParser) {
-        this.timeSlotService = timeSlotService;
+    public SessionChecker(SessionParser sessionParser) {
         this.sessionParser = sessionParser;
     }
 

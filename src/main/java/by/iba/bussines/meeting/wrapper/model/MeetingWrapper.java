@@ -4,21 +4,17 @@ import by.iba.bussines.calendar.factory.type.MeetingType;
 
 import java.util.List;
 
-public abstract class AbstractMeetingWrapper {
-    public MeetingType meetingType;
+public class MeetingWrapper {
+    protected final MeetingType meetingType;
     public List<String> recipients;
     public String meetingId;
 
-    public AbstractMeetingWrapper(MeetingType meetingType) {
+   public MeetingWrapper(MeetingType meetingType) {
         this.meetingType = meetingType;
     }
 
     public MeetingType getMeetingType() {
         return meetingType;
-    }
-
-    public void setMeetingType(MeetingType meetingType) {
-        this.meetingType = meetingType;
     }
 
     public List<String> getRecipients() {
