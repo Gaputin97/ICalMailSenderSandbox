@@ -3,11 +3,12 @@ package by.iba.bussines.meeting.wrapper.builder.complex;
 import by.iba.bussines.meeting.wrapper.builder.AbstractMeetingWrapperBuilder;
 import by.iba.bussines.meeting.wrapper.model.complex.ComplexMeetingWrapper;
 import by.iba.bussines.session.model.Session;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class ComplexMeetingWrapperBuilder extends AbstractMeetingWrapperBuilder<ComplexMeetingWrapperBuilder> {
-
     private List<Session> sessions;
 
     public ComplexMeetingWrapperBuilder(Class<ComplexMeetingWrapperBuilder> builderClass) {

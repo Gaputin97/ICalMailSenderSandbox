@@ -1,8 +1,9 @@
 package by.iba.bussines.calendar.factory;
 
-import by.iba.bussines.calendar.creator.type.complex.ComplexCalendarInvitationTemplate;
-import by.iba.bussines.calendar.creator.type.recurrence.RecurrenceCalendarInvitationTemplate;
-import by.iba.bussines.calendar.creator.type.single.SimpleCalendarInvitationTemplate;
+import by.iba.bussines.calendar.creator.type.complex.ComplexCalendarTemplate;
+import by.iba.bussines.calendar.creator.type.recurrence.RecurrenceCalendarTemplate;
+import by.iba.bussines.calendar.creator.type.single.SimpleCalendarTemplate;
+import by.iba.bussines.meeting.model.Meeting;
 import by.iba.bussines.meeting.wrapper.model.MeetingWrapper;
 import by.iba.bussines.meeting.wrapper.model.complex.ComplexMeetingWrapper;
 import by.iba.bussines.meeting.wrapper.model.reccurence.RecurrenceMeetingWrapper;
@@ -15,33 +16,33 @@ import javax.servlet.http.HttpServletRequest;
 
 @Component
 public class CalendarFactory {
-    private SimpleCalendarInvitationTemplate simpleCalendarInvitationTemplate;
-    private RecurrenceCalendarInvitationTemplate recurrenceCalendarInvitationTemplate;
-    private ComplexCalendarInvitationTemplate complexCalendarInvitationTemplate;
+    private SimpleCalendarTemplate simpleCalendarTemplate;
+    private RecurrenceCalendarTemplate recurrenceCalendarTemplate;
+    private ComplexCalendarTemplate complexCalendarTemplate;
 
     @Autowired
-    public CalendarFactory(SimpleCalendarInvitationTemplate simpleCalendarInvitationTemplate,
-                           RecurrenceCalendarInvitationTemplate recurrenceCalendarInvitationTemplate,
-                           ComplexCalendarInvitationTemplate complexCalendarInvitationTemplate) {
-        this.simpleCalendarInvitationTemplate = simpleCalendarInvitationTemplate;
-        this.recurrenceCalendarInvitationTemplate = recurrenceCalendarInvitationTemplate;
-        this.complexCalendarInvitationTemplate = complexCalendarInvitationTemplate;
+    public CalendarFactory(SimpleCalendarTemplate simpleCalendarTemplate,
+                           RecurrenceCalendarTemplate recurrenceCalendarTemplate,
+                           ComplexCalendarTemplate complexCalendarTemplate) {
+        this.simpleCalendarTemplate = simpleCalendarTemplate;
+        this.recurrenceCalendarTemplate = recurrenceCalendarTemplate;
+        this.complexCalendarTemplate = complexCalendarTemplate;
     }
 
-    public <T extends MeetingWrapper> Calendar createInvitationCalendarTemplate(T wrapper, HttpServletRequest request) {
+    public <T extends MeetingWrapper> Calendar createInvitationCalendarTemplate(T wrapper, HttpServletRequest request, Meeting meeting) {
         Calendar calendar = null;
         switch (wrapper.getMeetingType()) {
             case SINGLE:
                 SingleMeetingWrapper singleMeetingWrapper = ((SingleMeetingWrapper) wrapper);
-                calendar = simpleCalendarInvitationTemplate.createSingleMeetingInvitationTemplate(singleMeetingWrapper, request);
+                calendar = simpleCalendarTemplate.createSingleMeetingInvitationTemplate(singleMeetingWrapper, request, meeting);
                 break;
             case RECURRENCE:
                 RecurrenceMeetingWrapper recurrenceMeetingWrapper = ((RecurrenceMeetingWrapper) wrapper);
-                calendar = recurrenceCalendarInvitationTemplate.createRecurrenceCalendarInvitationTemplate(recurrenceMeetingWrapper, request);
+                calendar = recurrenceCalendarTemplate.createRecurrenceCalendarInvitationTemplate(recurrenceMeetingWrapper, request, meeting);
                 break;
             case COMPLEX:
                 ComplexMeetingWrapper complexMeetingWrapper = ((ComplexMeetingWrapper) wrapper);
-                calendar = complexCalendarInvitationTemplate.createComplexCalendarInvitationTemplate(complexMeetingWrapper, request);
+                calendar = complexCalendarTemplate.createComplexCalendarInvitationTemplate(complexMeetingWrapper, request);
                 break;
         }
         return calendar;

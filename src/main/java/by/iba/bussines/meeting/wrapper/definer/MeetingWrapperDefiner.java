@@ -16,12 +16,10 @@ import by.iba.bussines.timeslot.model.TimeSlot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Component
 public class MeetingWrapperDefiner {
-
     private MeetingServiceImpl meetingService;
     private MeetingWrapperConstants meetingWrapperConstants;
     private SessionParser sessionParser;

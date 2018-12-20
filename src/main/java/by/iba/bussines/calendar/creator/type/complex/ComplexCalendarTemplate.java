@@ -11,15 +11,15 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 
 @Component
-public class ComplexCalendarInvitationTemplate {
+public class ComplexCalendarTemplate {
     private CalendarTextFieldBreaker calendarTextFieldBreaker;
     private Calendar requestCalendar;
     private MeetingService meetingService;
 
     @Autowired
-    public ComplexCalendarInvitationTemplate(CalendarTextFieldBreaker calendarTextFieldBreaker,
-                                                @Qualifier("publishCalendar") Calendar requestCalendar,
-                                                MeetingService meetingService) {
+    public ComplexCalendarTemplate(CalendarTextFieldBreaker calendarTextFieldBreaker,
+                                   @Qualifier("publishCalendar") Calendar requestCalendar,
+                                   MeetingService meetingService) {
         this.calendarTextFieldBreaker = calendarTextFieldBreaker;
         this.requestCalendar = requestCalendar;
         this.meetingService = meetingService;
@@ -27,4 +27,5 @@ public class ComplexCalendarInvitationTemplate {
 
     public Calendar createComplexCalendarInvitationTemplate(ComplexMeetingWrapper complexMeetingWrapper, HttpServletRequest request) {
         return requestCalendar;
+    }
 }

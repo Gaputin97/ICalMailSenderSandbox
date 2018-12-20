@@ -12,6 +12,7 @@ import java.util.List;
 
 @Component
 public class CalendarListCreator {
+
     public List<Calendar> createCalendarList(List<Attendee> attendeeList, Calendar calendar) {
         List<Calendar> calendarList = new ArrayList<>(attendeeList.size());
         for (Attendee attendee : attendeeList) {

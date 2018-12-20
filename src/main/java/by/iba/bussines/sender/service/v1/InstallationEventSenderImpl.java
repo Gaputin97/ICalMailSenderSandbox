@@ -1,12 +1,13 @@
 package by.iba.bussines.sender.service.v1;
 
-import by.iba.bussines.calendar.attendee.Attendee;
 import by.iba.bussines.sender.service.InstallationEventSender;
 import by.iba.bussines.status.send.CalendarSendingStatus;
 import by.iba.exception.CalendarSendingException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
+import net.fortuna.ical4j.model.Parameter;
 import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.property.Attendee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -23,7 +24,7 @@ public class InstallationEventSenderImpl implements InstallationEventSender {
     JavaMailSender javaMailSender;
 
     @Override
-    public CalendarSendingStatus sendCalendarToRecipients(Calendar calendar) {
+    public CalendarSendingStatus sendCalendarToRecipient(Calendar calendar) {
         MimeMessage message;
         try {
             message = javaMailSender.createMimeMessage();
@@ -31,7 +32,7 @@ public class InstallationEventSenderImpl implements InstallationEventSender {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             Component event = calendar.getComponents().getComponent(Component.VEVENT);
             Property attendee = event.getProperties().getProperty(Property.ATTENDEE);
-            helper.setTo(attendee.toString());
+            helper.setTo(((Attendee) attendee).getCalAddress().toString());
 
             MimeMultipart multipart = new MimeMultipart("text/calendar");
 
@@ -53,7 +54,7 @@ public class InstallationEventSenderImpl implements InstallationEventSender {
             message.setContent(multipart);
             javaMailSender.send(message);
         } catch (MessagingException e) {
-            throw new CalendarSendingException("Exception with send calendar: " + calendar.toString());
+            throw new CalendarSendingException("Exception with send calendar: " + e.getMessage());
         }
         return new CalendarSendingStatus("Calendar message was successfully sanded");
     }

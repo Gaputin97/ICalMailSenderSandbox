@@ -4,9 +4,9 @@ import by.iba.bussines.enrollment.model.Enrollment;
 import by.iba.bussines.meeting.model.Meeting;
 import by.iba.bussines.meeting.service.MeetingService;
 import by.iba.bussines.status.insert.InsertStatus;
+import by.iba.bussines.status.send.CalendarSendingStatus;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,11 +21,11 @@ public class SenderController {
 
     @ApiOperation(value = "Send calendar templates for non existing recipients", response = Enrollment.class)
     @RequestMapping(value = "/send/meeting", method = RequestMethod.POST)
-    public InsertStatus sendInvitationTemplatesToRecipients(HttpServletRequest request,
-                                                            @RequestBody String meetingId,
-                                                            @RequestBody String[] recipientList) {
+    public CalendarSendingStatus sendInvitationTemplatesToRecipients(HttpServletRequest request,
+                                                                     @RequestBody String meetingId,
+                                                                     @RequestBody String[] recipientList) {
         Meeting meeting = meetingService.getMeetingById(request, meetingId);
 
-        return enrollmentService.saveEnrollment(enrollment);
+        return new CalendarSendingStatus("All templates was successfully sanded");
     }
 }
