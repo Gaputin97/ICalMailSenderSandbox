@@ -1,6 +1,6 @@
-package by.iba.bussiness.sender.service.v1;
+package by.iba.bussiness.sender.set_upper;
 
-import by.iba.bussiness.sender.service.InstallationEventSender;
+import by.iba.bussiness.calendar.creator.text_preparing.CalendarTextEditor;
 import by.iba.bussiness.status.send.CalendarSendingStatus;
 import by.iba.exception.CalendarSendingException;
 import net.fortuna.ical4j.model.Calendar;
@@ -20,12 +20,17 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 @Service
-public class InstallationEventSenderImpl implements InstallationEventSender {
+public class InstallationEventSenderImpl {
     Logger logger = LoggerFactory.getLogger(InstallationEventSenderImpl.class);
-    @Autowired
     JavaMailSender javaMailSender;
+    CalendarTextEditor calendarTextEditor;
 
-    @Override
+    @Autowired
+    public InstallationEventSenderImpl(JavaMailSender javaMailSender, CalendarTextEditor calendarTextEditor) {
+        this.javaMailSender = javaMailSender;
+        this.calendarTextEditor = calendarTextEditor;
+    }
+
     public CalendarSendingStatus sendCalendarToRecipient(Calendar calendar) {
         MimeMessage message;
         try {
@@ -34,23 +39,24 @@ public class InstallationEventSenderImpl implements InstallationEventSender {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             Component event = calendar.getComponents().getComponent(Component.VEVENT);
             Property attendee = event.getProperties().getProperty(Property.ATTENDEE);
-            helper.setTo(((Attendee) attendee).getCalAddress().toString());
+            String address = ((Attendee) attendee).getCalAddress().toString();
+            String method = calendarTextEditor.colonReplacer(calendar.getMethod().toString());
+
+            helper.setTo(calendarTextEditor.userEmailEditor(address));
 
             MimeMultipart multipart = new MimeMultipart();
             MimeBodyPart iСalInline = new MimeBodyPart();
             iСalInline.setHeader("Content-class", "urn:content-classes:calendarmessage");
             iСalInline.setHeader("Content-ID", "<calendar_part>");
             iСalInline.setHeader("Content-Disposition", "inline");
-            iСalInline.setContent(calendar.toString(), "text/calendar;charset=utf-8;" + calendar.getMethod().toString().replace(':', '='));
-            logger.info(calendar.getMethod().toString());
-            logger.info("calendar: \n " + calendar.toString());
+            iСalInline.setContent(calendar.toString(), "text/calendar;charset=utf-8;" + method);
             iСalInline.setFileName("inlineCalendar.ics");
             multipart.addBodyPart(iСalInline);
 
             MimeBodyPart iСalAttachment = new MimeBodyPart();
             iСalAttachment.setHeader("Content-class", "urn:content-classes:calendarmessage");
             iСalAttachment.setHeader("Content-Disposition", "attachment");
-            iСalAttachment.setContent(calendar.toString(), "text/calendar;charset=utf-8;" + calendar.getMethod().toString().replace(':', '='));
+            iСalAttachment.setContent(calendar.toString(), "text/calendar;charset=utf-8;" + method);
             iСalAttachment.setFileName("attachedCalendar.ics");
             multipart.addBodyPart(iСalAttachment);
 

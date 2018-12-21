@@ -3,7 +3,7 @@ package by.iba.bussiness.calendar.creator.text_preparing;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CalendarTextFieldBreaker {
+public class CalendarTextEditor {
     public String lineBreak(String stringField) {
         StringBuffer sourceStringBuilder = new StringBuffer(stringField);
         if (stringField.length() > 65) {
@@ -14,5 +14,16 @@ public class CalendarTextFieldBreaker {
             stringField = sourceStringBuilder.toString();
         }
         return stringField;
+    }
+
+    public String colonReplacer(String method) {
+        return method.replace(':', '=');
+    }
+
+    public String userEmailEditor(String email) {
+        if(email.substring(0, 7).equals("mailto:")) {
+            email = email.substring(7);
+        }
+        return email;
     }
 }

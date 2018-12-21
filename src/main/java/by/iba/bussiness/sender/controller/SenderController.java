@@ -1,7 +1,7 @@
 package by.iba.bussiness.sender.controller;
 
-import by.iba.bussiness.calendar.access_component.AccessComponent;
-import by.iba.bussiness.enrollment.model.Enrollment;
+import by.iba.bussiness.sender.service.v1.SenderServiceImpl;
+import by.iba.bussiness.calendar.email.Email;
 import by.iba.bussiness.status.send.CalendarSendingStatus;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -15,14 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 public class SenderController {
     private final static Logger logger = LoggerFactory.getLogger(SenderController.class);
     @Autowired
-    private AccessComponent accessComponent;
+    private SenderServiceImpl senderServiceImpl;
 
     @ApiOperation(value = "Send calendar templates for non existing recipients")
-    @RequestMapping(value = "/send/meeting/{meetingId}", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "/send/meeting/{meetingId}", method = RequestMethod.POST)
     public CalendarSendingStatus sendInvitationTemplatesToRecipients(@PathVariable String meetingId,
-                                                                     @RequestBody String recipientList,
+                                                                     @RequestBody Email email,
                                                                      HttpServletRequest request) {
-        accessComponent.getMeeting(request, meetingId, recipientList);
+        senderServiceImpl.sendMeeting(request, meetingId, email);
         logger.info("Calendar templates was successfully sanded");
         return new CalendarSendingStatus("All templates was successfully sanded");
     }

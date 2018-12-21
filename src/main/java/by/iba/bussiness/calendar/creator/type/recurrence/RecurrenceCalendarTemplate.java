@@ -1,6 +1,6 @@
 package by.iba.bussiness.calendar.creator.type.recurrence;
 
-import by.iba.bussiness.calendar.creator.text_preparing.CalendarTextFieldBreaker;
+import by.iba.bussiness.calendar.creator.text_preparing.CalendarTextEditor;
 import by.iba.bussiness.meeting.model.Meeting;
 import by.iba.bussiness.meeting.service.MeetingService;
 import by.iba.bussiness.meeting.wrapper.model.reccurence.RecurrenceMeetingWrapper;
@@ -13,15 +13,15 @@ import javax.servlet.http.HttpServletRequest;
 
 @Component
 public class RecurrenceCalendarTemplate {
-    private CalendarTextFieldBreaker calendarTextFieldBreaker;
+    private CalendarTextEditor calendarTextEditor;
     private Calendar requestCalendar;
     private MeetingService meetingService;
 
     @Autowired
-    public RecurrenceCalendarTemplate(CalendarTextFieldBreaker calendarTextFieldBreaker,
+    public RecurrenceCalendarTemplate(CalendarTextEditor calendarTextEditor,
                                       @Qualifier("requestCalendar") Calendar requestCalendar,
                                       MeetingService meetingService) {
-        this.calendarTextFieldBreaker = calendarTextFieldBreaker;
+        this.calendarTextEditor = calendarTextEditor;
         this.requestCalendar = requestCalendar;
         this.meetingService = meetingService;
     }
