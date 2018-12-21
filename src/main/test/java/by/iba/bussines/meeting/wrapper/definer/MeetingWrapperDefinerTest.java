@@ -1,20 +1,21 @@
-package by.iba.bussiness.meeting.wrapper.definer;
+package by.iba.bussines.meeting.wrapper.definer;
+
 
 import by.iba.bussiness.meeting.model.Meeting;
 import by.iba.bussiness.meeting.type.MeetingType;
+import by.iba.bussiness.meeting.wrapper.definer.MeetingWrapperDefiner;
 import by.iba.bussiness.meeting.wrapper.model.single.SingleMeetingWrapper;
-import by.iba.configuration.ApplicationConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = ApplicationConfiguration.class)
-@TestPropertySource(locations="classpath:application.properties")
+@ContextConfiguration(basePackage)
 public class MeetingWrapperDefinerTest {
 
     @Autowired

@@ -1,15 +1,12 @@
 package by.iba.bussiness.meeting.wrapper.builder.single;
 
-import by.iba.bussiness.meeting.wrapper.builder.AbstractMeetingWrapperBuilder;
 import by.iba.bussiness.meeting.wrapper.model.single.SingleMeetingWrapper;
 import by.iba.bussiness.session.model.Session;
+import org.springframework.stereotype.Component;
 
-public class SingleMeetingWrapperBuilder extends AbstractMeetingWrapperBuilder<SingleMeetingWrapperBuilder> {
+@Component
+public class SingleMeetingWrapperBuilder {
     private Session session;
-
-    public SingleMeetingWrapperBuilder(SingleMeetingWrapperBuilder builderClass) {
-        super(builderClass);
-    }
 
     public SingleMeetingWrapperBuilder setSession(Session session) {
         this.session = session;

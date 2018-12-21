@@ -34,18 +34,18 @@ public class MeetingWrapperDefiner {
                                  MeetingWrapperConstants meetingWrapperConstants,
                                  SessionParser sessionParser,
                                  RruleDefiner rruleDefiner,
-                                 SessionChecker sessionChecker
-                                 /*ComplexMeetingWrapperBuilder complexMeetingWrapperBuilder,
+                                 SessionChecker sessionChecker,
+                                 ComplexMeetingWrapperBuilder complexMeetingWrapperBuilder,
                                  RecurrenceMeetingWrapperBuilder recurrenceMeetingWrapperBuilder,
-                                 SingleMeetingWrapperBuilder singleMeetingWrapperBuilder*/) {
+                                 SingleMeetingWrapperBuilder singleMeetingWrapperBuilder) {
         this.meetingService = meetingService;
         this.meetingWrapperConstants = meetingWrapperConstants;
         this.sessionParser = sessionParser;
         this.rruleDefiner = rruleDefiner;
         this.sessionChecker = sessionChecker;
-//        this.complexMeetingWrapperBuilder = complexMeetingWrapperBuilder;
-//        this.recurrenceMeetingWrapperBuilder = recurrenceMeetingWrapperBuilder;
-//        this.singleMeetingWrapperBuilder = singleMeetingWrapperBuilder;
+        this.complexMeetingWrapperBuilder = complexMeetingWrapperBuilder;
+        this.recurrenceMeetingWrapperBuilder = recurrenceMeetingWrapperBuilder;
+        this.singleMeetingWrapperBuilder = singleMeetingWrapperBuilder;
     }
 
     public <T extends MeetingWrapper> T defineMeetingWrapper(Meeting meeting) {
@@ -54,18 +54,18 @@ public class MeetingWrapperDefiner {
         if (amountOfTimeSlots == meetingWrapperConstants.getAmountOfSessionsForSingleEvent()) {
             TimeSlot meetingTimeSlot = meeting.getTimeSlots().get(meetingWrapperConstants.getNumberOfFirstTimeSlot());
             Session meetingSession = sessionParser.timeSlotToSession(meetingTimeSlot);
-            meetingWrapper = new SingleMeetingWrapperBuilder(singleMeetingWrapperBuilder)
+            meetingWrapper = new SingleMeetingWrapperBuilder()
                     .setSession(meetingSession)
                     .build();
         } else {
             List<Session> sessions = sessionParser.timeSlotListToSessionList(meeting.getTimeSlots());
             if (sessionChecker.doAllSessionsTheSame(meeting)) {
                 Rrule rrule = rruleDefiner.defineRrule(sessions);
-                meetingWrapper = new RecurrenceMeetingWrapperBuilder(recurrenceMeetingWrapperBuilder)
+                meetingWrapper = new RecurrenceMeetingWrapperBuilder()
                         .setRrule(rrule)
                         .build();
             } else {
-                meetingWrapper = new ComplexMeetingWrapperBuilder(complexMeetingWrapperBuilder)
+                meetingWrapper = new ComplexMeetingWrapperBuilder()
                         .setSessions(sessions)
                         .build();
             }
