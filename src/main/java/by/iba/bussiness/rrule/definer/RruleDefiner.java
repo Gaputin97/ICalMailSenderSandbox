@@ -1,10 +1,10 @@
-package by.iba.bussines.rrule.definer;
+package by.iba.bussiness.rrule.definer;
 
-import by.iba.bussines.rrule.frequence.FrequenceDefiner;
-import by.iba.bussines.rrule.frequence.model.RruleFreqType;
-import by.iba.bussines.rrule.interval.IntervalDefiner;
-import by.iba.bussines.rrule.model.Rrule;
-import by.iba.bussines.session.model.Session;
+import by.iba.bussiness.rrule.frequence.FrequenceDefiner;
+import by.iba.bussiness.rrule.frequence.model.RruleFreqType;
+import by.iba.bussiness.rrule.interval.IntervalDefiner;
+import by.iba.bussiness.rrule.model.Rrule;
+import by.iba.bussiness.session.model.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

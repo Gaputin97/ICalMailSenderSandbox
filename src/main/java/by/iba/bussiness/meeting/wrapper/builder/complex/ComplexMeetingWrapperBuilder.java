@@ -1,9 +1,8 @@
-package by.iba.bussines.meeting.wrapper.builder.complex;
+package by.iba.bussiness.meeting.wrapper.builder.complex;
 
-import by.iba.bussines.meeting.wrapper.builder.AbstractMeetingWrapperBuilder;
-import by.iba.bussines.meeting.wrapper.model.complex.ComplexMeetingWrapper;
-import by.iba.bussines.session.model.Session;
-import org.springframework.stereotype.Component;
+import by.iba.bussiness.meeting.wrapper.builder.AbstractMeetingWrapperBuilder;
+import by.iba.bussiness.meeting.wrapper.model.complex.ComplexMeetingWrapper;
+import by.iba.bussiness.session.model.Session;
 
 import java.util.List;
 

@@ -1,13 +1,13 @@
-package by.iba.bussines.enrollment.service.v1;
+package by.iba.bussiness.enrollment.service.v1;
 
-import by.iba.bussines.enrollment.constants.EnrollmentConstants;
-import by.iba.bussines.enrollment.repository.v1.EnrollmentRepositoryImpl;
-import by.iba.bussines.enrollment.model.Enrollment;
-import by.iba.bussines.enrollment.service.EnrollmentService;
-import by.iba.bussines.status.insert.InsertStatus;
+import by.iba.bussiness.enrollment.constants.EnrollmentConstants;
+import by.iba.bussiness.enrollment.repository.v1.EnrollmentRepositoryImpl;
+import by.iba.bussiness.enrollment.model.Enrollment;
+import by.iba.bussiness.enrollment.service.EnrollmentService;
+import by.iba.bussiness.status.insert.InsertStatus;
 import by.iba.exception.ServiceException;
-import by.iba.bussines.token.model.JavaWebToken;
-import by.iba.bussines.token.service.v1.TokenServiceImpl;
+import by.iba.bussiness.token.model.JavaWebToken;
+import by.iba.bussiness.token.service.v1.TokenServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

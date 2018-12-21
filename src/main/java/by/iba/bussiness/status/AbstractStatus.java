@@ -1,4 +1,4 @@
-package by.iba.bussines.status;
+package by.iba.bussiness.status;
 
 public abstract class AbstractStatus {
     private String message;

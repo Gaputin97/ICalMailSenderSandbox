@@ -1,7 +1,7 @@
-package by.iba.bussines.meeting.controller;
+package by.iba.bussiness.meeting.controller;
 
-import by.iba.bussines.meeting.model.Meeting;
-import by.iba.bussines.meeting.service.v1.MeetingServiceImpl;
+import by.iba.bussiness.meeting.model.Meeting;
+import by.iba.bussiness.meeting.service.v1.MeetingServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

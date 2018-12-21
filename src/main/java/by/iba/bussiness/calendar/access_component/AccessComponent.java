@@ -1,13 +1,12 @@
-package by.iba.bussines.calendar.access_component;
+package by.iba.bussiness.calendar.access_component;
 
-import by.iba.bussines.calendar.attendee.Attendee;
-import by.iba.bussines.calendar.creator.CalendarListCreator;
-import by.iba.bussines.calendar.factory.CalendarFactory;
-import by.iba.bussines.meeting.model.Meeting;
-import by.iba.bussines.meeting.service.MeetingService;
-import by.iba.bussines.meeting.wrapper.definer.MeetingWrapperDefiner;
-import by.iba.bussines.meeting.wrapper.model.MeetingWrapper;
-import by.iba.bussines.sender.service.manager.MultiplyCalendarSender;
+import by.iba.bussiness.calendar.creator.CalendarListCreator;
+import by.iba.bussiness.calendar.factory.CalendarFactory;
+import by.iba.bussiness.meeting.model.Meeting;
+import by.iba.bussiness.meeting.service.MeetingService;
+import by.iba.bussiness.meeting.wrapper.definer.MeetingWrapperDefiner;
+import by.iba.bussiness.meeting.wrapper.model.MeetingWrapper;
+import by.iba.bussiness.sender.service.manager.MultiplyCalendarSender;
 import net.fortuna.ical4j.model.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,6 +31,7 @@ public class AccessComponent {
         this.meetingService = meetingService;
         this.meetingWrapperDefiner = meetingWrapperDefiner;
         this.calendarFactory = calendarFactory;
+        this.calendarListCreator = calendarListCreator;
         this.multiplyCalendarSender = multiplyCalendarSender;
     }
 

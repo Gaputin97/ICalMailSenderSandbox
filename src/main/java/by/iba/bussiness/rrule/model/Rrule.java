@@ -1,6 +1,6 @@
-package by.iba.bussines.rrule.model;
+package by.iba.bussiness.rrule.model;
 
-import by.iba.bussines.rrule.frequence.model.RruleFreqType;
+import by.iba.bussiness.rrule.frequence.model.RruleFreqType;
 
 import java.util.ArrayList;
 import java.util.Date;

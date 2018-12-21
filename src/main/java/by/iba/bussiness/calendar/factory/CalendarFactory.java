@@ -1,13 +1,13 @@
-package by.iba.bussines.calendar.factory;
+package by.iba.bussiness.calendar.factory;
 
-import by.iba.bussines.calendar.creator.type.complex.ComplexCalendarTemplate;
-import by.iba.bussines.calendar.creator.type.recurrence.RecurrenceCalendarTemplate;
-import by.iba.bussines.calendar.creator.type.single.SimpleCalendarTemplate;
-import by.iba.bussines.meeting.model.Meeting;
-import by.iba.bussines.meeting.wrapper.model.MeetingWrapper;
-import by.iba.bussines.meeting.wrapper.model.complex.ComplexMeetingWrapper;
-import by.iba.bussines.meeting.wrapper.model.reccurence.RecurrenceMeetingWrapper;
-import by.iba.bussines.meeting.wrapper.model.single.SingleMeetingWrapper;
+import by.iba.bussiness.calendar.creator.type.complex.ComplexCalendarTemplate;
+import by.iba.bussiness.calendar.creator.type.recurrence.RecurrenceCalendarTemplate;
+import by.iba.bussiness.calendar.creator.type.single.SimpleCalendarTemplate;
+import by.iba.bussiness.meeting.model.Meeting;
+import by.iba.bussiness.meeting.wrapper.model.MeetingWrapper;
+import by.iba.bussiness.meeting.wrapper.model.complex.ComplexMeetingWrapper;
+import by.iba.bussiness.meeting.wrapper.model.reccurence.RecurrenceMeetingWrapper;
+import by.iba.bussiness.meeting.wrapper.model.single.SingleMeetingWrapper;
 import net.fortuna.ical4j.model.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,7 +34,7 @@ public class CalendarFactory {
         switch (wrapper.getMeetingType()) {
             case SINGLE:
                 SingleMeetingWrapper singleMeetingWrapper = ((SingleMeetingWrapper) wrapper);
-                calendar = simpleCalendarTemplate.createSingleMeetingInvitationTemplate(singleMeetingWrapper, request, meeting);
+                calendar = simpleCalendarTemplate.createSingleMeetingInvitationTemplate(singleMeetingWrapper, meeting);
                 break;
             case RECURRENCE:
                 RecurrenceMeetingWrapper recurrenceMeetingWrapper = ((RecurrenceMeetingWrapper) wrapper);

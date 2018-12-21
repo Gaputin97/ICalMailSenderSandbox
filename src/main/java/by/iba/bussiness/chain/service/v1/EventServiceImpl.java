@@ -1,8 +1,8 @@
-package by.iba.bussines.chain.service.v1;
+package by.iba.bussiness.chain.service.v1;
 
-import by.iba.bussines.chain.model.Chain;
-import by.iba.bussines.chain.service.EventService;
-import by.iba.bussines.event.model.Event;
+import by.iba.bussiness.chain.model.Chain;
+import by.iba.bussiness.chain.service.EventService;
+import by.iba.bussiness.event.model.Event;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package by.iba.bussines.meeting.constants;
+package by.iba.bussiness.meeting.constants;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;

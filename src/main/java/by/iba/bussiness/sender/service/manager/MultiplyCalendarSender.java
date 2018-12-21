@@ -1,7 +1,6 @@
-package by.iba.bussines.sender.service.manager;
+package by.iba.bussiness.sender.service.manager;
 
-import by.iba.bussines.sender.controller.SenderController;
-import by.iba.bussines.sender.service.InstallationEventSender;
+import by.iba.bussiness.sender.service.InstallationEventSender;
 import net.fortuna.ical4j.model.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

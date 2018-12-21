@@ -1,4 +1,4 @@
-package by.iba.bussines.token.model;
+package by.iba.bussiness.token.model;
 
 import org.springframework.stereotype.Component;
 

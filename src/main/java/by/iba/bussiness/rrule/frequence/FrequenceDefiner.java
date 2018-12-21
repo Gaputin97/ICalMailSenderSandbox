@@ -1,10 +1,10 @@
-package by.iba.bussines.rrule.frequence;
+package by.iba.bussiness.rrule.frequence;
 
 
-import by.iba.bussines.rrule.constants.DateConstants;
-import by.iba.bussines.rrule.constants.EnumConstants;
-import by.iba.bussines.rrule.frequence.model.RruleFreqType;
-import by.iba.bussines.rrule.frequence.wrapper.FrequenceWrapper;
+import by.iba.bussiness.rrule.constants.DateConstants;
+import by.iba.bussiness.rrule.constants.EnumConstants;
+import by.iba.bussiness.rrule.frequence.model.RruleFreqType;
+import by.iba.bussiness.rrule.frequence.wrapper.FrequenceWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

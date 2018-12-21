@@ -1,4 +1,4 @@
-package by.iba.bussines.event.constants;
+package by.iba.bussiness.event.constants;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;

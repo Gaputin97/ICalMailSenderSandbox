@@ -1,6 +1,6 @@
-package by.iba.bussines.rrule.interval;
+package by.iba.bussiness.rrule.interval;
 
-import by.iba.bussines.rrule.frequence.model.RruleFreqType;
+import by.iba.bussiness.rrule.frequence.model.RruleFreqType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

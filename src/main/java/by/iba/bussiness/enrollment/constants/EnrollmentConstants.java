@@ -1,4 +1,4 @@
-package by.iba.bussines.enrollment.constants;
+package by.iba.bussiness.enrollment.constants;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;

@@ -1,22 +1,15 @@
-package by.iba.bussines.calendar.creator.type.recurrence;
+package by.iba.bussiness.calendar.creator.type.recurrence;
 
-import by.iba.bussines.calendar.creator.text_preparing.CalendarTextFieldBreaker;
-import by.iba.bussines.meeting.model.Meeting;
-import by.iba.bussines.meeting.service.MeetingService;
-import by.iba.bussines.meeting.wrapper.model.reccurence.RecurrenceMeetingWrapper;
-import by.iba.bussines.session.model.Session;
+import by.iba.bussiness.calendar.creator.text_preparing.CalendarTextFieldBreaker;
+import by.iba.bussiness.meeting.model.Meeting;
+import by.iba.bussiness.meeting.service.MeetingService;
+import by.iba.bussiness.meeting.wrapper.model.reccurence.RecurrenceMeetingWrapper;
 import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.DateTime;
-import net.fortuna.ical4j.model.component.VEvent;
-import net.fortuna.ical4j.model.property.*;
-import net.fortuna.ical4j.util.FixedUidGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.SocketException;
-import java.net.URISyntaxException;
 
 @Component
 public class RecurrenceCalendarTemplate {

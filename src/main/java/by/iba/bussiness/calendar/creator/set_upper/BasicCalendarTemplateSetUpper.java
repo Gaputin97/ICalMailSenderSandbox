@@ -1,4 +1,4 @@
-package by.iba.bussines.calendar.creator.set_upper;
+package by.iba.bussiness.calendar.creator.set_upper;
 
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.property.CalScale;

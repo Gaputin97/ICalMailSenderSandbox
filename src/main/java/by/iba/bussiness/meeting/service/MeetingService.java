@@ -1,6 +1,6 @@
-package by.iba.bussines.meeting.service;
+package by.iba.bussiness.meeting.service;
 
-import by.iba.bussines.meeting.model.Meeting;
+import by.iba.bussiness.meeting.model.Meeting;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

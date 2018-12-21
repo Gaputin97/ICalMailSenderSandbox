@@ -1,4 +1,4 @@
-package by.iba.bussines.meeting.wrapper.definer;
+package by.iba.bussiness.meeting.wrapper.definer;
 
 public class Data {
 }

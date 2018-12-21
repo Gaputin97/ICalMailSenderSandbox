@@ -1,9 +1,9 @@
-package by.iba.bussines.calendar.creator;
+package by.iba.bussiness.calendar.creator;
 
-import by.iba.bussines.calendar.attendee.Attendee;
 import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.parameter.Cn;
 import net.fortuna.ical4j.model.parameter.Rsvp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -12,10 +12,11 @@ import java.util.List;
 
 @Component
 public class CalendarListCreator {
-
+    Logger logger = LoggerFactory.getLogger(CalendarListCreator.class);
     public List<Calendar> createCalendarList(String attendeeList, Calendar calendar) {
         List<Calendar> calendarList = new ArrayList<>();
 //        for (String attendee : attendeeList) {
+            logger.info("Attendee: " + attendeeList);
             net.fortuna.ical4j.model.property.Attendee listener = new net.fortuna.ical4j.model.property.Attendee(URI.create(attendeeList));
 
             listener.getParameters().add(Rsvp.FALSE);

@@ -1,6 +1,6 @@
-package by.iba.bussines.session.sorter;
+package by.iba.bussiness.session.sorter;
 
-import by.iba.bussines.session.model.Session;
+import by.iba.bussiness.session.model.Session;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;

@@ -1,4 +1,4 @@
-package by.iba.bussines.owner.model;
+package by.iba.bussiness.owner.model;
 
 public class Owner {
     private String email;

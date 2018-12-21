@@ -1,6 +1,6 @@
-package by.iba.bussines.rrule.definer;
+package by.iba.bussiness.rrule.definer;
 
-import by.iba.bussines.rrule.model.Rrule;
+import by.iba.bussiness.rrule.model.Rrule;
 import org.springframework.stereotype.Component;
 
 import java.util.*;

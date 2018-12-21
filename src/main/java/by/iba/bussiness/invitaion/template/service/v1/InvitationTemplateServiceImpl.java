@@ -1,13 +1,13 @@
-package by.iba.bussines.invitaion.template.service.v1;
+package by.iba.bussiness.invitaion.template.service.v1;
 
 import by.iba.exception.ServiceException;
-import by.iba.bussines.invitaion.template.constants.InvitationTemplateConstants;
-import by.iba.bussines.invitaion.template.model.InvitationTemplate;
-import by.iba.bussines.invitaion.template.service.InvitationTemplateService;
-import by.iba.bussines.meeting.model.Meeting;
-import by.iba.bussines.meeting.service.v1.MeetingServiceImpl;
-import by.iba.bussines.token.model.JavaWebToken;
-import by.iba.bussines.token.service.v1.TokenServiceImpl;
+import by.iba.bussiness.invitaion.template.constants.InvitationTemplateConstants;
+import by.iba.bussiness.invitaion.template.model.InvitationTemplate;
+import by.iba.bussiness.invitaion.template.service.InvitationTemplateService;
+import by.iba.bussiness.meeting.model.Meeting;
+import by.iba.bussiness.meeting.service.v1.MeetingServiceImpl;
+import by.iba.bussiness.token.model.JavaWebToken;
+import by.iba.bussiness.token.service.v1.TokenServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

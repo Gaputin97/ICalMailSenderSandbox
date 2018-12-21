@@ -1,4 +1,4 @@
-package by.iba.bussines.session.model;
+package by.iba.bussiness.session.model;
 
 import java.util.Date;
 

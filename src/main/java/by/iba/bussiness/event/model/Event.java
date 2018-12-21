@@ -1,7 +1,7 @@
-package by.iba.bussines.event.model;
+package by.iba.bussiness.event.model;
 
-import by.iba.bussines.owner.model.Owner;
-import by.iba.bussines.timeslot.model.TimeSlot;
+import by.iba.bussiness.owner.model.Owner;
+import by.iba.bussiness.timeslot.model.TimeSlot;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;

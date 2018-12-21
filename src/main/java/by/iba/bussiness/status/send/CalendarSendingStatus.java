@@ -1,6 +1,6 @@
-package by.iba.bussines.status.send;
+package by.iba.bussiness.status.send;
 
-import by.iba.bussines.status.AbstractStatus;
+import by.iba.bussiness.status.AbstractStatus;
 
 public class CalendarSendingStatus extends AbstractStatus {
     public CalendarSendingStatus(String message) {

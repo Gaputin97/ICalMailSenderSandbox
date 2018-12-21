@@ -1,8 +1,8 @@
-package by.iba.bussines.session.parser;
+package by.iba.bussiness.session.parser;
 
-import by.iba.bussines.session.constants.SessionConstants;
-import by.iba.bussines.session.model.Session;
-import by.iba.bussines.timeslot.model.TimeSlot;
+import by.iba.bussiness.session.constants.SessionConstants;
+import by.iba.bussiness.session.model.Session;
+import by.iba.bussiness.timeslot.model.TimeSlot;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;

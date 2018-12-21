@@ -1,8 +1,8 @@
-package by.iba.bussines.session.checker;
+package by.iba.bussiness.session.checker;
 
-import by.iba.bussines.meeting.model.Meeting;
-import by.iba.bussines.session.model.Session;
-import by.iba.bussines.session.parser.SessionParser;
+import by.iba.bussiness.meeting.model.Meeting;
+import by.iba.bussiness.session.model.Session;
+import by.iba.bussiness.session.parser.SessionParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

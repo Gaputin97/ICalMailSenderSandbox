@@ -1,6 +1,6 @@
-package by.iba.bussines.rrule.frequence.model;
+package by.iba.bussiness.rrule.frequence.model;
 
-import by.iba.bussines.rrule.constants.DateConstants;
+import by.iba.bussiness.rrule.constants.DateConstants;
 
 import java.util.Calendar;
 

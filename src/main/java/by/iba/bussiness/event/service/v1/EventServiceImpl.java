@@ -1,7 +1,6 @@
-package by.iba.bussines.event.service.v1;
+package by.iba.bussiness.event.service.v1;
 
-import by.iba.bussines.event.service.EventService;
-import org.springframework.stereotype.Service;
+import by.iba.bussiness.event.service.EventService;
 
 public class EventServiceImpl implements EventService {
 

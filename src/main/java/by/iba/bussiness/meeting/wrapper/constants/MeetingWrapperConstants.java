@@ -1,4 +1,4 @@
-package by.iba.bussines.meeting.wrapper.constants;
+package by.iba.bussiness.meeting.wrapper.constants;
 
 import org.springframework.stereotype.Component;
 

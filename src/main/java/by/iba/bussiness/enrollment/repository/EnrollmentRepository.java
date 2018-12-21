@@ -1,7 +1,7 @@
-package by.iba.bussines.enrollment.repository;
+package by.iba.bussiness.enrollment.repository;
 
-import by.iba.bussines.enrollment.model.Enrollment;
-import by.iba.bussines.status.insert.InsertStatus;
+import by.iba.bussiness.enrollment.model.Enrollment;
+import by.iba.bussiness.status.insert.InsertStatus;
 
 public interface EnrollmentRepository {
     Enrollment getByEmailAndMeetingId(String parentId, String email);

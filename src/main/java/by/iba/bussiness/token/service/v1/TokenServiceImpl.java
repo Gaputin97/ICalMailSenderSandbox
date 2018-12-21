@@ -1,9 +1,9 @@
-package by.iba.bussines.token.service.v1;
+package by.iba.bussiness.token.service.v1;
 
 import by.iba.exception.ServiceException;
-import by.iba.bussines.token.constants.TokenConstants;
-import by.iba.bussines.token.model.JavaWebToken;
-import by.iba.bussines.token.service.TokenService;
+import by.iba.bussiness.token.constants.TokenConstants;
+import by.iba.bussiness.token.model.JavaWebToken;
+import by.iba.bussiness.token.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

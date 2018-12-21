@@ -1,11 +1,14 @@
-package by.iba.bussines.meeting.service.v1;
+package by.iba.bussiness.meeting.service.v1;
 
+import by.iba.bussiness.sender.controller.SenderController;
 import by.iba.exception.ServiceException;
-import by.iba.bussines.meeting.constants.MeetingConstants;
-import by.iba.bussines.meeting.model.Meeting;
-import by.iba.bussines.meeting.service.MeetingService;
-import by.iba.bussines.token.model.JavaWebToken;
-import by.iba.bussines.token.service.TokenService;
+import by.iba.bussiness.meeting.constants.MeetingConstants;
+import by.iba.bussiness.meeting.model.Meeting;
+import by.iba.bussiness.meeting.service.MeetingService;
+import by.iba.bussiness.token.model.JavaWebToken;
+import by.iba.bussiness.token.service.TokenService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +25,8 @@ import java.util.List;
 
 @Service
 public class MeetingServiceImpl implements MeetingService {
+    private final static Logger logger = LoggerFactory.getLogger(MeetingServiceImpl.class);
+
     private TokenService tokenService;
     private MeetingConstants meetingConstants;
     private RestTemplate restTemplate;
@@ -47,6 +52,7 @@ public class MeetingServiceImpl implements MeetingService {
                     HttpMethod.GET, httpEntity, Meeting.class);
             meeting = meetingResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
+            logger.error("Error with getting meeting by id " + e.getClass());
             throw new ServiceException(e.getMessage());
         }
         return meeting;

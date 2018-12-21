@@ -1,6 +1,6 @@
-package by.iba.bussines.meeting.wrapper.model;
+package by.iba.bussiness.meeting.wrapper.model;
 
-import by.iba.bussines.meeting.type.MeetingType;
+import by.iba.bussiness.meeting.type.MeetingType;
 
 public class MeetingWrapper {
     protected final MeetingType meetingType;

@@ -1,6 +1,6 @@
-package by.iba.bussines.token.service;
+package by.iba.bussiness.token.service;
 
-import by.iba.bussines.token.model.JavaWebToken;
+import by.iba.bussiness.token.model.JavaWebToken;
 
 import javax.servlet.http.HttpServletRequest;
 

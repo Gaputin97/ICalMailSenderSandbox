@@ -1,7 +1,7 @@
-package by.iba.bussines.enrollment.service;
+package by.iba.bussiness.enrollment.service;
 
-import by.iba.bussines.enrollment.model.Enrollment;
-import by.iba.bussines.status.insert.InsertStatus;
+import by.iba.bussiness.enrollment.model.Enrollment;
+import by.iba.bussiness.status.insert.InsertStatus;
 import javax.servlet.http.HttpServletRequest;
 
 public interface EnrollmentService {

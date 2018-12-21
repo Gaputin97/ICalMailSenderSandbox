@@ -1,6 +1,4 @@
-package by.iba.bussines.event.service;
-
-import org.springframework.stereotype.Service;
+package by.iba.bussiness.event.service;
 
 public interface EventService {
 

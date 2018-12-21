@@ -1,6 +1,4 @@
-package by.iba.bussines.rrule.constants;
-
-import org.springframework.stereotype.Component;
+package by.iba.bussiness.rrule.constants;
 
 
 public class EnumConstants {

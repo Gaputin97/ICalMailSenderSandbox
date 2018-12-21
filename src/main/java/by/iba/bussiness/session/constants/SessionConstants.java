@@ -1,5 +1,5 @@
-package by.iba.bussines.session.constants;
+package by.iba.bussiness.session.constants;
 
 public class SessionConstants {
-    public static final String DATE_FORMAT = "MM/dd/yyyy HH:mm:ss";
+    public static final String DATE_FORMAT = "MM-dd-yyyy'T'HH:mm:ss";
 }

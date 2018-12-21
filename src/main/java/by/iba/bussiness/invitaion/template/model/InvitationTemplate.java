@@ -1,4 +1,4 @@
-package by.iba.bussines.invitaion.template.model;
+package by.iba.bussiness.invitaion.template.model;
 
 public class InvitationTemplate {
 

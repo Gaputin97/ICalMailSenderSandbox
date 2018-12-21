@@ -1,8 +1,8 @@
-package by.iba.bussines.meeting.wrapper.model.single;
+package by.iba.bussiness.meeting.wrapper.model.single;
 
-import by.iba.bussines.meeting.type.MeetingType;
-import by.iba.bussines.meeting.wrapper.model.MeetingWrapper;
-import by.iba.bussines.session.model.Session;
+import by.iba.bussiness.meeting.type.MeetingType;
+import by.iba.bussiness.meeting.wrapper.model.MeetingWrapper;
+import by.iba.bussiness.session.model.Session;
 
 public class SingleMeetingWrapper extends MeetingWrapper {
     private Session session;

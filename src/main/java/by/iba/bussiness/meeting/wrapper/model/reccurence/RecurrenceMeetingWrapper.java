@@ -1,8 +1,8 @@
-package by.iba.bussines.meeting.wrapper.model.reccurence;
+package by.iba.bussiness.meeting.wrapper.model.reccurence;
 
-import by.iba.bussines.meeting.type.MeetingType;
-import by.iba.bussines.meeting.wrapper.model.MeetingWrapper;
-import by.iba.bussines.rrule.model.Rrule;
+import by.iba.bussiness.meeting.type.MeetingType;
+import by.iba.bussiness.meeting.wrapper.model.MeetingWrapper;
+import by.iba.bussiness.rrule.model.Rrule;
 
 public class RecurrenceMeetingWrapper extends MeetingWrapper {
     private Rrule rrule;

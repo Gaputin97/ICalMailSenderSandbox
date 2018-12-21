@@ -1,6 +1,6 @@
-package by.iba.bussines.rrule.frequence;
+package by.iba.bussiness.rrule.frequence;
 
-import by.iba.bussines.rrule.frequence.model.RruleFreqType;
+import by.iba.bussiness.rrule.frequence.model.RruleFreqType;
 import org.springframework.stereotype.Component;
 
 @Component

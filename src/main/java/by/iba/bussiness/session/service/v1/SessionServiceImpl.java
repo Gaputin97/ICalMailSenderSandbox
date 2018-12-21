@@ -1,12 +1,12 @@
-package by.iba.bussines.session.service.v1;
+package by.iba.bussiness.session.service.v1;
 
-import by.iba.bussines.meeting.model.Meeting;
-import by.iba.bussines.meeting.service.v1.MeetingServiceImpl;
-import by.iba.bussines.session.model.Session;
-import by.iba.bussines.session.parser.SessionParser;
-import by.iba.bussines.session.service.SessionService;
-import by.iba.bussines.session.sorter.SessionSorter;
-import by.iba.bussines.timeslot.model.TimeSlot;
+import by.iba.bussiness.meeting.model.Meeting;
+import by.iba.bussiness.meeting.service.v1.MeetingServiceImpl;
+import by.iba.bussiness.session.model.Session;
+import by.iba.bussiness.session.parser.SessionParser;
+import by.iba.bussiness.session.service.SessionService;
+import by.iba.bussiness.session.sorter.SessionSorter;
+import by.iba.bussiness.timeslot.model.TimeSlot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

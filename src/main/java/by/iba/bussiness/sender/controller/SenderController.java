@@ -1,11 +1,8 @@
-package by.iba.bussines.sender.controller;
+package by.iba.bussiness.sender.controller;
 
-import by.iba.bussines.calendar.access_component.AccessComponent;
-import by.iba.bussines.enrollment.model.Enrollment;
-import by.iba.bussines.meeting.model.Meeting;
-import by.iba.bussines.meeting.service.MeetingService;
-import by.iba.bussines.status.insert.InsertStatus;
-import by.iba.bussines.status.send.CalendarSendingStatus;
+import by.iba.bussiness.calendar.access_component.AccessComponent;
+import by.iba.bussiness.enrollment.model.Enrollment;
+import by.iba.bussiness.status.send.CalendarSendingStatus;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +17,8 @@ public class SenderController {
     @Autowired
     private AccessComponent accessComponent;
 
-    @ApiOperation(value = "Send calendar templates for non existing recipients", response = Enrollment.class)
-    @RequestMapping(value = "/send/meeting/{meetingId}", method = RequestMethod.POST)
+    @ApiOperation(value = "Send calendar templates for non existing recipients")
+    @RequestMapping(value = "/send/meeting/{meetingId}", method = RequestMethod.POST, consumes = "application/json")
     public CalendarSendingStatus sendInvitationTemplatesToRecipients(@PathVariable String meetingId,
                                                                      @RequestBody String recipientList,
                                                                      HttpServletRequest request) {

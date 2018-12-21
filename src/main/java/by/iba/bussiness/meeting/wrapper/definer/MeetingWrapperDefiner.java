@@ -1,18 +1,18 @@
-package by.iba.bussines.meeting.wrapper.definer;
+package by.iba.bussiness.meeting.wrapper.definer;
 
-import by.iba.bussines.meeting.model.Meeting;
-import by.iba.bussines.meeting.service.v1.MeetingServiceImpl;
-import by.iba.bussines.meeting.wrapper.builder.complex.ComplexMeetingWrapperBuilder;
-import by.iba.bussines.meeting.wrapper.builder.reccurence.RecurrenceMeetingWrapperBuilder;
-import by.iba.bussines.meeting.wrapper.builder.single.SingleMeetingWrapperBuilder;
-import by.iba.bussines.meeting.wrapper.constants.MeetingWrapperConstants;
-import by.iba.bussines.meeting.wrapper.model.MeetingWrapper;
-import by.iba.bussines.rrule.definer.RruleDefiner;
-import by.iba.bussines.rrule.model.Rrule;
-import by.iba.bussines.session.checker.SessionChecker;
-import by.iba.bussines.session.model.Session;
-import by.iba.bussines.session.parser.SessionParser;
-import by.iba.bussines.timeslot.model.TimeSlot;
+import by.iba.bussiness.meeting.model.Meeting;
+import by.iba.bussiness.meeting.service.v1.MeetingServiceImpl;
+import by.iba.bussiness.meeting.wrapper.builder.complex.ComplexMeetingWrapperBuilder;
+import by.iba.bussiness.meeting.wrapper.builder.reccurence.RecurrenceMeetingWrapperBuilder;
+import by.iba.bussiness.meeting.wrapper.builder.single.SingleMeetingWrapperBuilder;
+import by.iba.bussiness.meeting.wrapper.constants.MeetingWrapperConstants;
+import by.iba.bussiness.meeting.wrapper.model.MeetingWrapper;
+import by.iba.bussiness.rrule.definer.RruleDefiner;
+import by.iba.bussiness.rrule.model.Rrule;
+import by.iba.bussiness.session.checker.SessionChecker;
+import by.iba.bussiness.session.model.Session;
+import by.iba.bussiness.session.parser.SessionParser;
+import by.iba.bussiness.timeslot.model.TimeSlot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

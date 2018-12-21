@@ -1,9 +1,8 @@
-package by.iba.bussines.meeting.wrapper.builder.reccurence;
+package by.iba.bussiness.meeting.wrapper.builder.reccurence;
 
-import by.iba.bussines.meeting.wrapper.builder.AbstractMeetingWrapperBuilder;
-import by.iba.bussines.meeting.wrapper.model.reccurence.RecurrenceMeetingWrapper;
-import by.iba.bussines.rrule.model.Rrule;
-import org.springframework.stereotype.Component;
+import by.iba.bussiness.meeting.wrapper.builder.AbstractMeetingWrapperBuilder;
+import by.iba.bussiness.meeting.wrapper.model.reccurence.RecurrenceMeetingWrapper;
+import by.iba.bussiness.rrule.model.Rrule;
 
 public class RecurrenceMeetingWrapperBuilder extends AbstractMeetingWrapperBuilder<RecurrenceMeetingWrapperBuilder> {
     private Rrule rrule;

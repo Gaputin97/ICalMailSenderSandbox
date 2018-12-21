@@ -1,6 +1,6 @@
-package by.iba.bussines.status.insert;
+package by.iba.bussiness.status.insert;
 
-import by.iba.bussines.status.AbstractStatus;
+import by.iba.bussiness.status.AbstractStatus;
 
 public class InsertStatus extends AbstractStatus {
     

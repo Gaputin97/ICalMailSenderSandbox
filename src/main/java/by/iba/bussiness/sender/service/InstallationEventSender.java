@@ -1,6 +1,6 @@
-package by.iba.bussines.sender.service;
+package by.iba.bussiness.sender.service;
 
-import by.iba.bussines.status.send.CalendarSendingStatus;
+import by.iba.bussiness.status.send.CalendarSendingStatus;
 import net.fortuna.ical4j.model.Calendar;
 
 public interface InstallationEventSender {

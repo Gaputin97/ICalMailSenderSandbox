@@ -1,6 +1,6 @@
-package by.iba.bussines.meeting.wrapper.definer;
+package by.iba.bussiness.meeting.wrapper.definer;
 
-//import by.iba.bussines.meeting.model.Meeting;
+//import by.iba.bussiness.meeting.model.Meeting;
 //import org.junit.Test;
 //
 //public class MeetingWrapperDefinerTest {

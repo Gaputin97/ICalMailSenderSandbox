@@ -1,8 +1,8 @@
-package by.iba.bussines.calendar.creator.type.complex;
+package by.iba.bussiness.calendar.creator.type.complex;
 
-import by.iba.bussines.calendar.creator.text_preparing.CalendarTextFieldBreaker;
-import by.iba.bussines.meeting.service.MeetingService;
-import by.iba.bussines.meeting.wrapper.model.complex.ComplexMeetingWrapper;
+import by.iba.bussiness.calendar.creator.text_preparing.CalendarTextFieldBreaker;
+import by.iba.bussiness.meeting.service.MeetingService;
+import by.iba.bussiness.meeting.wrapper.model.complex.ComplexMeetingWrapper;
 import net.fortuna.ical4j.model.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

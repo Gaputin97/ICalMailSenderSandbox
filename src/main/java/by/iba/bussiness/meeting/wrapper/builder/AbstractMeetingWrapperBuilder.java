@@ -1,4 +1,4 @@
-package by.iba.bussines.meeting.wrapper.builder;
+package by.iba.bussiness.meeting.wrapper.builder;
 
 
 public class AbstractMeetingWrapperBuilder<T extends AbstractMeetingWrapperBuilder> {

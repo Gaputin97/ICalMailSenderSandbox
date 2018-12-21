@@ -1,4 +1,4 @@
-package by.iba.bussines.chain.constants;
+package by.iba.bussiness.chain.constants;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;

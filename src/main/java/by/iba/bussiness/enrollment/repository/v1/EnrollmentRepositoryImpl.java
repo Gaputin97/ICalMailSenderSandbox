@@ -1,11 +1,11 @@
-package by.iba.bussines.enrollment.repository.v1;
+package by.iba.bussiness.enrollment.repository.v1;
 
-import by.iba.bussines.enrollment.repository.EnrollmentRepository;
-import by.iba.bussines.enrollment.model.Enrollment;
+import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
+import by.iba.bussiness.enrollment.model.Enrollment;
 
 import by.iba.exception.RepositoryException;
 
-import by.iba.bussines.status.insert.InsertStatus;
+import by.iba.bussiness.status.insert.InsertStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

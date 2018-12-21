@@ -1,10 +1,10 @@
-package by.iba.bussines.calendar.creator.type.single;
+package by.iba.bussiness.calendar.creator.type.single;
 
-import by.iba.bussines.calendar.creator.text_preparing.CalendarTextFieldBreaker;
-import by.iba.bussines.meeting.model.Meeting;
-import by.iba.bussines.meeting.service.MeetingService;
-import by.iba.bussines.meeting.wrapper.model.single.SingleMeetingWrapper;
-import by.iba.bussines.session.model.Session;
+import by.iba.bussiness.calendar.creator.text_preparing.CalendarTextFieldBreaker;
+import by.iba.bussiness.meeting.model.Meeting;
+import by.iba.bussiness.meeting.service.MeetingService;
+import by.iba.bussiness.meeting.wrapper.model.single.SingleMeetingWrapper;
+import by.iba.bussiness.session.model.Session;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.component.CalendarComponent;
@@ -34,7 +34,7 @@ public class SimpleCalendarTemplate {
         this.meetingService = meetingService;
     }
 
-    public Calendar createSingleMeetingInvitationTemplate(SingleMeetingWrapper singleMeetingWrapper, HttpServletRequest request, Meeting meeting) {
+    public Calendar createSingleMeetingInvitationTemplate(SingleMeetingWrapper singleMeetingWrapper, Meeting meeting) {
         Session timeSlot = singleMeetingWrapper.getSession();
         DateTime startDateTime = new DateTime(timeSlot.getStartDate());
         DateTime endDateTime = new DateTime(timeSlot.getEndDate());
@@ -57,7 +57,6 @@ public class SimpleCalendarTemplate {
         // Remake after enter appointment
         Uid UID = fixedUidGenerator.generateUid();
         event.getProperties().add(UID);
-        requestCalendar.getComponents().add(event);
 
         return requestCalendar;
     }
