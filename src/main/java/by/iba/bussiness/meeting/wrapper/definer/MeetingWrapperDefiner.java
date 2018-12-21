@@ -34,17 +34,10 @@ public class MeetingWrapperDefiner {
                                  MeetingWrapperConstants meetingWrapperConstants,
                                  SessionParser sessionParser,
                                  RruleDefiner rruleDefiner,
-<<<<<<< HEAD:src/main/java/by/iba/bussines/meeting/wrapper/definer/MeetingWrapperDefiner.java
-                                 SessionChecker sessionChecker,
-                                 ComplexMeetingWrapperBuilder complexMeetingWrapperBuilder,
-                                 RecurrenceMeetingWrapperBuilder recurrenceMeetingWrapperBuilder,
-                                 SingleMeetingWrapperBuilder singleMeetingWrapperBuilder) {
-=======
                                  SessionChecker sessionChecker
                                  /*ComplexMeetingWrapperBuilder complexMeetingWrapperBuilder,
                                  RecurrenceMeetingWrapperBuilder recurrenceMeetingWrapperBuilder,
                                  SingleMeetingWrapperBuilder singleMeetingWrapperBuilder*/) {
->>>>>>> 98c346483b3f8847b2afbd934c2bf7742e20ed68:src/main/java/by/iba/bussiness/meeting/wrapper/definer/MeetingWrapperDefiner.java
         this.meetingService = meetingService;
         this.meetingWrapperConstants = meetingWrapperConstants;
         this.sessionParser = sessionParser;
