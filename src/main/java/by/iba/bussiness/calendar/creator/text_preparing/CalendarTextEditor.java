@@ -16,11 +16,11 @@ public class CalendarTextEditor {
         return stringField;
     }
 
-    public String colonReplacer(String method) {
+    public String colonReplace(String method) {
         return method.replace(':', '=');
     }
 
-    public String userEmailEditor(String email) {
+    public String userEmailEdit(String email) {
         if(email.substring(0, 7).equals("mailto:")) {
             email = email.substring(7);
         }

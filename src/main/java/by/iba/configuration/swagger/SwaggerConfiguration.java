@@ -13,7 +13,7 @@ public class SwaggerConfiguration {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2).
                 select().
-                apis(RequestHandlerSelectors.basePackage("by.iba.bussiness.sender.controller")).
+                apis(RequestHandlerSelectors.any()).
                 paths(PathSelectors.any()).
                 build();
     }
