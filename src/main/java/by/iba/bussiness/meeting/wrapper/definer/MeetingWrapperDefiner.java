@@ -54,18 +54,18 @@ public class MeetingWrapperDefiner {
         if (amountOfTimeSlots == meetingWrapperConstants.getAmountOfSessionsForSingleEvent()) {
             TimeSlot meetingTimeSlot = meeting.getTimeSlots().get(meetingWrapperConstants.getNumberOfFirstTimeSlot());
             Session meetingSession = sessionParser.timeSlotToSession(meetingTimeSlot);
-            meetingWrapper = new SingleMeetingWrapperBuilder(singleMeetingWrapperBuilder)
+            meetingWrapper = new SingleMeetingWrapperBuilder()
                     .setSession(meetingSession)
                     .build();
         } else {
             List<Session> sessions = sessionParser.timeSlotListToSessionList(meeting.getTimeSlots());
             if (sessionChecker.doAllSessionsTheSame(meeting)) {
                 Rrule rrule = rruleDefiner.defineRrule(sessions);
-                meetingWrapper = new RecurrenceMeetingWrapperBuilder(recurrenceMeetingWrapperBuilder)
+                meetingWrapper = new RecurrenceMeetingWrapperBuilder()
                         .setRrule(rrule)
                         .build();
             } else {
-                meetingWrapper = new ComplexMeetingWrapperBuilder(complexMeetingWrapperBuilder)
+                meetingWrapper = new ComplexMeetingWrapperBuilder()
                         .setSessions(sessions)
                         .build();
             }

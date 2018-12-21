@@ -8,10 +8,17 @@ import by.iba.bussiness.meeting.wrapper.model.single.SingleMeetingWrapper;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(basePackage)
 public class MeetingWrapperDefinerTest {
 
+    @Autowired
     private MeetingWrapperDefiner meetingWrapperDefiner;
 
     @Test
@@ -25,7 +32,6 @@ public class MeetingWrapperDefinerTest {
         MeetingType meetingType = singleMeetingWrapper.getMeetingType();
         Assert.assertEquals(meetingType, Data.MEETING_TYPE_FOR_SINGLE_EVENT);
         Assert.assertNotNull(singleMeetingWrapper.getSession());
-
 
     }
 }
