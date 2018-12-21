@@ -1,17 +1,17 @@
 package by.iba.bussines.meeting.wrapper.definer;
 
-import by.iba.bussines.calendar.factory.type.MeetingType;
-import by.iba.bussines.meeting.model.Meeting;
-import by.iba.bussines.meeting.wrapper.model.single.SingleMeetingWrapper;
+
+import by.iba.bussiness.meeting.model.Meeting;
+import by.iba.bussiness.meeting.type.MeetingType;
+import by.iba.bussiness.meeting.wrapper.definer.MeetingWrapperDefiner;
+import by.iba.bussiness.meeting.wrapper.model.single.SingleMeetingWrapper;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runner.Runner;
-import org.springframework.beans.factory.annotation.Autowired;
+
 
 public class MeetingWrapperDefinerTest {
 
-    @Autowired
     private MeetingWrapperDefiner meetingWrapperDefiner;
 
     @Test

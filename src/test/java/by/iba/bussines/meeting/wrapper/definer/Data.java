@@ -1,7 +1,7 @@
 package by.iba.bussines.meeting.wrapper.definer;
 
-import by.iba.bussines.calendar.factory.type.MeetingType;
-import by.iba.bussines.timeslot.model.TimeSlot;
+import by.iba.bussiness.meeting.type.MeetingType;
+import by.iba.bussiness.timeslot.model.TimeSlot;
 
 import java.util.ArrayList;
 import java.util.List;

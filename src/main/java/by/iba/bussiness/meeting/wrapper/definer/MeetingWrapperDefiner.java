@@ -34,18 +34,18 @@ public class MeetingWrapperDefiner {
                                  MeetingWrapperConstants meetingWrapperConstants,
                                  SessionParser sessionParser,
                                  RruleDefiner rruleDefiner,
-                                 SessionChecker sessionChecker
-                                 /*ComplexMeetingWrapperBuilder complexMeetingWrapperBuilder,
+                                 SessionChecker sessionChecker,
+                                 ComplexMeetingWrapperBuilder complexMeetingWrapperBuilder,
                                  RecurrenceMeetingWrapperBuilder recurrenceMeetingWrapperBuilder,
-                                 SingleMeetingWrapperBuilder singleMeetingWrapperBuilder*/) {
+                                 SingleMeetingWrapperBuilder singleMeetingWrapperBuilder) {
         this.meetingService = meetingService;
         this.meetingWrapperConstants = meetingWrapperConstants;
         this.sessionParser = sessionParser;
         this.rruleDefiner = rruleDefiner;
         this.sessionChecker = sessionChecker;
-//        this.complexMeetingWrapperBuilder = complexMeetingWrapperBuilder;
-//        this.recurrenceMeetingWrapperBuilder = recurrenceMeetingWrapperBuilder;
-//        this.singleMeetingWrapperBuilder = singleMeetingWrapperBuilder;
+        this.complexMeetingWrapperBuilder = complexMeetingWrapperBuilder;
+        this.recurrenceMeetingWrapperBuilder = recurrenceMeetingWrapperBuilder;
+        this.singleMeetingWrapperBuilder = singleMeetingWrapperBuilder;
     }
 
     public <T extends MeetingWrapper> T defineMeetingWrapper(Meeting meeting) {
