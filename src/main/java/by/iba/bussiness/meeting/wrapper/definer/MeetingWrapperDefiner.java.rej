@@ -1,0 +1,9 @@
+diff a/src/main/java/by/iba/bussiness/meeting/wrapper/definer/MeetingWrapperDefiner.java b/src/main/java/by/iba/bussiness/meeting/wrapper/definer/MeetingWrapperDefiner.java	(rejected hunks)
+@@ -0,6 +0,7 @@
+                                  SessionChecker sessionChecker,
+                                  ComplexMeetingWrapperBuilder complexMeetingWrapperBuilder,
+                                  RecurrenceMeetingWrapperBuilder recurrenceMeetingWrapperBuilder,
++                                 SingleMeetingWrapperBuilder singleMeetingWrapperBuilder) {
+ =======
+                                  SessionChecker sessionChecker
+                                  /*ComplexMeetingWrapperBuilder complexMeetingWrapperBuilder,
