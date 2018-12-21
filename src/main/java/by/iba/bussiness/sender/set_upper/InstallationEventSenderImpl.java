@@ -40,9 +40,9 @@ public class InstallationEventSenderImpl {
             Component event = calendar.getComponents().getComponent(Component.VEVENT);
             Property attendee = event.getProperties().getProperty(Property.ATTENDEE);
             String address = ((Attendee) attendee).getCalAddress().toString();
-            String method = calendarTextEditor.colonReplacer(calendar.getMethod().toString());
+            String method = calendarTextEditor.colonReplace(calendar.getMethod().toString());
 
-            helper.setTo(calendarTextEditor.userEmailEditor(address));
+            helper.setTo(calendarTextEditor.userEmailEdit(address));
 
             MimeMultipart multipart = new MimeMultipart();
             MimeBodyPart iСalInline = new MimeBodyPart();
