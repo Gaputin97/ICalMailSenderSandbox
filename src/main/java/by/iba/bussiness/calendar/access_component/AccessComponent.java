@@ -35,7 +35,7 @@ public class AccessComponent {
         this.multiplyCalendarSender = multiplyCalendarSender;
     }
 
-    public void getMeeting(HttpServletRequest request, String meetingId, List<Attendee> attendeeList){
+    public void getMeeting(HttpServletRequest request, String meetingId, String attendeeList){
         Meeting meeting = meetingService.getMeetingById(request, meetingId);
         MeetingWrapper meetingWrapper = meetingWrapperDefiner.defineMeetingWrapper(meeting);
         Calendar calendar = calendarFactory.createInvitationCalendarTemplate(meetingWrapper, request, meeting);

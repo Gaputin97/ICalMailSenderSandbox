@@ -13,18 +13,18 @@ import java.util.List;
 @Component
 public class CalendarListCreator {
 
-    public List<Calendar> createCalendarList(List<Attendee> attendeeList, Calendar calendar) {
-        List<Calendar> calendarList = new ArrayList<>(attendeeList.size());
-        for (Attendee attendee : attendeeList) {
-            net.fortuna.ical4j.model.property.Attendee listener = new net.fortuna.ical4j.model.property.Attendee(URI.create(attendee.getEmail()));
-            listener.getParameters().add(new Cn(attendee.getCommonName()));
+    public List<Calendar> createCalendarList(String attendeeList, Calendar calendar) {
+        List<Calendar> calendarList = new ArrayList<>();
+//        for (String attendee : attendeeList) {
+            net.fortuna.ical4j.model.property.Attendee listener = new net.fortuna.ical4j.model.property.Attendee(URI.create(attendeeList));
+
             listener.getParameters().add(Rsvp.FALSE);
 
             net.fortuna.ical4j.model.Component vEvent = calendar.getComponent(net.fortuna.ical4j.model.Component.VEVENT);
             vEvent.getProperties().add(listener);
 
             calendarList.add(calendar);
-        }
+//        }
         if (calendarList.isEmpty()) {
             throw new NullPointerException("Your calendar list is empty!");
         }

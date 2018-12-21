@@ -7,11 +7,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
 public class ComplexMeetingWrapperBuilder extends AbstractMeetingWrapperBuilder<ComplexMeetingWrapperBuilder> {
     private List<Session> sessions;
 
-    public ComplexMeetingWrapperBuilder(Class<ComplexMeetingWrapperBuilder> builderClass) {
+    public ComplexMeetingWrapperBuilder(ComplexMeetingWrapperBuilder builderClass) {
         super(builderClass);
     }
 
