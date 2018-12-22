@@ -7,6 +7,7 @@ import by.iba.bussiness.calendar.factory.CalendarFactory;
 import by.iba.bussiness.meeting.model.Meeting;
 import by.iba.bussiness.meeting.service.MeetingService;
 import by.iba.bussiness.calendar.date.model.DateHelper;
+import by.iba.bussiness.meeting.type.MeetingType;
 import by.iba.bussiness.sender.MessageSender;
 import by.iba.bussiness.sender.service.SenderService;
 import net.fortuna.ical4j.model.Calendar;
@@ -43,6 +44,10 @@ public class SenderServiceImpl implements SenderService {
         DateHelper dateHelper = dateHelperDefiner.definerDateHelper(meeting);
         Calendar calendar = calendarFactory.createInvitationCalendarTemplate(dateHelper, meeting);
         List<Calendar> calendarList = calendarListCreator.createCalendarList(emailList, calendar);
-        messageSender.sendMessageToAllRecipients(calendarList);
+        if(dateHelper.getMeetingType().equals(MeetingType.SINGLE) || dateHelper.getMeetingType().equals(MeetingType.RECURRENCE)) {
+            messageSender.sendMessageToAllRecipients(calendarList);
+        } else if (dateHelper.getMeetingType().equals(MeetingType.COMPLEX)) {
+            
+        }
     }
 }

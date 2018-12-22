@@ -8,18 +8,16 @@ import java.util.List;
 
 @Component
 public class ComplexDateHelperBuilder {
-    private List<Session> sessions;
+    private List<Session> sessionList;
 
-    public ComplexDateHelperBuilder setSessions(List<Session> sessions) {
-        this.sessions = sessions;
+    public ComplexDateHelperBuilder setSessionList(List<Session> sessionList) {
+        this.sessionList = sessionList;
         return this;
     }
 
     public ComplexDateHelper build() {
         ComplexDateHelper complexDateHelper = new ComplexDateHelper();
-        complexDateHelper.setSessions(sessions);
+        complexDateHelper.setSessionList(sessionList);
         return complexDateHelper;
     }
-
-
 }

@@ -14,8 +14,8 @@ public class RecurrenceDateHelperBuilder {
     }
 
     public RecurrenceDateHelper build() {
-        RecurrenceDateHelper reccurenceMeetingWrapper = new RecurrenceDateHelper();
-        reccurenceMeetingWrapper.setRrule(rrule);
-        return reccurenceMeetingWrapper;
+        RecurrenceDateHelper recurrenceMeetingWrapper = new RecurrenceDateHelper();
+        recurrenceMeetingWrapper.setRrule(rrule);
+        return recurrenceMeetingWrapper;
     }
 }

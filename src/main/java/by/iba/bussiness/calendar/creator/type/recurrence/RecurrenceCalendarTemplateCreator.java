@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.net.SocketException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
@@ -59,7 +60,17 @@ public class RecurrenceCalendarTemplateCreator {
         Session firstSession = sessionParser.timeSlotToSession(firstTimeSlot);
         DateTime startDateTime = new DateTime(firstSession.getStartDate());
 
-        requestCalendar.getComponents().add(new VEvent(startDateTime, meeting.getSummary()));
+        Calendar calendar = null;
+        try {
+            calendar = new Calendar(requestCalendar);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        calendar.getComponents().add(new VEvent(startDateTime, meeting.getSummary()));
         net.fortuna.ical4j.model.Component event = requestCalendar.getComponents().getComponent(net.fortuna.ical4j.model.Component.VEVENT);
 
         event.getProperties().add(new Sequence("0"));
@@ -80,7 +91,7 @@ public class RecurrenceCalendarTemplateCreator {
         Uid UID = fixedUidGenerator.generateUid();
         event.getProperties().add(UID);
 
-        return requestCalendar;
+        return calendar;
 
     }
 }
