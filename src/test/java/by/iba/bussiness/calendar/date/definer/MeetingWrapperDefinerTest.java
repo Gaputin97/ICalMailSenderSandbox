@@ -1,35 +1,35 @@
-package by.iba.bussines.meeting.wrapper.definer;
-
+package by.iba.bussiness.calendar.date.definer;
 
 import by.iba.bussiness.meeting.model.Meeting;
 import by.iba.bussiness.meeting.type.MeetingType;
 import by.iba.bussiness.calendar.date.model.single.SingleMeetingWrapper;
+import by.iba.configuration.ApplicationConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(basePackage)
+@ContextConfiguration(classes = ApplicationConfiguration.class)
+@TestPropertySource(locations = "classpath:application.properties")
 public class MeetingWrapperDefinerTest {
 
     @Autowired
-    private MeetingWrapperDefiner meetingWrapperDefiner;
+    private DateHelperDefiner dateHelperDefiner;
 
     @Test
     public void defineMeetingWrapperTest() {
         //given
         Meeting meeting = new Meeting();
-        meeting.setTimeSlots(Data.createTimeSlotsForSingleEvent());
+        meeting.setTimeSlots(MeetingWrapperDefinerTestData.createTimeSlotsForSingleEvent());
         //when
-        SingleMeetingWrapper singleMeetingWrapper = meetingWrapperDefiner.defineMeetingWrapper(meeting);
+        SingleMeetingWrapper singleMeetingWrapper = (SingleMeetingWrapper) dateHelperDefiner.definerDateHelper(meeting);
         //then
         MeetingType meetingType = singleMeetingWrapper.getMeetingType();
-        Assert.assertEquals(meetingType, Data.MEETING_TYPE_FOR_SINGLE_EVENT);
+        Assert.assertEquals(meetingType, MeetingWrapperDefinerTestData.MEETING_TYPE_FOR_SINGLE_EVENT);
         Assert.assertNotNull(singleMeetingWrapper.getSession());
 
     }

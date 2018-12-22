@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CalendarTextEditor {
-    public String lineBreak(String stringField) {
+    public String breakLine(String stringField) {
         StringBuffer sourceStringBuilder = new StringBuffer(stringField);
         if (stringField.length() > 65) {
             int countOfLines = stringField.length() / 65;
@@ -16,11 +16,11 @@ public class CalendarTextEditor {
         return stringField;
     }
 
-    public String colonReplace(String method) {
+    public String replaceColonToEqual(String method) {
         return method.replace(':', '=');
     }
 
-    public String userEmailEdit(String email) {
+    public String editUserEmail(String email) {
         if(email.substring(0, 7).equals("mailto:")) {
             email = email.substring(7);
         }

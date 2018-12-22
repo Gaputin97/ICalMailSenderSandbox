@@ -2,10 +2,13 @@ package by.iba.bussiness.calendar.creator;
 
 import by.iba.bussiness.calendar.email.Email;
 import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.CalendarException;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.component.CalendarComponent;
 import net.fortuna.ical4j.model.parameter.Rsvp;
 import net.fortuna.ical4j.model.property.Attendee;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
@@ -16,6 +19,8 @@ import java.util.List;
 
 @org.springframework.stereotype.Component
 public class CalendarListCreator {
+    private Logger logger = LoggerFactory.getLogger(CalendarListCreator.class);
+
     public List<Calendar> createCalendarList(Email emailList, Calendar calendar) {
         List<Calendar> calendarList = new ArrayList<>();
 
@@ -28,12 +33,9 @@ public class CalendarListCreator {
 
             try {
                 calendarList.add(new Calendar(calendar));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
+            } catch (ParseException | IOException | URISyntaxException ex) {
+                logger.info(ex.getMessage());
+                throw new CalendarException("Can't create calendar meeting. Try again later.");
             }
             event.getProperties().remove(listener);
         }

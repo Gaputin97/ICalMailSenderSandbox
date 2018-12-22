@@ -1,13 +1,15 @@
 package by.iba.bussiness.enrollment.service.v1;
 
 import by.iba.bussiness.enrollment.constants.EnrollmentConstants;
-import by.iba.bussiness.enrollment.repository.v1.EnrollmentRepositoryImpl;
 import by.iba.bussiness.enrollment.model.Enrollment;
+import by.iba.bussiness.enrollment.repository.v1.EnrollmentRepositoryImpl;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.status.insert.InsertStatus;
-import by.iba.exception.ServiceException;
 import by.iba.bussiness.token.model.JavaWebToken;
 import by.iba.bussiness.token.service.v1.TokenServiceImpl;
+import by.iba.exception.ServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class EnrollmentServiceImpl implements EnrollmentService {
+    private final static Logger logger = LoggerFactory.getLogger(EnrollmentServiceImpl.class);
     private TokenServiceImpl tokenService;
     private RestTemplate restTemplate;
     private EnrollmentConstants enrollmentConstants;
@@ -50,6 +53,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                     HttpMethod.GET, httpEntity, Enrollment.class);
             enrollment = enrollmentResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
+            logger.error(e.getMessage());
             throw new ServiceException(e.getMessage());
         }
         return enrollment;
