@@ -1,13 +1,13 @@
 package by.iba.bussiness.sender.service.v1;
 
 import by.iba.bussiness.calendar.creator.CalendarListCreator;
+import by.iba.bussiness.calendar.date.definer.DateHelperDefiner;
 import by.iba.bussiness.calendar.email.Email;
 import by.iba.bussiness.calendar.factory.CalendarFactory;
 import by.iba.bussiness.meeting.model.Meeting;
 import by.iba.bussiness.meeting.service.MeetingService;
-import by.iba.bussiness.meeting.wrapper.definer.MeetingWrapperDefiner;
-import by.iba.bussiness.meeting.wrapper.model.MeetingWrapper;
-import by.iba.bussiness.sender.manager.MultiplyCalendarSender;
+import by.iba.bussiness.calendar.date.model.DateHelper;
+import by.iba.bussiness.sender.MessageSender;
 import by.iba.bussiness.sender.service.SenderService;
 import net.fortuna.ical4j.model.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,29 +19,30 @@ import java.util.List;
 @Component
 public class SenderServiceImpl implements SenderService {
     private MeetingService meetingService;
-    private MeetingWrapperDefiner meetingWrapperDefiner;
+    private DateHelperDefiner dateHelperDefiner;
     private CalendarFactory calendarFactory;
     private CalendarListCreator calendarListCreator;
-    private MultiplyCalendarSender multiplyCalendarSender;
+    private MessageSender messageSender;
 
     @Autowired
     public SenderServiceImpl(MeetingService meetingService,
-                             MeetingWrapperDefiner meetingWrapperDefiner,
+                             DateHelperDefiner dateHelperDefiner,
                              CalendarFactory calendarFactory,
                              CalendarListCreator calendarListCreator,
-                             MultiplyCalendarSender multiplyCalendarSender) {
+                             MessageSender messageSender) {
         this.meetingService = meetingService;
-        this.meetingWrapperDefiner = meetingWrapperDefiner;
+        this.dateHelperDefiner = dateHelperDefiner;
         this.calendarFactory = calendarFactory;
         this.calendarListCreator = calendarListCreator;
-        this.multiplyCalendarSender = multiplyCalendarSender;
+        this.messageSender = messageSender;
     }
 
-    public void sendMeeting(HttpServletRequest request, String meetingId, Email emailList){
+    @Override
+    public void sendMeeting(HttpServletRequest request, String meetingId, Email emailList) {
         Meeting meeting = meetingService.getMeetingById(request, meetingId);
-        MeetingWrapper meetingWrapper = meetingWrapperDefiner.defineMeetingWrapper(meeting);
-        Calendar calendar = calendarFactory.createInvitationCalendarTemplate(meetingWrapper, request, meeting);
+        DateHelper dateHelper = dateHelperDefiner.definerDateHelper(meeting);
+        Calendar calendar = calendarFactory.createInvitationCalendarTemplate(dateHelper, meeting);
         List<Calendar> calendarList = calendarListCreator.createCalendarList(emailList, calendar);
-        multiplyCalendarSender.sendToEndUser(calendarList);
+        messageSender.sendMessageToAllRecipients(calendarList);
     }
 }
