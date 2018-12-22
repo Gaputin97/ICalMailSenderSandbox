@@ -1,6 +1,9 @@
 package by.iba.bussiness.sender;
 
 import by.iba.bussiness.calendar.creator.text_preparing.CalendarTextEditor;
+import by.iba.bussiness.enrollment.model.Enrollment;
+import by.iba.bussiness.enrollment.service.v1.EnrollmentServiceImpl;
+import by.iba.bussiness.meeting.model.Meeting;
 import by.iba.bussiness.status.send.CalendarSendingStatus;
 import by.iba.exception.SendingException;
 import net.fortuna.ical4j.model.Calendar;
@@ -25,14 +28,16 @@ public class MessageSender {
     private Logger logger = LoggerFactory.getLogger(MessageSender.class);
     private JavaMailSender javaMailSender;
     private CalendarTextEditor calendarTextEditor;
+    private EnrollmentServiceImpl enrollmentService;
 
     @Autowired
-    public MessageSender(JavaMailSender javaMailSender, CalendarTextEditor calendarTextEditor) {
+    public MessageSender(JavaMailSender javaMailSender, CalendarTextEditor calendarTextEditor, EnrollmentServiceImpl enrollmentService) {
         this.javaMailSender = javaMailSender;
         this.calendarTextEditor = calendarTextEditor;
+        this.enrollmentService = enrollmentService;
     }
 
-    public void sendMessageToOneRecipient(Calendar calendar) {
+    public void sendMessageToOneRecipient(Calendar calendar, Meeting meeting) {
         MimeMessage message;
         try {
             message = javaMailSender.createMimeMessage();
@@ -60,19 +65,22 @@ public class MessageSender {
             iСalAttachment.setContent(calendar.toString(), "text/calendar;charset=utf-8;" + method);
             iСalAttachment.setFileName("attachedCalendar.ics");
             multipart.addBodyPart(iСalAttachment);
-
+            Enrollment enrollment = new Enrollment();
+            enrollment.setParentId(meeting.getId());
+            enrollment.setUserEmail(editedUserEmail);
             message.setContent(multipart);
             javaMailSender.send(message);
             logger.info("Message was sended to " + editedUserEmail);
+            enrollmentService.saveEnrollment(enrollment);
         } catch (MessagingException e) {
             logger.error(e.getMessage());
             throw new SendingException("Error while trying to send message.");
         }
     }
 
-    public CalendarSendingStatus sendMessageToAllRecipients(List<Calendar> calendarList) {
+    public CalendarSendingStatus sendMessageToAllRecipients(List<Calendar> calendarList, Meeting meeting) {
         for (Calendar calendar : calendarList) {
-            sendMessageToOneRecipient(calendar);
+            sendMessageToOneRecipient(calendar, meeting);
         }
         logger.info("Messages to all recipients were sended successfully");
         return new CalendarSendingStatus("Messages with calendar were sended to all recipients");
