@@ -14,8 +14,6 @@ import java.util.List;
 
 @Component
 public class EnrollmentChecker {
-    public boolean isExistsEnrollment(){
-        return false;
     private final static Logger logger = LoggerFactory.getLogger(EnrollmentServiceImpl.class);
     private EnrollmentServiceImpl enrollmentService;
 

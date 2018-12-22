@@ -47,7 +47,6 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         HttpEntity httpEntity = new HttpEntity<>(httpHeaders);
         Enrollment enrollment = null;
         try {
-            String test = enrollmentConstants.getEnrollmentEndpointByEmailAndMeetingId(parentId, email);
             ResponseEntity<Enrollment> enrollmentResponseEntity = restTemplate.exchange(enrollmentConstants.getEnrollmentEndpointByEmailAndMeetingId(parentId, email),
                     HttpMethod.GET, httpEntity, Enrollment.class);
             enrollment = enrollmentResponseEntity.getBody();
