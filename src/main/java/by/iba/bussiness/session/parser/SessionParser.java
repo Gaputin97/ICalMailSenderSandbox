@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class SessionParser {
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat(SessionConstants.DATE_FORMAT);
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat(SessionConstants.DATE_FORMAT);
 
     public Session timeSlotToSession(TimeSlot timeSlot) {
         Date startDate;

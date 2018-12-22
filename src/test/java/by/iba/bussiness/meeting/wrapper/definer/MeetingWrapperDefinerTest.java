@@ -24,12 +24,12 @@ public class MeetingWrapperDefinerTest {
     public void defineMeetingWrapperTest() {
         //given
         Meeting meeting = new Meeting();
-        meeting.setTimeSlots(Data.createTimeSlotsForSingleEvent());
+        meeting.setTimeSlots(MeetingWrapperDefinerTestData.createTimeSlotsForSingleEvent());
         //when
         SingleMeetingWrapper singleMeetingWrapper = meetingWrapperDefiner.defineMeetingWrapper(meeting);
         //then
         MeetingType meetingType = singleMeetingWrapper.getMeetingType();
-        Assert.assertEquals(meetingType, Data.MEETING_TYPE_FOR_SINGLE_EVENT);
+        Assert.assertEquals(meetingType, MeetingWrapperDefinerTestData.MEETING_TYPE_FOR_SINGLE_EVENT);
         Assert.assertNotNull(singleMeetingWrapper.getSession());
 
     }

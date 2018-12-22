@@ -25,6 +25,7 @@ public class RruleDefiner {
 
 
     public Rrule defineRrule(List<Session> sessions) {
+        Collections.sort(sessions);
         Session lastSession = sessions.get(sessions.size() - 1);
         Session firstSession = sessions.get(0);
 

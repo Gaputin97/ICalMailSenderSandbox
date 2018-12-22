@@ -34,9 +34,9 @@ public class SimpleCalendarTemplate {
     }
 
     public Calendar createSingleMeetingInvitationTemplate(SingleMeetingWrapper singleMeetingWrapper, Meeting meeting) {
-        Session timeSlot = singleMeetingWrapper.getSession();
-        DateTime startDateTime = new DateTime(timeSlot.getStartDate());
-        DateTime endDateTime = new DateTime(timeSlot.getEndDate());
+        Session session = singleMeetingWrapper.getSession();
+        DateTime startDateTime = new DateTime(session.getStartDate());
+        DateTime endDateTime = new DateTime(session.getEndDate());
         String summary = calendarTextEditor.lineBreak(meeting.getSummary());
 
         requestCalendar.getComponents().add(new VEvent(startDateTime, endDateTime, summary));
