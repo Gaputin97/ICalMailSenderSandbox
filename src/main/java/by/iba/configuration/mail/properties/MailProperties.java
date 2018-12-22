@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @PropertySource("classpath:smtp.properties")
-@ConfigurationProperties
+@ConfigurationProperties(prefix = "mail")
 public class MailProperties {
 
     private String host;

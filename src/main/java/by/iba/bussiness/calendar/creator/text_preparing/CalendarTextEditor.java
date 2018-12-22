@@ -9,7 +9,7 @@ public class CalendarTextEditor {
         if (stringField.length() > 65) {
             int countOfLines = stringField.length() / 65;
             for (int i = 0; i < countOfLines; i++) {
-                sourceStringBuilder.insert(65, "\n");
+                sourceStringBuilder.insert(64, "\n");
             }
             stringField = sourceStringBuilder.toString();
         }
