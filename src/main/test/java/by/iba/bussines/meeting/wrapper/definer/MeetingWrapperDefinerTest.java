@@ -3,7 +3,6 @@ package by.iba.bussines.meeting.wrapper.definer;
 
 import by.iba.bussiness.meeting.model.Meeting;
 import by.iba.bussiness.meeting.type.MeetingType;
-import by.iba.bussiness.calendar.date.model.single.SingleMeetingWrapper;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

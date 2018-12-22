@@ -3,11 +3,11 @@ package by.iba.bussiness.calendar.factory;
 import by.iba.bussiness.calendar.creator.type.complex.ComplexCalendarTemplateCreator;
 import by.iba.bussiness.calendar.creator.type.recurrence.RecurrenceCalendarTemplateCreator;
 import by.iba.bussiness.calendar.creator.type.single.SimpleCalendarTemplateCreator;
+import by.iba.bussiness.calendar.date.model.single.SingleDateHelper;
 import by.iba.bussiness.meeting.model.Meeting;
 import by.iba.bussiness.calendar.date.model.DateHelper;
 import by.iba.bussiness.calendar.date.model.complex.ComplexDateHelper;
 import by.iba.bussiness.calendar.date.model.reccurence.RecurrenceDateHelper;
-import by.iba.bussiness.calendar.date.model.single.SingleMeetingWrapper;
 import net.fortuna.ical4j.model.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,8 +31,8 @@ public class CalendarFactory {
         Calendar calendar = null;
         switch (wrapper.getMeetingType()) {
             case SINGLE:
-                SingleMeetingWrapper singleMeetingWrapper = ((SingleMeetingWrapper) wrapper);
-                calendar = simpleCalendarTemplateCreator.createSimpleMeetingInvitationTemplate(singleMeetingWrapper, meeting);
+                SingleDateHelper singleDateHelper = ((SingleDateHelper) wrapper);
+                calendar = simpleCalendarTemplateCreator.createSimpleMeetingInvitationTemplate(singleDateHelper, meeting);
                 break;
             case RECURRENCE:
                 RecurrenceDateHelper recurrenceDateHelper = ((RecurrenceDateHelper) wrapper);
