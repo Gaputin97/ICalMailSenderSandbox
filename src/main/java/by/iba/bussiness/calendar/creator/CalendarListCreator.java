@@ -23,10 +23,10 @@ import java.util.List;
 public class CalendarListCreator {
     private Logger logger = LoggerFactory.getLogger(CalendarListCreator.class);
 
-    public List<Calendar> createCalendarList(Email emailList, Calendar calendar) {
+    public List<Calendar> createCalendarList(List<String> emails, Calendar calendar) {
         List<Calendar> calendarList = new ArrayList<>();
 
-        for (String email : emailList.getEmails()) {
+        for (String email : emails) {
             Attendee listener = new Attendee(URI.create("mailto:" + email));
             listener.getParameters().add(Rsvp.FALSE);
             listener.getParameters().add(Role.REQ_PARTICIPANT);

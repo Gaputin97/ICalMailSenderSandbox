@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigInteger;
 
 @RestController
 public class EnrollmentController {
@@ -17,7 +18,7 @@ public class EnrollmentController {
 
     @ApiOperation(value = "Get enrollment by email and meetingId", response = Enrollment.class)
     @RequestMapping(value = "/enrollment/get/{parentId}/{userEmail}", method = RequestMethod.GET)
-    public Enrollment getEnrollmentByEmailAndMeetingId(@PathVariable(value = "parentId") String parentId,
+    public Enrollment getEnrollmentByEmailAndMeetingId(@PathVariable(value = "parentId") BigInteger parentId,
                                                        @PathVariable(value = "userEmail") String userEmail,
                                                        HttpServletRequest request) {
         return enrollmentService.getEnrollmentByEmailAndMeetingId(request, parentId, userEmail);
@@ -25,7 +26,7 @@ public class EnrollmentController {
 
     @ApiOperation(value = "Get enrollment by email and meetingId from local database", response = Enrollment.class)
     @RequestMapping(value = "/enrollment/local/get/{parentId}/{userEmail}", method = RequestMethod.GET)
-    public Enrollment getLocalEnrollmentByEmailAndMeetingId(@PathVariable(value = "parentId") String parentId,
+    public Enrollment getLocalEnrollmentByEmailAndMeetingId(@PathVariable(value = "parentId") BigInteger parentId,
                                                             @PathVariable(value = "userEmail") String userEmail) {
         return enrollmentService.getLocalEnrollmentByEmailAndMeetingId(parentId, userEmail);
     }

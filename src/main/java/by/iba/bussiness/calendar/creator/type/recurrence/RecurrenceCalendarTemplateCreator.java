@@ -1,6 +1,7 @@
 package by.iba.bussiness.calendar.creator.type.recurrence;
 
 import by.iba.bussiness.calendar.creator.text_preparing.CalendarTextEditor;
+import by.iba.bussiness.calendar.creator.type.recurrence.increaser.DateIncreaser;
 import by.iba.bussiness.calendar.creator.type.recurrence.parser.IcalDateParser;
 import by.iba.bussiness.calendar.date.constants.DateHelperConstants;
 import by.iba.bussiness.calendar.date.model.reccurence.RecurrenceDateHelper;
@@ -19,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+
 import java.net.SocketException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
@@ -32,17 +34,19 @@ public class RecurrenceCalendarTemplateCreator {
     private SessionParser sessionParser;
     private DateHelperConstants dateHelperConstants;
     private IcalDateParser icalDateParser;
+    private DateIncreaser dateIncreaser;
 
     @Autowired
     public RecurrenceCalendarTemplateCreator(CalendarTextEditor calendarTextEditor,
                                              @Qualifier("requestCalendar") Calendar requestCalendar,
                                              SessionParser sessionParser,
-                                             DateHelperConstants dateHelperConstants, IcalDateParser icalDateParser) {
+                                             DateHelperConstants dateHelperConstants, IcalDateParser icalDateParser, DateIncreaser dateIncreaser) {
         this.calendarTextEditor = calendarTextEditor;
         this.requestCalendar = requestCalendar;
         this.sessionParser = sessionParser;
         this.dateHelperConstants = dateHelperConstants;
         this.icalDateParser = icalDateParser;
+        this.dateIncreaser = dateIncreaser;
     }
 
     public Calendar createRecurrenceCalendarInvitationTemplate(RecurrenceDateHelper recurrenceDateHelper, Meeting meeting) {
@@ -52,11 +56,14 @@ public class RecurrenceCalendarTemplateCreator {
         List<TimeSlot> meetingTimeSlots = meeting.getTimeSlots();
         TimeSlot firstTimeSlot = meetingTimeSlots.get(dateHelperConstants.getNumberOfFirstTimeSlot());
         TimeSlot lastTimeSlot = meetingTimeSlots.get(meetingTimeSlots.size() - 1);
-        String until = icalDateParser.parseToIcalDate(lastTimeSlot.getStartDateTime());
+        Session lastSession = sessionParser.timeSlotToSession(lastTimeSlot);
+        String increasedDate = dateIncreaser.increaseAndParse(rrule.getRruleFreqType(), rrule.getInterval(), lastSession.getStartDate());
+        String until = icalDateParser.parseToIcalDate(increasedDate);
         Session firstSession = sessionParser.timeSlotToSession(firstTimeSlot);
         DateTime startDateTime = new DateTime(firstSession.getStartDate());
+        DateTime endDateTime = new DateTime(firstSession.getEndDate());
 
-        requestCalendar.getComponents().add(new VEvent(startDateTime, meeting.getSummary()));
+        requestCalendar.getComponents().add(new VEvent(startDateTime, endDateTime, meeting.getSummary()));
         net.fortuna.ical4j.model.Component event = requestCalendar.getComponents().getComponent(net.fortuna.ical4j.model.Component.VEVENT);
 
         event.getProperties().add(new Sequence("0"));
