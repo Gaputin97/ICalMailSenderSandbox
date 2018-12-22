@@ -71,7 +71,7 @@ public class DateHelperDefiner {
                 logger.info("Meeting type of meeting with id " + meeting.getId() + " is recurrence");
             } else {
                 dateHelper = new ComplexDateHelperBuilder()
-                        .setSessions(sessions)
+                        .setSessionList(sessions)
                         .build();
                 logger.info("Meeting type of meeting with id " + meeting.getId() + " is complex");
             }

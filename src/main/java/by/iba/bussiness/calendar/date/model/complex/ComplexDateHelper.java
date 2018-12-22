@@ -7,17 +7,17 @@ import by.iba.bussiness.calendar.session.model.Session;
 import java.util.List;
 
 public class ComplexDateHelper extends DateHelper {
-    private List<Session> session;
+    private List<Session> sessionList;
 
     public ComplexDateHelper() {
         super(MeetingType.COMPLEX);
     }
 
-    public List<Session> getSession() {
-        return session;
+    public List<Session> getSessionList() {
+        return sessionList;
     }
 
-    public void setSessions(List<Session> session) {
-        this.session = session;
+    public void setSessionList(List<Session> session) {
+        this.sessionList = session;
     }
 }
