@@ -1,8 +1,8 @@
 package by.iba.bussiness.calendar.creator.type.single;
 
 import by.iba.bussiness.calendar.creator.text_preparing.CalendarTextEditor;
+import by.iba.bussiness.calendar.date.model.single.SingleDateHelper;
 import by.iba.bussiness.meeting.model.Meeting;
-import by.iba.bussiness.calendar.date.model.single.SingleMeetingWrapper;
 import by.iba.bussiness.calendar.session.model.Session;
 import by.iba.exception.CalendarException;
 import net.fortuna.ical4j.model.Calendar;
@@ -33,9 +33,9 @@ public class SimpleCalendarTemplateCreator {
         this.requestCalendar = requestCalendar;
     }
 
-    public Calendar createSimpleMeetingInvitationTemplate(SingleMeetingWrapper singleMeetingWrapper, Meeting meeting) {
+    public Calendar createSimpleMeetingInvitationTemplate(SingleDateHelper singleDateHelper, Meeting meeting) {
         logger.info("Started creating ics file with single meeting with id " + meeting.getId());
-        Session session = singleMeetingWrapper.getSession();
+        Session session = singleDateHelper.getSession();
         DateTime startDateTime = new DateTime(session.getStartDate());
         DateTime endDateTime = new DateTime(session.getEndDate());
         String summary = calendarTextEditor.breakLine(meeting.getSummary());

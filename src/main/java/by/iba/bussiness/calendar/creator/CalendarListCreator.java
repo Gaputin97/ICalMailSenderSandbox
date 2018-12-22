@@ -5,6 +5,8 @@ import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.CalendarException;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.component.CalendarComponent;
+import net.fortuna.ical4j.model.parameter.PartStat;
+import net.fortuna.ical4j.model.parameter.Role;
 import net.fortuna.ical4j.model.parameter.Rsvp;
 import net.fortuna.ical4j.model.property.Attendee;
 import org.slf4j.Logger;
@@ -27,6 +29,8 @@ public class CalendarListCreator {
         for (String email : emailList.getEmails()) {
             Attendee listener = new Attendee(URI.create("mailto:" + email));
             listener.getParameters().add(Rsvp.FALSE);
+            listener.getParameters().add(Role.REQ_PARTICIPANT);
+            listener.getParameters().add(PartStat.ACCEPTED);
 
             CalendarComponent event = calendar.getComponent(Component.VEVENT);
             event.getProperties().add(listener);
@@ -34,13 +38,14 @@ public class CalendarListCreator {
             try {
                 calendarList.add(new Calendar(calendar));
             } catch (ParseException | IOException | URISyntaxException ex) {
-                logger.info(ex.getMessage());
+                logger.error(ex.getMessage());
                 throw new CalendarException("Can't create calendar meeting. Try again later.");
             }
             event.getProperties().remove(listener);
         }
         if (calendarList.isEmpty()) {
-            throw new NullPointerException("Your calendar list is empty!");
+            logger.info("Calendar list is empty");
+            throw new CalendarException("Calendar list is empty");
         }
         return calendarList;
     }

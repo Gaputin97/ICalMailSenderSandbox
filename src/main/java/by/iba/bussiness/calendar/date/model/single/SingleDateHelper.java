@@ -1,13 +1,13 @@
 package by.iba.bussiness.calendar.date.model.single;
 
-import by.iba.bussiness.meeting.type.MeetingType;
 import by.iba.bussiness.calendar.date.model.DateHelper;
 import by.iba.bussiness.calendar.session.model.Session;
+import by.iba.bussiness.meeting.type.MeetingType;
 
-public class SingleMeetingWrapper extends DateHelper {
+public class SingleDateHelper extends DateHelper {
     private Session session;
 
-    public SingleMeetingWrapper() {
+    public SingleDateHelper() {
         super(MeetingType.SINGLE);
     }
 

@@ -1,6 +1,6 @@
 package by.iba.bussiness.calendar.date.builder.single;
 
-import by.iba.bussiness.calendar.date.model.single.SingleMeetingWrapper;
+import by.iba.bussiness.calendar.date.model.single.SingleDateHelper;
 import by.iba.bussiness.calendar.session.model.Session;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +13,8 @@ public class SimpleDateHelperBuilder {
         return this;
     }
 
-    public SingleMeetingWrapper build() {
-        SingleMeetingWrapper singleMeetingWrapper = new SingleMeetingWrapper();
+    public SingleDateHelper build() {
+        SingleDateHelper singleMeetingWrapper = new SingleDateHelper();
         singleMeetingWrapper.setSession(session);
         return singleMeetingWrapper;
     }
