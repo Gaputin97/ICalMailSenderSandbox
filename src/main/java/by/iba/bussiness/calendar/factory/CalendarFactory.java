@@ -27,19 +27,19 @@ public class CalendarFactory {
         this.complexCalendarTemplateCreator = complexCalendarTemplateCreator;
     }
 
-    public <T extends DateHelper> Calendar createInvitationCalendarTemplate(T wrapper, Meeting meeting) {
+    public <T extends DateHelper> Calendar createInvitationCalendarTemplate(T helper, Meeting meeting) {
         Calendar calendar = null;
-        switch (wrapper.getMeetingType()) {
+        switch (helper.getMeetingType()) {
             case SINGLE:
-                SingleDateHelper singleDateHelper = ((SingleDateHelper) wrapper);
+                SingleDateHelper singleDateHelper = ((SingleDateHelper) helper);
                 calendar = simpleCalendarTemplateCreator.createSimpleMeetingInvitationTemplate(singleDateHelper, meeting);
                 break;
             case RECURRENCE:
-                RecurrenceDateHelper recurrenceDateHelper = ((RecurrenceDateHelper) wrapper);
+                RecurrenceDateHelper recurrenceDateHelper = ((RecurrenceDateHelper) helper);
                 calendar = recurrenceCalendarTemplateCreator.createRecurrenceCalendarInvitationTemplate(recurrenceDateHelper, meeting);
                 break;
             case COMPLEX:
-                ComplexDateHelper complexDateHelper = ((ComplexDateHelper) wrapper);
+                ComplexDateHelper complexDateHelper = ((ComplexDateHelper) helper);
                 calendar = complexCalendarTemplateCreator.createComplexCalendarInvitationTemplate(complexDateHelper, meeting);
                 break;
         }

@@ -10,7 +10,6 @@ public class DateHelperConstants {
     public int getAmountOfSessionsForSingleEvent() {
         return amountOfSessionsForSingleEvent;
     }
-
     public int getNumberOfFirstTimeSlot() {
         return numberOfFirstTimeSlot;
     }

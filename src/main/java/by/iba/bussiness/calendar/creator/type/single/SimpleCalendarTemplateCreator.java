@@ -17,8 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.net.SocketException;
 import java.net.URISyntaxException;
+import java.text.ParseException;
 
 @Component
 
@@ -42,7 +44,16 @@ public class SimpleCalendarTemplateCreator {
 
         String summary = calendarTextEditor.breakLine(meeting.getSummary());
 
-        Calendar calendar = requestCalendar;
+        Calendar calendar = null;
+        try {
+            calendar = new Calendar(requestCalendar);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
         calendar.getComponents().add(new VEvent(startDateTime, endDateTime, summary));
         CalendarComponent event = calendar.getComponents().getComponent(CalendarComponent.VEVENT);
 
