@@ -6,6 +6,7 @@ import net.fortuna.ical4j.model.property.Method;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Version;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,6 +14,7 @@ public class BasicCalendarTemplateSetUpper {
     private static final String PRODUCT_IDENTIFIER = "-//Your Learning//EN";
 
     @Bean("requestCalendar")
+    @Scope("prototype")
     public Calendar setUpRequestMethod() {
         Calendar calendar = setUpCommonFields();
         calendar.getProperties().add(Method.REQUEST);
@@ -20,6 +22,7 @@ public class BasicCalendarTemplateSetUpper {
     }
 
     @Bean("publishCalendar")
+    @Scope("prototype")
     public Calendar setUpPublishMethod() {
         Calendar calendar = setUpCommonFields();
         calendar.getProperties().add(Method.PUBLISH);
@@ -27,6 +30,7 @@ public class BasicCalendarTemplateSetUpper {
     }
 
     @Bean("cancelCalendar")
+    @Scope("prototype")
     public Calendar setUpCancelMethod() {
         Calendar calendar = setUpCommonFields();
         calendar.getProperties().add(Method.CANCEL);

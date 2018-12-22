@@ -17,6 +17,7 @@ public class CalendarTextEditor {
     }
 
     public String colonReplace(String method) {
+
         return method.replace(':', '=');
     }
 

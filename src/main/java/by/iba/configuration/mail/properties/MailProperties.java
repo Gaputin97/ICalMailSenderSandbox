@@ -6,10 +6,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 @PropertySource("classpath:smtp.properties")
-@ConfigurationProperties(prefix = "mail")
 @ConfigurationProperties("mail")
 public class MailProperties {
-
     private String host;
     private Integer port;
     private String username;

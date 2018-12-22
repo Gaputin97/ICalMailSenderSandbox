@@ -38,7 +38,7 @@ public class CalendarFactory {
                 break;
             case RECURRENCE:
                 RecurrenceMeetingWrapper recurrenceMeetingWrapper = ((RecurrenceMeetingWrapper) wrapper);
-                calendar = recurrenceCalendarTemplate.createRecurrenceCalendarInvitationTemplate(recurrenceMeetingWrapper, request, meeting);
+                calendar = recurrenceCalendarTemplate.createRecurrenceCalendarInvitationTemplate(recurrenceMeetingWrapper, meeting);
                 break;
             case COMPLEX:
                 ComplexMeetingWrapper complexMeetingWrapper = ((ComplexMeetingWrapper) wrapper);
