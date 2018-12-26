@@ -11,16 +11,14 @@ import by.iba.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigInteger;
 
 @Service
 public class EnrollmentServiceImpl implements EnrollmentService {
@@ -42,25 +40,27 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public Enrollment getEnrollmentByEmailAndMeetingId(HttpServletRequest request, String parentId, String email) {
+    public Enrollment getEnrollmentByEmailAndMeetingId(HttpServletRequest request, BigInteger parentId, String email) {
         JavaWebToken javaWebToken = tokenService.getJavaWebToken(request);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set(HttpHeaders.AUTHORIZATION, "Bearer " + javaWebToken.getJwt());
         HttpEntity httpEntity = new HttpEntity<>(httpHeaders);
-        Enrollment enrollment;
+        Enrollment enrollment = null;
         try {
             ResponseEntity<Enrollment> enrollmentResponseEntity = restTemplate.exchange(enrollmentConstants.getEnrollmentEndpointByEmailAndMeetingId(parentId, email),
                     HttpMethod.GET, httpEntity, Enrollment.class);
             enrollment = enrollmentResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            logger.error(e.getMessage());
-            throw new ServiceException(e.getMessage());
+            logger.error("Get enrollment error " + e.getMessage());
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND || e.getStatusCode() == HttpStatus.UNAUTHORIZED || e.getStatusCode() == HttpStatus.FORBIDDEN) {
+                throw new ServiceException(e.getMessage());
+            }
         }
         return enrollment;
     }
 
     @Override
-    public Enrollment getLocalEnrollmentByEmailAndMeetingId(String parentId, String email) {
+    public Enrollment getLocalEnrollmentByEmailAndMeetingId(BigInteger parentId, String email) {
         return enrollmentRepository.getByEmailAndMeetingId(parentId, email);
     }
 

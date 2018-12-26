@@ -10,7 +10,7 @@ public class Enrollment {
     @Id
     private BigInteger id;
     @Field
-    private String parentId;
+    private BigInteger parentId;
     @Field
     private String userEmail;
 
@@ -25,11 +25,11 @@ public class Enrollment {
         this.id = id;
     }
 
-    public String getParentId() {
+    public BigInteger getParentId() {
         return parentId;
     }
 
-    public void setParentId(String parentId) {
+    public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
     }
 

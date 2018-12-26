@@ -1,9 +1,12 @@
 package by.iba.bussiness.sender.service;
 
-import by.iba.bussiness.calendar.email.Email;
+import by.iba.bussiness.calendar.attendee.model.Attendee;
+import by.iba.bussiness.status.send.CalendarSendingStatus;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public interface SenderService {
-    void sendMeeting(HttpServletRequest request, String meetingId, Email emailList);
+
+    CalendarSendingStatus sendMeeting(HttpServletRequest request, String meetingId, List<Attendee> attendees);
 }
