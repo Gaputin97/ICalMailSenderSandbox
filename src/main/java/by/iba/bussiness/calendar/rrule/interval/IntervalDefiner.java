@@ -1,6 +1,6 @@
 package by.iba.bussiness.calendar.rrule.interval;
 
-import by.iba.bussiness.calendar.rrule.frequence.model.RruleFreqType;
+import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,12 +17,12 @@ public class IntervalDefiner {
         this.intervalHelper = intervalHelper;
     }
 
-    public long defineInterval(List<Date> startDatesOfSessions, RruleFreqType rruleFreqType) {
+    public long defineInterval(List<Date> startDatesOfSessions, Frequency frequency) {
         final int amountOfDurationsBetweenDates = startDatesOfSessions.size() - 1;
-        long minimumInterval = rruleFreqType.getMillisecondsInOneHundredYear();
+        long minimumInterval = frequency.getMillisecondsInOneHundredYear();
         for (int numberOfDates = 0; numberOfDates < amountOfDurationsBetweenDates; numberOfDates++) {
             long timeBetweenSessions = startDatesOfSessions.get(numberOfDates + 1).getTime() - startDatesOfSessions.get(numberOfDates).getTime();
-            minimumInterval = intervalHelper.defineInterval(rruleFreqType, timeBetweenSessions, minimumInterval);
+            minimumInterval = intervalHelper.defineInterval(frequency, timeBetweenSessions, minimumInterval);
         }
         return minimumInterval;
     }

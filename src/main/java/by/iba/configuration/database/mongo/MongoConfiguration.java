@@ -6,6 +6,7 @@ import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -28,7 +29,7 @@ public class MongoConfiguration {
     }
 
     @Bean
-    public MongoTemplate mongoTemplate() {
+    public MongoTemplate mongoTemplate(@Value("{}")) {
         return new MongoTemplate(mongoDbFactory());
     }
 }

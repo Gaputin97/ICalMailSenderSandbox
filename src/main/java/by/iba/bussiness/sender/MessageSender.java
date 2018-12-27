@@ -1,10 +1,10 @@
 package by.iba.bussiness.sender;
 
-import by.iba.bussiness.calendar.creator.text_preparing.CalendarTextEditor;
-import by.iba.bussiness.enrollment.model.Enrollment;
+import by.iba.bussiness.calendar.creator.CalendarTextEditor;
+import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.service.v1.EnrollmentServiceImpl;
-import by.iba.bussiness.meeting.model.Meeting;
-import by.iba.bussiness.status.send.CalendarSendingStatus;
+import by.iba.bussiness.meeting.Meeting;
+import by.iba.bussiness.status.send.CalendarResponseStatus;
 import by.iba.exception.SendingException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
@@ -56,20 +56,23 @@ public class MessageSender {
             iСalInline.setHeader("Content-ID", "<calendar_part>");
             iСalInline.setHeader("Content-Disposition", "inline");
             iСalInline.setContent(calendar.toString(), "text/calendar;charset=utf-8;" + method);
+
             iСalInline.setFileName("inlineCalendar.ics");
             multipart.addBodyPart(iСalInline);
 
             MimeBodyPart iСalAttachment = new MimeBodyPart();
             iСalAttachment.setHeader("Content-class", "urn:content-classes:calendarmessage");
             iСalAttachment.setHeader("Content-Disposition", "attachment");
-            iСalAttachment.setContent(calendar.toString(), "text/calendar;charset=utf-8;" + method);
+            iСalInline.setContent(calendar.toString(), "text/calendar;charset=utf-8;" + method);
             iСalAttachment.setFileName("attachedCalendar.ics");
             multipart.addBodyPart(iСalAttachment);
             Enrollment enrollment = new Enrollment();
             enrollment.setParentId(meeting.getId());
             enrollment.setUserEmail(editedUserEmail);
             message.setContent(multipart);
+
             javaMailSender.send(message);
+
             logger.info("Message was sended to " + editedUserEmail);
             enrollmentService.saveEnrollment(enrollment);
         } catch (MessagingException e) {
@@ -78,11 +81,11 @@ public class MessageSender {
         }
     }
 
-    public CalendarSendingStatus sendMessageToAllRecipients(List<Calendar> calendarList, Meeting meeting) {
+    public CalendarResponseStatus sendMessageToAllRecipients(List<Calendar> calendarList, Meeting meeting) {
         for (Calendar calendar : calendarList) {
             sendMessageToOneRecipient(calendar, meeting);
         }
         logger.info("Messages to all recipients were sended successfully");
-        return new CalendarSendingStatus("Messages with calendar were sended to all recipients");
+        return new CalendarResponseStatus("Messages with calendar were sended to all recipients");
     }
 }

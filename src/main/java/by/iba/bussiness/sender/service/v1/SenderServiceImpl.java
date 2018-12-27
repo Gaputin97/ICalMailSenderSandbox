@@ -1,17 +1,16 @@
 package by.iba.bussiness.sender.service.v1;
 
 import by.iba.bussiness.calendar.attendee.model.Attendee;
-import by.iba.bussiness.calendar.creator.CalendarListCreator;
-import by.iba.bussiness.calendar.date.definer.DateHelperDefiner;
-import by.iba.bussiness.calendar.factory.CalendarFactory;
-import by.iba.bussiness.enrollment.checker.EnrollmentChecker;
-import by.iba.bussiness.meeting.model.Meeting;
+import by.iba.bussiness.calendar.creator.CalendarAttendeeAdder;
+import by.iba.bussiness.calendar.date.DateHelperDefiner;
+import by.iba.bussiness.calendar.CalendarFactory;
+import by.iba.bussiness.enrollment.EnrollmentChecker;
+import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.MeetingService;
 import by.iba.bussiness.calendar.date.model.DateHelper;
-import by.iba.bussiness.meeting.type.MeetingType;
 import by.iba.bussiness.sender.MessageSender;
 import by.iba.bussiness.sender.service.SenderService;
-import by.iba.bussiness.status.send.CalendarSendingStatus;
+import by.iba.bussiness.status.send.CalendarResponseStatus;
 import net.fortuna.ical4j.model.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,7 +24,7 @@ public class SenderServiceImpl implements SenderService {
     private MeetingService meetingService;
     private DateHelperDefiner dateHelperDefiner;
     private CalendarFactory calendarFactory;
-    private CalendarListCreator calendarListCreator;
+    private CalendarAttendeeAdder calendarAttendeeAdder;
     private MessageSender messageSender;
     private EnrollmentChecker enrollmentChecker;
 
@@ -33,19 +32,19 @@ public class SenderServiceImpl implements SenderService {
     public SenderServiceImpl(MeetingService meetingService,
                              DateHelperDefiner dateHelperDefiner,
                              CalendarFactory calendarFactory,
-                             CalendarListCreator calendarListCreator,
+                             CalendarAttendeeAdder calendarAttendeeAdder,
                              MessageSender messageSender,
                              EnrollmentChecker enrollmentChecker) {
         this.meetingService = meetingService;
         this.dateHelperDefiner = dateHelperDefiner;
         this.calendarFactory = calendarFactory;
-        this.calendarListCreator = calendarListCreator;
+        this.calendarAttendeeAdder = calendarAttendeeAdder;
         this.messageSender = messageSender;
         this.enrollmentChecker = enrollmentChecker;
     }
 
     @Override
-    public CalendarSendingStatus sendMeeting(HttpServletRequest request, String meetingId, List<Attendee> attendees) {
+    public CalendarResponseStatus sendMeeting(HttpServletRequest request, String meetingId, List<Attendee> attendees) {
         List<String> emails = new ArrayList<>(attendees.size());
         attendees.forEach(x -> emails.add(x.getEmail()));
         Meeting meeting = meetingService.getMeetingById(request, meetingId);
@@ -58,7 +57,7 @@ public class SenderServiceImpl implements SenderService {
 //        } else if (dateHelper.getMeetingType().equals(MeetingType.COMPLEX)) {
 //
 //        }
-        List<Calendar> calendarList = calendarListCreator.createCalendarList(emails, calendar);
+        List<Calendar> calendarList = calendarAttendeeAdder.createCalendarList(emails, calendar);
         return messageSender.sendMessageToAllRecipients(calendarList, meeting);
     }
 }

@@ -1,7 +1,7 @@
 package by.iba.bussiness.chain.service;
 
-import by.iba.bussiness.chain.model.Chain;
-import by.iba.bussiness.event.model.Event;
+import by.iba.bussiness.chain.Chain;
+import by.iba.bussiness.event.Event;
 
 import java.util.List;
 

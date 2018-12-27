@@ -1,8 +1,8 @@
 package by.iba.bussiness.calendar.date.model.single;
 
 import by.iba.bussiness.calendar.date.model.DateHelper;
-import by.iba.bussiness.calendar.session.model.Session;
-import by.iba.bussiness.meeting.type.MeetingType;
+import by.iba.bussiness.calendar.session.Session;
+import by.iba.bussiness.meeting.MeetingType;
 
 public class SingleDateHelper extends DateHelper {
     private Session session;
