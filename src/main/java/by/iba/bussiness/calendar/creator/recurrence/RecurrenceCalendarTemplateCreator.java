@@ -62,12 +62,8 @@ public class RecurrenceCalendarTemplateCreator {
         TimeSlot firstTimeSlot = meetingTimeSlots.get(dateHelperConstants.getNumberOfFirstTimeSlot());
         TimeSlot lastTimeSlot = meetingTimeSlots.get(meetingTimeSlots.size() - 1);
         Session lastSession = sessionParser.timeSlotToSession(lastTimeSlot);
-<<<<<<< HEAD:src/main/java/by/iba/bussiness/calendar/creator/type/recurrence/RecurrenceCalendarTemplateCreator.java
-        String increasedDate = dateIncreaser.increaseAndParse(rrule.getRruleFreqType(), rrule.getInterval(), lastSession.getStartDate());
-        String until = iСalDateParser.parseToICalDate(increasedDate);
-=======
         String increasedDate = dateIncreaser.increaseAndParse(rrule.getFrequency(), rrule.getInterval(), lastSession.getStartDate());
->>>>>>> 61adc5006302434ca1e73f3b5d6b3ab8af3706f9:src/main/java/by/iba/bussiness/calendar/creator/recurrence/RecurrenceCalendarTemplateCreator.java
+        String until = iСalDateParser.parseToICalDate(increasedDate);
         Session firstSession = sessionParser.timeSlotToSession(firstTimeSlot);
         DateTime startDateTime = new DateTime(firstSession.getStartDate());
         DateTime endDateTime = new DateTime(firstSession.getEndDate());

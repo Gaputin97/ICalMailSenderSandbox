@@ -75,7 +75,7 @@ public class ComplexCalendarTemplateCreator {
                 event.getProperties().add(new Organizer("mailto:" + meeting.getOwner().getEmail()));
                 fixedUidGenerator = new FixedUidGenerator("YourLearning.Complex");
             } catch (URISyntaxException | SocketException e) {
-                logger.error(e.getMessage());
+                logger.error("Can't create calendar template", e);
                 throw new CalendarException("Can't create calendar meeting. Try againg later");
             }
             Uid UID = fixedUidGenerator.generateUid();

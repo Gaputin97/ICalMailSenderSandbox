@@ -40,7 +40,7 @@ public class TokenServiceImpl implements TokenService {
             ResponseEntity<JavaWebToken> javaWebTokenResponseEntity = restTemplate.exchange(tokenConstants.getTokenEndpoint(), HttpMethod.GET, httpEntity, JavaWebToken.class);
             javaWebToken = javaWebTokenResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            logger.error("Error while try to get token: " + e.getMessage());
+            logger.error("Error while try to get token: ", e);
             throw new ServiceException(e.getMessage());
         }
         return javaWebToken;

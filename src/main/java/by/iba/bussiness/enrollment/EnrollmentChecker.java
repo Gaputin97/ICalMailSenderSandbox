@@ -28,7 +28,7 @@ public class EnrollmentChecker {
             boolean isExistThirdPartyEnrollment = enrollmentService.getEnrollmentByEmailAndMeetingId(request, meetingId, email) != null;
             boolean isExistLocalEnrollment = enrollmentService.getLocalEnrollmentByEmailAndMeetingId(meetingId, email) != null;
             if (isExistLocalEnrollment || isExistThirdPartyEnrollment) {
-                logger.info("Enrollment with meeting id " + meetingId + " and email " + email + " exists. ");
+                logger.error("Enrollment with meeting id " + meetingId + " and email " + email + " exists. ");
                 throw new ServiceException("Meeting " + meeting.getSummary() + " was sended to " + email);
             }
         }

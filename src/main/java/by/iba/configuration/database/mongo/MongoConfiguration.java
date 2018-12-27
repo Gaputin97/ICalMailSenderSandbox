@@ -29,7 +29,7 @@ public class MongoConfiguration {
     }
 
     @Bean
-    public MongoTemplate mongoTemplate(@Value("{}")) {
+    public MongoTemplate mongoTemplate() {
         return new MongoTemplate(mongoDbFactory());
     }
 }

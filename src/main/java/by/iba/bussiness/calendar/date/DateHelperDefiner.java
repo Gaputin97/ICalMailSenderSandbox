@@ -56,23 +56,23 @@ public class DateHelperDefiner {
         if (amountOfTimeSlots == dateHelperConstants.getAmountOfSessionsForSingleEvent()) {
             TimeSlot meetingTimeSlot = meeting.getTimeSlots().get(dateHelperConstants.getNumberOfFirstTimeSlot());
             Session meetingSession = sessionParser.timeSlotToSession(meetingTimeSlot);
-            dateHelper = new SimpleDateHelperBuilder()
+            dateHelper = simpleDateHelperBuilder
                     .setSession(meetingSession)
                     .build();
-            logger.info("Meeting type of meeting with id " + meeting.getId() + " is simple");
+            logger.debug("Meeting type of meeting with id " + meeting.getId() + " is simple");
         } else {
             List<Session> sessions = sessionParser.timeSlotListToSessionList(meeting.getTimeSlots());
             if (sessionChecker.doAllSessionsTheSame(meeting)) {
                 Rrule rrule = rruleDefiner.defineRrule(sessions);
-                dateHelper = new RecurrenceDateHelperBuilder()
+                dateHelper = recurrenceDateHelperBuilder
                         .setRrule(rrule)
                         .build();
-                logger.info("Meeting type of meeting with id " + meeting.getId() + " is recurrence");
+                logger.debug("Meeting type of meeting with id " + meeting.getId() + " is recurrence");
             } else {
-                dateHelper = new ComplexDateHelperBuilder()
+                dateHelper = complexDateHelperBuilder
                         .setSessionList(sessions)
                         .build();
-                logger.info("Meeting type of meeting with id " + meeting.getId() + " is complex");
+                logger.debug("Meeting type of meeting with id " + meeting.getId() + " is complex");
             }
         }
         return dateHelper;

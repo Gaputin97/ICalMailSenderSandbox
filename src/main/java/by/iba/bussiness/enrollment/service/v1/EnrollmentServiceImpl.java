@@ -4,7 +4,6 @@ import by.iba.bussiness.enrollment.constants.EnrollmentConstants;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.repository.v1.EnrollmentRepositoryImpl;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
-import by.iba.bussiness.status.insert.InsertStatus;
 import by.iba.bussiness.token.model.JavaWebToken;
 import by.iba.bussiness.token.service.v1.TokenServiceImpl;
 import by.iba.exception.ServiceException;
@@ -51,8 +50,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                     HttpMethod.GET, httpEntity, Enrollment.class);
             enrollment = enrollmentResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            logger.error("Get enrollment error " + e.getMessage());
             if (e.getStatusCode() == HttpStatus.NOT_FOUND || e.getStatusCode() == HttpStatus.UNAUTHORIZED || e.getStatusCode() == HttpStatus.FORBIDDEN) {
+                logger.error("Get enrollment error: ", e);
                 throw new ServiceException(e.getMessage());
             }
         }
@@ -65,7 +64,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public InsertStatus saveEnrollment(Enrollment enrollment) {
+    public Enrollment saveEnrollment(Enrollment enrollment) {
         return enrollmentRepository.save(enrollment);
     }
 }

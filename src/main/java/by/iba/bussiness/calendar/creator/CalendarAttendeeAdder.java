@@ -20,7 +20,7 @@ import java.util.List;
 
 @org.springframework.stereotype.Component
 public class CalendarAttendeeAdder {
-    private Logger logger = LoggerFactory.getLogger(CalendarAttendeeAdder.class);
+    private static final Logger logger = LoggerFactory.getLogger(CalendarAttendeeAdder.class);
 
     public List<Calendar> createCalendarList(List<String> emails, Calendar calendar) {
         List<Calendar> calendarList = new ArrayList<>();
@@ -36,15 +36,11 @@ public class CalendarAttendeeAdder {
 
             try {
                 calendarList.add(new Calendar(calendar));
-            } catch (ParseException | IOException | URISyntaxException ex) {
-                logger.error(ex.getMessage());
+            } catch (ParseException | IOException | URISyntaxException e) {
+                logger.error("Can't create calendar list", e);
                 throw new CalendarException("Can't create calendar meeting. Try again later.");
             }
             event.getProperties().remove(listener);
-        }
-        if (calendarList.isEmpty()) {
-            logger.info("Calendar list is empty");
-            throw new CalendarException("Calendar list is empty");
         }
         return calendarList;
     }

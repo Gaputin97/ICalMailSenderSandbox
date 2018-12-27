@@ -25,7 +25,7 @@ import java.text.ParseException;
 @Component
 
 public class SimpleCalendarTemplateCreator {
-    private Logger logger = LoggerFactory.getLogger(SimpleCalendarTemplateCreator.class);
+    private static final Logger logger = LoggerFactory.getLogger(SimpleCalendarTemplateCreator.class);
     private CalendarTextEditor calendarTextEditor;
     private Calendar requestCalendar;
 
@@ -66,7 +66,7 @@ public class SimpleCalendarTemplateCreator {
             event.getProperties().add(new Organizer("mailto:" + meeting.getOwner().getEmail()));
             fixedUidGenerator = new FixedUidGenerator("YourLearning");
         } catch (URISyntaxException | SocketException e) {
-            logger.error(e.getMessage());
+            logger.error("Can't create calendar template", e);
             throw new CalendarException("Can't create calendar meeting. Try again later");
         }
         Uid UID = fixedUidGenerator.generateUid();

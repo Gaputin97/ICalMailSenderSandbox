@@ -2,7 +2,7 @@ package by.iba.bussiness.sender;
 
 import by.iba.bussiness.calendar.attendee.model.Attendee;
 import by.iba.bussiness.sender.service.v1.SenderServiceImpl;
-import by.iba.bussiness.status.send.CalendarResponseStatus;
+import by.iba.bussiness.response.CalendarSendingResponse;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +22,9 @@ public class SenderController {
 
     @ApiOperation(value = "Send calendar templates for non existing recipients")
     @RequestMapping(value = "/send/meeting/{meetingId}", method = RequestMethod.POST)
-    public CalendarResponseStatus sendInvitationTemplatesToRecipients(@PathVariable String meetingId,
-                                                                      @RequestBody List<Attendee> attendees,
-                                                                      HttpServletRequest request) {
+    public CalendarSendingResponse sendInvitationTemplatesToRecipients(@PathVariable String meetingId,
+                                                                       @RequestBody List<Attendee> attendees,
+                                                                       HttpServletRequest request) {
         return senderServiceImpl.sendMeeting(request, meetingId, attendees);
     }
 
