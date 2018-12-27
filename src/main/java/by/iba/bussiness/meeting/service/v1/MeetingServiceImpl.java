@@ -51,8 +51,8 @@ public class MeetingServiceImpl implements MeetingService {
                     HttpMethod.GET, httpEntity, Meeting.class);
             meeting = meetingResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            logger.error(e.getMessage());
-            throw new ServiceException("Can't find user with id " + id);
+            logger.error("Cant find meeting by id", e);
+            throw new ServiceException("Can't find meeting with id " + id);
         }
         return meeting;
     }
@@ -69,7 +69,7 @@ public class MeetingServiceImpl implements MeetingService {
                     HttpMethod.GET, httpEntity, Meeting[].class);
             meetings = Arrays.asList(meetingResponseEntity.getBody());
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            logger.error(e.getMessage());
+            logger.error("Can't get all meetings", e);
             throw new ServiceException("Can't get all meetings");
         }
         return meetings;

@@ -4,7 +4,7 @@ import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.service.v1.EnrollmentServiceImpl;
 import by.iba.bussiness.meeting.Meeting;
-import by.iba.bussiness.status.send.CalendarResponseStatus;
+import by.iba.bussiness.response.CalendarSendingResponse;
 import by.iba.exception.SendingException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
@@ -25,7 +25,7 @@ import java.util.List;
 @org.springframework.stereotype.Component
 public class MessageSender {
 
-    private Logger logger = LoggerFactory.getLogger(MessageSender.class);
+    private static final Logger logger = LoggerFactory.getLogger(MessageSender.class);
     private JavaMailSender javaMailSender;
     private CalendarTextEditor calendarTextEditor;
     private EnrollmentServiceImpl enrollmentService;
@@ -76,16 +76,16 @@ public class MessageSender {
             logger.info("Message was sended to " + editedUserEmail);
             enrollmentService.saveEnrollment(enrollment);
         } catch (MessagingException e) {
-            logger.error(e.getMessage());
+            logger.error("Error while trying to send message", e);
             throw new SendingException("Error while trying to send message.");
         }
     }
 
-    public CalendarResponseStatus sendMessageToAllRecipients(List<Calendar> calendarList, Meeting meeting) {
+    public CalendarSendingResponse sendMessageToAllRecipients(List<Calendar> calendarList, Meeting meeting) {
         for (Calendar calendar : calendarList) {
             sendMessageToOneRecipient(calendar, meeting);
         }
         logger.info("Messages to all recipients were sended successfully");
-        return new CalendarResponseStatus("Messages with calendar were sended to all recipients");
+        return new CalendarSendingResponse(true);
     }
 }

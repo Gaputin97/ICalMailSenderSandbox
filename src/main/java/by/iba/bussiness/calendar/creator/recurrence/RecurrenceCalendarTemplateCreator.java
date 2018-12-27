@@ -59,9 +59,9 @@ public class RecurrenceCalendarTemplateCreator {
         List<TimeSlot> meetingTimeSlots = meeting.getTimeSlots();
         TimeSlot firstTimeSlot = meetingTimeSlots.get(dateHelperConstants.getNumberOfFirstTimeSlot());
         TimeSlot lastTimeSlot = meetingTimeSlots.get(meetingTimeSlots.size() - 1);
-        String until = iСalDateParser.parseToICalDate(lastTimeSlot.getStartDateTime());
         Session lastSession = sessionParser.timeSlotToSession(lastTimeSlot);
         String increasedDate = dateIncreaser.increaseAndParse(rrule.getFrequency(), rrule.getInterval(), lastSession.getStartDate());
+        String until = iСalDateParser.parseToICalDate(increasedDate);
         Session firstSession = sessionParser.timeSlotToSession(firstTimeSlot);
         DateTime startDateTime = new DateTime(firstSession.getStartDate());
         DateTime endDateTime = new DateTime(firstSession.getEndDate());
@@ -76,8 +76,8 @@ public class RecurrenceCalendarTemplateCreator {
             e.printStackTrace();
         }
         calendar.getComponents().add(new VEvent(startDateTime, meeting.getSummary()));
-        requestCalendar.getComponents().add(new VEvent(startDateTime, endDateTime, meeting.getSummary()));
-        net.fortuna.ical4j.model.Component event = requestCalendar.getComponents().getComponent(net.fortuna.ical4j.model.Component.VEVENT);
+        calendar.getComponents().add(new VEvent(startDateTime, endDateTime, meeting.getSummary()));
+        net.fortuna.ical4j.model.Component event = calendar.getComponents().getComponent(net.fortuna.ical4j.model.Component.VEVENT);
 
         event.getProperties().add(new Sequence("0"));
         event.getProperties().add(new Location(calendarTextEditor.breakLine(meeting.getLocation())));

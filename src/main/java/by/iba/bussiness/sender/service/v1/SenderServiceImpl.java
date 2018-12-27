@@ -10,7 +10,7 @@ import by.iba.bussiness.meeting.service.MeetingService;
 import by.iba.bussiness.calendar.date.model.DateHelper;
 import by.iba.bussiness.sender.MessageSender;
 import by.iba.bussiness.sender.service.SenderService;
-import by.iba.bussiness.status.send.CalendarResponseStatus;
+import by.iba.bussiness.response.CalendarSendingResponse;
 import net.fortuna.ical4j.model.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -44,7 +44,7 @@ public class SenderServiceImpl implements SenderService {
     }
 
     @Override
-    public CalendarResponseStatus sendMeeting(HttpServletRequest request, String meetingId, List<Attendee> attendees) {
+    public CalendarSendingResponse sendMeeting(HttpServletRequest request, String meetingId, List<Attendee> attendees) {
         List<String> emails = new ArrayList<>(attendees.size());
         attendees.forEach(x -> emails.add(x.getEmail()));
         Meeting meeting = meetingService.getMeetingById(request, meetingId);

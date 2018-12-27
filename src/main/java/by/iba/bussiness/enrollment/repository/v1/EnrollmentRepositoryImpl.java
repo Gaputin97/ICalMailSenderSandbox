@@ -5,7 +5,6 @@ import by.iba.bussiness.enrollment.Enrollment;
 
 import by.iba.exception.RepositoryException;
 
-import by.iba.bussiness.status.insert.InsertStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +22,14 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
     private MongoTemplate mongoTemplate;
 
     @Override
-    public InsertStatus save(Enrollment enrollment) {
+    public Enrollment save(Enrollment enrollment) {
         try {
             mongoTemplate.save(enrollment);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RepositoryException("Error with database. Try again later");
         }
-        return new InsertStatus("Enrollment was added successfully");
+        return enrollment;
     }
 
     @Override

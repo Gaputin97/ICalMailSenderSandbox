@@ -1,8 +1,8 @@
-package by.iba.bussiness.sender;
+package by.iba.bussiness.sender.controller;
 
 import by.iba.bussiness.calendar.attendee.model.Attendee;
-import by.iba.bussiness.sender.service.v1.SenderServiceImpl;
 import by.iba.bussiness.response.CalendarSendingResponse;
+import by.iba.bussiness.sender.service.v1.SenderServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,6 @@ import java.util.List;
 @RestController
 public class SenderController {
     private final static Logger logger = LoggerFactory.getLogger(SenderController.class);
-    private static final String NAME_OF_FILE = "Calendar.ics";
     @Autowired
     private SenderServiceImpl senderServiceImpl;
 
@@ -30,12 +29,13 @@ public class SenderController {
 
 
 //    @RequestMapping(path = "/download", method = RequestMethod.GET)
-//    public ResponseEntity<InputStreamResource> download() {
+//    public ResponseEntity<Resource> download(String param) throws IOException {
+//
 //        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 //
-//        UploadF
 //        return ResponseEntity.ok()
-//                .headers(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + NAME_OF_FILE)
+//                .headers(headers)
+//                .contentLength(file.length())
 //                .contentType(MediaType.parseMediaType("text/calendar"))
 //                .body(resource);
 //    }

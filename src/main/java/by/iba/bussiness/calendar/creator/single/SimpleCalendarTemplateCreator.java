@@ -44,9 +44,9 @@ public class SimpleCalendarTemplateCreator {
 
         String summary = calendarTextEditor.breakLine(meeting.getSummary());
 
-        Calendar calendar = null;
-        CalendarComponent event = null;
-        FixedUidGenerator fixedUidGenerator = null;
+        Calendar calendar;
+        CalendarComponent event;
+        FixedUidGenerator fixedUidGenerator;
         try {
             calendar = new Calendar(requestCalendar);
             calendar.getComponents().add(new VEvent(startDateTime, endDateTime, summary));
@@ -56,6 +56,7 @@ public class SimpleCalendarTemplateCreator {
             fixedUidGenerator = new FixedUidGenerator("YourLearning");
         } catch (ParseException | IOException | URISyntaxException e) {
             logger.error("Can't create calendar: " + e.getStackTrace());
+            throw new CalendarException("Can't create calendar meeting. Try again later");
         }
 
         Uid UID = fixedUidGenerator.generateUid();
