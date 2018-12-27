@@ -1,6 +1,5 @@
 package by.iba.bussiness.meeting.service.v1;
 
-import by.iba.bussiness.meeting.constants.MeetingConstants;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.MeetingService;
 import by.iba.bussiness.token.model.JavaWebToken;
@@ -9,6 +8,7 @@ import by.iba.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -27,15 +27,17 @@ public class MeetingServiceImpl implements MeetingService {
     private final static Logger logger = LoggerFactory.getLogger(MeetingServiceImpl.class);
 
     private TokenService tokenService;
-    private MeetingConstants meetingConstants;
+    @Value("${meeting_by_id_endpoint}")
+    private String ENDPOINT_FIND_MEETING_BY_ID;
+    @Value("${all_meetings_endpoint}")
+    private String ENDPOINT_FIND_ALL_MEETINGS;
+
     private RestTemplate restTemplate;
 
     @Autowired
     public MeetingServiceImpl(TokenService tokenService,
-                              MeetingConstants meetingConstants,
                               RestTemplate restTemplate) {
         this.tokenService = tokenService;
-        this.meetingConstants = meetingConstants;
         this.restTemplate = restTemplate;
     }
 
@@ -47,7 +49,7 @@ public class MeetingServiceImpl implements MeetingService {
         HttpEntity httpEntity = new HttpEntity<>(httpHeaders);
         Meeting meeting;
         try {
-            ResponseEntity<Meeting> meetingResponseEntity = restTemplate.exchange(meetingConstants.getMeetingEndpointById(id),
+            ResponseEntity<Meeting> meetingResponseEntity = restTemplate.exchange(ENDPOINT_FIND_MEETING_BY_ID + id,
                     HttpMethod.GET, httpEntity, Meeting.class);
             meeting = meetingResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
@@ -65,8 +67,7 @@ public class MeetingServiceImpl implements MeetingService {
         HttpEntity httpEntity = new HttpEntity<>(httpHeaders);
         List<Meeting> meetings;
         try {
-            ResponseEntity<Meeting[]> meetingResponseEntity = restTemplate.exchange(meetingConstants.getAllMeetingsEndpoint(),
-                    HttpMethod.GET, httpEntity, Meeting[].class);
+            ResponseEntity<Meeting[]> meetingResponseEntity = restTemplate.exchange(ENDPOINT_FIND_ALL_MEETINGS, HttpMethod.GET, httpEntity, Meeting[].class);
             meetings = Arrays.asList(meetingResponseEntity.getBody());
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             logger.error("Can't get all meetings", e);

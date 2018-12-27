@@ -1,9 +1,11 @@
 package by.iba.bussiness.enrollment.service.v1;
 
 import by.iba.bussiness.enrollment.Enrollment;
+import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.enrollment.repository.v1.EnrollmentRepositoryImpl;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.token.model.JavaWebToken;
+import by.iba.bussiness.token.service.TokenService;
 import by.iba.bussiness.token.service.v1.TokenServiceImpl;
 import by.iba.exception.ServiceException;
 import org.slf4j.Logger;
@@ -24,20 +26,20 @@ import java.math.BigInteger;
 @PropertySource("endpoint.properties")
 public class EnrollmentServiceImpl implements EnrollmentService {
     private final static Logger logger = LoggerFactory.getLogger(EnrollmentServiceImpl.class);
-    private TokenServiceImpl tokenService;
+    private TokenService tokenService;
     private RestTemplate restTemplate;
-    private EnrollmentRepositoryImpl enrollmentRepository;
+    private EnrollmentRepository enrollmentRepository;
 
     @Value("${enrollment_by_email_and_meeting_id_endpoint}")
-    private String findEnrollmentByEmailAndMeetingIdEndpoint;
+    private String ENDPOINT_FIND_ENROLLMENT_BY_MEETING_ID_AND_EMAIL;
 
     @Autowired
-    public EnrollmentServiceImpl(TokenServiceImpl tokenService,
+    public EnrollmentServiceImpl(TokenService tokenService,
                                  RestTemplate restTemplate,
-                                 EnrollmentRepositoryImpl enrollmentRepository1) {
+                                 EnrollmentRepository enrollmentRepository) {
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
-        this.enrollmentRepository = enrollmentRepository1;
+        this.enrollmentRepository = enrollmentRepository;
     }
 
     @Override
@@ -49,7 +51,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         Enrollment enrollment = null;
         try {
             ResponseEntity<Enrollment> enrollmentResponseEntity = restTemplate.exchange(
-                    findEnrollmentByEmailAndMeetingIdEndpoint + "/" + parentId + "/" + email,
+                    ENDPOINT_FIND_ENROLLMENT_BY_MEETING_ID_AND_EMAIL + parentId + "/" + email,
                     HttpMethod.GET,
                     httpEntity,
                     Enrollment.class);
