@@ -30,11 +30,11 @@ public class Meeting {
     private String location;
     @Field
     private String locationInfo;
-    @Field
+    @Field("sub")
     private Owner owner;
     @Field
     private String summary;
-    @Field
+    @Field("sub")
     private List<TimeSlot> timeSlots = new ArrayList();
     @Field
     private String timeZone;

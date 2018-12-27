@@ -26,7 +26,7 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
         try {
             mongoTemplate.save(enrollment);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error("Error while trying to save enrollment.", e);
             throw new RepositoryException("Error with database. Try again later");
         }
         return enrollment;
