@@ -1,6 +1,5 @@
 package by.iba.bussiness.enrollment.service.v1;
 
-import by.iba.bussiness.enrollment.constants.EnrollmentConstants;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.repository.v1.EnrollmentRepositoryImpl;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
@@ -11,6 +10,8 @@ import by.iba.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -21,21 +22,22 @@ import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
 
 @Service
+@PropertySource("endpoint.properties")
 public class EnrollmentServiceImpl implements EnrollmentService {
     private final static Logger logger = LoggerFactory.getLogger(EnrollmentServiceImpl.class);
     private TokenServiceImpl tokenService;
     private RestTemplate restTemplate;
-    private EnrollmentConstants enrollmentConstants;
     private EnrollmentRepositoryImpl enrollmentRepository;
+
+    @Value("${enrollment_by_email_and_meeting_id_endpoint}")
+    private String findEnrollmentByEmailAndMeetingIdEndpoint;
 
     @Autowired
     public EnrollmentServiceImpl(TokenServiceImpl tokenService,
                                  RestTemplate restTemplate,
-                                 EnrollmentConstants enrollmentConstants,
                                  EnrollmentRepositoryImpl enrollmentRepository1) {
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
-        this.enrollmentConstants = enrollmentConstants;
         this.enrollmentRepository = enrollmentRepository1;
     }
 
@@ -47,8 +49,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         HttpEntity httpEntity = new HttpEntity<>(httpHeaders);
         Enrollment enrollment = null;
         try {
-            ResponseEntity<Enrollment> enrollmentResponseEntity = restTemplate.exchange(enrollmentConstants.getEnrollmentEndpointByEmailAndMeetingId(parentId, email),
-                    HttpMethod.GET, httpEntity, Enrollment.class);
+            ResponseEntity<Enrollment> enrollmentResponseEntity = restTemplate.exchange(
+                    findEnrollmentByEmailAndMeetingIdEndpoint + "/" + parentId + "/" + email,
+                    HttpMethod.GET,
+                    httpEntity,
+                    Enrollment.class);
             enrollment = enrollmentResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             logger.error("Get enrollment error " + e.getMessage());

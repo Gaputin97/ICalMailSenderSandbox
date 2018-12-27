@@ -9,11 +9,11 @@ public class IntervalHelper {
 
     public long defineInterval(Frequency frequency, long timeBetweenSessions, long minimumInterval) {
         long millisecondsInFreq = frequency.getMillisecondsInFreq();
-        long freqsInOneHundredYears = frequency.getMillisecondsInOneHundredYear();
+        long freqInOneHundredYears = frequency.getMillisecondsInOneHundredYear();
         if (!(minimumInterval == DateConstants.VALUE_FOR_DEFAULT_INTERVAL)) {
             long possibleInterval = timeBetweenSessions / millisecondsInFreq;
             if (possibleInterval < minimumInterval) {
-                if (minimumInterval % possibleInterval == 0 || minimumInterval == freqsInOneHundredYears) {
+                if (minimumInterval % possibleInterval == 0 || minimumInterval == freqInOneHundredYears) {
                     minimumInterval = possibleInterval;
                 } else {
                     minimumInterval = DateConstants.VALUE_FOR_DEFAULT_INTERVAL;

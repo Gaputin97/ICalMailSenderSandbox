@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BasicCalendarTemplateSetUpper {
+public class BasicCalendarTemplateInstaller {
     private static final String PRODUCT_IDENTIFIER = "-//Your Learning//EN";
 
     @Bean("requestCalendar")

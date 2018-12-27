@@ -1,9 +1,6 @@
 package by.iba.bussiness.calendar.rrule.frequence;
 
-import by.iba.bussiness.calendar.rrule.frequence.Frequency;
-
 public class FrequencyWrapper {
-
     private Frequency frequency;
     private int amountOfDurationMultipleToFreq;
 

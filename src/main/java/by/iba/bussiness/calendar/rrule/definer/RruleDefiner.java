@@ -48,5 +48,4 @@ public class RruleDefiner {
         logger.info("Amount of exdates is " + rrule.getExDates().size());
         return rrule;
     }
-
 }

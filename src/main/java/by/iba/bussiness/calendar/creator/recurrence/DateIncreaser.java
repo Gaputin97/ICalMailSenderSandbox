@@ -1,4 +1,4 @@
-package by.iba.bussiness.calendar.creator.recurrence.increaser;
+package by.iba.bussiness.calendar.creator.recurrence;
 
 import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 import by.iba.bussiness.calendar.session.SessionConstants;

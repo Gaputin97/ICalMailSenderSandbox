@@ -13,14 +13,8 @@ import java.util.Optional;
 
 @Component
 public class FrequencyDefiner {
-
-    private FrequencyHelper frequencyHelper;
-
     @Autowired
-    public FrequencyDefiner(FrequencyHelper frequencyHelper) {
-        this.frequencyHelper = frequencyHelper;
-    }
-
+    private FrequencyHelper frequencyHelper;
 
     public Frequency defineFrequence(List<Date> startDatesOfSessions) {
         final int amountOfDurationsBetweenDates = startDatesOfSessions.size() - 1;

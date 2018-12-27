@@ -1,7 +1,7 @@
 package by.iba.bussiness.sender.service.v1;
 
 import by.iba.bussiness.calendar.attendee.model.Attendee;
-import by.iba.bussiness.calendar.creator.CalendarAttendeeAdder;
+import by.iba.bussiness.calendar.creator.CalendarAttendeesInstaller;
 import by.iba.bussiness.calendar.date.DateHelperDefiner;
 import by.iba.bussiness.calendar.CalendarFactory;
 import by.iba.bussiness.enrollment.EnrollmentChecker;
@@ -24,7 +24,7 @@ public class SenderServiceImpl implements SenderService {
     private MeetingService meetingService;
     private DateHelperDefiner dateHelperDefiner;
     private CalendarFactory calendarFactory;
-    private CalendarAttendeeAdder calendarAttendeeAdder;
+    private CalendarAttendeesInstaller calendarAttendeesInstaller;
     private MessageSender messageSender;
     private EnrollmentChecker enrollmentChecker;
 
@@ -32,13 +32,13 @@ public class SenderServiceImpl implements SenderService {
     public SenderServiceImpl(MeetingService meetingService,
                              DateHelperDefiner dateHelperDefiner,
                              CalendarFactory calendarFactory,
-                             CalendarAttendeeAdder calendarAttendeeAdder,
+                             CalendarAttendeesInstaller calendarAttendeesInstaller,
                              MessageSender messageSender,
                              EnrollmentChecker enrollmentChecker) {
         this.meetingService = meetingService;
         this.dateHelperDefiner = dateHelperDefiner;
         this.calendarFactory = calendarFactory;
-        this.calendarAttendeeAdder = calendarAttendeeAdder;
+        this.calendarAttendeesInstaller = calendarAttendeesInstaller;
         this.messageSender = messageSender;
         this.enrollmentChecker = enrollmentChecker;
     }
@@ -57,7 +57,7 @@ public class SenderServiceImpl implements SenderService {
 //        } else if (dateHelper.getMeetingType().equals(MeetingType.COMPLEX)) {
 //
 //        }
-        List<Calendar> calendarList = calendarAttendeeAdder.createCalendarList(emails, calendar);
+        List<Calendar> calendarList = calendarAttendeesInstaller.createCalendarList(emails, calendar);
         return messageSender.sendMessageToAllRecipients(calendarList, meeting);
     }
 }

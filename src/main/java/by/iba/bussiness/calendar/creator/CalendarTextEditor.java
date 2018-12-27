@@ -16,7 +16,6 @@ public class CalendarTextEditor {
         return stringField;
     }
 
-
     public String replaceColonToEqual(String method) {
         return method.replace(':', '=');
     }

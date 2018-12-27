@@ -25,13 +25,13 @@ import java.text.ParseException;
 @Component
 
 public class SimpleCalendarTemplateCreator {
-    private Logger logger = LoggerFactory.getLogger(SimpleCalendarTemplateCreator.class);
+    private static final Logger logger = LoggerFactory.getLogger(SimpleCalendarTemplateCreator.class);
     private CalendarTextEditor calendarTextEditor;
     private Calendar requestCalendar;
 
     @Autowired
     public SimpleCalendarTemplateCreator(CalendarTextEditor calendarTextEditor,
-                                         @Qualifier("requestCalendar") Calendar requestCalendar) {
+                                         Calendar requestCalendar) {
         this.calendarTextEditor = calendarTextEditor;
         this.requestCalendar = requestCalendar;
     }
@@ -45,32 +45,25 @@ public class SimpleCalendarTemplateCreator {
         String summary = calendarTextEditor.breakLine(meeting.getSummary());
 
         Calendar calendar = null;
+        CalendarComponent event = null;
+        FixedUidGenerator fixedUidGenerator = null;
         try {
             calendar = new Calendar(requestCalendar);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+            calendar.getComponents().add(new VEvent(startDateTime, endDateTime, summary));
+            event = calendar.getComponents().getComponent(CalendarComponent.VEVENT);
+
+            event.getProperties().add(new Organizer("mailto:" + meeting.getOwner().getEmail()));
+            fixedUidGenerator = new FixedUidGenerator("YourLearning");
+        } catch (ParseException | IOException | URISyntaxException e) {
+            logger.error("Can't create calendar: " + e.getStackTrace());
         }
-        calendar.getComponents().add(new VEvent(startDateTime, endDateTime, summary));
-        CalendarComponent event = calendar.getComponents().getComponent(CalendarComponent.VEVENT);
+
+        Uid UID = fixedUidGenerator.generateUid();
+        event.getProperties().add(UID);
 
         event.getProperties().add(new Sequence("0"));
         event.getProperties().add(new Location(calendarTextEditor.breakLine(meeting.getLocation())));
         event.getProperties().add(new Description(calendarTextEditor.breakLine(meeting.getDescription())));
-
-        FixedUidGenerator fixedUidGenerator;
-        try {
-            event.getProperties().add(new Organizer("mailto:" + meeting.getOwner().getEmail()));
-            fixedUidGenerator = new FixedUidGenerator("YourLearning");
-        } catch (URISyntaxException | SocketException e) {
-            logger.error(e.getMessage());
-            throw new CalendarException("Can't create calendar meeting. Try again later");
-        }
-        Uid UID = fixedUidGenerator.generateUid();
-        event.getProperties().add(UID);
 
         return calendar;
     }
