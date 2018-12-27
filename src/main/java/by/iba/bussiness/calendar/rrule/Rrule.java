@@ -1,25 +1,25 @@
 package by.iba.bussiness.calendar.rrule.model;
 
-import by.iba.bussiness.calendar.rrule.frequence.model.RruleFreqType;
+import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Rrule {
-    private RruleFreqType rruleFreqType;
+    private Frequency frequency;
     private Long interval;
     private List<Date> exDates = new ArrayList<>();
 
     public Rrule() {
     }
 
-    public RruleFreqType getRruleFreqType() {
-        return rruleFreqType;
+    public Frequency getFrequency() {
+        return frequency;
     }
 
-    public void setRruleFreqType(RruleFreqType rruleFreqType) {
-        this.rruleFreqType = rruleFreqType;
+    public void setFrequency(Frequency frequency) {
+        this.frequency = frequency;
     }
 
     public Long getInterval() {

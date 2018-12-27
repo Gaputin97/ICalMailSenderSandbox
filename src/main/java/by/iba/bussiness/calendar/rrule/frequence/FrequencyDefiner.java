@@ -3,8 +3,8 @@ package by.iba.bussiness.calendar.rrule.frequence;
 
 import by.iba.bussiness.calendar.rrule.constants.DateConstants;
 import by.iba.bussiness.calendar.rrule.constants.EnumConstants;
-import by.iba.bussiness.calendar.rrule.frequence.model.RruleFreqType;
-import by.iba.bussiness.calendar.rrule.frequence.wrapper.FrequenceWrapper;
+import by.iba.bussiness.calendar.rrule.frequence.model.Frequency;
+import by.iba.bussiness.calendar.rrule.frequence.wrapper.FrequencyWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +24,7 @@ public class FrequenceDefiner {
     }
 
 
-    public RruleFreqType defineFrequence(List<Date> startDatesOfSessions) {
+    public Frequency defineFrequence(List<Date> startDatesOfSessions) {
         final int amountOfDurationsBetweenDates = startDatesOfSessions.size() - 1;
         int amountOfDurationsWhichMultipleToMinute = 0;
         int amountOfDurationsWhichMultipleToHour = 0;
@@ -34,7 +34,7 @@ public class FrequenceDefiner {
         for (int numberOfDates = 0; numberOfDates < amountOfDurationsBetweenDates; numberOfDates++) {
             long timeBetweenSessions = startDatesOfSessions.get(numberOfDates + 1).getTime() - startDatesOfSessions.get(numberOfDates).getTime();
             if (freqsToExclude < DateConstants.VALUE_FOR_EXCLUDE_WEEK_FREQ) {
-                boolean isTimeBetweenSessionsMultipleToWeek = frequenceHelper.isDurationMultipleToFreq(RruleFreqType.WEEKLY, timeBetweenSessions);
+                boolean isTimeBetweenSessionsMultipleToWeek = frequenceHelper.isDurationMultipleToFreq(Frequency.WEEKLY, timeBetweenSessions);
                 if (isTimeBetweenSessionsMultipleToWeek) {
                     amountOfDurationsWhichMultipleToWeek++;
                 } else {
@@ -42,7 +42,7 @@ public class FrequenceDefiner {
                 }
             }
             if (freqsToExclude < DateConstants.VALUE_FOR_EXCLUDE_DAILY_FREQ) {
-                boolean isTimeBetweenSessionsMultipleToDay = frequenceHelper.isDurationMultipleToFreq(RruleFreqType.DAILY, timeBetweenSessions);
+                boolean isTimeBetweenSessionsMultipleToDay = frequenceHelper.isDurationMultipleToFreq(Frequency.DAILY, timeBetweenSessions);
                 if (isTimeBetweenSessionsMultipleToDay) {
                     amountOfDurationsWhichMultipleToDay++;
                 } else {
@@ -50,30 +50,30 @@ public class FrequenceDefiner {
                 }
             }
             if (freqsToExclude < DateConstants.VALUE_FOR_EXCLUDE_HOURLY_FREQ) {
-                boolean isTimeBetweenSessionsMultipleToHour = frequenceHelper.isDurationMultipleToFreq(RruleFreqType.HOURLY, timeBetweenSessions);
+                boolean isTimeBetweenSessionsMultipleToHour = frequenceHelper.isDurationMultipleToFreq(Frequency.HOURLY, timeBetweenSessions);
                 if (isTimeBetweenSessionsMultipleToHour) {
                     amountOfDurationsWhichMultipleToHour++;
                 } else {
                     freqsToExclude += EnumConstants.ORDINAL_OF_HOURLY;
                 }
             }
-            boolean isTimeBetweenSessionsMultipleToMinute = frequenceHelper.isDurationMultipleToFreq(RruleFreqType.MINUTELY, timeBetweenSessions);
+            boolean isTimeBetweenSessionsMultipleToMinute = frequenceHelper.isDurationMultipleToFreq(Frequency.MINUTELY, timeBetweenSessions);
             if (isTimeBetweenSessionsMultipleToMinute) {
                 amountOfDurationsWhichMultipleToMinute++;
             }
         }
-        List<FrequenceWrapper> candidates = new ArrayList<>();
-        candidates.add(new FrequenceWrapper(RruleFreqType.WEEKLY, amountOfDurationsWhichMultipleToWeek));
-        candidates.add(new FrequenceWrapper(RruleFreqType.DAILY, amountOfDurationsWhichMultipleToDay));
-        candidates.add(new FrequenceWrapper(RruleFreqType.HOURLY, amountOfDurationsWhichMultipleToHour));
-        candidates.add(new FrequenceWrapper(RruleFreqType.MINUTELY, amountOfDurationsWhichMultipleToMinute));
+        List<FrequencyWrapper> candidates = new ArrayList<>();
+        candidates.add(new FrequencyWrapper(Frequency.WEEKLY, amountOfDurationsWhichMultipleToWeek));
+        candidates.add(new FrequencyWrapper(Frequency.DAILY, amountOfDurationsWhichMultipleToDay));
+        candidates.add(new FrequencyWrapper(Frequency.HOURLY, amountOfDurationsWhichMultipleToHour));
+        candidates.add(new FrequencyWrapper(Frequency.MINUTELY, amountOfDurationsWhichMultipleToMinute));
         return chooseNeededFrequence(candidates, amountOfDurationsBetweenDates);
     }
 
-    public RruleFreqType chooseNeededFrequence(List<FrequenceWrapper> frequenceWrappers, int realAmountOfDurations) {
-        Optional<FrequenceWrapper> neededFrequenceWrapper = frequenceWrappers.stream()
+    public Frequency chooseNeededFrequence(List<FrequencyWrapper> frequencyWrappers, int realAmountOfDurations) {
+        Optional<FrequencyWrapper> neededFrequenceWrapper = frequencyWrappers.stream()
                 .filter(x -> x.getAmountOfDurationMultipleToFreq() == realAmountOfDurations).findFirst();
-        FrequenceWrapper frequenceWrapper = neededFrequenceWrapper.get();
-        return frequenceWrapper.getRruleFreqType();
+        FrequencyWrapper frequencyWrapper = neededFrequenceWrapper.get();
+        return frequencyWrapper.getFrequency();
     }
 }

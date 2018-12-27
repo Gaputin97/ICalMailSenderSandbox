@@ -4,7 +4,7 @@ import by.iba.bussiness.meeting.invitation.template.service.InvitationTemplateSe
 import by.iba.exception.ServiceException;
 import by.iba.bussiness.meeting.invitation.template.constants.InvitationTemplateConstants;
 import by.iba.bussiness.meeting.invitation.template.model.InvitationTemplate;
-import by.iba.bussiness.meeting.model.Meeting;
+import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.v1.MeetingServiceImpl;
 import by.iba.bussiness.token.model.JavaWebToken;
 import by.iba.bussiness.token.service.v1.TokenServiceImpl;

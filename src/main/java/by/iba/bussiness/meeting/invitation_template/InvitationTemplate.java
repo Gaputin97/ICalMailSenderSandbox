@@ -1,7 +1,6 @@
 package by.iba.bussiness.meeting.invitation.template.model;
 
 public class InvitationTemplate {
-
     private boolean active;
     private String blendedDescription;
     private String blendedImageUrl;

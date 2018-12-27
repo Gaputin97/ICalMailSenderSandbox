@@ -1,24 +1,23 @@
 package by.iba.bussiness.calendar.rrule.frequence.wrapper;
 
+import by.iba.bussiness.calendar.rrule.frequence.model.Frequency;
 
-import by.iba.bussiness.calendar.rrule.frequence.model.RruleFreqType;
+public class FrequencyWrapper {
 
-public class FrequenceWrapper {
-
-    private RruleFreqType rruleFreqType;
+    private Frequency frequency;
     private int amountOfDurationMultipleToFreq;
 
-    public FrequenceWrapper(RruleFreqType rruleFreqType, int minimumDuration) {
-        this.rruleFreqType = rruleFreqType;
+    public FrequencyWrapper(Frequency frequency, int minimumDuration) {
+        this.frequency = frequency;
         this.amountOfDurationMultipleToFreq = minimumDuration;
     }
 
-    public RruleFreqType getRruleFreqType() {
-        return rruleFreqType;
+    public Frequency getFrequency() {
+        return frequency;
     }
 
-    public void setRruleFreqType(RruleFreqType rruleFreqType) {
-        this.rruleFreqType = rruleFreqType;
+    public void setFrequency(Frequency frequency) {
+        this.frequency = frequency;
     }
 
     public int getAmountOfDurationMultipleToFreq() {

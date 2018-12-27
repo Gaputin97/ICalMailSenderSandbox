@@ -23,7 +23,6 @@ public class EnrollmentChecker {
     }
 
     public void isExistsEnrollment(HttpServletRequest request, List<String> emails, Meeting meeting) {
-        boolean isExist = false;
         BigInteger meetingId = meeting.getId();
         for (String email : emails) {
             boolean isExistThirdPartyEnrollment = enrollmentService.getEnrollmentByEmailAndMeetingId(request, meetingId, email) != null;
