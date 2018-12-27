@@ -1,14 +1,15 @@
 package by.iba.bussiness.meeting.invitation_template.service.v1;
 
 import by.iba.bussiness.meeting.invitation_template.service.InvitationTemplateService;
+import by.iba.bussiness.token.service.TokenService;
 import by.iba.exception.ServiceException;
-import by.iba.bussiness.meeting.invitation.template.constants.InvitationTemplateConstants;
 import by.iba.bussiness.meeting.invitation_template.InvitationTemplate;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.v1.MeetingServiceImpl;
 import by.iba.bussiness.token.model.JavaWebToken;
-import by.iba.bussiness.token.service.v1.TokenServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,20 +22,22 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 
 @Service
+@PropertySource("endpoint.properties")
 public class InvitationTemplateServiceImpl implements InvitationTemplateService {
-    private TokenServiceImpl tokenService;
+    private TokenService tokenService;
     private RestTemplate restTemplate;
-    private InvitationTemplateConstants invitationTemplateConstants;
+    @Value("${template_by_id_endpoint}")
+    private String ENDPOINT_GET_TEMPLATE_BY_ID;
+    @Value("${template_by_code_endpoint}")
+    private String ENDPOINT_GET_TEMPLATE_BY_CODE;
     private MeetingServiceImpl meetingService;
 
     @Autowired
-    public InvitationTemplateServiceImpl(TokenServiceImpl tokenService,
+    public InvitationTemplateServiceImpl(TokenService tokenService,
                                          RestTemplate restTemplate,
-                                         InvitationTemplateConstants invitationTemplateConstants,
                                          MeetingServiceImpl meetingService) {
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
-        this.invitationTemplateConstants = invitationTemplateConstants;
         this.meetingService = meetingService;
     }
 
@@ -46,8 +49,8 @@ public class InvitationTemplateServiceImpl implements InvitationTemplateService 
         HttpEntity httpEntity = new HttpEntity<>(httpHeaders);
         InvitationTemplate invitationTemplate;
         try {
-            ResponseEntity<InvitationTemplate> invitationTemplateResponseEntity = restTemplate.exchange(invitationTemplateConstants.getTemplateById(),
-                    HttpMethod.GET, httpEntity, InvitationTemplate.class, id);
+            ResponseEntity<InvitationTemplate> invitationTemplateResponseEntity = restTemplate.exchange(ENDPOINT_GET_TEMPLATE_BY_ID + id,
+                    HttpMethod.GET, httpEntity, InvitationTemplate.class);
             invitationTemplate = invitationTemplateResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             throw new ServiceException(e.getMessage());
@@ -63,8 +66,8 @@ public class InvitationTemplateServiceImpl implements InvitationTemplateService 
         HttpEntity httpEntity = new HttpEntity<>(httpHeaders);
         InvitationTemplate invitationTemplate;
         try {
-            ResponseEntity<InvitationTemplate> invitationTemplateResponseEntity = restTemplate.exchange(invitationTemplateConstants.getTemplateByCode(),
-                    HttpMethod.GET, httpEntity, InvitationTemplate.class, code);
+            ResponseEntity<InvitationTemplate> invitationTemplateResponseEntity = restTemplate.exchange(ENDPOINT_GET_TEMPLATE_BY_CODE + code,
+                    HttpMethod.GET, httpEntity, InvitationTemplate.class);
             invitationTemplate = invitationTemplateResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             throw new ServiceException(e.getMessage());

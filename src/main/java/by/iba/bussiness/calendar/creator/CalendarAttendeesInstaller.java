@@ -20,9 +20,7 @@ import java.util.List;
 
 @org.springframework.stereotype.Component
 public class CalendarAttendeesInstaller {
-    private Logger logger = LoggerFactory.getLogger(CalendarAttendeesInstaller.class);
-public class CalendarAttendeeAdder {
-    private static final Logger logger = LoggerFactory.getLogger(CalendarAttendeeAdder.class);
+    private static final Logger logger = LoggerFactory.getLogger(CalendarAttendeesInstaller.class);
 
     public List<Calendar> createCalendarList(List<String> emails, Calendar calendar) {
         List<Calendar> calendarList = new ArrayList<>();
