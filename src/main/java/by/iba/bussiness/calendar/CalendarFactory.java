@@ -1,10 +1,10 @@
-package by.iba.bussiness.calendar.factory;
+package by.iba.bussiness.calendar;
 
 import by.iba.bussiness.calendar.creator.complex.ComplexCalendarTemplateCreator;
 import by.iba.bussiness.calendar.creator.recurrence.RecurrenceCalendarTemplateCreator;
 import by.iba.bussiness.calendar.creator.single.SimpleCalendarTemplateCreator;
 import by.iba.bussiness.calendar.date.model.single.SingleDateHelper;
-import by.iba.bussiness.meeting.model.Meeting;
+import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.calendar.date.model.DateHelper;
 import by.iba.bussiness.calendar.date.model.complex.ComplexDateHelper;
 import by.iba.bussiness.calendar.date.model.reccurence.RecurrenceDateHelper;

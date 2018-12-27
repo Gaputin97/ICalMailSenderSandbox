@@ -1,15 +1,15 @@
-package by.iba.bussiness.calendar.creator.type.recurrence;
+package by.iba.bussiness.calendar.creator.recurrence;
 
-import by.iba.bussiness.calendar.creator.text_preparing.CalendarTextEditor;
-import by.iba.bussiness.calendar.creator.type.recurrence.increaser.DateIncreaser;
-import by.iba.bussiness.calendar.creator.type.recurrence.parser.IcalDateParser;
-import by.iba.bussiness.calendar.date.constants.DateHelperConstants;
+import by.iba.bussiness.calendar.creator.CalendarTextEditor;
+import by.iba.bussiness.calendar.creator.recurrence.increaser.DateIncreaser;
+import by.iba.bussiness.calendar.creator.recurrence.parser.IcalDateParser;
+import by.iba.bussiness.calendar.date.DateHelperConstants;
 import by.iba.bussiness.calendar.date.model.reccurence.RecurrenceDateHelper;
-import by.iba.bussiness.meeting.model.Meeting;
-import by.iba.bussiness.calendar.rrule.model.Rrule;
-import by.iba.bussiness.calendar.session.model.Session;
-import by.iba.bussiness.calendar.session.parser.SessionParser;
-import by.iba.bussiness.meeting.timeslot.model.TimeSlot;
+import by.iba.bussiness.meeting.Meeting;
+import by.iba.bussiness.calendar.rrule.Rrule;
+import by.iba.bussiness.calendar.session.Session;
+import by.iba.bussiness.calendar.session.SessionParser;
+import by.iba.bussiness.meeting.timeslot.TimeSlot;
 import by.iba.exception.CalendarException;
 import net.fortuna.ical4j.model.*;
 import net.fortuna.ical4j.model.component.VEvent;
@@ -63,7 +63,7 @@ public class RecurrenceCalendarTemplateCreator {
         TimeSlot lastTimeSlot = meetingTimeSlots.get(meetingTimeSlots.size() - 1);
         String until = iСalDateParser.parseToICalDate(lastTimeSlot.getStartDateTime());
         Session lastSession = sessionParser.timeSlotToSession(lastTimeSlot);
-        String increasedDate = dateIncreaser.increaseAndParse(rrule.getRruleFreqType(), rrule.getInterval(), lastSession.getStartDate());
+        String increasedDate = dateIncreaser.increaseAndParse(rrule.getFrequency(), rrule.getInterval(), lastSession.getStartDate());
         Session firstSession = sessionParser.timeSlotToSession(firstTimeSlot);
         DateTime startDateTime = new DateTime(firstSession.getStartDate());
         DateTime endDateTime = new DateTime(firstSession.getEndDate());
@@ -87,7 +87,7 @@ public class RecurrenceCalendarTemplateCreator {
 
         FixedUidGenerator fixedUidGenerator;
         try {
-            Recur recurrence = new Recur("FREQ=" + rrule.getRruleFreqType().toString() + ";" + "INTERVAL=" + rrule.getInterval() + ";" + "UNTIL=" + until + ";");
+            Recur recurrence = new Recur("FREQ=" + rrule.getFrequency().toString() + ";" + "INTERVAL=" + rrule.getInterval() + ";" + "UNTIL=" + until + ";");
             event.getProperties().add(new RRule(recurrence));
             event.getProperties().add(new ExDate(exDates));
             event.getProperties().add(new Organizer("mailto:" + meeting.getOwner().getEmail()));

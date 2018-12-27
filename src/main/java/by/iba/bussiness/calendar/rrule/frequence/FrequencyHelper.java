@@ -1,10 +1,9 @@
 package by.iba.bussiness.calendar.rrule.frequence;
 
-import by.iba.bussiness.calendar.rrule.frequence.model.Frequency;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FrequenceHelper {
+public class FrequencyHelper {
 
     public boolean isDurationMultipleToFreq(Frequency frequency, long timeBetweenSessions) {
         boolean isDurationMultipleToFreq = false;
@@ -14,6 +13,4 @@ public class FrequenceHelper {
         }
         return isDurationMultipleToFreq;
     }
-
-
 }

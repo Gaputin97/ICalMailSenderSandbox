@@ -1,7 +1,7 @@
-package by.iba.bussiness.calendar.date.builder.single;
+package by.iba.bussiness.calendar.date.builder;
 
 import by.iba.bussiness.calendar.date.model.single.SingleDateHelper;
-import by.iba.bussiness.calendar.session.model.Session;
+import by.iba.bussiness.calendar.session.Session;
 import org.springframework.stereotype.Component;
 
 @Component

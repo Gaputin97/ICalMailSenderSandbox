@@ -1,7 +1,7 @@
-package by.iba.bussiness.enrollment.checker;
+package by.iba.bussiness.enrollment;
 
 import by.iba.bussiness.enrollment.service.v1.EnrollmentServiceImpl;
-import by.iba.bussiness.meeting.model.Meeting;
+import by.iba.bussiness.meeting.Meeting;
 import by.iba.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

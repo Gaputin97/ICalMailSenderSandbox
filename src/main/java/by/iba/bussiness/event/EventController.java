@@ -1,4 +1,4 @@
-package by.iba.bussiness.event.controller;
+package by.iba.bussiness.event;
 
 import org.springframework.web.bind.annotation.RestController;
 

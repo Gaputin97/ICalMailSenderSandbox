@@ -1,8 +1,6 @@
-package by.iba.bussiness.calendar.session.parser;
+package by.iba.bussiness.calendar.session;
 
-import by.iba.bussiness.calendar.session.constants.SessionConstants;
-import by.iba.bussiness.calendar.session.model.Session;
-import by.iba.bussiness.meeting.timeslot.model.TimeSlot;
+import by.iba.bussiness.meeting.timeslot.TimeSlot;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
@@ -13,7 +11,6 @@ import java.util.List;
 
 @Component
 public class SessionParser {
-
     private final SimpleDateFormat dateFormat = new SimpleDateFormat(SessionConstants.DATE_FORMAT);
 
     public Session timeSlotToSession(TimeSlot timeSlot) {
@@ -28,7 +25,6 @@ public class SessionParser {
             throw new RuntimeException(e);
         }
         return new Session(startDate, endDate);
-
     }
 
     public List<Session> timeSlotListToSessionList(List<TimeSlot> timeSlots) {
@@ -48,6 +44,5 @@ public class SessionParser {
             }
         }
         return sessions;
-
     }
 }

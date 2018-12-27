@@ -1,8 +1,8 @@
 package by.iba.bussiness.calendar.date.model.complex;
 
-import by.iba.bussiness.meeting.type.MeetingType;
+import by.iba.bussiness.meeting.MeetingType;
 import by.iba.bussiness.calendar.date.model.DateHelper;
-import by.iba.bussiness.calendar.session.model.Session;
+import by.iba.bussiness.calendar.session.Session;
 
 import java.util.List;
 

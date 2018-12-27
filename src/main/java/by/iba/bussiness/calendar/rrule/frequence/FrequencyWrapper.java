@@ -1,6 +1,6 @@
-package by.iba.bussiness.calendar.rrule.frequence.wrapper;
+package by.iba.bussiness.calendar.rrule.frequence;
 
-import by.iba.bussiness.calendar.rrule.frequence.model.Frequency;
+import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 
 public class FrequencyWrapper {
 

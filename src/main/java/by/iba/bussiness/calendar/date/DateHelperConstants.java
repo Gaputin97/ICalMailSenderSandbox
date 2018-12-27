@@ -1,4 +1,4 @@
-package by.iba.bussiness.calendar.date.constants;
+package by.iba.bussiness.calendar.date;
 
 import org.springframework.stereotype.Component;
 

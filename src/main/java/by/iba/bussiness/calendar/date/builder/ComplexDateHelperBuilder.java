@@ -1,7 +1,7 @@
-package by.iba.bussiness.calendar.date.builder.complex;
+package by.iba.bussiness.calendar.date.builder;
 
 import by.iba.bussiness.calendar.date.model.complex.ComplexDateHelper;
-import by.iba.bussiness.calendar.session.model.Session;
+import by.iba.bussiness.calendar.session.Session;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

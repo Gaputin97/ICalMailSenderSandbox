@@ -3,8 +3,6 @@ package by.iba.bussiness.calendar.rrule.frequence;
 
 import by.iba.bussiness.calendar.rrule.constants.DateConstants;
 import by.iba.bussiness.calendar.rrule.constants.EnumConstants;
-import by.iba.bussiness.calendar.rrule.frequence.model.Frequency;
-import by.iba.bussiness.calendar.rrule.frequence.wrapper.FrequencyWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,13 +12,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class FrequenceDefiner {
+public class FrequencyDefiner {
 
-    private FrequenceHelper frequenceHelper;
+    private FrequencyHelper frequencyHelper;
 
     @Autowired
-    public FrequenceDefiner(FrequenceHelper frequenceHelper) {
-        this.frequenceHelper = frequenceHelper;
+    public FrequencyDefiner(FrequencyHelper frequencyHelper) {
+        this.frequencyHelper = frequencyHelper;
     }
 
 
@@ -34,7 +32,7 @@ public class FrequenceDefiner {
         for (int numberOfDates = 0; numberOfDates < amountOfDurationsBetweenDates; numberOfDates++) {
             long timeBetweenSessions = startDatesOfSessions.get(numberOfDates + 1).getTime() - startDatesOfSessions.get(numberOfDates).getTime();
             if (freqsToExclude < DateConstants.VALUE_FOR_EXCLUDE_WEEK_FREQ) {
-                boolean isTimeBetweenSessionsMultipleToWeek = frequenceHelper.isDurationMultipleToFreq(Frequency.WEEKLY, timeBetweenSessions);
+                boolean isTimeBetweenSessionsMultipleToWeek = frequencyHelper.isDurationMultipleToFreq(Frequency.WEEKLY, timeBetweenSessions);
                 if (isTimeBetweenSessionsMultipleToWeek) {
                     amountOfDurationsWhichMultipleToWeek++;
                 } else {
@@ -42,7 +40,7 @@ public class FrequenceDefiner {
                 }
             }
             if (freqsToExclude < DateConstants.VALUE_FOR_EXCLUDE_DAILY_FREQ) {
-                boolean isTimeBetweenSessionsMultipleToDay = frequenceHelper.isDurationMultipleToFreq(Frequency.DAILY, timeBetweenSessions);
+                boolean isTimeBetweenSessionsMultipleToDay = frequencyHelper.isDurationMultipleToFreq(Frequency.DAILY, timeBetweenSessions);
                 if (isTimeBetweenSessionsMultipleToDay) {
                     amountOfDurationsWhichMultipleToDay++;
                 } else {
@@ -50,14 +48,14 @@ public class FrequenceDefiner {
                 }
             }
             if (freqsToExclude < DateConstants.VALUE_FOR_EXCLUDE_HOURLY_FREQ) {
-                boolean isTimeBetweenSessionsMultipleToHour = frequenceHelper.isDurationMultipleToFreq(Frequency.HOURLY, timeBetweenSessions);
+                boolean isTimeBetweenSessionsMultipleToHour = frequencyHelper.isDurationMultipleToFreq(Frequency.HOURLY, timeBetweenSessions);
                 if (isTimeBetweenSessionsMultipleToHour) {
                     amountOfDurationsWhichMultipleToHour++;
                 } else {
                     freqsToExclude += EnumConstants.ORDINAL_OF_HOURLY;
                 }
             }
-            boolean isTimeBetweenSessionsMultipleToMinute = frequenceHelper.isDurationMultipleToFreq(Frequency.MINUTELY, timeBetweenSessions);
+            boolean isTimeBetweenSessionsMultipleToMinute = frequencyHelper.isDurationMultipleToFreq(Frequency.MINUTELY, timeBetweenSessions);
             if (isTimeBetweenSessionsMultipleToMinute) {
                 amountOfDurationsWhichMultipleToMinute++;
             }

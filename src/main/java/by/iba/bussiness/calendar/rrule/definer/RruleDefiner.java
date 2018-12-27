@@ -1,10 +1,10 @@
 package by.iba.bussiness.calendar.rrule.definer;
 
-import by.iba.bussiness.calendar.rrule.frequence.FrequenceDefiner;
-import by.iba.bussiness.calendar.rrule.frequence.model.RruleFreqType;
+import by.iba.bussiness.calendar.rrule.frequence.FrequencyDefiner;
+import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 import by.iba.bussiness.calendar.rrule.interval.IntervalDefiner;
-import by.iba.bussiness.calendar.rrule.model.Rrule;
-import by.iba.bussiness.calendar.session.model.Session;
+import by.iba.bussiness.calendar.rrule.Rrule;
+import by.iba.bussiness.calendar.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +15,13 @@ import java.util.*;
 @Component
 public class RruleDefiner {
     private final static Logger logger = LoggerFactory.getLogger(RruleDefiner.class);
-    private FrequenceDefiner frequenceDefiner;
+    private FrequencyDefiner frequencyDefiner;
     private IntervalDefiner intervalDefiner;
     private ExDatesDefiner exDatesDefiner;
 
     @Autowired
-    public RruleDefiner(FrequenceDefiner frequenceDefiner, IntervalDefiner intervalDefiner, ExDatesDefiner exDatesDefiner) {
-        this.frequenceDefiner = frequenceDefiner;
+    public RruleDefiner(FrequencyDefiner frequencyDefiner, IntervalDefiner intervalDefiner, ExDatesDefiner exDatesDefiner) {
+        this.frequencyDefiner = frequencyDefiner;
         this.intervalDefiner = intervalDefiner;
         this.exDatesDefiner = exDatesDefiner;
     }
@@ -37,12 +37,12 @@ public class RruleDefiner {
         List<Date> startDatesOfSessions = new LinkedList();
         sessions.forEach(x -> startDatesOfSessions.add(x.getStartDate()));
 
-        RruleFreqType rruleFreqType = frequenceDefiner.defineFrequence(startDatesOfSessions);
-        long interval = intervalDefiner.defineInterval(startDatesOfSessions, rruleFreqType);
+        Frequency frequency = frequencyDefiner.defineFrequence(startDatesOfSessions);
+        long interval = intervalDefiner.defineInterval(startDatesOfSessions, frequency);
         Rrule rrule = new Rrule();
         rrule.setInterval(interval);
-        rrule.setRruleFreqType(rruleFreqType);
-        logger.info("Interval of rrule is " + interval + " and freq type is " + rruleFreqType.toString());
+        rrule.setFrequency(frequency);
+        logger.info("Interval of rrule is " + interval + " and freq type is " + frequency.toString());
 
         exDatesDefiner.defineExDates(rrule, startDateOfFirstSession, startDateOfLastSession, startDatesOfSessions);
         logger.info("Amount of exdates is " + rrule.getExDates().size());

@@ -1,8 +1,8 @@
-package by.iba.bussiness.calendar.creator.type.complex;
+package by.iba.bussiness.calendar.creator.complex;
 
-import by.iba.bussiness.calendar.creator.text_preparing.CalendarTextEditor;
-import by.iba.bussiness.calendar.session.model.Session;
-import by.iba.bussiness.meeting.model.Meeting;
+import by.iba.bussiness.calendar.creator.CalendarTextEditor;
+import by.iba.bussiness.calendar.session.Session;
+import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.MeetingService;
 import by.iba.bussiness.calendar.date.model.complex.ComplexDateHelper;
 import by.iba.exception.CalendarException;
@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

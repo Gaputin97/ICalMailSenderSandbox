@@ -1,6 +1,5 @@
 package by.iba.bussiness.calendar.creator;
 
-import by.iba.bussiness.calendar.email.Email;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.CalendarException;
 import net.fortuna.ical4j.model.Component;
@@ -20,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @org.springframework.stereotype.Component
-public class CalendarListCreator {
-    private Logger logger = LoggerFactory.getLogger(CalendarListCreator.class);
+public class CalendarAttendeeAdder {
+    private Logger logger = LoggerFactory.getLogger(CalendarAttendeeAdder.class);
 
     public List<Calendar> createCalendarList(List<String> emails, Calendar calendar) {
         List<Calendar> calendarList = new ArrayList<>();

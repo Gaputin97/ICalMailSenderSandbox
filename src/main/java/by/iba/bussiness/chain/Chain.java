@@ -1,4 +1,4 @@
-package by.iba.bussiness.chain.model;
+package by.iba.bussiness.chain;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

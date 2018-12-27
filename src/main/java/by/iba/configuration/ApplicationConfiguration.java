@@ -9,20 +9,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-@Configuration
-@ComponentScan("by.iba")
-@Import({MongoConfiguration.class, RestTemplateConfiguration.class, SwaggerConfiguration.class, MailConfiguration.class})
+@Import({
+        MongoConfiguration.class,
+        RestTemplateConfiguration.class, SwaggerConfiguration.class, MailConfiguration.class})
 public class ApplicationConfiguration {
-    private MongoConfiguration mongoConfiguration;
-    private RestTemplateConfiguration restTemplateConfiguration;
-    private SwaggerConfiguration swaggerConfiguration;
-    private MailConfiguration mailConfiguration;
 
-    @Autowired
-    public ApplicationConfiguration(MongoConfiguration mongoConfiguration, RestTemplateConfiguration restTemplateConfiguration, SwaggerConfiguration swaggerConfiguration, MailConfiguration mailConfiguration) {
-        this.mongoConfiguration = mongoConfiguration;
-        this.restTemplateConfiguration = restTemplateConfiguration;
-        this.swaggerConfiguration = swaggerConfiguration;
-        this.mailConfiguration = mailConfiguration;
-    }
 }

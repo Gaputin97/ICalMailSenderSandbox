@@ -1,7 +1,7 @@
 package by.iba.bussiness.enrollment.service.v1;
 
 import by.iba.bussiness.enrollment.constants.EnrollmentConstants;
-import by.iba.bussiness.enrollment.model.Enrollment;
+import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.repository.v1.EnrollmentRepositoryImpl;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.status.insert.InsertStatus;

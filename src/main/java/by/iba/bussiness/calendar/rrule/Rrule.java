@@ -1,4 +1,4 @@
-package by.iba.bussiness.calendar.rrule.model;
+package by.iba.bussiness.calendar.rrule;
 
 import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 

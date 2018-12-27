@@ -1,6 +1,5 @@
-package by.iba.bussiness.enrollment.controller;
+package by.iba.bussiness.enrollment;
 
-import by.iba.bussiness.enrollment.model.Enrollment;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.status.insert.InsertStatus;
 
@@ -12,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
 
 @RestController
-public class EnrollmentController {
+public class  EnrollmentController {
     @Autowired
     private EnrollmentService enrollmentService;
 

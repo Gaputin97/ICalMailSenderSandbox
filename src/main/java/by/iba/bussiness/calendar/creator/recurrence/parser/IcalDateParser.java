@@ -1,4 +1,4 @@
-package by.iba.bussiness.calendar.creator.type.recurrence.parser;
+package by.iba.bussiness.calendar.creator.recurrence.parser;
 
 import org.springframework.stereotype.Component;
 

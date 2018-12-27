@@ -1,20 +1,13 @@
-package by.iba.bussiness.meeting.timeslot.model;
+package by.iba.bussiness.meeting.timeslot;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TimeSlot{
-
     private float duration;
-
     private String endDateTime;
-
     private String facilityInformation;
-
     private float id;
-
-    private List<String> resourceEmails = new ArrayList();
-
+    private List<String> resourceEmails;
     private String startDateTime;
 
     public float getDuration() {
@@ -64,5 +57,4 @@ public class TimeSlot{
     public void setStartDateTime(String startDateTime) {
         this.startDateTime = startDateTime;
     }
-
 }

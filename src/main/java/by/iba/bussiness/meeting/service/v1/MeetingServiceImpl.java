@@ -1,7 +1,7 @@
 package by.iba.bussiness.meeting.service.v1;
 
 import by.iba.bussiness.meeting.constants.MeetingConstants;
-import by.iba.bussiness.meeting.model.Meeting;
+import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.MeetingService;
 import by.iba.bussiness.token.model.JavaWebToken;
 import by.iba.bussiness.token.service.TokenService;

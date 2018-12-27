@@ -1,6 +1,6 @@
 package by.iba.bussiness.calendar.rrule.definer;
 
-import by.iba.bussiness.calendar.rrule.model.Rrule;
+import by.iba.bussiness.calendar.rrule.Rrule;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -21,7 +21,7 @@ public class ExDatesDefiner {
             } else {
                 ((LinkedList<Date>) startDatesOfSessions).removeFirst();
             }
-            startCalendar.add(rrule.getRruleFreqType().getFrequence(), rrule.getInterval().intValue());
+            startCalendar.add(rrule.getFrequency().getFrequency(), rrule.getInterval().intValue());
         }
     }
 }

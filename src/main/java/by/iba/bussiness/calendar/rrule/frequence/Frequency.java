@@ -1,4 +1,4 @@
-package by.iba.bussiness.calendar.rrule.frequence.model;
+package by.iba.bussiness.calendar.rrule.frequence;
 
 import by.iba.bussiness.calendar.rrule.constants.DateConstants;
 

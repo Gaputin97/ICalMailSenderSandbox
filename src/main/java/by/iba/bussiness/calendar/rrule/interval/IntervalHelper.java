@@ -1,15 +1,15 @@
 package by.iba.bussiness.calendar.rrule.interval;
 
 import by.iba.bussiness.calendar.rrule.constants.DateConstants;
-import by.iba.bussiness.calendar.rrule.frequence.model.RruleFreqType;
+import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 import org.springframework.stereotype.Component;
 
 @Component
 public class IntervalHelper {
 
-    public long defineInterval(RruleFreqType rruleFreqType, long timeBetweenSessions, long minimumInterval) {
-        long millisecondsInFreq = rruleFreqType.getMillisecondsInFreq();
-        long freqsInOneHundredYears = rruleFreqType.getMillisecondsInOneHundredYear();
+    public long defineInterval(Frequency frequency, long timeBetweenSessions, long minimumInterval) {
+        long millisecondsInFreq = frequency.getMillisecondsInFreq();
+        long freqsInOneHundredYears = frequency.getMillisecondsInOneHundredYear();
         if (!(minimumInterval == DateConstants.VALUE_FOR_DEFAULT_INTERVAL)) {
             long possibleInterval = timeBetweenSessions / millisecondsInFreq;
             if (possibleInterval < minimumInterval) {
@@ -24,6 +24,4 @@ public class IntervalHelper {
         }
         return minimumInterval;
     }
-
-
 }

@@ -1,4 +1,4 @@
-package by.iba.bussiness.sender.controller;
+package by.iba.bussiness.sender;
 
 import by.iba.bussiness.calendar.attendee.model.Attendee;
 import by.iba.bussiness.sender.service.v1.SenderServiceImpl;

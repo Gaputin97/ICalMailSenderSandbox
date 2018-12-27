@@ -1,7 +1,6 @@
-package by.iba.bussiness.meeting.invitation.template.controller;
+package by.iba.bussiness.meeting.invitation_template;
 
-import by.iba.bussiness.meeting.invitation.template.model.InvitationTemplate;
-import by.iba.bussiness.meeting.invitation.template.service.v1.InvitationTemplateServiceImpl;
+import by.iba.bussiness.meeting.invitation_template.service.v1.InvitationTemplateServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

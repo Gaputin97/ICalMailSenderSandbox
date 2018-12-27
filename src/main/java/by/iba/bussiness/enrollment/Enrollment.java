@@ -1,4 +1,4 @@
-package by.iba.bussiness.enrollment.model;
+package by.iba.bussiness.enrollment;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

@@ -1,4 +1,4 @@
-package by.iba.bussiness.meeting.type;
+package by.iba.bussiness.meeting;
 
 import net.fortuna.ical4j.model.property.Method;
 

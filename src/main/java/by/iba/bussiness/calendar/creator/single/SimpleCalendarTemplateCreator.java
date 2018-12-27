@@ -1,9 +1,9 @@
-package by.iba.bussiness.calendar.creator.type.single;
+package by.iba.bussiness.calendar.creator.single;
 
-import by.iba.bussiness.calendar.creator.text_preparing.CalendarTextEditor;
+import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.calendar.date.model.single.SingleDateHelper;
-import by.iba.bussiness.meeting.model.Meeting;
-import by.iba.bussiness.calendar.session.model.Session;
+import by.iba.bussiness.meeting.Meeting;
+import by.iba.bussiness.calendar.session.Session;
 import by.iba.exception.CalendarException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
@@ -67,7 +67,7 @@ public class SimpleCalendarTemplateCreator {
             fixedUidGenerator = new FixedUidGenerator("YourLearning");
         } catch (URISyntaxException | SocketException e) {
             logger.error(e.getMessage());
-            throw new CalendarException("Can't create calendar meeting. Try againg later");
+            throw new CalendarException("Can't create calendar meeting. Try again later");
         }
         Uid UID = fixedUidGenerator.generateUid();
         event.getProperties().add(UID);
