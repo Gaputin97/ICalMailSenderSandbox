@@ -7,6 +7,7 @@ import by.iba.bussiness.calendar.session.Session;
 import by.iba.exception.CalendarException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
+import net.fortuna.ical4j.model.Recur;
 import net.fortuna.ical4j.model.component.CalendarComponent;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.*;
@@ -22,6 +23,7 @@ import java.net.SocketException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.UUID;
+import java.util.Arrays;
 
 @Component
 
@@ -39,18 +41,15 @@ public class SimpleCalendarTemplateCreator {
 
     public Calendar createSimpleMeetingInvitationTemplate(SingleDateHelper singleDateHelper, Meeting meeting) {
         logger.info("Started creating ics file with single meeting with id " + meeting.getId());
-        Session session = singleDateHelper.getSession();
-        DateTime startDateTime = new DateTime(session.getStartDate());
-        DateTime endDateTime = new DateTime(session.getEndDate());
-
-        String summary = calendarTextEditor.breakLine(meeting.getSummary());
-
         Calendar calendar;
         CalendarComponent event;
+        VEvent event;
         try {
-            calendar = new Calendar(requestCalendar);
-            calendar.getComponents().add(new VEvent(startDateTime, endDateTime, summary));
-            event = calendar.getComponents().getComponent(CalendarComponent.VEVENT);
+            Sequence sequence = new Sequence("0");
+            Organizer organizer = new Organizer("mailto:" + meeting.getOwner().getEmail());
+            Location location = new Location(calendarTextEditor.breakLine(meeting.getLocation()));
+            Description description = new Description(calendarTextEditor.breakLine(meeting.getDescription()));
+            Summary summary = new Summary(calendarTextEditor.breakLine(meeting.getSummary()));
 
             event.getProperties().add(new Organizer("mailto:" + meeting.getOwner().getEmail()));
         } catch (ParseException | IOException | URISyntaxException e) {
@@ -64,7 +63,21 @@ public class SimpleCalendarTemplateCreator {
         event.getProperties().add(new Sequence("0"));
         event.getProperties().add(new Location(calendarTextEditor.breakLine(meeting.getLocation())));
         event.getProperties().add(new Description(calendarTextEditor.breakLine(meeting.getDescription())));
+            FixedUidGenerator fixedUidGenerator = new FixedUidGenerator("YourLearning");
+            Uid uid = fixedUidGenerator.generateUid();
 
+            Session session = singleDateHelper.getSession();
+            DateTime startDateTime = new DateTime(session.getStartDate());
+            DateTime endDateTime = new DateTime(session.getEndDate());
+
+            calendar = new Calendar(requestCalendar);
+            event = new VEvent(startDateTime, endDateTime, summary.toString());
+            event.getProperties().addAll(Arrays.asList(sequence, organizer, location, description, summary, uid));
+            calendar.getComponents().add(event);
+        } catch (ParseException | URISyntaxException | IOException e) {
+            logger.error(e.getMessage());
+            throw new CalendarException("Can't create single calendar meeting. Try again later");
+        }
         return calendar;
     }
 }

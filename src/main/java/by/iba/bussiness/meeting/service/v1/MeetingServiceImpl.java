@@ -24,8 +24,7 @@ import java.util.List;
 
 @Service
 public class MeetingServiceImpl implements MeetingService {
-    private final static Logger logger = LoggerFactory.getLogger(MeetingServiceImpl.class);
-
+    private static final  Logger logger = LoggerFactory.getLogger(MeetingServiceImpl.class);
     private TokenService tokenService;
     @Value("${meeting_by_id_endpoint}")
     private String ENDPOINT_FIND_MEETING_BY_ID;

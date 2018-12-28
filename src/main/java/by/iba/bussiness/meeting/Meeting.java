@@ -23,6 +23,10 @@ public class Meeting {
     private String locationInfo;
     private Owner owner;
     private String summary;
+    @Field("subOne")
+    private Owner owner;
+    private String summary;
+    @Field("subTwo")
     private List<TimeSlot> timeSlots = new ArrayList();
     private String timeZone;
     private String title;

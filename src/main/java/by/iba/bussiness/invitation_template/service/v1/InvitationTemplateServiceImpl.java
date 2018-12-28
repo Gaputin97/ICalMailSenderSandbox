@@ -1,9 +1,9 @@
-package by.iba.bussiness.meeting.invitation_template.service.v1;
+package by.iba.bussiness.invitation_template.service.v1;
 
-import by.iba.bussiness.meeting.invitation_template.service.InvitationTemplateService;
+import by.iba.bussiness.invitation_template.service.InvitationTemplateService;
 import by.iba.bussiness.token.service.TokenService;
 import by.iba.exception.ServiceException;
-import by.iba.bussiness.meeting.invitation_template.InvitationTemplate;
+import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.v1.MeetingServiceImpl;
 import by.iba.bussiness.token.model.JavaWebToken;

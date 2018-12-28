@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 public class SenderController {
-    private final static Logger logger = LoggerFactory.getLogger(SenderController.class);
+    private static final  Logger logger = LoggerFactory.getLogger(SenderController.class);
     private static final String NAME_OF_FILE = "Calendar.ics";
     @Autowired
     private SenderServiceImpl senderServiceImpl;

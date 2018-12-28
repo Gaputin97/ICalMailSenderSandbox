@@ -17,7 +17,7 @@ import java.math.BigInteger;
 
 @Repository
 public class EnrollmentRepositoryImpl implements EnrollmentRepository {
-    private final static Logger logger = LoggerFactory.getLogger(EnrollmentRepositoryImpl.class);
+    private static final  Logger logger = LoggerFactory.getLogger(EnrollmentRepositoryImpl.class);
     @Autowired
     private MongoTemplate mongoTemplate;
 

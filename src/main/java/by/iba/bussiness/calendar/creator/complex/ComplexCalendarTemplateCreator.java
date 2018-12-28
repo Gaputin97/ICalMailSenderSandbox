@@ -1,10 +1,10 @@
 package by.iba.bussiness.calendar.creator.complex;
 
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
+import by.iba.bussiness.calendar.date.model.complex.ComplexDateHelper;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.MeetingService;
-import by.iba.bussiness.calendar.date.model.complex.ComplexDateHelper;
 import by.iba.exception.CalendarException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,34 +40,19 @@ public class ComplexCalendarTemplateCreator {
     }
 
     public Calendar createComplexCalendarInvitationTemplate(ComplexDateHelper complexDateHelper, Meeting meeting) {
-        logger.info("Started creating ics file with complex meeting with id " + meeting.getId());
         List<Session> sessionList = complexDateHelper.getSessionList();
-        String summary = calendarTextEditor.breakLine(meeting.getSummary());
-        String description = calendarTextEditor.breakLine(meeting.getDescription());
-        String location = calendarTextEditor.breakLine(meeting.getLocation());
-        String sequence = "0";
-
         Calendar calendar = null;
-        try {
-            calendar = new Calendar(publishCalendar);
-        } catch (ParseException e) {
-
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-
+        VEvent event;
         for (Session session : sessionList) {
-            DateTime startDateTime = new DateTime(session.getStartDate());
-            DateTime endDateTime = new DateTime(session.getEndDate());
-            calendar.getComponents().add(new VEvent(startDateTime, endDateTime, summary));
+            try {
+                Sequence sequence = new Sequence("0");
+                Organizer organizer = new Organizer("mailto:" + meeting.getOwner().getEmail());
+                Location location = new Location(calendarTextEditor.breakLine(meeting.getLocation()));
+                Description description = new Description(calendarTextEditor.breakLine(meeting.getDescription()));
+                Summary summary = new Summary(calendarTextEditor.breakLine(meeting.getSummary()));
 
-            CalendarComponent event = calendar.getComponents().getComponent(CalendarComponent.VEVENT);
-            event.getProperties().add(new Sequence(sequence));
-            event.getProperties().add(new Location(location));
-            event.getProperties().add(new Description(description));
+                FixedUidGenerator fixedUidGenerator = new FixedUidGenerator("YourLearning");
+                Uid uid = fixedUidGenerator.generateUid();
 
             try {
                 event.getProperties().add(new Organizer("mailto:" + meeting.getOwner().getEmail()));
@@ -77,6 +63,17 @@ public class ComplexCalendarTemplateCreator {
             Uid UID = new Uid(UUID.randomUUID().toString());
             event.getProperties().add(UID);
 
+                DateTime startDateTime = new DateTime(session.getStartDate());
+                DateTime endDateTime = new DateTime(session.getEndDate());
+
+                calendar = new Calendar(publishCalendar);
+                event = new VEvent(startDateTime, endDateTime, summary.toString());
+                event.getProperties().addAll(Arrays.asList(sequence, organizer, location, description, summary, uid));
+                calendar.getComponents().add(event);
+            } catch (ParseException | URISyntaxException | IOException e) {
+                logger.error(e.getMessage());
+                throw new CalendarException("Can't create complex calendar meeting. Try again later");
+            }
         }
         return calendar;
     }

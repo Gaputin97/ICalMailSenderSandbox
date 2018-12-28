@@ -11,5 +11,4 @@ public class Appointment {
     private BigInteger id;
     private BigInteger meetingId;
     private byte[] icsFile;
-
 }
