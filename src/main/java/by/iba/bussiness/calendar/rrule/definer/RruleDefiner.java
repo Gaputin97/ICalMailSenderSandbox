@@ -14,7 +14,7 @@ import java.util.*;
 
 @Component
 public class RruleDefiner {
-    private final static Logger logger = LoggerFactory.getLogger(RruleDefiner.class);
+    private static final  Logger logger = LoggerFactory.getLogger(RruleDefiner.class);
     private FrequencyDefiner frequencyDefiner;
     private IntervalDefiner intervalDefiner;
     private ExDatesDefiner exDatesDefiner;

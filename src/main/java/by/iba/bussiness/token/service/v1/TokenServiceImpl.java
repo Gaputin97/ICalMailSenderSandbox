@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class TokenServiceImpl implements TokenService {
-    private final static Logger logger = LoggerFactory.getLogger(TokenServiceImpl.class);
+    private static final  Logger logger = LoggerFactory.getLogger(TokenServiceImpl.class);
 
     @Autowired
     private RestTemplate restTemplate;

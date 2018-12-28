@@ -25,7 +25,7 @@ import java.math.BigInteger;
 @Service
 @PropertySource("endpoint.properties")
 public class EnrollmentServiceImpl implements EnrollmentService {
-    private final static Logger logger = LoggerFactory.getLogger(EnrollmentServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(EnrollmentServiceImpl.class);
     private TokenService tokenService;
     private RestTemplate restTemplate;
     private EnrollmentRepository enrollmentRepository;

@@ -14,7 +14,7 @@ import java.util.List;
 
 @Component
 public class EnrollmentChecker {
-    private final static Logger logger = LoggerFactory.getLogger(EnrollmentServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(EnrollmentServiceImpl.class);
     private EnrollmentServiceImpl enrollmentService;
 
     @Autowired

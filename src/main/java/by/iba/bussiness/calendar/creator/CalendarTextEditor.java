@@ -6,8 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CalendarTextEditor {
-    private static final Logger logger = LoggerFactory.getLogger(CalendarTextEditor.class);
-
+    private static final  Logger logger = LoggerFactory.getLogger(CalendarTextEditor.class);
     public String breakLine(String stringField) {
         StringBuffer sourceStringBuilder = new StringBuffer(stringField);
         if (stringField.length() > 65) {

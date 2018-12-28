@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,39 +44,30 @@ public class ComplexCalendarTemplateCreator {
 
     public Calendar createComplexCalendarInvitationTemplate(ComplexDateHelper complexDateHelper, Meeting meeting) {
         List<Session> sessionList = complexDateHelper.getSessionList();
-        String summary = calendarTextEditor.breakLine(meeting.getSummary());
-        String description = calendarTextEditor.breakLine(meeting.getDescription());
-        String location = calendarTextEditor.breakLine(meeting.getLocation());
-        String sequence = "0";
-
         Calendar calendar = null;
-        try {
-            calendar = new Calendar(publishCalendar);
-        } catch (ParseException | IOException | URISyntaxException e) {
-            e.printStackTrace();
-        }
-
+        VEvent event;
         for (Session session : sessionList) {
-            DateTime startDateTime = new DateTime(session.getStartDate());
-            DateTime endDateTime = new DateTime(session.getEndDate());
-            calendar.getComponents().add(new VEvent(startDateTime, endDateTime, summary));
-
-            CalendarComponent event = calendar.getComponents().getComponent(CalendarComponent.VEVENT);
-            event.getProperties().add(new Sequence(sequence));
-            event.getProperties().add(new Location(location));
-            event.getProperties().add(new Description(description));
-
-            FixedUidGenerator fixedUidGenerator;
-
             try {
-                event.getProperties().add(new Organizer("mailto:" + meeting.getOwner().getEmail()));
-                fixedUidGenerator = new FixedUidGenerator("YourLearning.Complex");
-            } catch (URISyntaxException | SocketException e) {
-                logger.error("Can't create calendar template", e);
-                throw new CalendarException("Can't create calendar meeting. Try againg later");
+                Sequence sequence = new Sequence("0");
+                Organizer organizer = new Organizer("mailto:" + meeting.getOwner().getEmail());
+                Location location = new Location(calendarTextEditor.breakLine(meeting.getLocation()));
+                Description description = new Description(calendarTextEditor.breakLine(meeting.getDescription()));
+                Summary summary = new Summary(calendarTextEditor.breakLine(meeting.getSummary()));
+
+                FixedUidGenerator fixedUidGenerator = new FixedUidGenerator("YourLearning");
+                Uid uid = fixedUidGenerator.generateUid();
+
+                DateTime startDateTime = new DateTime(session.getStartDate());
+                DateTime endDateTime = new DateTime(session.getEndDate());
+
+                calendar = new Calendar(publishCalendar);
+                event = new VEvent(startDateTime, endDateTime, summary.toString());
+                event.getProperties().addAll(Arrays.asList(sequence, organizer, location, description, summary, uid));
+                calendar.getComponents().add(event);
+            } catch (ParseException | URISyntaxException | IOException e) {
+                logger.error(e.getMessage());
+                throw new CalendarException("Can't create complex calendar meeting. Try again later");
             }
-            Uid UID = fixedUidGenerator.generateUid();
-            event.getProperties().add(UID);
         }
         return calendar;
     }

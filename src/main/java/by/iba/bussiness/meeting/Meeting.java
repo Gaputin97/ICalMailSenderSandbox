@@ -14,31 +14,20 @@ import java.util.List;
 public class Meeting {
     @Id
     private BigInteger id;
-    @Field
     private String description;
-    @Field
     private float duration;
-    @Field
     private String startDateTime;
-    @Field
     private String endDateTime;
-    @Field
     private String invitationResourcesTemplate;
-    @Field
     private String invitationTemplate;
-    @Field
     private String location;
-    @Field
     private String locationInfo;
     @Field("subOne")
     private Owner owner;
-    @Field
     private String summary;
     @Field("subTwo")
     private List<TimeSlot> timeSlots = new ArrayList();
-    @Field
     private String timeZone;
-    @Field
     private String title;
 
     public Meeting() {

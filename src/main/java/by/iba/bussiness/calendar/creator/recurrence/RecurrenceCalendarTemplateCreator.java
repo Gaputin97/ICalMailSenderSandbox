@@ -3,6 +3,7 @@ package by.iba.bussiness.calendar.creator.recurrence;
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.calendar.date.DateHelperConstants;
 import by.iba.bussiness.calendar.date.model.reccurence.RecurrenceDateHelper;
+import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.session.Session;
@@ -60,10 +61,8 @@ public class RecurrenceCalendarTemplateCreator {
 
         Session lastSession = sessionParser.timeSlotToSession(lastTimeSlot);
         String increasedDate = dateIncreaser.increaseAndParse(rrule.getFrequency(), rrule.getInterval(), lastSession.getStartDate());
-        String until = iСalDateParser.parseToICalDate(increasedDate);
+
         Session firstSession = sessionParser.timeSlotToSession(firstTimeSlot);
-        DateTime startDateTime = new DateTime(firstSession.getStartDate());
-        DateTime endDateTime = new DateTime(firstSession.getEndDate());
 
         Calendar calendar;
         VEvent event;
@@ -72,21 +71,28 @@ public class RecurrenceCalendarTemplateCreator {
             Organizer organizer = new Organizer("mailto:" + meeting.getOwner().getEmail());
             Location location = new Location(calendarTextEditor.breakLine(meeting.getLocation()));
             Description description = new Description(calendarTextEditor.breakLine(meeting.getDescription()));
+            Summary summary = new Summary(meeting.getSummary());
+            String frequency = rrule.getFrequency().toString();
+            Long interval = rrule.getInterval();
+            String until = iСalDateParser.parseToICalDate(increasedDate);
             ExDate exDates = new ExDate(exDatesList);
 
-            Recur recurrence = new Recur("FREQ=" + rrule.getFrequency().toString() + ";" + "INTERVAL=" + rrule.getInterval() + ";" + "UNTIL=" + until + ";");
+            Recur recurrence = new Recur("FREQ=" + frequency + ";" + "INTERVAL=" + interval + ";" + "UNTIL=" + until + ";");
             RRule rRule = new RRule(recurrence);
 
             FixedUidGenerator fixedUidGenerator = new FixedUidGenerator("YourLearning");
             Uid uid = fixedUidGenerator.generateUid();
 
+            DateTime startDateTime = new DateTime(firstSession.getStartDate());
+            DateTime endDateTime = new DateTime(firstSession.getEndDate());
+
             calendar = new Calendar(requestCalendar);
-            event = new VEvent(startDateTime, endDateTime, meeting.getSummary());
+            event = new VEvent(startDateTime, endDateTime, summary.toString());
             event.getProperties().addAll(Arrays.asList(sequence, organizer, location, description, uid, rRule, exDates));
             calendar.getComponents().add(event);
         } catch (ParseException | URISyntaxException | IOException e) {
             logger.error(e.getMessage());
-            throw new CalendarException("Can't create calendar meeting. Try again later");
+            throw new CalendarException("Can't create recurrence calendar meeting. Try again later");
         }
         return calendar;
     }
