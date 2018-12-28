@@ -1,6 +1,6 @@
-package by.iba.bussiness.meeting.invitation_template.service;
+package by.iba.bussiness.invitation_template.service;
 
-import by.iba.bussiness.meeting.invitation_template.InvitationTemplate;
+import by.iba.bussiness.invitation_template.InvitationTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 

@@ -1,4 +1,4 @@
-package by.iba.bussiness.meeting.invitation_template;
+package by.iba.bussiness.invitation_template;
 
 public class InvitationTemplate {
     private boolean active;

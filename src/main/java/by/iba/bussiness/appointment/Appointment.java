@@ -10,9 +10,6 @@ import java.math.BigInteger;
 public class Appointment {
     @Id
     private BigInteger id;
-    @Field
     private BigInteger meetingId;
-    @Field
     private byte[] icsFile;
-
 }

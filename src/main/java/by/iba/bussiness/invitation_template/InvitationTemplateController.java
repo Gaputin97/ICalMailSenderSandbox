@@ -1,6 +1,6 @@
-package by.iba.bussiness.meeting.invitation_template;
+package by.iba.bussiness.invitation_template;
 
-import by.iba.bussiness.meeting.invitation_template.service.v1.InvitationTemplateServiceImpl;
+import by.iba.bussiness.invitation_template.service.v1.InvitationTemplateServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,5 +29,4 @@ public class InvitationTemplateController {
     public InvitationTemplate getInvitationTemplateByMeetingId(@PathVariable(value = "meetingId") String meetingId, HttpServletRequest request) {
         return invitationTemplateService.getInvitationTemplateByMeetingId(request, meetingId);
     }
-
 }

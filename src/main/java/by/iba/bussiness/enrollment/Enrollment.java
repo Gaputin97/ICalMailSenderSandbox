@@ -9,9 +9,7 @@ import java.math.BigInteger;
 public class Enrollment {
     @Id
     private BigInteger id;
-    @Field
     private BigInteger parentId;
-    @Field
     private String userEmail;
 
     public Enrollment() {

@@ -4,7 +4,8 @@ import javax.validation.constraints.Email;
 
 public class Attendee {
     private String commonName;
-    private @Email String email;
+    @Email
+    private String email;
 
     public String getCommonName() {
         return commonName;
