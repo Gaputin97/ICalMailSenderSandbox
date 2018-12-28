@@ -4,7 +4,7 @@ import by.iba.bussiness.calendar.date.model.reccurence.RecurrenceDateHelper;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import org.springframework.stereotype.Component;
 
-@Component
+
 public class RecurrenceDateHelperBuilder {
     private Rrule rrule;
 

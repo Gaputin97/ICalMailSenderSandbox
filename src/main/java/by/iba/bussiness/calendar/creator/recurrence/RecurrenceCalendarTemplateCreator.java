@@ -25,10 +25,11 @@ import java.net.SocketException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class RecurrenceCalendarTemplateCreator {
-    private Logger logger = LoggerFactory.getLogger(RecurrenceCalendarTemplateCreator.class);
+    private static final Logger logger = LoggerFactory.getLogger(RecurrenceCalendarTemplateCreator.class);
     private CalendarTextEditor calendarTextEditor;
     private Calendar requestCalendar;
     private SessionParser sessionParser;
@@ -57,7 +58,7 @@ public class RecurrenceCalendarTemplateCreator {
         rrule.getExDates().forEach(x -> exDates.add(new Date(x)));
 
         List<TimeSlot> meetingTimeSlots = meeting.getTimeSlots();
-        TimeSlot firstTimeSlot = meetingTimeSlots.get(dateHelperConstants.getNumberOfFirstTimeSlot());
+        TimeSlot firstTimeSlot = meetingTimeSlots.get(DateHelperConstants.NUMBER_OF_FIRST_TIME_SLOT);
         TimeSlot lastTimeSlot = meetingTimeSlots.get(meetingTimeSlots.size() - 1);
         Session lastSession = sessionParser.timeSlotToSession(lastTimeSlot);
         String increasedDate = dateIncreaser.increaseAndParse(rrule.getFrequency(), rrule.getInterval(), lastSession.getStartDate());
@@ -75,26 +76,22 @@ public class RecurrenceCalendarTemplateCreator {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-        calendar.getComponents().add(new VEvent(startDateTime, meeting.getSummary()));
         calendar.getComponents().add(new VEvent(startDateTime, endDateTime, meeting.getSummary()));
         net.fortuna.ical4j.model.Component event = calendar.getComponents().getComponent(net.fortuna.ical4j.model.Component.VEVENT);
 
         event.getProperties().add(new Sequence("0"));
         event.getProperties().add(new Location(calendarTextEditor.breakLine(meeting.getLocation())));
         event.getProperties().add(new Description(calendarTextEditor.breakLine(meeting.getDescription())));
-
-        FixedUidGenerator fixedUidGenerator;
         try {
             Recur recurrence = new Recur("FREQ=" + rrule.getFrequency().toString() + ";" + "INTERVAL=" + rrule.getInterval() + ";" + "UNTIL=" + until + ";");
             event.getProperties().add(new RRule(recurrence));
             event.getProperties().add(new ExDate(exDates));
             event.getProperties().add(new Organizer("mailto:" + meeting.getOwner().getEmail()));
-            fixedUidGenerator = new FixedUidGenerator("YourLearning");
         } catch (ParseException | URISyntaxException | SocketException e) {
             logger.error(e.getMessage());
             throw new CalendarException("Can't create calendar meeting. Try again later");
         }
-        Uid UID = fixedUidGenerator.generateUid();
+        Uid UID = new Uid(UUID.randomUUID().toString());
         event.getProperties().add(UID);
 
         return calendar;

@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
+import java.util.UUID;
 
 @Component
 
@@ -46,20 +47,18 @@ public class SimpleCalendarTemplateCreator {
 
         Calendar calendar;
         CalendarComponent event;
-        FixedUidGenerator fixedUidGenerator;
         try {
             calendar = new Calendar(requestCalendar);
             calendar.getComponents().add(new VEvent(startDateTime, endDateTime, summary));
             event = calendar.getComponents().getComponent(CalendarComponent.VEVENT);
 
             event.getProperties().add(new Organizer("mailto:" + meeting.getOwner().getEmail()));
-            fixedUidGenerator = new FixedUidGenerator("YourLearning");
         } catch (ParseException | IOException | URISyntaxException e) {
             logger.error("Can't create calendar: " + e.getStackTrace());
             throw new CalendarException("Can't create calendar meeting. Try again later");
         }
 
-        Uid UID = fixedUidGenerator.generateUid();
+        Uid UID = new Uid(UUID.randomUUID().toString());
         event.getProperties().add(UID);
 
         event.getProperties().add(new Sequence("0"));

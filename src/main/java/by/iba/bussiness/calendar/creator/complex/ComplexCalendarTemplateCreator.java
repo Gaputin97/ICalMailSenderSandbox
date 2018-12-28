@@ -23,21 +23,19 @@ import java.net.SocketException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class ComplexCalendarTemplateCreator {
     private static final Logger logger = LoggerFactory.getLogger(ComplexCalendarTemplateCreator.class);
     private CalendarTextEditor calendarTextEditor;
     private Calendar publishCalendar;
-    private MeetingService meetingService;
 
     @Autowired
     public ComplexCalendarTemplateCreator(CalendarTextEditor calendarTextEditor,
-                                          @Qualifier("publishCalendar") Calendar publishCalendar,
-                                          MeetingService meetingService) {
+                                          @Qualifier("publishCalendar") Calendar publishCalendar) {
         this.calendarTextEditor = calendarTextEditor;
         this.publishCalendar = publishCalendar;
-        this.meetingService = meetingService;
     }
 
     public Calendar createComplexCalendarInvitationTemplate(ComplexDateHelper complexDateHelper, Meeting meeting) {
@@ -70,22 +68,15 @@ public class ComplexCalendarTemplateCreator {
             event.getProperties().add(new Location(location));
             event.getProperties().add(new Description(description));
 
-            FixedUidGenerator fixedUidGenerator;
             try {
                 event.getProperties().add(new Organizer("mailto:" + meeting.getOwner().getEmail()));
-                fixedUidGenerator = new FixedUidGenerator("YourLearning.Complex");
             } catch (URISyntaxException | SocketException e) {
                 logger.error("Can't create calendar template", e);
-                throw new CalendarException("Can't create calendar meeting. Try againg later");
+                throw new CalendarException("Can't create calendar meeting. Try again later");
             }
-            Uid UID = fixedUidGenerator.generateUid();
+            Uid UID = new Uid(UUID.randomUUID().toString());
             event.getProperties().add(UID);
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
         return calendar;
     }

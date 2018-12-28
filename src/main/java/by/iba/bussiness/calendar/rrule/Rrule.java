@@ -9,7 +9,7 @@ import java.util.List;
 public class Rrule {
     private Frequency frequency;
     private Long interval;
-    private List<Date> exDates = new ArrayList<>();
+    private List<Date> exDates;
 
     public Rrule() {
     }

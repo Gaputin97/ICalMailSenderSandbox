@@ -4,7 +4,7 @@ import by.iba.bussiness.calendar.date.model.single.SingleDateHelper;
 import by.iba.bussiness.calendar.session.Session;
 import org.springframework.stereotype.Component;
 
-@Component
+
 public class SimpleDateHelperBuilder {
     private Session session;
 

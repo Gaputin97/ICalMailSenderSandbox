@@ -1,16 +1,6 @@
 package by.iba.bussiness.calendar.date;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class DateHelperConstants {
-    private final int amountOfSessionsForSingleEvent = 1;
-    private final int numberOfFirstTimeSlot = 0;
-
-    public int getAmountOfSessionsForSingleEvent() {
-        return amountOfSessionsForSingleEvent;
-    }
-    public int getNumberOfFirstTimeSlot() {
-        return numberOfFirstTimeSlot;
-    }
+    public static final int AMOUNT_OF_SESSIONS_FOR_SINGLE_EVENT = 1;
+    public static final int NUMBER_OF_FIRST_TIME_SLOT = 0;
 }

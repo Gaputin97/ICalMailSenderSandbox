@@ -3,18 +3,18 @@ package by.iba.bussiness.meeting.timeslot;
 import java.util.List;
 
 public class TimeSlot{
-    private float duration;
+    private long duration;
     private String endDateTime;
     private String facilityInformation;
     private float id;
     private List<String> resourceEmails;
     private String startDateTime;
 
-    public float getDuration() {
+    public long getDuration() {
         return duration;
     }
 
-    public void setDuration(float duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 

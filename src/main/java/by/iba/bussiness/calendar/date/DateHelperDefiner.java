@@ -22,40 +22,26 @@ import java.util.List;
 @Component
 public class DateHelperDefiner {
     private final static Logger logger = LoggerFactory.getLogger(DateHelperDefiner.class);
-    private MeetingServiceImpl meetingService;
-    private DateHelperConstants dateHelperConstants;
     private SessionParser sessionParser;
     private RruleDefiner rruleDefiner;
     private SessionChecker sessionChecker;
-    private ComplexDateHelperBuilder complexDateHelperBuilder;
-    private RecurrenceDateHelperBuilder recurrenceDateHelperBuilder;
-    private SimpleDateHelperBuilder simpleDateHelperBuilder;
 
     @Autowired
-    public DateHelperDefiner(MeetingServiceImpl meetingService,
-                             DateHelperConstants dateHelperConstants,
-                             SessionParser sessionParser,
+    public DateHelperDefiner(SessionParser sessionParser,
                              RruleDefiner rruleDefiner,
-                             SessionChecker sessionChecker,
-                             ComplexDateHelperBuilder complexDateHelperBuilder,
-                             RecurrenceDateHelperBuilder recurrenceDateHelperBuilder,
-                             SimpleDateHelperBuilder simpleDateHelperBuilder) {
-        this.meetingService = meetingService;
-        this.dateHelperConstants = dateHelperConstants;
+                             SessionChecker sessionChecker) {
         this.sessionParser = sessionParser;
         this.rruleDefiner = rruleDefiner;
         this.sessionChecker = sessionChecker;
-        this.complexDateHelperBuilder = complexDateHelperBuilder;
-        this.recurrenceDateHelperBuilder = recurrenceDateHelperBuilder;
-        this.simpleDateHelperBuilder = simpleDateHelperBuilder;
     }
 
     public DateHelper definerDateHelper(Meeting meeting) {
         DateHelper dateHelper;
         int amountOfTimeSlots = meeting.getTimeSlots().size();
-        if (amountOfTimeSlots == dateHelperConstants.getAmountOfSessionsForSingleEvent()) {
-            TimeSlot meetingTimeSlot = meeting.getTimeSlots().get(dateHelperConstants.getNumberOfFirstTimeSlot());
+        if (amountOfTimeSlots == DateHelperConstants.AMOUNT_OF_SESSIONS_FOR_SINGLE_EVENT) {
+            TimeSlot meetingTimeSlot = meeting.getTimeSlots().get(DateHelperConstants.NUMBER_OF_FIRST_TIME_SLOT);
             Session meetingSession = sessionParser.timeSlotToSession(meetingTimeSlot);
+            SimpleDateHelperBuilder simpleDateHelperBuilder = new SimpleDateHelperBuilder();
             dateHelper = simpleDateHelperBuilder
                     .setSession(meetingSession)
                     .build();
@@ -64,11 +50,13 @@ public class DateHelperDefiner {
             List<Session> sessions = sessionParser.timeSlotListToSessionList(meeting.getTimeSlots());
             if (sessionChecker.doAllSessionsTheSame(meeting)) {
                 Rrule rrule = rruleDefiner.defineRrule(sessions);
+                RecurrenceDateHelperBuilder recurrenceDateHelperBuilder = new RecurrenceDateHelperBuilder();
                 dateHelper = recurrenceDateHelperBuilder
                         .setRrule(rrule)
                         .build();
                 logger.debug("Meeting type of meeting with id " + meeting.getId() + " is recurrence");
             } else {
+                ComplexDateHelperBuilder complexDateHelperBuilder = new ComplexDateHelperBuilder();
                 dateHelper = complexDateHelperBuilder
                         .setSessionList(sessions)
                         .build();
