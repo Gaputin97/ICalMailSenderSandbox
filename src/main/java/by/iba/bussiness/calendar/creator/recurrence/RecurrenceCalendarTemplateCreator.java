@@ -3,17 +3,15 @@ package by.iba.bussiness.calendar.creator.recurrence;
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.calendar.date.DateHelperConstants;
 import by.iba.bussiness.calendar.date.model.reccurence.RecurrenceDateHelper;
-import by.iba.bussiness.calendar.rrule.frequence.Frequency;
-import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.calendar.session.SessionParser;
+import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.timeslot.TimeSlot;
 import by.iba.exception.CalendarException;
 import net.fortuna.ical4j.model.*;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.*;
-import net.fortuna.ical4j.util.FixedUidGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,34 +58,13 @@ public class RecurrenceCalendarTemplateCreator {
         TimeSlot firstTimeSlot = meetingTimeSlots.get(DateHelperConstants.NUMBER_OF_FIRST_TIME_SLOT);
         TimeSlot lastTimeSlot = meetingTimeSlots.get(meetingTimeSlots.size() - 1);
 
-        Session lastSession = sessionParser.timeSlotToSession(lastTimeSlot);
-        String increasedDate = dateIncreaser.increaseAndParse(rrule.getFrequency(), rrule.getInterval(), lastSession.getStartDate());
-
         Session firstSession = sessionParser.timeSlotToSession(firstTimeSlot);
+        Session lastSession = sessionParser.timeSlotToSession(lastTimeSlot);
 
+        String increasedDate = dateIncreaser.increaseAndParse(rrule.getFrequency(), rrule.getInterval(), lastSession.getStartDate());
         Calendar calendar;
         VEvent event;
         try {
-            calendar = new Calendar(requestCalendar);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        calendar.getComponents().add(new VEvent(startDateTime, endDateTime, meeting.getSummary()));
-        net.fortuna.ical4j.model.Component event = calendar.getComponents().getComponent(net.fortuna.ical4j.model.Component.VEVENT);
-
-        event.getProperties().add(new Sequence("0"));
-        event.getProperties().add(new Location(calendarTextEditor.breakLine(meeting.getLocation())));
-        event.getProperties().add(new Description(calendarTextEditor.breakLine(meeting.getDescription())));
-        try {
-            Recur recurrence = new Recur("FREQ=" + rrule.getFrequency().toString() + ";" + "INTERVAL=" + rrule.getInterval() + ";" + "UNTIL=" + until + ";");
-            event.getProperties().add(new RRule(recurrence));
-            event.getProperties().add(new ExDate(exDates));
-            event.getProperties().add(new Organizer("mailto:" + meeting.getOwner().getEmail()));
-        } catch (ParseException | URISyntaxException | SocketException e) {
             Sequence sequence = new Sequence("0");
             Organizer organizer = new Organizer("mailto:" + meeting.getOwner().getEmail());
             Location location = new Location(calendarTextEditor.breakLine(meeting.getLocation()));
@@ -100,23 +77,18 @@ public class RecurrenceCalendarTemplateCreator {
 
             Recur recurrence = new Recur("FREQ=" + frequency + ";" + "INTERVAL=" + interval + ";" + "UNTIL=" + until + ";");
             RRule rRule = new RRule(recurrence);
-
-            FixedUidGenerator fixedUidGenerator = new FixedUidGenerator("YourLearning");
-            Uid uid = fixedUidGenerator.generateUid();
-
+            Uid UID = new Uid(UUID.randomUUID().toString());
             DateTime startDateTime = new DateTime(firstSession.getStartDate());
             DateTime endDateTime = new DateTime(firstSession.getEndDate());
 
             calendar = new Calendar(requestCalendar);
             event = new VEvent(startDateTime, endDateTime, summary.toString());
-            event.getProperties().addAll(Arrays.asList(sequence, organizer, location, description, uid, rRule, exDates));
+            event.getProperties().addAll(Arrays.asList(sequence, organizer, location, description, UID, rRule, exDates));
             calendar.getComponents().add(event);
         } catch (ParseException | URISyntaxException | IOException e) {
             logger.error(e.getMessage());
             throw new CalendarException("Can't create recurrence calendar meeting. Try again later");
         }
-        Uid UID = new Uid(UUID.randomUUID().toString());
-        event.getProperties().add(UID);
 
         return calendar;
     }
