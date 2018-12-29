@@ -10,7 +10,7 @@ public class Appointment {
     @Id
     private String id;
     private int index;
-    private String key;
+    private String code;
     private String from;
     private String fromName;
     private String blendedDescription;
@@ -21,6 +21,9 @@ public class Appointment {
     private String locationLVC;
     private String subject;
     private BigInteger meetingId;
+
+    public Appointment() {
+    }
 
     public String getId() {
         return id;
@@ -38,12 +41,12 @@ public class Appointment {
         this.index = index;
     }
 
-    public String getKey() {
-        return key;
+    public String getCode() {
+        return code;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getFrom() {
@@ -124,5 +127,24 @@ public class Appointment {
 
     public void setMeetingId(BigInteger meetingId) {
         this.meetingId = meetingId;
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "id='" + id + '\'' +
+                ", index=" + index +
+                ", code='" + code + '\'' +
+                ", from='" + from + '\'' +
+                ", fromName='" + fromName + '\'' +
+                ", blendedDescription='" + blendedDescription + '\'' +
+                ", faceToFaceDescription='" + faceToFaceDescription + '\'' +
+                ", onlineDescription='" + onlineDescription + '\'' +
+                ", locationBLD='" + locationBLD + '\'' +
+                ", locationILT='" + locationILT + '\'' +
+                ", locationLVC='" + locationLVC + '\'' +
+                ", subject='" + subject + '\'' +
+                ", meetingId=" + meetingId +
+                '}';
     }
 }

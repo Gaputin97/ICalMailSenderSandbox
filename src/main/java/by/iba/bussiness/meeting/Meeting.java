@@ -22,7 +22,6 @@ public class Meeting {
     private String locationInfo;
     private Owner owner;
     private String summary;
-    private List<TimeSlot> timeSlots = new ArrayList();
     private List<TimeSlot> timeSlots;
     private String timeZone;
     private String title;
@@ -140,5 +139,25 @@ public class Meeting {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Override
+    public String toString() {
+        return "Meeting{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", duration=" + duration +
+                ", startDateTime='" + startDateTime + '\'' +
+                ", endDateTime='" + endDateTime + '\'' +
+                ", invitationResourcesTemplate='" + invitationResourcesTemplate + '\'' +
+                ", invitationTemplate='" + invitationTemplate + '\'' +
+                ", location='" + location + '\'' +
+                ", locationInfo='" + locationInfo + '\'' +
+                ", owner=" + owner +
+                ", summary='" + summary + '\'' +
+                ", timeSlots=" + timeSlots +
+                ", timeZone='" + timeZone + '\'' +
+                ", title='" + title + '\'' +
+                '}';
     }
 }

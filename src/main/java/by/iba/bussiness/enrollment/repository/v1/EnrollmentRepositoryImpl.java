@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
+import java.util.List;
 
 @Repository
 public class EnrollmentRepositoryImpl implements EnrollmentRepository {
@@ -25,20 +26,30 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
     public Enrollment save(Enrollment enrollment) {
         try {
             mongoTemplate.save(enrollment);
-        } catch (Exception e) {
-            logger.error("Error while trying to save enrollment.", e);
-            throw new RepositoryException("Error with database. Try again later");
+        } catch (RuntimeException e) {
+            logger.info("Can't save enrollment in database" + e.getStackTrace());
+            throw new RepositoryException("Can't locally save enrollment to database " + enrollment.toString());
         }
         return enrollment;
     }
 
     @Override
-    public Enrollment getByEmailAndMeetingId(BigInteger parentId, String userEmail) {
+    public Enrollment getByEmailAndParentId(BigInteger parentId, String userEmail) {
         Query query = new Query(Criteria.where("parentId").is(parentId).and("userEmail").is(userEmail));
         Enrollment enrollment = mongoTemplate.findOne(query, Enrollment.class);
         if (enrollment == null) {
-            logger.error("There are no enrollment with parentId " + parentId + " and user email " + userEmail);
+            logger.info("Can't locally find enrollment with parent ID " + parentId + " and user email " + userEmail);
         }
         return enrollment;
+    }
+
+    @Override
+    public List<Enrollment> getAllByParentId(BigInteger parentId) {
+        Query query = new Query(Criteria.where("parentId").is(parentId));
+        List<Enrollment> enrollmentList = mongoTemplate.find(query, Enrollment.class);
+        if(enrollmentList.isEmpty()) {
+            logger.info("Can't locally find any enrollments with parent ID: " + parentId);
+        }
+        return enrollmentList;
     }
 }

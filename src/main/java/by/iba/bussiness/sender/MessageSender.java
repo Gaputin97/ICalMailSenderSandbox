@@ -2,6 +2,7 @@ package by.iba.bussiness.sender;
 
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.enrollment.Enrollment;
+import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.enrollment.service.v1.EnrollmentServiceImpl;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.response.CalendarSendingResponse;
@@ -28,13 +29,13 @@ public class MessageSender {
     private static final Logger logger = LoggerFactory.getLogger(MessageSender.class);
     private JavaMailSender javaMailSender;
     private CalendarTextEditor calendarTextEditor;
-    private EnrollmentServiceImpl enrollmentService;
+    private EnrollmentRepository enrollmentRepository;
 
     @Autowired
-    public MessageSender(JavaMailSender javaMailSender, CalendarTextEditor calendarTextEditor, EnrollmentServiceImpl enrollmentService) {
+    public MessageSender(JavaMailSender javaMailSender, CalendarTextEditor calendarTextEditor, EnrollmentRepository enrollmentRepository) {
         this.javaMailSender = javaMailSender;
         this.calendarTextEditor = calendarTextEditor;
-        this.enrollmentService = enrollmentService;
+        this.enrollmentRepository = enrollmentRepository;
     }
 
     public void sendMessageToOneRecipient(Calendar calendar, Meeting meeting) {
@@ -74,7 +75,7 @@ public class MessageSender {
             Enrollment enrollment = new Enrollment();
             enrollment.setParentId(meeting.getId());
             enrollment.setUserEmail(editedUserEmail);
-            enrollmentService.saveEnrollment(enrollment);
+            enrollmentRepository.save(enrollment);
             logger.info("New enrollment with meeting id" + meeting.getId() + " and user " + editedUserEmail + " was added");
         } catch (MessagingException e) {
             logger.error("Error while trying to send message", e);
