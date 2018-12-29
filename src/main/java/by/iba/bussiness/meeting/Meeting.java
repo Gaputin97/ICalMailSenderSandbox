@@ -6,7 +6,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "meeting")
@@ -23,11 +22,7 @@ public class Meeting {
     private String locationInfo;
     private Owner owner;
     private String summary;
-    @Field("subOne")
-    private Owner owner;
-    private String summary;
-    @Field("subTwo")
-    private List<TimeSlot> timeSlots = new ArrayList();
+    private List<TimeSlot> timeSlots;
     private String timeZone;
     private String title;
 

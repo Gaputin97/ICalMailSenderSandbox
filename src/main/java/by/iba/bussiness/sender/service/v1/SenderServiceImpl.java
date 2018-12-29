@@ -1,6 +1,6 @@
 package by.iba.bussiness.sender.service.v1;
 
-import by.iba.bussiness.calendar.attendee.model.Attendee;
+import by.iba.bussiness.calendar.attendee.Attendee;
 import by.iba.bussiness.calendar.creator.CalendarAttendeesInstaller;
 import by.iba.bussiness.calendar.date.DateHelperDefiner;
 import by.iba.bussiness.calendar.CalendarFactory;

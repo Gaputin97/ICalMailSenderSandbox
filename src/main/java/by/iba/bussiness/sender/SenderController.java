@@ -1,6 +1,6 @@
 package by.iba.bussiness.sender;
 
-import by.iba.bussiness.calendar.attendee.model.Attendee;
+import by.iba.bussiness.calendar.attendee.Attendee;
 import by.iba.bussiness.sender.service.v1.SenderServiceImpl;
 import by.iba.bussiness.response.CalendarSendingResponse;
 import io.swagger.annotations.ApiOperation;

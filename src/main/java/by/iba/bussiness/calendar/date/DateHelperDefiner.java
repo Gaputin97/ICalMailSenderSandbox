@@ -21,7 +21,6 @@ import java.util.List;
 
 @Component
 public class DateHelperDefiner {
-    private final static Logger logger = LoggerFactory.getLogger(DateHelperDefiner.class);
     private static final  Logger logger = LoggerFactory.getLogger(DateHelperDefiner.class);
     private MeetingServiceImpl meetingService;
     private DateHelperConstants dateHelperConstants;
