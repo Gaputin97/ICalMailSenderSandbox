@@ -30,7 +30,6 @@ public class RecurrenceCalendarTemplateCreator {
     private CalendarTextEditor calendarTextEditor;
     private Calendar requestCalendar;
     private SessionParser sessionParser;
-    private DateHelperConstants dateHelperConstants;
     private IcalDateParser iСalDateParser;
     private DateIncreaser dateIncreaser;
 
@@ -38,13 +37,11 @@ public class RecurrenceCalendarTemplateCreator {
     public RecurrenceCalendarTemplateCreator(CalendarTextEditor calendarTextEditor,
                                              @Qualifier("requestCalendar") Calendar requestCalendar,
                                              SessionParser sessionParser,
-                                             DateHelperConstants dateHelperConstants,
                                              IcalDateParser icalDateParser,
                                              DateIncreaser dateIncreaser) {
         this.calendarTextEditor = calendarTextEditor;
         this.requestCalendar = requestCalendar;
         this.sessionParser = sessionParser;
-        this.dateHelperConstants = dateHelperConstants;
         this.iСalDateParser = icalDateParser;
         this.dateIncreaser = dateIncreaser;
     }

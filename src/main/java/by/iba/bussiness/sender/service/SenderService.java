@@ -1,6 +1,6 @@
 package by.iba.bussiness.sender.service;
 
-import by.iba.bussiness.calendar.attendee.model.Attendee;
+import by.iba.bussiness.calendar.attendee.Attendee;
 import by.iba.bussiness.response.CalendarSendingResponse;
 
 import javax.servlet.http.HttpServletRequest;

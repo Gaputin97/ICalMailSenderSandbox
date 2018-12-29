@@ -1,14 +1,14 @@
-package by.iba.bussiness.invitation_template;
+package by.iba.bussiness.appointment;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigInteger;
 
-@Document(collection = "invitationTemplate")
-public class InvitationTemplate {
+@Document(collection = "appointment")
+public class Appointment {
     @Id
-    private BigInteger id;
+    private String id;
     private int index;
     private String key;
     private String from;
@@ -20,12 +20,13 @@ public class InvitationTemplate {
     private String locationILT;
     private String locationLVC;
     private String subject;
+    private BigInteger meetingId;
 
-    public BigInteger getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -115,5 +116,13 @@ public class InvitationTemplate {
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public BigInteger getMeetingId() {
+        return meetingId;
+    }
+
+    public void setMeetingId(BigInteger meetingId) {
+        this.meetingId = meetingId;
     }
 }

@@ -7,6 +7,8 @@ import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.v1.MeetingServiceImpl;
 import by.iba.bussiness.token.model.JavaWebToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -24,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 @PropertySource("endpoint.properties")
 public class InvitationTemplateServiceImpl implements InvitationTemplateService {
+    private static final Logger logger = LoggerFactory.getLogger(InvitationTemplateServiceImpl.class);
     private TokenService tokenService;
     private RestTemplate restTemplate;
     @Value("${template_by_id_endpoint}")
@@ -53,6 +56,7 @@ public class InvitationTemplateServiceImpl implements InvitationTemplateService 
                     HttpMethod.GET, httpEntity, InvitationTemplate.class);
             invitationTemplate = invitationTemplateResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
+            logger.error("Can't exchange invitation template by id: " + e.getStackTrace());
             throw new ServiceException(e.getMessage());
         }
         return invitationTemplate;
@@ -70,6 +74,7 @@ public class InvitationTemplateServiceImpl implements InvitationTemplateService 
                     HttpMethod.GET, httpEntity, InvitationTemplate.class);
             invitationTemplate = invitationTemplateResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
+            logger.error("Can't exchange invitation template by code: " + e.getStackTrace());
             throw new ServiceException(e.getMessage());
         }
         return invitationTemplate;

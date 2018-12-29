@@ -25,8 +25,8 @@ public class MeetingRepositoryImpl implements MeetingRepository {
         try {
             mongoTemplate.save(meeting);
         } catch (Exception e) {
-            logger.error("Error while trying to save meeting.", e);
-            throw new RepositoryException("Error with database. Try again later");
+            logger.info("Can't save meeting." + e.getStackTrace());
+            throw new RepositoryException("Can't save meeting. Try again later");
         }
         return meeting;
     }
@@ -36,7 +36,7 @@ public class MeetingRepositoryImpl implements MeetingRepository {
         Query query = new Query(Criteria.where("id").is(id));
         Meeting meeting = mongoTemplate.findOne(query, Meeting.class);
         if (meeting == null) {
-            logger.error("There are no meeting with id " + id);
+            logger.info("There are no meeting with id: " + id);
         }
         return meeting;
     }
