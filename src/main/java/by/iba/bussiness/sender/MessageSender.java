@@ -66,15 +66,16 @@ public class MessageSender {
             iСalInline.setContent(calendar.toString(), "text/calendar;charset=utf-8;" + method);
             iСalAttachment.setFileName("attachedCalendar.ics");
             multipart.addBodyPart(iСalAttachment);
-            Enrollment enrollment = new Enrollment();
-            enrollment.setParentId(meeting.getId());
-            enrollment.setUserEmail(editedUserEmail);
             message.setContent(multipart);
 
             javaMailSender.send(message);
 
             logger.info("Message was sended to " + editedUserEmail);
+            Enrollment enrollment = new Enrollment();
+            enrollment.setParentId(meeting.getId());
+            enrollment.setUserEmail(editedUserEmail);
             enrollmentService.saveEnrollment(enrollment);
+            logger.info("New enrollment with meeting id" + meeting.getId() + " and user " + editedUserEmail + " was added");
         } catch (MessagingException e) {
             logger.error("Error while trying to send message", e);
             throw new SendingException("Error while trying to send message.");

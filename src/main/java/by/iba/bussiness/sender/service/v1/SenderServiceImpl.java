@@ -51,12 +51,6 @@ public class SenderServiceImpl implements SenderService {
         enrollmentChecker.isExistsEnrollment(request, emails, meeting);
         DateHelper dateHelper = dateHelperDefiner.definerDateHelper(meeting);
         Calendar calendar = calendarFactory.createInvitationCalendarTemplate(dateHelper, meeting);
-        //      List<Calendar> calendarList = calendarListCreator.createCalendarList(emails, calendar);
-//        if(dateHelper.getMeetingType().equals(MeetingType.SINGLE) || dateHelper.getMeetingType().equals(MeetingType.RECURRENCE)) {
-//            messageSender.sendMessageToAllRecipients(calendarList, meeting);
-//        } else if (dateHelper.getMeetingType().equals(MeetingType.COMPLEX)) {
-//
-//        }
         List<Calendar> calendarList = calendarAttendeesInstaller.createCalendarList(emails, calendar);
         return messageSender.sendMessageToAllRecipients(calendarList, meeting);
     }
