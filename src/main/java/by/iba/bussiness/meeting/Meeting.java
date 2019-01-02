@@ -22,7 +22,6 @@ public class Meeting {
     private String locationInfo;
     private Owner owner;
     private String summary;
-    private List<TimeSlot> timeSlots = new ArrayList();
     private List<TimeSlot> timeSlots;
     private String timeZone;
     private String title;

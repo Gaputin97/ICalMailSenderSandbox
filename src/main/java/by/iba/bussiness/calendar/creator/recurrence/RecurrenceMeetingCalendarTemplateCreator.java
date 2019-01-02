@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.UUID;
 
 @org.springframework.stereotype.Component
-public class RecurrenceCalendarTemplateCreator {
-    private static final Logger logger = LoggerFactory.getLogger(RecurrenceCalendarTemplateCreator.class);
+public class RecurrenceMeetingCalendarTemplateCreator {
+    private static final Logger logger = LoggerFactory.getLogger(RecurrenceMeetingCalendarTemplateCreator.class);
     private CalendarTextEditor calendarTextEditor;
     private Calendar requestCalendar;
     private SessionParser sessionParser;
@@ -34,11 +34,11 @@ public class RecurrenceCalendarTemplateCreator {
     private DateIncreaser dateIncreaser;
 
     @Autowired
-    public RecurrenceCalendarTemplateCreator(CalendarTextEditor calendarTextEditor,
-                                             @Qualifier("requestCalendar") Calendar requestCalendar,
-                                             SessionParser sessionParser,
-                                             IcalDateParser icalDateParser,
-                                             DateIncreaser dateIncreaser) {
+    public RecurrenceMeetingCalendarTemplateCreator(CalendarTextEditor calendarTextEditor,
+                                                    @Qualifier("requestCalendar") Calendar requestCalendar,
+                                                    SessionParser sessionParser,
+                                                    IcalDateParser icalDateParser,
+                                                    DateIncreaser dateIncreaser) {
         this.calendarTextEditor = calendarTextEditor;
         this.requestCalendar = requestCalendar;
         this.sessionParser = sessionParser;

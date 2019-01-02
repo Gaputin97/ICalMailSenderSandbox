@@ -1,8 +1,8 @@
 package by.iba.bussiness.calendar;
 
-import by.iba.bussiness.calendar.creator.complex.ComplexCalendarTemplateCreator;
-import by.iba.bussiness.calendar.creator.recurrence.RecurrenceCalendarTemplateCreator;
-import by.iba.bussiness.calendar.creator.single.SimpleCalendarTemplateCreator;
+import by.iba.bussiness.calendar.creator.complex.ComplexMeetingCalendarTemplateCreator;
+import by.iba.bussiness.calendar.creator.recurrence.RecurrenceMeetingCalendarTemplateCreator;
+import by.iba.bussiness.calendar.creator.single.SimpleMeetingCalendarTemplateCreator;
 import by.iba.bussiness.calendar.date.model.single.SingleDateHelper;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.calendar.date.model.DateHelper;
@@ -14,17 +14,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CalendarFactory {
-    private SimpleCalendarTemplateCreator simpleCalendarTemplateCreator;
-    private RecurrenceCalendarTemplateCreator recurrenceCalendarTemplateCreator;
-    private ComplexCalendarTemplateCreator complexCalendarTemplateCreator;
+    private SimpleMeetingCalendarTemplateCreator simpleMeetingCalendarTemplateCreator;
+    private RecurrenceMeetingCalendarTemplateCreator recurrenceMeetingCalendarTemplateCreator;
+    private ComplexMeetingCalendarTemplateCreator complexMeetingCalendarTemplateCreator;
 
     @Autowired
-    public CalendarFactory(SimpleCalendarTemplateCreator simpleCalendarTemplateCreator,
-                           RecurrenceCalendarTemplateCreator recurrenceCalendarTemplateCreator,
-                           ComplexCalendarTemplateCreator complexCalendarTemplateCreator) {
-        this.simpleCalendarTemplateCreator = simpleCalendarTemplateCreator;
-        this.recurrenceCalendarTemplateCreator = recurrenceCalendarTemplateCreator;
-        this.complexCalendarTemplateCreator = complexCalendarTemplateCreator;
+    public CalendarFactory(SimpleMeetingCalendarTemplateCreator simpleMeetingCalendarTemplateCreator,
+                           RecurrenceMeetingCalendarTemplateCreator recurrenceMeetingCalendarTemplateCreator,
+                           ComplexMeetingCalendarTemplateCreator complexMeetingCalendarTemplateCreator) {
+        this.simpleMeetingCalendarTemplateCreator = simpleMeetingCalendarTemplateCreator;
+        this.recurrenceMeetingCalendarTemplateCreator = recurrenceMeetingCalendarTemplateCreator;
+        this.complexMeetingCalendarTemplateCreator = complexMeetingCalendarTemplateCreator;
     }
 
     public <T extends DateHelper> Calendar createInvitationCalendarTemplate(T helper, Meeting meeting) {
@@ -32,15 +32,15 @@ public class CalendarFactory {
         switch (helper.getMeetingType()) {
             case SINGLE:
                 SingleDateHelper singleDateHelper = ((SingleDateHelper) helper);
-                calendar = simpleCalendarTemplateCreator.createSimpleMeetingInvitationTemplate(singleDateHelper, meeting);
+                calendar = simpleMeetingCalendarTemplateCreator.createSimpleMeetingInvitationTemplate(singleDateHelper, meeting);
                 break;
             case RECURRENCE:
                 RecurrenceDateHelper recurrenceDateHelper = ((RecurrenceDateHelper) helper);
-                calendar = recurrenceCalendarTemplateCreator.createRecurrenceCalendarInvitationTemplate(recurrenceDateHelper, meeting);
+                calendar = recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarInvitationTemplate(recurrenceDateHelper, meeting);
                 break;
             case COMPLEX:
                 ComplexDateHelper complexDateHelper = ((ComplexDateHelper) helper);
-                calendar = complexCalendarTemplateCreator.createComplexCalendarInvitationTemplate(complexDateHelper, meeting);
+                calendar = complexMeetingCalendarTemplateCreator.createComplexCalendarInvitationTemplate(complexDateHelper, meeting);
                 break;
         }
         return calendar;
