@@ -22,14 +22,14 @@ import java.util.UUID;
 
 @Component
 
-public class SimpleCalendarTemplateCreator {
-    private static final Logger logger = LoggerFactory.getLogger(SimpleCalendarTemplateCreator.class);
+public class SimpleMeetingCalendarTemplateCreator {
+    private static final Logger logger = LoggerFactory.getLogger(SimpleMeetingCalendarTemplateCreator.class);
     private CalendarTextEditor calendarTextEditor;
     private Calendar requestCalendar;
 
     @Autowired
-    public SimpleCalendarTemplateCreator(CalendarTextEditor calendarTextEditor,
-                                         Calendar requestCalendar) {
+    public SimpleMeetingCalendarTemplateCreator(CalendarTextEditor calendarTextEditor,
+                                                Calendar requestCalendar) {
         this.calendarTextEditor = calendarTextEditor;
         this.requestCalendar = requestCalendar;
     }

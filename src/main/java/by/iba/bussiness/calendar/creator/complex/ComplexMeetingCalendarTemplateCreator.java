@@ -23,14 +23,14 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-public class ComplexCalendarTemplateCreator {
-    private static final Logger logger = LoggerFactory.getLogger(ComplexCalendarTemplateCreator.class);
+public class ComplexMeetingCalendarTemplateCreator {
+    private static final Logger logger = LoggerFactory.getLogger(ComplexMeetingCalendarTemplateCreator.class);
     private CalendarTextEditor calendarTextEditor;
     private Calendar publishCalendar;
 
     @Autowired
-    public ComplexCalendarTemplateCreator(CalendarTextEditor calendarTextEditor,
-                                          @Qualifier("publishCalendar") Calendar publishCalendar) {
+    public ComplexMeetingCalendarTemplateCreator(CalendarTextEditor calendarTextEditor,
+                                                 @Qualifier("publishCalendar") Calendar publishCalendar) {
         this.calendarTextEditor = calendarTextEditor;
         this.publishCalendar = publishCalendar;
     }
