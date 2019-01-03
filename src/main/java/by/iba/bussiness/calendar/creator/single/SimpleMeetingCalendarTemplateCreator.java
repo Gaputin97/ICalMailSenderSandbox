@@ -12,6 +12,7 @@ import net.fortuna.ical4j.model.property.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -26,16 +27,19 @@ public class SimpleMeetingCalendarTemplateCreator {
     private static final Logger logger = LoggerFactory.getLogger(SimpleMeetingCalendarTemplateCreator.class);
     private CalendarTextEditor calendarTextEditor;
     private Calendar requestCalendar;
+    private Calendar cancelCalendar;
 
     @Autowired
     public SimpleMeetingCalendarTemplateCreator(CalendarTextEditor calendarTextEditor,
-                                                Calendar requestCalendar) {
+                                                @Qualifier("requestCalendar") Calendar requestCalendar,
+                                                @Qualifier("cancelCalendar") Calendar cancelCalendar) {
         this.calendarTextEditor = calendarTextEditor;
         this.requestCalendar = requestCalendar;
+        this.cancelCalendar = cancelCalendar;
     }
 
     public Calendar createSimpleMeetingInvitationTemplate(SingleDateHelper singleDateHelper, Meeting meeting) {
-        logger.info("Started creating ics file with single meeting with id " + meeting.getId());
+        logger.info("Started creating invitation ics file with single meeting with id " + meeting.getId());
         Calendar calendar;
         VEvent event;
         try {
@@ -52,6 +56,34 @@ public class SimpleMeetingCalendarTemplateCreator {
             DateTime endDateTime = new DateTime(session.getEndDate());
 
             calendar = new Calendar(requestCalendar);
+            event = new VEvent(startDateTime, endDateTime, summary.toString());
+            event.getProperties().addAll(Arrays.asList(sequence, organizer, location, description, summary, UID));
+            calendar.getComponents().add(event);
+        } catch (ParseException | URISyntaxException | IOException e) {
+            logger.error(e.getMessage());
+            throw new CalendarException("Can't create single calendar meeting. Try again later");
+        }
+        return calendar;
+    }
+
+    public Calendar createSimpleMeetingCancellationTemplate(SingleDateHelper singleDateHelper, Meeting meeting) {
+        logger.info("Started creating cancellation ics file with single meeting with id " + meeting.getId());
+        Calendar calendar;
+        VEvent event;
+        try {
+            Sequence sequence = new Sequence("0");
+            Organizer organizer = new Organizer("mailto:" + meeting.getOwner().getEmail());
+            Location location = new Location(calendarTextEditor.breakLine(meeting.getLocation()));
+            Description description = new Description(calendarTextEditor.breakLine(meeting.getDescription()));
+            Summary summary = new Summary(calendarTextEditor.breakLine(meeting.getSummary()));
+
+            Uid UID = new Uid(UUID.randomUUID().toString());
+
+            Session session = singleDateHelper.getSession();
+            DateTime startDateTime = new DateTime(session.getStartDate());
+            DateTime endDateTime = new DateTime(session.getEndDate());
+
+            calendar = new Calendar(cancelCalendar);
             event = new VEvent(startDateTime, endDateTime, summary.toString());
             event.getProperties().addAll(Arrays.asList(sequence, organizer, location, description, summary, UID));
             calendar.getComponents().add(event);

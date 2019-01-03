@@ -3,14 +3,16 @@ package by.iba.bussiness.sender;
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
-import by.iba.bussiness.enrollment.service.v1.EnrollmentServiceImpl;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.response.CalendarSendingResponse;
+import by.iba.bussiness.sender.parser.StatusParser;
 import by.iba.exception.SendingException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.Attendee;
+import net.fortuna.ical4j.model.property.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,24 +32,26 @@ public class MessageSender {
     private JavaMailSender javaMailSender;
     private CalendarTextEditor calendarTextEditor;
     private EnrollmentRepository enrollmentRepository;
+    private StatusParser statusParser;
 
     @Autowired
-    public MessageSender(JavaMailSender javaMailSender, CalendarTextEditor calendarTextEditor, EnrollmentRepository enrollmentRepository) {
+    public MessageSender(JavaMailSender javaMailSender, CalendarTextEditor calendarTextEditor, EnrollmentRepository enrollmentRepository, StatusParser statusParser) {
         this.javaMailSender = javaMailSender;
         this.calendarTextEditor = calendarTextEditor;
         this.enrollmentRepository = enrollmentRepository;
+        this.statusParser = statusParser;
     }
 
     public void sendMessageToOneRecipient(Calendar calendar, Meeting meeting) {
         MimeMessage message;
         try {
             message = javaMailSender.createMimeMessage();
-
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            Component event = calendar.getComponents().getComponent(Component.VEVENT);
+            VEvent event = (VEvent) calendar.getComponents().getComponent(Component.VEVENT);
             Property attendee = event.getProperties().getProperty(Property.ATTENDEE);
+            Method method = calendar.getMethod();
             String address = ((Attendee) attendee).getCalAddress().toString();
-            String method = calendarTextEditor.replaceColonToEqual(calendar.getMethod().toString());
+            String stringMethod = calendarTextEditor.replaceColonToEqual(method.toString());
             String editedUserEmail = calendarTextEditor.editUserEmail(address);
             helper.setTo(editedUserEmail);
 
@@ -56,7 +60,7 @@ public class MessageSender {
             iСalInline.setHeader("Content-class", "urn:content-classes:calendarmessage");
             iСalInline.setHeader("Content-ID", "<calendar_part>");
             iСalInline.setHeader("Content-Disposition", "inline");
-            iСalInline.setContent(calendar.toString(), "text/calendar;charset=utf-8;" + method);
+            iСalInline.setContent(calendar.toString(), "text/calendar;charset=utf-8;" + stringMethod);
 
             iСalInline.setFileName("inlineCalendar.ics");
             multipart.addBodyPart(iСalInline);
@@ -64,7 +68,7 @@ public class MessageSender {
             MimeBodyPart iСalAttachment = new MimeBodyPart();
             iСalAttachment.setHeader("Content-class", "urn:content-classes:calendarmessage");
             iСalAttachment.setHeader("Content-Disposition", "attachment");
-            iСalInline.setContent(calendar.toString(), "text/calendar;charset=utf-8;" + method);
+            iСalAttachment.setContent(calendar.toString(), "text/calendar;charset=utf-8;" + stringMethod);
             iСalAttachment.setFileName("attachedCalendar.ics");
             multipart.addBodyPart(iСalAttachment);
             message.setContent(multipart);
@@ -75,6 +79,8 @@ public class MessageSender {
             Enrollment enrollment = new Enrollment();
             enrollment.setParentId(meeting.getId());
             enrollment.setUserEmail(editedUserEmail);
+            enrollment.setEnrollmentType(statusParser.parseCalMethodToEnrollmentStatus(method));
+            enrollment.setCurrentCalendarUid(event.getUid().toString());
             enrollmentRepository.save(enrollment);
             logger.info("New enrollment with meeting id" + meeting.getId() + " and user " + editedUserEmail + " was added");
         } catch (MessagingException e) {
@@ -88,6 +94,6 @@ public class MessageSender {
             sendMessageToOneRecipient(calendar, meeting);
         }
         logger.info("Messages to all recipients were sended successfully");
-        return new CalendarSendingResponse(true);
+        return new CalendarSendingResponse(true, "All messages was sended successfully");
     }
 }
