@@ -1,10 +1,21 @@
 package by.iba.bussiness.enrollment.service.v1;
 
+import by.iba.bussiness.calendar.CalendarFactory;
+import by.iba.bussiness.calendar.attendee.Learner;
+import by.iba.bussiness.calendar.creator.CalendarAttendeesInstaller;
+import by.iba.bussiness.calendar.date.DateHelperDefiner;
 import by.iba.bussiness.enrollment.Enrollment;
+import by.iba.bussiness.enrollment.EnrollmentChecker;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
+import by.iba.bussiness.invitation_template.service.InvitationTemplateService;
+import by.iba.bussiness.meeting.Meeting;
+import by.iba.bussiness.meeting.service.MeetingService;
+import by.iba.bussiness.response.CalendarSendingResponse;
+import by.iba.bussiness.sender.MessageSender;
 import by.iba.bussiness.token.model.JavaWebToken;
 import by.iba.bussiness.token.service.TokenService;
 import by.iba.exception.ServiceException;
+import net.fortuna.ical4j.model.Calendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +30,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -27,6 +39,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private static final Logger logger = LoggerFactory.getLogger(EnrollmentServiceImpl.class);
     private TokenService tokenService;
     private RestTemplate restTemplate;
+    private MeetingService meetingService;
+    private CalendarAttendeesInstaller calendarAttendeesInstaller;
+    private MessageSender messageSender;
+    private EnrollmentChecker enrollmentChecker;
+    private InvitationTemplateService invitationTemplateService;
 
     @Value("${enrollment_by_email_and_meeting_id_endpoint}")
     private String ENDPOINT_FIND_ENROLLMENT_BY_PARENT_ID_AND_EMAIL;
@@ -36,9 +53,21 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Autowired
     public EnrollmentServiceImpl(TokenService tokenService,
-                                 RestTemplate restTemplate) {
+                                 RestTemplate restTemplate,
+                                 MeetingService meetingService,
+                                 DateHelperDefiner dateHelperDefiner,
+                                 CalendarFactory calendarFactory,
+                                 CalendarAttendeesInstaller calendarAttendeesInstaller,
+                                 MessageSender messageSender,
+                                 EnrollmentChecker enrollmentChecker,
+                                 InvitationTemplateService invitationTemplateService) {
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
+        this.meetingService = meetingService;
+        this.calendarAttendeesInstaller = calendarAttendeesInstaller;
+        this.messageSender = messageSender;
+        this.enrollmentChecker = enrollmentChecker;
+        this.invitationTemplateService = invitationTemplateService;
     }
 
     @Override
@@ -58,7 +87,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             HttpStatus errorStatus = e.getStatusCode();
             if (errorStatus.equals(HttpStatus.NOT_FOUND) || errorStatus.equals(HttpStatus.UNAUTHORIZED) || errorStatus.equals(HttpStatus.FORBIDDEN)) {
-                logger.error("Get enrollment error from ec3 service: " +  e.getStackTrace());
+                logger.error("Get enrollment error from ec3 service: " + e.getStackTrace());
                 throw new ServiceException(e.getMessage());
             }
         }
@@ -77,7 +106,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                     ENDPOINT_FIND_ENROLLMENT_BY_PARENT_ID + parentId,
                     HttpMethod.GET,
                     httpEntity,
-                    new ParameterizedTypeReference<List<Enrollment>>(){});
+                    new ParameterizedTypeReference<List<Enrollment>>() {
+                    });
             enrollmentList = resultEnrollmentList.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             HttpStatus errorStatus = e.getStatusCode();
@@ -87,5 +117,29 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             }
         }
         return enrollmentList;
+    }
+
+    @Override
+    public CalendarSendingResponse enrollUsers(HttpServletRequest request, String meetingId, List<Learner> learners) {
+        CalendarSendingResponse calendarSendingResponse;
+        Meeting meeting = meetingService.getMeetingById(request, meetingId);
+        String invitationTemplateKey = meeting.getInvitationTemplate();
+//        if (invitationTemplateKey.isEmpty()) {
+//            logger.error("Invitation template of meeting " + meetingId + " is null");
+//            throw new ServiceException("Meeting " + meetingId + " doesn't have learner template");
+//        }
+        Iterator<Learner> iterator = learners.iterator();
+        while (iterator.hasNext()) {
+            if (enrollmentChecker.isExistsEnrollment(request, iterator.next(), meeting)) {
+                iterator.remove();
+            }
+        }
+        if (learners.isEmpty()) {
+            calendarSendingResponse = new CalendarSendingResponse(false, "All learners ");
+        } else {
+            List<Calendar> calendarList = calendarAttendeesInstaller.createCalendarList(learners, meeting);
+            calendarSendingResponse = messageSender.sendMessageToAllRecipients(calendarList, meeting);
+        }
+        return calendarSendingResponse;
     }
 }

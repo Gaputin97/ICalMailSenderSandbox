@@ -1,5 +1,6 @@
 package by.iba.bussiness.enrollment;
 
+import by.iba.bussiness.calendar.attendee.Learner;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.meeting.Meeting;
@@ -20,21 +21,29 @@ public class EnrollmentChecker {
     private EnrollmentRepository enrollmentRepository;
 
     @Autowired
-    public EnrollmentChecker(EnrollmentService enrollmentService, EnrollmentRepository enrollmentRepository) {
-        this.enrollmentService = enrollmentService;
+    public EnrollmentChecker(EnrollmentRepository enrollmentRepository) {
         this.enrollmentRepository = enrollmentRepository;
     }
 
-    public void isExistsEnrollment(HttpServletRequest request, List<String> emails, Meeting meeting) {
+    public boolean isExistsEnrollment(HttpServletRequest request, Learner learner, Meeting meeting) {
         BigInteger meetingId = meeting.getId();
-        for (String email : emails) {
-            boolean isExistThirdPartyEnrollment = enrollmentService.getEnrollmentByEmailAndParentId(request, meetingId, email) != null;
-            boolean isExistLocalEnrollment = enrollmentRepository.getByEmailAndParentId(meetingId, email) != null;
-            if (isExistLocalEnrollment || isExistThirdPartyEnrollment) {
-                logger.error("Enrollment with meeting id " + meetingId + " and email " + email + " exists. ");
-                throw new ServiceException("Meeting " + meeting.getSummary() + " was sended to " + email);
+        boolean isExists;
+        String email = learner.getEmail();
+        Enrollment enrollment = enrollmentRepository.getByEmailAndParentId(meetingId, email);
+        boolean isExistLocalEnrollment = enrollment != null;
+        if (isExistLocalEnrollment) {
+            EnrollmentType enrollmentType = enrollment.getEnrollmentType();
+            EnrollmentType learnerType = learner.getEnrollmentType();
+            if (enrollmentType != learnerType) {
+                isExists = false;
+            } else {
+                isExists = true;
             }
+            logger.info("Enrollment with meeting id " + meetingId + " and email " + email + " and enrollment type " + enrollmentType + " exists. ");
+        } else {
+            isExists = false;
         }
+        return isExists;
     }
 }
 

@@ -1,5 +1,6 @@
 package by.iba.bussiness.enrollment.repository.v1;
 
+import by.iba.bussiness.enrollment.EnrollmentType;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.enrollment.Enrollment;
 
@@ -18,7 +19,7 @@ import java.util.List;
 
 @Repository
 public class EnrollmentRepositoryImpl implements EnrollmentRepository {
-    private static final  Logger logger = LoggerFactory.getLogger(EnrollmentRepositoryImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(EnrollmentRepositoryImpl.class);
     @Autowired
     private MongoTemplate mongoTemplate;
 
@@ -44,10 +45,20 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
     }
 
     @Override
+    public Enrollment getByEmailAndParentIdAndType(BigInteger parentId, String userEmail, EnrollmentType enrollmentType) {
+        Query query = new Query(Criteria.where("parentId").is(parentId).and("userEmail").is(userEmail).and("enrollmentType").is(enrollmentType));
+        Enrollment enrollment = mongoTemplate.findOne(query, Enrollment.class);
+        if (enrollment == null) {
+            logger.info("Can't locally find enrollment with parent ID " + parentId + " and user email " + userEmail + " and enrollment type " + enrollmentType);
+        }
+        return enrollment;
+    }
+
+    @Override
     public List<Enrollment> getAllByParentId(BigInteger parentId) {
         Query query = new Query(Criteria.where("parentId").is(parentId));
         List<Enrollment> enrollmentList = mongoTemplate.find(query, Enrollment.class);
-        if(enrollmentList.isEmpty()) {
+        if (enrollmentList.isEmpty()) {
             logger.info("Can't locally find any enrollments with parent ID: " + parentId);
         }
         return enrollmentList;

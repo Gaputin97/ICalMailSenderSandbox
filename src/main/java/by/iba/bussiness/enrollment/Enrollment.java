@@ -16,11 +16,8 @@ public class Enrollment {
     private String calendarVersion;
     private String calendarStatus;
     private String calendarDate;
-    private EnrollmentStatus enrollmentStatus;
-
-    private enum EnrollmentStatus {
-        ATTENDEED, CANCELLED;
-    }
+    private EnrollmentType enrollmentType;
+    private String currentCalendarUid;
 
     public Enrollment() {
     }
@@ -89,12 +86,20 @@ public class Enrollment {
         this.calendarDate = calendarDate;
     }
 
-    public EnrollmentStatus getEnrollmentStatus() {
-        return enrollmentStatus;
+    public EnrollmentType getEnrollmentType() {
+        return enrollmentType;
     }
 
-    public void setEnrollmentStatus(EnrollmentStatus enrollmentStatus) {
-        this.enrollmentStatus = enrollmentStatus;
+    public void setEnrollmentType(EnrollmentType enrollmentType) {
+        this.enrollmentType = enrollmentType;
+    }
+
+    public String getCurrentCalendarUid() {
+        return currentCalendarUid;
+    }
+
+    public void setCurrentCalendarUid(String currentCalendarUid) {
+        this.currentCalendarUid = currentCalendarUid;
     }
 
     @Override
@@ -108,7 +113,7 @@ public class Enrollment {
                 ", calendarVersion='" + calendarVersion + '\'' +
                 ", calendarStatus='" + calendarStatus + '\'' +
                 ", calendarDate='" + calendarDate + '\'' +
-                ", enrollmentStatus=" + enrollmentStatus +
+                ", enrollmentStatus=" + enrollmentType +
                 '}';
     }
 }

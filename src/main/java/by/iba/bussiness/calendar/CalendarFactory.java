@@ -45,5 +45,24 @@ public class CalendarFactory {
         }
         return calendar;
     }
+
+    public <T extends DateHelper> Calendar createCancelCalendarTemplate(T helper, Meeting meeting) {
+        Calendar calendar = null;
+        switch (helper.getMeetingType()) {
+            case SINGLE:
+                SingleDateHelper singleDateHelper = ((SingleDateHelper) helper);
+                calendar = simpleMeetingCalendarTemplateCreator.createSimpleMeetingCancellationTemplate(singleDateHelper, meeting);
+                break;
+            case RECURRENCE:
+                RecurrenceDateHelper recurrenceDateHelper = ((RecurrenceDateHelper) helper);
+                calendar = recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarInvitationTemplate(recurrenceDateHelper, meeting);
+                break;
+            case COMPLEX:
+                ComplexDateHelper complexDateHelper = ((ComplexDateHelper) helper);
+                calendar = complexMeetingCalendarTemplateCreator.createComplexCalendarInvitationTemplate(complexDateHelper, meeting);
+                break;
+        }
+        return calendar;
+    }
 }
 

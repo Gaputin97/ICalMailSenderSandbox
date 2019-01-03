@@ -1,5 +1,11 @@
 package by.iba.bussiness.calendar.creator;
 
+import by.iba.bussiness.calendar.CalendarFactory;
+import by.iba.bussiness.calendar.attendee.Learner;
+import by.iba.bussiness.calendar.date.DateHelperDefiner;
+import by.iba.bussiness.calendar.date.model.DateHelper;
+import by.iba.bussiness.enrollment.EnrollmentType;
+import by.iba.bussiness.meeting.Meeting;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.CalendarException;
 import net.fortuna.ical4j.model.Component;
@@ -10,6 +16,7 @@ import net.fortuna.ical4j.model.parameter.Rsvp;
 import net.fortuna.ical4j.model.property.Attendee;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.net.URI;
@@ -21,18 +28,35 @@ import java.util.List;
 @org.springframework.stereotype.Component
 public class CalendarAttendeesInstaller {
     private static final Logger logger = LoggerFactory.getLogger(CalendarAttendeesInstaller.class);
+    private DateHelperDefiner dateHelperDefiner;
+    private CalendarFactory calendarFactory;
 
-    public List<Calendar> createCalendarList(List<String> emails, Calendar calendar) {
+    @Autowired
+    public CalendarAttendeesInstaller(DateHelperDefiner dateHelperDefiner, CalendarFactory calendarFactory) {
+        this.dateHelperDefiner = dateHelperDefiner;
+        this.calendarFactory = calendarFactory;
+    }
+
+    public List<Calendar> createCalendarList(List<Learner> learners, Meeting meeting) {
         List<Calendar> calendarList = new ArrayList<>();
-
-        for (String email : emails) {
-            Attendee listener = new Attendee(URI.create("mailto:" + email));
-            listener.getParameters().add(Rsvp.FALSE);
-            listener.getParameters().add(Role.REQ_PARTICIPANT);
-            listener.getParameters().add(PartStat.ACCEPTED);
+        DateHelper dateHelper = dateHelperDefiner.definerDateHelper(meeting);
+        Calendar calendarInvite = calendarFactory.createInvitationCalendarTemplate(dateHelper, meeting);
+        Calendar calendarCancel = calendarFactory.createCancelCalendarTemplate(dateHelper, meeting);
+        for (Learner learner : learners) {
+            Calendar calendar;
+            if (learner.getEnrollmentType() == EnrollmentType.CONFIRMED) {
+                calendar = calendarInvite;
+            } else {
+                calendar = calendarCancel;
+            }
+            String email = learner.getEmail();
+            Attendee attendee = new Attendee(URI.create("mailto:" + email));
+            attendee.getParameters().add(Rsvp.FALSE);
+            attendee.getParameters().add(Role.REQ_PARTICIPANT);
+            attendee.getParameters().add(PartStat.ACCEPTED);
 
             CalendarComponent event = calendar.getComponent(Component.VEVENT);
-            event.getProperties().add(listener);
+            event.getProperties().add(attendee);
 
             try {
                 calendarList.add(new Calendar(calendar));
@@ -40,7 +64,7 @@ public class CalendarAttendeesInstaller {
                 logger.error("Can't create calendar list", e);
                 throw new CalendarException("Can't create calendar meeting. Try again later.");
             }
-            event.getProperties().remove(listener);
+            event.getProperties().remove(attendee);
         }
         return calendarList;
     }

@@ -1,17 +1,20 @@
 package by.iba.bussiness.enrollment;
 
+import by.iba.bussiness.calendar.attendee.Learner;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 
+import by.iba.bussiness.response.CalendarSendingResponse;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
+import java.util.List;
 
 @RestController
-public class  EnrollmentController {
+public class EnrollmentController {
     private EnrollmentService enrollmentService;
     private EnrollmentRepository enrollmentRepository;
 
@@ -41,4 +44,13 @@ public class  EnrollmentController {
     public Enrollment saveEnrollment(@RequestBody Enrollment enrollment) {
         return enrollmentRepository.save(enrollment);
     }
+
+    @ApiOperation(value = "Send calendar templates for non existing recipients")
+    @RequestMapping(value = "/enrollment/add/{meetingId}", method = RequestMethod.POST)
+    public CalendarSendingResponse enrollUsers(@PathVariable String meetingId,
+                                                                       @RequestBody List<Learner> learners,
+                                                                       HttpServletRequest request) {
+        return enrollmentService.enrollUsers(request, meetingId, learners);
+    }
+
 }
