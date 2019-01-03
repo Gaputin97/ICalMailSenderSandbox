@@ -5,7 +5,6 @@ import by.iba.bussiness.calendar.date.builder.RecurrenceDateHelperBuilder;
 import by.iba.bussiness.calendar.date.builder.SimpleDateHelperBuilder;
 import by.iba.bussiness.calendar.date.model.DateHelper;
 import by.iba.bussiness.meeting.Meeting;
-import by.iba.bussiness.meeting.service.v1.MeetingServiceImpl;
 import by.iba.bussiness.calendar.rrule.definer.RruleDefiner;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.session.SessionChecker;

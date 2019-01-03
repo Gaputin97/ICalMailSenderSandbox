@@ -3,7 +3,6 @@ package by.iba.bussiness.sender;
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
-import by.iba.bussiness.enrollment.service.v1.EnrollmentServiceImpl;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.response.CalendarSendingResponse;
 import by.iba.exception.SendingException;

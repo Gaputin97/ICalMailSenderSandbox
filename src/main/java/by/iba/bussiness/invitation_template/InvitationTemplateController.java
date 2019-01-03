@@ -1,6 +1,6 @@
 package by.iba.bussiness.invitation_template;
 
-import by.iba.bussiness.invitation_template.service.v1.InvitationTemplateServiceImpl;
+import by.iba.bussiness.invitation_template.service.InvitationTemplateService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class InvitationTemplateController {
     @Autowired
-    private InvitationTemplateServiceImpl invitationTemplateService;
+    private InvitationTemplateService invitationTemplateService;
 
     @ApiOperation(value = "Get invitation template by id from template service", response = InvitationTemplate.class)
     @RequestMapping(value = "/template/get/{id}", method = RequestMethod.GET)

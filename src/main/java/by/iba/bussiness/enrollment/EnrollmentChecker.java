@@ -2,7 +2,6 @@ package by.iba.bussiness.enrollment;
 
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
-import by.iba.bussiness.enrollment.service.v1.EnrollmentServiceImpl;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.exception.ServiceException;
 import org.slf4j.Logger;
@@ -16,7 +15,7 @@ import java.util.List;
 
 @Component
 public class EnrollmentChecker {
-    private static final Logger logger = LoggerFactory.getLogger(EnrollmentServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(EnrollmentChecker.class);
     private EnrollmentService enrollmentService;
     private EnrollmentRepository enrollmentRepository;
 

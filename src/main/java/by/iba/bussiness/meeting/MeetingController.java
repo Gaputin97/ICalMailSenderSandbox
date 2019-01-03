@@ -1,6 +1,6 @@
 package by.iba.bussiness.meeting;
 
-import by.iba.bussiness.meeting.service.v1.MeetingServiceImpl;
+import by.iba.bussiness.meeting.service.MeetingService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 public class MeetingController {
     @Autowired
-    private MeetingServiceImpl meetingService;
+    private MeetingService meetingService;
 
     @ApiOperation(value = "Get meeting by id from meeting service", response = Meeting.class)
     @RequestMapping(value = "/meeting/get/{id}", method = RequestMethod.GET)

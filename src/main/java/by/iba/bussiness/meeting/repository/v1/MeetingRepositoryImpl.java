@@ -1,6 +1,5 @@
 package by.iba.bussiness.meeting.repository.v1;
 
-import by.iba.bussiness.enrollment.repository.v1.EnrollmentRepositoryImpl;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.repository.MeetingRepository;
 import by.iba.exception.RepositoryException;
@@ -16,7 +15,7 @@ import java.math.BigInteger;
 
 @Repository
 public class MeetingRepositoryImpl implements MeetingRepository {
-    private static final Logger logger = LoggerFactory.getLogger(EnrollmentRepositoryImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(MeetingRepositoryImpl.class);
     @Autowired
     private MongoTemplate mongoTemplate;
 
