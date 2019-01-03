@@ -1,6 +1,7 @@
 package by.iba.bussiness.calendar.creator.complex;
 
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
+import by.iba.bussiness.calendar.creator.UidDefiner;
 import by.iba.bussiness.calendar.date.model.complex.ComplexDateHelper;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.meeting.Meeting;
@@ -27,15 +28,17 @@ public class ComplexMeetingCalendarTemplateCreator {
     private static final Logger logger = LoggerFactory.getLogger(ComplexMeetingCalendarTemplateCreator.class);
     private CalendarTextEditor calendarTextEditor;
     private Calendar publishCalendar;
+    private UidDefiner uidDefiner;
 
     @Autowired
     public ComplexMeetingCalendarTemplateCreator(CalendarTextEditor calendarTextEditor,
-                                                 @Qualifier("publishCalendar") Calendar publishCalendar) {
+                                                 @Qualifier("publishCalendar") Calendar publishCalendar, UidDefiner uidDefiner) {
         this.calendarTextEditor = calendarTextEditor;
         this.publishCalendar = publishCalendar;
+        this.uidDefiner = uidDefiner;
     }
 
-    public Calendar createComplexCalendarInvitationTemplate(ComplexDateHelper complexDateHelper, Meeting meeting) {
+    public Calendar createComplexCalendarInvitationTemplate(ComplexDateHelper complexDateHelper, Meeting meeting, String calendarUid) {
         List<Session> sessionList = complexDateHelper.getSessionList();
         Calendar calendar = null;
         VEvent event;
@@ -43,11 +46,10 @@ public class ComplexMeetingCalendarTemplateCreator {
             try {
                 Sequence sequence = new Sequence("0");
                 Organizer organizer = new Organizer("mailto:" + meeting.getOwner().getEmail());
-                Location location = new Location(calendarTextEditor.breakLine(meeting.getLocation()));
-                Description description = new Description(calendarTextEditor.breakLine(meeting.getDescription()));
-                Summary summary = new Summary(calendarTextEditor.breakLine(meeting.getSummary()));
-
-                Uid UID = new Uid(UUID.randomUUID().toString());
+                Location location = new Location((meeting.getLocation()));
+                Description description = new Description((meeting.getDescription()));
+                Summary summary = new Summary((meeting.getSummary()));
+                Uid UID = uidDefiner.defineUid(calendarUid);
 
                 DateTime startDateTime = new DateTime(session.getStartDate());
                 DateTime endDateTime = new DateTime(session.getEndDate());

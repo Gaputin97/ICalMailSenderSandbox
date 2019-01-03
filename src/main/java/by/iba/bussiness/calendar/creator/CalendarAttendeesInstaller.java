@@ -37,11 +37,11 @@ public class CalendarAttendeesInstaller {
         this.calendarFactory = calendarFactory;
     }
 
-    public List<Calendar> createCalendarList(List<Learner> learners, Meeting meeting) {
+    public List<Calendar> createCalendarList(List<Learner> learners, Meeting meeting, String calendarUid) {
         List<Calendar> calendarList = new ArrayList<>();
         DateHelper dateHelper = dateHelperDefiner.definerDateHelper(meeting);
-        Calendar calendarInvite = calendarFactory.createInvitationCalendarTemplate(dateHelper, meeting);
-        Calendar calendarCancel = calendarFactory.createCancelCalendarTemplate(dateHelper, meeting);
+        Calendar calendarInvite = calendarFactory.createInvitationCalendarTemplate(dateHelper, meeting, calendarUid);
+        Calendar calendarCancel = calendarFactory.createCancelCalendarTemplate(dateHelper, meeting, calendarUid);
         for (Learner learner : learners) {
             Calendar calendar;
             if (learner.getEnrollmentType() == EnrollmentType.CONFIRMED) {

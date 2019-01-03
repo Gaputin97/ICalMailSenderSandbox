@@ -2,8 +2,11 @@ package by.iba.bussiness.sender;
 
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.enrollment.Enrollment;
+import by.iba.bussiness.enrollment.EnrollmentChecker;
+import by.iba.bussiness.enrollment.EnrollmentType;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.meeting.Meeting;
+import by.iba.bussiness.owner.Owner;
 import by.iba.bussiness.response.CalendarSendingResponse;
 import by.iba.bussiness.sender.parser.StatusParser;
 import by.iba.exception.SendingException;
@@ -23,6 +26,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import java.math.BigInteger;
 import java.util.List;
 
 @org.springframework.stereotype.Component
@@ -76,11 +80,16 @@ public class MessageSender {
             javaMailSender.send(message);
 
             logger.info("Message was sended to " + editedUserEmail);
-            Enrollment enrollment = new Enrollment();
+            BigInteger meetingId = meeting.getId();
+            Enrollment enrollment = enrollmentRepository.getByEmailAndParentId(meetingId, editedUserEmail);
+            if (enrollment == null) {
+                enrollment = new Enrollment();
+            }
             enrollment.setParentId(meeting.getId());
             enrollment.setUserEmail(editedUserEmail);
-            enrollment.setEnrollmentType(statusParser.parseCalMethodToEnrollmentStatus(method));
-            enrollment.setCurrentCalendarUid(event.getUid().toString());
+            EnrollmentType enrollmentType = statusParser.parseCalMethodToEnrollmentStatus(method);
+            enrollment.setEnrollmentType(enrollmentType);
+            enrollment.setCurrentCalendarUid(event.getUid().getValue());
             enrollmentRepository.save(enrollment);
             logger.info("New enrollment with meeting id" + meeting.getId() + " and user " + editedUserEmail + " was added");
         } catch (MessagingException e) {
@@ -91,6 +100,7 @@ public class MessageSender {
 
     public CalendarSendingResponse sendMessageToAllRecipients(List<Calendar> calendarList, Meeting meeting) {
         for (Calendar calendar : calendarList) {
+
             sendMessageToOneRecipient(calendar, meeting);
         }
         logger.info("Messages to all recipients were sended successfully");

@@ -1,8 +1,16 @@
 package by.iba.bussiness.owner;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.persistence.Id;
+import java.math.BigInteger;
+
+@Document(collection = "owner")
 public class Owner {
     private String email;
     private String name;
+    @Id
+    private BigInteger id;
 
     public String getEmail() {
         return email;
@@ -18,6 +26,17 @@ public class Owner {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Owner() {
+    }
+
+    public BigInteger getId() {
+        return id;
+    }
+
+    public void setId(BigInteger id) {
+        this.id = id;
     }
 
     @Override

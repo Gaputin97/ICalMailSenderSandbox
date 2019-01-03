@@ -6,6 +6,7 @@ import by.iba.bussiness.calendar.creator.CalendarAttendeesInstaller;
 import by.iba.bussiness.calendar.date.DateHelperDefiner;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentChecker;
+import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.invitation_template.service.InvitationTemplateService;
 import by.iba.bussiness.meeting.Meeting;
@@ -44,6 +45,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private MessageSender messageSender;
     private EnrollmentChecker enrollmentChecker;
     private InvitationTemplateService invitationTemplateService;
+    private EnrollmentRepository enrollmentRepository;
 
     @Value("${enrollment_by_email_and_meeting_id_endpoint}")
     private String ENDPOINT_FIND_ENROLLMENT_BY_PARENT_ID_AND_EMAIL;
@@ -60,7 +62,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                                  CalendarAttendeesInstaller calendarAttendeesInstaller,
                                  MessageSender messageSender,
                                  EnrollmentChecker enrollmentChecker,
-                                 InvitationTemplateService invitationTemplateService) {
+                                 InvitationTemplateService invitationTemplateService, EnrollmentRepository enrollmentRepository) {
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
         this.meetingService = meetingService;
@@ -68,6 +70,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         this.messageSender = messageSender;
         this.enrollmentChecker = enrollmentChecker;
         this.invitationTemplateService = invitationTemplateService;
+        this.enrollmentRepository = enrollmentRepository;
     }
 
     @Override
@@ -135,9 +138,16 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             }
         }
         if (learners.isEmpty()) {
-            calendarSendingResponse = new CalendarSendingResponse(false, "All learners ");
+            calendarSendingResponse = new CalendarSendingResponse(false, "All learners have last version of calendar");
         } else {
-            List<Calendar> calendarList = calendarAttendeesInstaller.createCalendarList(learners, meeting);
+            Enrollment enrollment = enrollmentRepository.getOneByParentId(meeting.getId());
+            String calendarUid;
+            if (enrollment == null) {
+                calendarUid = "";
+            } else {
+                calendarUid = enrollment.getCurrentCalendarUid();
+            }
+            List<Calendar> calendarList = calendarAttendeesInstaller.createCalendarList(learners, meeting, calendarUid);
             calendarSendingResponse = messageSender.sendMessageToAllRecipients(calendarList, meeting);
         }
         return calendarSendingResponse;
