@@ -27,19 +27,9 @@ public class DataComparator {
         this.appointmentRepository = appointmentRepository;
     }
 
-    public Update addUpdateValues(Meeting meeting) {
-        Update update = new Update();
-        update.set("description", meeting.getDescription());
-        update.set("duration",meeting.getDuration());
-        update.set("startDateTime", meeting.getStartDateTime());
-        update.set("endDateTime", meeting.getEndDateTime());
-        update.set("invitationTemplateKey", meeting.getInvitationTemplateKey());
-        update.set("summary", meeting.getSummary());
-        update.set("location", meeting.getLocation());
-        update.set("timeSlots", meeting.getTimeSlots());
-        update.set("timeZone", meeting.getTimeZone());
-        update.set("locationInfo", meeting.getLocationInfo());
-        update.set("title", meeting.getTitle());
+
+    private
+    private Update compare(Meeting meeting) {
 
         return update;
     }

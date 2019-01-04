@@ -2,6 +2,7 @@ package by.iba.bussiness.appointment;
 
 import by.iba.bussiness.meeting.timeslot.TimeSlot;
 import by.iba.bussiness.owner.Owner;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,46 +12,55 @@ import java.util.List;
 @Document(collection = "appointment")
 public class Appointment {
     @Id
-    private String id;
-    private int index;
-    private String blendedDescription;
-    private String faceToFaceDescription;
-    private String onlineDescription;
-    private String locationBLD;
-    private String locationILT;
-    private String locationLVC;
-    private String subject;
+    private ObjectId id;
     private BigInteger meetingId;
-    private String description;
-    private float duration;
-    private String startDateTime;
-    private String endDateTime;
     private String invitationTemplateKey;
+    private int updateIndex;
+    private int rescheduleIndex;
+    private String blendedDescription;
+    private String onlineDescription;
+    private String faceToFaceDescription;
+    private String description;
+    private String locationBLD;
+    private String locationLVC;
+    private String locationILT;
     private String location;
     private String locationInfo;
-    private Owner owner;
+    private String subject;
     private String summary;
+    private String title;
+    private String startDateTime;
+    private String endDateTime;
+    private float duration;
+    private Owner owner;
     private List<TimeSlot> timeSlots;
     private String timeZone;
-    private String title;
 
     public Appointment() {
     }
 
-    public String getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
-    public int getIndex() {
-        return index;
+    public int getUpdateIndex() {
+        return updateIndex;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public void setUpdateIndex(int updateIndex) {
+        this.updateIndex = updateIndex;
+    }
+
+    public int getRescheduleIndex() {
+        return rescheduleIndex;
+    }
+
+    public void setRescheduleIndex(int rescheduleIndex) {
+        this.rescheduleIndex = rescheduleIndex;
     }
 
     public String getBlendedDescription() {
@@ -216,8 +226,9 @@ public class Appointment {
     @Override
     public String toString() {
         return "Appointment{" +
-                "id='" + id + '\'' +
-                ", index=" + index +
+                "id=" + id +
+                ", updateIndex=" + updateIndex +
+                ", rescheduleIndex=" + rescheduleIndex +
                 ", blendedDescription='" + blendedDescription + '\'' +
                 ", faceToFaceDescription='" + faceToFaceDescription + '\'' +
                 ", onlineDescription='" + onlineDescription + '\'' +
