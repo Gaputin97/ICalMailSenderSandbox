@@ -1,5 +1,6 @@
 package by.iba.bussiness.calendar.date;
 
+import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.date.builder.ComplexDateHelperBuilder;
 import by.iba.bussiness.calendar.date.builder.RecurrenceDateHelperBuilder;
 import by.iba.bussiness.calendar.date.builder.SimpleDateHelperBuilder;
@@ -34,7 +35,7 @@ public class DateHelperDefiner {
         this.sessionChecker = sessionChecker;
     }
 
-    public DateHelper definerDateHelper(Meeting meeting) {
+    public DateHelper defineDateHelper(Meeting meeting) {
         DateHelper dateHelper;
         int amountOfTimeSlots = meeting.getTimeSlots().size();
         if (amountOfTimeSlots == DateHelperConstants.AMOUNT_OF_SESSIONS_FOR_SINGLE_EVENT) {
@@ -46,8 +47,9 @@ public class DateHelperDefiner {
                     .build();
             logger.debug("Meeting type of meeting with id " + meeting.getId() + " is simple");
         } else {
-            List<Session> sessions = sessionParser.timeSlotListToSessionList(meeting.getTimeSlots());
-            if (sessionChecker.doAllSessionsTheSame(meeting)) {
+            List<TimeSlot> appointmentTimeSlots = meeting.getTimeSlots();
+            List<Session> sessions = sessionParser.timeSlotListToSessionList(appointmentTimeSlots);
+            if (sessionChecker.doAllSessionsTheSame(appointmentTimeSlots)) {
                 Rrule rrule = rruleDefiner.defineRrule(sessions);
                 RecurrenceDateHelperBuilder recurrenceDateHelperBuilder = new RecurrenceDateHelperBuilder();
                 dateHelper = recurrenceDateHelperBuilder

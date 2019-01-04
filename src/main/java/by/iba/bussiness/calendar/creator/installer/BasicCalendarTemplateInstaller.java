@@ -1,4 +1,4 @@
-package by.iba.bussiness.calendar.creator;
+package by.iba.bussiness.calendar.creator.installer;
 
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.property.CalScale;

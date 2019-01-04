@@ -6,7 +6,6 @@ import by.iba.bussiness.enrollment.service.EnrollmentService;
 
 import by.iba.bussiness.response.CalendarSendingResponse;
 import io.swagger.annotations.ApiOperation;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +34,7 @@ public class EnrollmentController {
 
     @ApiOperation(value = "Get enrollment by email and meetingId from local database", response = Enrollment.class)
     @RequestMapping(value = "/enrollment/local/get/{parentId}/{userEmail}", method = RequestMethod.GET)
-    public Enrollment getLocalEnrollmentByEmailAndMeetingId(@PathVariable(value = "parentId") ObjectId parentId,
+    public Enrollment getLocalEnrollmentByEmailAndMeetingId(@PathVariable(value = "parentId") BigInteger parentId,
                                                             @PathVariable(value = "userEmail") String userEmail) {
         return enrollmentRepository.getByEmailAndParentId(parentId, userEmail);
     }

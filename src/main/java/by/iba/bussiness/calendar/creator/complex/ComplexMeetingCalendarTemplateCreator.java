@@ -1,9 +1,11 @@
 package by.iba.bussiness.calendar.creator.complex;
 
+import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
-import by.iba.bussiness.calendar.creator.UidDefiner;
+import by.iba.bussiness.calendar.creator.definer.UidDefiner;
 import by.iba.bussiness.calendar.date.model.complex.ComplexDateHelper;
 import by.iba.bussiness.calendar.session.Session;
+import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.exception.CalendarException;
 import net.fortuna.ical4j.model.Calendar;
@@ -21,7 +23,6 @@ import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 @Component
 public class ComplexMeetingCalendarTemplateCreator {
@@ -38,18 +39,18 @@ public class ComplexMeetingCalendarTemplateCreator {
         this.uidDefiner = uidDefiner;
     }
 
-    public Calendar createComplexCalendarInvitationTemplate(ComplexDateHelper complexDateHelper, Meeting meeting, String calendarUid) {
+    public Calendar createComplexCalendarInvitationTemplate(ComplexDateHelper complexDateHelper, Appointment appointment, Enrollment enrollment) {
         List<Session> sessionList = complexDateHelper.getSessionList();
         Calendar calendar = null;
         VEvent event;
         for (Session session : sessionList) {
             try {
                 Sequence sequence = new Sequence("0");
-                Organizer organizer = new Organizer("mailto:" + meeting.getOwner().getEmail());
-                Location location = new Location((meeting.getLocation()));
-                Description description = new Description((meeting.getDescription()));
-                Summary summary = new Summary((meeting.getSummary()));
-                Uid UID = uidDefiner.defineUid(calendarUid);
+                Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
+                Location location = new Location((appointment.getLocation()));
+                Description description = new Description((appointment.getDescription()));
+                Summary summary = new Summary((appointment.getSummary()));
+                Uid UID = uidDefiner.defineUid(enrollment);
 
                 DateTime startDateTime = new DateTime(session.getStartDate());
                 DateTime endDateTime = new DateTime(session.getEndDate());

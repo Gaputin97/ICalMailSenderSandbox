@@ -2,16 +2,16 @@ package by.iba.bussiness.meeting;
 
 import by.iba.bussiness.meeting.timeslot.TimeSlot;
 import by.iba.bussiness.owner.Owner;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Document(collection = "meeting")
 public class Meeting {
     @Id
-    private ObjectId id;
+    private BigInteger id;
     private String description;
     private short duration;
     private String startDateTime;
@@ -28,11 +28,11 @@ public class Meeting {
     public Meeting() {
     }
 
-    public ObjectId getId() {
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 
