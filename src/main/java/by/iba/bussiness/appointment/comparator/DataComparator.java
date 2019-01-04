@@ -28,9 +28,9 @@ public class DataComparator {
     }
 
 
-    private
-    private Update compare(Meeting meeting) {
-
-        return update;
-    }
+//    private
+//    private Update compare(Meeting meeting) {
+//
+//        return update;
+//    }
 }

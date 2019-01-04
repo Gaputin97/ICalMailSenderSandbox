@@ -1,5 +1,6 @@
 package by.iba.bussiness.calendar;
 
+import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.creator.complex.ComplexMeetingCalendarTemplateCreator;
 import by.iba.bussiness.calendar.creator.recurrence.RecurrenceMeetingCalendarTemplateCreator;
 import by.iba.bussiness.calendar.creator.single.SimpleMeetingCalendarTemplateCreator;
@@ -27,39 +28,39 @@ public class CalendarFactory {
         this.complexMeetingCalendarTemplateCreator = complexMeetingCalendarTemplateCreator;
     }
 
-    public <T extends DateHelper> Calendar createInvitationCalendarTemplate(T helper, Meeting meeting, String calendarUid) {
+    public <T extends DateHelper> Calendar createInvitationCalendarTemplate(T helper, Appointment appointment, String calendarUid) {
         Calendar calendar = null;
         switch (helper.getMeetingType()) {
             case SINGLE:
                 SingleDateHelper singleDateHelper = ((SingleDateHelper) helper);
-                calendar = simpleMeetingCalendarTemplateCreator.createSimpleMeetingInvitationTemplate(singleDateHelper, meeting, calendarUid);
+                calendar = simpleMeetingCalendarTemplateCreator.createSimpleMeetingInvitationTemplate(singleDateHelper, appointment, calendarUid);
                 break;
             case RECURRENCE:
                 RecurrenceDateHelper recurrenceDateHelper = ((RecurrenceDateHelper) helper);
-                calendar = recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarInvitationTemplate(recurrenceDateHelper, meeting, calendarUid);
+                calendar = recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarInvitationTemplate(recurrenceDateHelper, appointment, calendarUid);
                 break;
             case COMPLEX:
                 ComplexDateHelper complexDateHelper = ((ComplexDateHelper) helper);
-                calendar = complexMeetingCalendarTemplateCreator.createComplexCalendarInvitationTemplate(complexDateHelper, meeting, calendarUid);
+                calendar = complexMeetingCalendarTemplateCreator.createComplexCalendarInvitationTemplate(complexDateHelper, appointment, calendarUid);
                 break;
         }
         return calendar;
     }
 
-    public <T extends DateHelper> Calendar createCancelCalendarTemplate(T helper, Meeting meeting, String calendarUid) {
+    public <T extends DateHelper> Calendar createCancelCalendarTemplate(T helper, Appointment appointment, String calendarUid) {
         Calendar calendar = null;
         switch (helper.getMeetingType()) {
             case SINGLE:
                 SingleDateHelper singleDateHelper = ((SingleDateHelper) helper);
-                calendar = simpleMeetingCalendarTemplateCreator.createSimpleMeetingCancellationTemplate(singleDateHelper, meeting, calendarUid);
+                calendar = simpleMeetingCalendarTemplateCreator.createSimpleMeetingCancellationTemplate(singleDateHelper, appointment, calendarUid);
                 break;
             case RECURRENCE:
                 RecurrenceDateHelper recurrenceDateHelper = ((RecurrenceDateHelper) helper);
-                calendar = recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarCancellationTemplate(recurrenceDateHelper, meeting, calendarUid);
+                calendar = recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarCancellationTemplate(recurrenceDateHelper, appointment, calendarUid);
                 break;
             case COMPLEX:
                 ComplexDateHelper complexDateHelper = ((ComplexDateHelper) helper);
-                calendar = complexMeetingCalendarTemplateCreator.createComplexCalendarInvitationTemplate(complexDateHelper, meeting, calendarUid);
+                calendar = complexMeetingCalendarTemplateCreator.createComplexCalendarInvitationTemplate(complexDateHelper, appointment, calendarUid);
                 break;
         }
         return calendar;

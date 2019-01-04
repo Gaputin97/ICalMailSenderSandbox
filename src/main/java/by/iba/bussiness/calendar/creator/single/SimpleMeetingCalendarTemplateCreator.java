@@ -1,5 +1,6 @@
 package by.iba.bussiness.calendar.creator.single;
 
+import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.calendar.creator.UidDefiner;
 import by.iba.bussiness.calendar.date.model.single.SingleDateHelper;
@@ -46,16 +47,16 @@ public class SimpleMeetingCalendarTemplateCreator {
         this.invitationTemplateService = invitationTemplateService;
     }
 
-    public Calendar createSimpleMeetingInvitationTemplate(SingleDateHelper singleDateHelper, Meeting meeting, String calendarUid) {
-        logger.info("Started creating invitation ics file with single meeting with id " + meeting.getId());
+    public Calendar createSimpleMeetingInvitationTemplate(SingleDateHelper singleDateHelper, Appointment appointment, String calendarUid) {
+        logger.info("Started creating invitation ics file with single meeting with id " + appointment.getMeetingId());
         Calendar calendar;
         VEvent event;
         try {
             Sequence sequence = new Sequence("0");
-            Organizer organizer = new Organizer("mailto:" + meeting.getOwner().getEmail());
-            Location location = new Location(meeting.getLocation());
-            Description description = new Description((meeting.getDescription()));
-            Summary summary = new Summary((meeting.getSummary()));
+            Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
+            Location location = new Location(appointment.getLocation());
+            Description description = new Description((appointment.getDescription()));
+            Summary summary = new Summary((appointment.getSummary()));
             Uid UID = uidDefiner.defineUid(calendarUid);
             Session session = singleDateHelper.getSession();
             DateTime startDateTime = new DateTime(session.getStartDate());
