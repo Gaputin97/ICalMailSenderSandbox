@@ -3,7 +3,6 @@ package by.iba.bussiness.meeting;
 import by.iba.bussiness.meeting.timeslot.TimeSlot;
 import by.iba.bussiness.owner.Owner;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigInteger;
@@ -20,8 +19,6 @@ public class Meeting {
     private String invitationTemplateKey;
     private String location;
     private String locationInfo;
-
-    @DBRef
     private Owner owner;
     private String summary;
     private List<TimeSlot> timeSlots;

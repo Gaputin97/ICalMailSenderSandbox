@@ -1,6 +1,7 @@
 package by.iba.bussiness.enrollment;
 
 import by.iba.bussiness.owner.Owner;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,7 +11,7 @@ import java.math.BigInteger;
 @Document(collection = "enrollment")
 public class Enrollment {
     @Id
-    private BigInteger id;
+    private ObjectId id;
     private BigInteger parentId;
     private String userEmail;
     private String userName;
@@ -21,11 +22,11 @@ public class Enrollment {
     private EnrollmentType enrollmentType;
     private String currentCalendarUid;
 
-    public BigInteger getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
