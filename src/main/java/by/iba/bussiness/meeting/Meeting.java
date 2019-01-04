@@ -2,18 +2,18 @@ package by.iba.bussiness.meeting;
 
 import by.iba.bussiness.meeting.timeslot.TimeSlot;
 import by.iba.bussiness.owner.Owner;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.math.BigInteger;
 import java.util.List;
 
 @Document(collection = "meeting")
 public class Meeting {
     @Id
-    private BigInteger id;
+    private ObjectId id;
     private String description;
-    private float duration;
+    private short duration;
     private String startDateTime;
     private String endDateTime;
     private String invitationTemplateKey;
@@ -28,6 +28,14 @@ public class Meeting {
     public Meeting() {
     }
 
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -36,11 +44,11 @@ public class Meeting {
         this.description = description;
     }
 
-    public float getDuration() {
+    public short getDuration() {
         return duration;
     }
 
-    public void setDuration(float duration) {
+    public void setDuration(short duration) {
         this.duration = duration;
     }
 
@@ -50,14 +58,6 @@ public class Meeting {
 
     public void setEndDateTime(String endDateTime) {
         this.endDateTime = endDateTime;
-    }
-
-    public BigInteger getId() {
-        return id;
-    }
-
-    public void setId(BigInteger id) {
-        this.id = id;
     }
 
     public String getInvitationTemplateKey() {

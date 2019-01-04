@@ -13,7 +13,7 @@ import java.util.List;
 public class Appointment {
     @Id
     private ObjectId id;
-    private BigInteger meetingId;
+    private ObjectId meetingId;
     private String invitationTemplateKey;
     private int updateIndex;
     private int rescheduleIndex;
@@ -31,7 +31,7 @@ public class Appointment {
     private String title;
     private String startDateTime;
     private String endDateTime;
-    private float duration;
+    private short duration;
     private Owner owner;
     private List<TimeSlot> timeSlots;
     private String timeZone;
@@ -119,11 +119,11 @@ public class Appointment {
         this.subject = subject;
     }
 
-    public BigInteger getMeetingId() {
+    public ObjectId getMeetingId() {
         return meetingId;
     }
 
-    public void setMeetingId(BigInteger meetingId) {
+    public void setMeetingId(ObjectId meetingId) {
         this.meetingId = meetingId;
     }
 
@@ -135,11 +135,11 @@ public class Appointment {
         this.description = description;
     }
 
-    public float getDuration() {
+    public short getDuration() {
         return duration;
     }
 
-    public void setDuration(float duration) {
+    public void setDuration(short duration) {
         this.duration = duration;
     }
 
