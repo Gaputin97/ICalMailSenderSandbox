@@ -2,9 +2,12 @@ package by.iba.bussiness.appointment;
 
 import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.meeting.Meeting;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AppointmentCreator {
-    private Appointment createAppointment(Meeting meeting, InvitationTemplate  invitationTemplate) {
+
+    public Appointment createAppointment(Meeting meeting, InvitationTemplate  invitationTemplate) {
         Appointment appointment = new Appointment();
         appointment.setMeetingId(meeting.getId());
         appointment.setInvitationTemplateKey(invitationTemplate.getKey());

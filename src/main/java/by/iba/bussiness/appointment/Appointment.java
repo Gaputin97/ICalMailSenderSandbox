@@ -6,7 +6,6 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Objects;
 
@@ -270,9 +269,7 @@ public class Appointment {
                 Objects.equals(locationILT, that.locationILT) &&
                 Objects.equals(location, that.location) &&
                 Objects.equals(locationInfo, that.locationInfo) &&
-                Objects.equals(subject, that.subject) &&
                 Objects.equals(summary, that.summary) &&
-                Objects.equals(title, that.title) &&
                 Objects.equals(startDateTime, that.startDateTime) &&
                 Objects.equals(endDateTime, that.endDateTime) &&
                 Objects.equals(owner, that.owner) &&
@@ -282,6 +279,6 @@ public class Appointment {
 
     @Override
     public int hashCode() {
-        return Objects.hash(meetingId, invitationTemplateKey, blendedDescription, onlineDescription, faceToFaceDescription, description, locationBLD, locationLVC, locationILT, location, locationInfo, subject, summary, title, startDateTime, endDateTime, duration, owner, timeSlots, timeZone);
+        return Objects.hash(meetingId, invitationTemplateKey, blendedDescription, onlineDescription, faceToFaceDescription, description, locationBLD, locationLVC, locationILT, location, locationInfo, summary, startDateTime, endDateTime, duration, owner, timeSlots, timeZone);
     }
 }
