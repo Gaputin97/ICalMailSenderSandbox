@@ -1,5 +1,6 @@
 package by.iba.bussiness.enrollment.service.v1;
 
+import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.CalendarFactory;
 import by.iba.bussiness.calendar.attendee.Learner;
 import by.iba.bussiness.calendar.creator.CalendarAttendeesInstaller;
@@ -131,12 +132,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             logger.error("Invitation template of meeting " + meetingId + " is empty");
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner template");
         }
-        Iterator<Learner> iterator = learners.iterator();
-        while (iterator.hasNext()) {
-            if (enrollmentChecker.isExistsEnrollment(request, iterator.next(), meeting)) {
-                iterator.remove();
-            }
-        }
+        Appointment appointment = null;
         if (learners.isEmpty()) {
             calendarSendingResponse = new CalendarSendingResponse(false, "All learners have last version of calendar");
         } else {
@@ -147,7 +143,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             } else {
                 calendarUid = enrollment.getCurrentCalendarUid();
             }
-            List<Calendar> calendarList = calendarAttendeesInstaller.createCalendarList(learners, meeting, calendarUid);
+            List<Calendar> calendarList = calendarAttendeesInstaller.createCalendarList(learners, appointment);
             calendarSendingResponse = messageSender.sendMessageToAllRecipients(calendarList, meeting);
         }
         return calendarSendingResponse;

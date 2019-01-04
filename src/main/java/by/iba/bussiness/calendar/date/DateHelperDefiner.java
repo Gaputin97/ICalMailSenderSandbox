@@ -1,5 +1,6 @@
 package by.iba.bussiness.calendar.date;
 
+import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.date.builder.ComplexDateHelperBuilder;
 import by.iba.bussiness.calendar.date.builder.RecurrenceDateHelperBuilder;
 import by.iba.bussiness.calendar.date.builder.SimpleDateHelperBuilder;
@@ -34,32 +35,33 @@ public class DateHelperDefiner {
         this.sessionChecker = sessionChecker;
     }
 
-    public DateHelper definerDateHelper(Meeting meeting) {
+    public DateHelper definerDateHelper(Appointment appointment) {
         DateHelper dateHelper;
-        int amountOfTimeSlots = meeting.getTimeSlots().size();
+        int amountOfTimeSlots = appointment.getTimeSlots().size();
         if (amountOfTimeSlots == DateHelperConstants.AMOUNT_OF_SESSIONS_FOR_SINGLE_EVENT) {
-            TimeSlot meetingTimeSlot = meeting.getTimeSlots().get(DateHelperConstants.NUMBER_OF_FIRST_TIME_SLOT);
+            TimeSlot meetingTimeSlot = appointment.getTimeSlots().get(DateHelperConstants.NUMBER_OF_FIRST_TIME_SLOT);
             Session meetingSession = sessionParser.timeSlotToSession(meetingTimeSlot);
             SimpleDateHelperBuilder simpleDateHelperBuilder = new SimpleDateHelperBuilder();
             dateHelper = simpleDateHelperBuilder
                     .setSession(meetingSession)
                     .build();
-            logger.debug("Meeting type of meeting with id " + meeting.getId() + " is simple");
+            logger.debug("Meeting type of meeting with id " + appointment.getMeetingId() + " is simple");
         } else {
-            List<Session> sessions = sessionParser.timeSlotListToSessionList(meeting.getTimeSlots());
-            if (sessionChecker.doAllSessionsTheSame(meeting)) {
+            List<TimeSlot> appointmentTimeSlots = appointment.getTimeSlots();
+            List<Session> sessions = sessionParser.timeSlotListToSessionList(appointmentTimeSlots);
+            if (sessionChecker.doAllSessionsTheSame(appointmentTimeSlots)) {
                 Rrule rrule = rruleDefiner.defineRrule(sessions);
                 RecurrenceDateHelperBuilder recurrenceDateHelperBuilder = new RecurrenceDateHelperBuilder();
                 dateHelper = recurrenceDateHelperBuilder
                         .setRrule(rrule)
                         .build();
-                logger.debug("Meeting type of meeting with id " + meeting.getId() + " is recurrence");
+                logger.debug("Meeting type of meeting with id " + appointment.getId() + " is recurrence");
             } else {
                 ComplexDateHelperBuilder complexDateHelperBuilder = new ComplexDateHelperBuilder();
                 dateHelper = complexDateHelperBuilder
                         .setSessionList(sessions)
                         .build();
-                logger.debug("Meeting type of meeting with id " + meeting.getId() + " is complex");
+                logger.debug("Meeting type of meeting with id " + appointment.getId() + " is complex");
             }
         }
         return dateHelper;

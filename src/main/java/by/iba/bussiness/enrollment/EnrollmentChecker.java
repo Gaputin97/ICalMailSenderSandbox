@@ -1,5 +1,6 @@
 package by.iba.bussiness.enrollment;
 
+import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.attendee.Learner;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
@@ -18,7 +19,6 @@ import java.util.List;
 @Component
 public class EnrollmentChecker {
     private static final Logger logger = LoggerFactory.getLogger(EnrollmentChecker.class);
-    private EnrollmentService enrollmentService;
     private EnrollmentRepository enrollmentRepository;
 
     @Autowired
@@ -29,6 +29,9 @@ public class EnrollmentChecker {
     public boolean isExistsEnrollment(HttpServletRequest request, Learner learner, Meeting meeting) {
         ObjectId meetingId = meeting.getId();
         boolean isExists;
+    public boolean wasChangedStatus(Learner learner, BigInteger meetingId) {
+        boolean wasChanged;
+>>>>>>> dev1
         String email = learner.getEmail();
         Enrollment enrollment = enrollmentRepository.getByEmailAndParentId(meetingId, email);
         boolean isExistLocalEnrollment = enrollment != null;
@@ -37,14 +40,18 @@ public class EnrollmentChecker {
             EnrollmentType learnerType = learner.getEnrollmentType();
             if (enrollmentType != learnerType) {
                 isExists = false;
+                wasChanged = false;
             } else {
                 isExists = true;
+                wasChanged = true;
             }
             logger.info("Enrollment with meeting id " + meetingId + " and email " + email + " and enrollment type " + enrollmentType + " exists. ");
         } else {
             isExists = false;
+            wasChanged = false;
         }
         return isExists;
+        return wasChanged;
     }
 }
 

@@ -1,5 +1,6 @@
 package by.iba.bussiness.calendar.session;
 
+import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.timeslot.TimeSlot;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,7 @@ import java.util.List;
 @Component
 public class SessionChecker {
 
-    public boolean doAllSessionsTheSame(Meeting meeting) {
-        List<TimeSlot> timeSlots = meeting.getTimeSlots();
+    public boolean doAllSessionsTheSame(List<TimeSlot> timeSlots) {
         return timeSlots.stream().map(TimeSlot::getDuration).distinct().count() == 1;
     }
 }
