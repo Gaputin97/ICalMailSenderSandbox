@@ -12,7 +12,7 @@ import java.math.BigInteger;
 public class Enrollment {
     @Id
     private ObjectId id;
-    private BigInteger parentId;
+    private ObjectId parentId;
     private String userEmail;
     private String userName;
     private String subject;
@@ -30,11 +30,11 @@ public class Enrollment {
         this.id = id;
     }
 
-    public BigInteger getParentId() {
+    public ObjectId getParentId() {
         return parentId;
     }
 
-    public void setParentId(BigInteger parentId) {
+    public void setParentId(ObjectId parentId) {
         this.parentId = parentId;
     }
 

@@ -1,16 +1,15 @@
 package by.iba.bussiness.owner;
 
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import javax.persistence.Id;
-import java.math.BigInteger;
 
 @Document(collection = "owner")
 public class Owner {
     private String email;
     private String name;
     @Id
-    private BigInteger id;
+    private ObjectId id;
 
     public String getEmail() {
         return email;
@@ -31,11 +30,11 @@ public class Owner {
     public Owner() {
     }
 
-    public BigInteger getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 

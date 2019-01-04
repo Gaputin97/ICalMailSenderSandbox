@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Objects;
 
 @Document(collection = "appointment")
 public class Appointment {
@@ -250,5 +251,37 @@ public class Appointment {
                 ", timeZone='" + timeZone + '\'' +
                 ", title='" + title + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Appointment that = (Appointment) o;
+        return duration == that.duration &&
+                Objects.equals(meetingId, that.meetingId) &&
+                Objects.equals(invitationTemplateKey, that.invitationTemplateKey) &&
+                Objects.equals(blendedDescription, that.blendedDescription) &&
+                Objects.equals(onlineDescription, that.onlineDescription) &&
+                Objects.equals(faceToFaceDescription, that.faceToFaceDescription) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(locationBLD, that.locationBLD) &&
+                Objects.equals(locationLVC, that.locationLVC) &&
+                Objects.equals(locationILT, that.locationILT) &&
+                Objects.equals(location, that.location) &&
+                Objects.equals(locationInfo, that.locationInfo) &&
+                Objects.equals(subject, that.subject) &&
+                Objects.equals(summary, that.summary) &&
+                Objects.equals(title, that.title) &&
+                Objects.equals(startDateTime, that.startDateTime) &&
+                Objects.equals(endDateTime, that.endDateTime) &&
+                Objects.equals(owner, that.owner) &&
+                Objects.equals(timeSlots, that.timeSlots) &&
+                Objects.equals(timeZone, that.timeZone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(meetingId, invitationTemplateKey, blendedDescription, onlineDescription, faceToFaceDescription, description, locationBLD, locationLVC, locationILT, location, locationInfo, subject, summary, title, startDateTime, endDateTime, duration, owner, timeSlots, timeZone);
     }
 }

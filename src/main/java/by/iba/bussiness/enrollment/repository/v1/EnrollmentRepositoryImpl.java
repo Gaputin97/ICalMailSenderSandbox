@@ -6,6 +6,7 @@ import by.iba.bussiness.enrollment.Enrollment;
 
 import by.iba.exception.RepositoryException;
 
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
     }
 
     @Override
-    public Enrollment getByEmailAndParentId(BigInteger parentId, String userEmail) {
+    public Enrollment getByEmailAndParentId(ObjectId parentId, String userEmail) {
         Query query = new Query(Criteria.where("parentId").is(parentId).and("userEmail").is(userEmail));
         Enrollment enrollment = mongoTemplate.findOne(query, Enrollment.class);
         if (enrollment == null) {
@@ -45,7 +46,7 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
     }
 
     @Override
-    public Enrollment getByEmailAndParentIdAndType(BigInteger parentId, String userEmail, EnrollmentType enrollmentType) {
+    public Enrollment getByEmailAndParentIdAndType(ObjectId parentId, String userEmail, EnrollmentType enrollmentType) {
         Query query = new Query(Criteria.where("parentId").is(parentId).and("userEmail").is(userEmail).and("enrollmentType").is(enrollmentType));
         Enrollment enrollment = mongoTemplate.findOne(query, Enrollment.class);
         if (enrollment == null) {
@@ -55,7 +56,7 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
     }
 
     @Override
-    public List<Enrollment> getAllByParentId(BigInteger parentId) {
+    public List<Enrollment> getAllByParentId(ObjectId parentId) {
         Query query = new Query(Criteria.where("parentId").is(parentId));
         List<Enrollment> enrollmentList = mongoTemplate.find(query, Enrollment.class);
         if (enrollmentList.isEmpty()) {
@@ -65,7 +66,7 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
     }
 
     @Override
-    public Enrollment getOneByParentId(BigInteger parentId) {
+    public Enrollment getOneByParentId(ObjectId parentId) {
         Query query = new Query(Criteria.where("parentId").is(parentId));
         Enrollment enrollment = mongoTemplate.findOne(query, Enrollment.class);
         if (enrollment == null) {

@@ -16,6 +16,7 @@ import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.Attendee;
 import net.fortuna.ical4j.model.property.Method;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +81,7 @@ public class MessageSender {
             javaMailSender.send(message);
 
             logger.info("Message was sended to " + editedUserEmail);
-            BigInteger meetingId = meeting.getId();
+            ObjectId meetingId = meeting.getId();
             Enrollment enrollment = enrollmentRepository.getByEmailAndParentId(meetingId, editedUserEmail);
             if (enrollment == null) {
                 enrollment = new Enrollment();

@@ -1,12 +1,13 @@
 package by.iba.bussiness.meeting.timeslot;
 
 import java.util.List;
+import java.util.Objects;
 
 public class TimeSlot{
     private long duration;
     private String endDateTime;
     private String facilityInformation;
-    private float id;
+    private int id;
     private List<String> resourceEmails;
     private String startDateTime;
 
@@ -34,11 +35,11 @@ public class TimeSlot{
         this.facilityInformation = facilityInformation;
     }
 
-    public float getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(float id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -56,5 +57,19 @@ public class TimeSlot{
 
     public void setStartDateTime(String startDateTime) {
         this.startDateTime = startDateTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TimeSlot timeSlot = (TimeSlot) o;
+        return Objects.equals(endDateTime, timeSlot.endDateTime) &&
+                Objects.equals(startDateTime, timeSlot.startDateTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(endDateTime, startDateTime);
     }
 }

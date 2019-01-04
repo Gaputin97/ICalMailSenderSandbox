@@ -5,6 +5,7 @@ import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.exception.ServiceException;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class EnrollmentChecker {
     }
 
     public boolean isExistsEnrollment(HttpServletRequest request, Learner learner, Meeting meeting) {
-        BigInteger meetingId = meeting.getId();
+        ObjectId meetingId = meeting.getId();
         boolean isExists;
         String email = learner.getEmail();
         Enrollment enrollment = enrollmentRepository.getByEmailAndParentId(meetingId, email);

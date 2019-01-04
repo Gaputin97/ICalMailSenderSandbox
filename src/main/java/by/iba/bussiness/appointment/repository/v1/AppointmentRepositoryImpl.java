@@ -3,6 +3,7 @@ package by.iba.bussiness.appointment.repository.v1;
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.repository.AppointmentRepository;
 import by.iba.exception.RepositoryException;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
     }
 
     @Override
-    public Appointment getByMeetingId(String meetingId) {
+    public Appointment getByMeetingId(ObjectId meetingId) {
         Query query = new Query(Criteria.where("meetingId").is(meetingId));
         Appointment appointment = mongoTemplate.findOne(query, Appointment.class);
         if(appointment == null){
