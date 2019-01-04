@@ -3,12 +3,10 @@ package by.iba.bussiness.invitation_template;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.math.BigInteger;
-
 @Document(collection = "invitationTemplate")
 public class InvitationTemplate {
     @Id
-    private BigInteger id;
+    private String id;
     private int index;
     private String key;
     private String from;
@@ -21,11 +19,11 @@ public class InvitationTemplate {
     private String locationLVC;
     private String subject;
 
-    public BigInteger getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(String id) {
         this.id = id;
     }
 

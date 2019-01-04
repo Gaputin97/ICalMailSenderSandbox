@@ -7,7 +7,6 @@ import by.iba.bussiness.owner.Owner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -36,26 +35,28 @@ public class AppointmentHandler {
         Owner oldAppointmentOwner = sourceAppointment.getOwner();
         Owner tempAppointmentOwner = tempAppointment.getOwner();
 
-        if(sourceAppointment.hashCode() == tempAppointment.hashCode()) {
+        int maximumIndex;
+        if (sourceAppointment.hashCode() == tempAppointment.hashCode()) {
             appointment = sourceAppointment;
-        } else if (sourceAppointment.getTimeSlots().hashCode() == tempAppointment.getTimeSlots().hashCode()) {
+        } else if (!sourceAppointment.getTimeSlots().equals(tempAppointment.getTimeSlots())) {
             appointment = tempAppointment;
-            int rescheduleIndex = getMaximumSequence(sourceAppointment);
-            tempAppointment.setRescheduleIndex(rescheduleIndex);
+            maximumIndex = getMaximumIndex(sourceAppointment);
+            tempAppointment.setRescheduleIndex(++maximumIndex);
         } else if (!oldAppointmentDescription.equals(tempAppointmentDescription) ||
                 (!oldAppointmentLocation.equals(tempAppointmentLocation)) ||
                 (!oldAppointmentOwner.equals(tempAppointmentOwner))) {
-            int rescheduleIndex = getMaximumSequence(sourceAppointment);
-            tempAppointment.setUpdateIndex(rescheduleIndex);
+            appointment = tempAppointment;
+            maximumIndex = getMaximumIndex(sourceAppointment);
+            tempAppointment.setUpdateIndex(++maximumIndex);
         }
         appointment.setId(sourceAppointment.getId());
         appointmentRepository.save(appointment);
         return appointment;
     }
 
-    private int getMaximumSequence(Appointment sourceAppointment) {
+    private int getMaximumIndex(Appointment sourceAppointment) {
         int updateIndex = sourceAppointment.getUpdateIndex();
         int rescheduleIndex = sourceAppointment.getRescheduleIndex();
-        return updateIndex > rescheduleIndex ? ++updateIndex : ++rescheduleIndex;
+        return updateIndex > rescheduleIndex ? updateIndex : rescheduleIndex;
     }
 }

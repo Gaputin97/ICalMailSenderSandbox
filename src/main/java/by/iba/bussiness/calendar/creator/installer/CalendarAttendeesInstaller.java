@@ -71,27 +71,33 @@ public class CalendarAttendeesInstaller {
             EnrollmentType enrollmentType = learner.getEnrollmentType();
             Calendar calendar = null;
             Enrollment enrollment = enrollmentRepository.getByEmailAndParentIdAndType(meetingId, email, enrollmentType);
-            Appointment appointment = appointmentRepository.getByMeetingId(meetingId);
+            Appointment oldAppointment = appointmentRepository.getByMeetingId(meetingId);
             Appointment newAppointment;
-            if (appointment == null) {
+            if (oldAppointment == null) {
                 newAppointment = appointmentCreator.createAppointment(meeting, invitationTemplate);
                 Calendar calendarInvite = calendarFactory.createInvitationCalendarTemplate(dateHelper, newAppointment, enrollment);
+                appointmentRepository.save(newAppointment);
                 calendar = calendarInvite;
             } else {
                 if (enrollment == null) {
                     if (enrollmentChecker.wasChangedStatus(learner, meetingId)) {
-                        Calendar calendarCancel = calendarFactory.createCancelCalendarTemplate(dateHelper, appointment, enrollment);
+                        Calendar calendarCancel = calendarFactory.createCancelCalendarTemplate(dateHelper, oldAppointment, enrollment);
                         calendar = calendarCancel;
                     } else {
-                        Calendar calendarInvite = calendarFactory.createInvitationCalendarTemplate(dateHelper, appointment, enrollment);
+                        Calendar calendarInvite = calendarFactory.createInvitationCalendarTemplate(dateHelper, oldAppointment, enrollment);
                         calendar = calendarInvite;
                     }
                 } else {
                     Appointment updatedAppointment = appointmentHandler.updateAndGetAppointment(meeting, invitationTemplate);
-                    if (!(updatedAppointment.getRescheduleIndex() <= appointment.getRescheduleIndex()
-                            && updatedAppointment.getUpdateIndex() <= appointment.getUpdateIndex())) {
+                    if (updatedAppointment.getUpdateIndex() == 0 && updatedAppointment.getRescheduleIndex() == 0) {
                         Calendar calendarInvite = calendarFactory.createInvitationCalendarTemplate(dateHelper, updatedAppointment, enrollment);
                         calendar = calendarInvite;
+                    } else {
+                        if ((updatedAppointment.getRescheduleIndex() > oldAppointment.getRescheduleIndex()
+                                || updatedAppointment.getUpdateIndex() > oldAppointment.getUpdateIndex())) {
+                            Calendar calendarInvite = calendarFactory.createInvitationCalendarTemplate(dateHelper, updatedAppointment, enrollment);
+                            calendar = calendarInvite;
+                        }
                     }
                 }
             }

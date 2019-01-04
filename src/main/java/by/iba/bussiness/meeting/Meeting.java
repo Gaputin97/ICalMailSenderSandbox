@@ -16,7 +16,7 @@ public class Meeting {
     private short duration;
     private String startDateTime;
     private String endDateTime;
-    private String invitationTemplateKey;
+    private String invitationTemplate;
     private String location;
     private String locationInfo;
     private Owner owner;
@@ -60,12 +60,12 @@ public class Meeting {
         this.endDateTime = endDateTime;
     }
 
-    public String getInvitationTemplateKey() {
-        return invitationTemplateKey;
+    public String getInvitationTemplate() {
+        return invitationTemplate;
     }
 
-    public void setInvitationTemplateKey(String invitationTemplateKey) {
-        this.invitationTemplateKey = invitationTemplateKey;
+    public void setInvitationTemplate(String invitationTemplate) {
+        this.invitationTemplate = invitationTemplate;
     }
 
     public String getLocation() {
@@ -140,7 +140,7 @@ public class Meeting {
                 ", duration=" + duration +
                 ", startDateTime='" + startDateTime + '\'' +
                 ", endDateTime='" + endDateTime + '\'' +
-                ", invitationTemplateKey='" + invitationTemplateKey + '\'' +
+                ", invitationTemplate='" + invitationTemplate + '\'' +
                 ", location='" + location + '\'' +
                 ", locationInfo='" + locationInfo + '\'' +
                 ", owner=" + owner +
