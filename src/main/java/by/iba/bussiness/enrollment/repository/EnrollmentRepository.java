@@ -13,4 +13,6 @@ public interface EnrollmentRepository {
     Enrollment getByEmailAndParentIdAndType(BigInteger parentId, String userEmail, EnrollmentType enrollmentType);
 
     List<Enrollment> getAllByParentId(BigInteger parentId);
+
+    Enrollment getOneByParentId(BigInteger parentId);
 }

@@ -1,6 +1,8 @@
 package by.iba.bussiness.enrollment;
 
+import by.iba.bussiness.owner.Owner;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigInteger;
@@ -18,9 +20,6 @@ public class Enrollment {
     private String calendarDate;
     private EnrollmentType enrollmentType;
     private String currentCalendarUid;
-
-    public Enrollment() {
-    }
 
     public BigInteger getId() {
         return id;
