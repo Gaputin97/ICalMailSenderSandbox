@@ -3,7 +3,9 @@ package by.iba.bussiness.calendar.creator.definer;
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.enrollment.Enrollment;
 import net.fortuna.ical4j.model.property.Sequence;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SequenceDefiner {
     public Sequence defineSequence(Appointment appointment, Enrollment enrollment) {
         Sequence sequence;

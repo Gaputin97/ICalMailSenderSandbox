@@ -1,8 +1,8 @@
 package by.iba.bussiness.calendar.creator.installer;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.appointment.AppointmentComparator;
 import by.iba.bussiness.appointment.AppointmentCreator;
+import by.iba.bussiness.appointment.AppointmentHandler;
 import by.iba.bussiness.appointment.repository.AppointmentRepository;
 import by.iba.bussiness.calendar.CalendarFactory;
 import by.iba.bussiness.calendar.attendee.Learner;
@@ -43,20 +43,23 @@ public class CalendarAttendeesInstaller {
     private EnrollmentChecker enrollmentChecker;
     private AppointmentCreator appointmentCreator;
     private AppointmentRepository appointmentRepository;
-    private AppointmentComparator appointmentComparator;
+    private AppointmentHandler appointmentHandler;
 
     @Autowired
     public CalendarAttendeesInstaller(DateHelperDefiner dateHelperDefiner,
                                       CalendarFactory calendarFactory,
                                       EnrollmentRepository enrollmentRepository,
-                                      EnrollmentChecker enrollmentChecker, AppointmentCreator appointmentCreator, AppointmentRepository appointmentRepository, AppointmentComparator appointmentComparator) {
+                                      EnrollmentChecker enrollmentChecker,
+                                      AppointmentCreator appointmentCreator,
+                                      AppointmentRepository appointmentRepository,
+                                      AppointmentHandler appointmentHandler) {
         this.dateHelperDefiner = dateHelperDefiner;
         this.calendarFactory = calendarFactory;
         this.enrollmentRepository = enrollmentRepository;
         this.enrollmentChecker = enrollmentChecker;
         this.appointmentCreator = appointmentCreator;
         this.appointmentRepository = appointmentRepository;
-        this.appointmentComparator = appointmentComparator;
+        this.appointmentHandler = appointmentHandler;
     }
 
     public List<Calendar> createCalendarList(List<Learner> learners, Meeting meeting, InvitationTemplate invitationTemplate) {
@@ -84,7 +87,7 @@ public class CalendarAttendeesInstaller {
                         calendar = calendarInvite;
                     }
                 } else {
-                    Appointment updatedAppointment = appointmentComparator.comparateAppointments(appointment);
+                    Appointment updatedAppointment = appointmentHandler.updateAndGetAppointment(meeting, invitationTemplate);
                     if (!(updatedAppointment.getRescheduleIndex() <= appointment.getRescheduleIndex()
                             && updatedAppointment.getUpdateIndex() <= appointment.getUpdateIndex())) {
                         Calendar calendarInvite = calendarFactory.createInvitationCalendarTemplate(dateHelper, updatedAppointment, enrollment);
@@ -92,7 +95,7 @@ public class CalendarAttendeesInstaller {
                     }
                 }
             }
-            addAttendeToCalendar(email, calendar);
+            addAttendeeToCalendar(email, calendar);
             try {
                 calendarList.add(new Calendar(calendar));
             } catch (ParseException | IOException | URISyntaxException e) {
@@ -103,7 +106,7 @@ public class CalendarAttendeesInstaller {
         return calendarList;
     }
 
-    public void addAttendeToCalendar(String email, Calendar calendar) {
+    public void addAttendeeToCalendar(String email, Calendar calendar) {
         CalendarComponent vEvent = calendar.getComponent(Component.VEVENT);
         Attendee attendee = new Attendee(URI.create("mailto:" + email));
         attendee.getParameters().add(Rsvp.FALSE);
