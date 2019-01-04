@@ -4,6 +4,8 @@ import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.calendar.creator.UidDefiner;
 import by.iba.bussiness.calendar.date.model.single.SingleDateHelper;
 import by.iba.bussiness.calendar.session.Session;
+import by.iba.bussiness.invitation_template.InvitationTemplate;
+import by.iba.bussiness.invitation_template.service.InvitationTemplateService;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.exception.CalendarException;
 import net.fortuna.ical4j.model.Calendar;
@@ -20,7 +22,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.Arrays;
-import java.util.UUID;
 
 @Component
 
@@ -30,15 +31,19 @@ public class SimpleMeetingCalendarTemplateCreator {
     private Calendar requestCalendar;
     private Calendar cancelCalendar;
     private UidDefiner uidDefiner;
+    private InvitationTemplateService invitationTemplateService;
 
     @Autowired
     public SimpleMeetingCalendarTemplateCreator(CalendarTextEditor calendarTextEditor,
                                                 @Qualifier("requestCalendar") Calendar requestCalendar,
-                                                @Qualifier("cancelCalendar") Calendar cancelCalendar, UidDefiner uidDefiner) {
+                                                @Qualifier("cancelCalendar") Calendar cancelCalendar,
+                                                UidDefiner uidDefiner,
+                                                InvitationTemplateService invitationTemplateService) {
         this.calendarTextEditor = calendarTextEditor;
         this.requestCalendar = requestCalendar;
         this.cancelCalendar = cancelCalendar;
         this.uidDefiner = uidDefiner;
+        this.invitationTemplateService = invitationTemplateService;
     }
 
     public Calendar createSimpleMeetingInvitationTemplate(SingleDateHelper singleDateHelper, Meeting meeting, String calendarUid) {

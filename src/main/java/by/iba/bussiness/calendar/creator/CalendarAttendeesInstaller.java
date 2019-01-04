@@ -1,5 +1,6 @@
 package by.iba.bussiness.calendar.creator;
 
+import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.CalendarFactory;
 import by.iba.bussiness.calendar.attendee.Learner;
 import by.iba.bussiness.calendar.date.DateHelperDefiner;
@@ -37,16 +38,17 @@ public class CalendarAttendeesInstaller {
         this.calendarFactory = calendarFactory;
     }
 
-    public List<Calendar> createCalendarList(List<Learner> learners, Meeting meeting, String calendarUid) {
+    public List<Calendar> createCalendarList(List<Learner> learners, Appointment appointment, String calendarUid) {
         List<Calendar> calendarList = new ArrayList<>();
-        DateHelper dateHelper = dateHelperDefiner.definerDateHelper(meeting);
-        Calendar calendarInvite = calendarFactory.createInvitationCalendarTemplate(dateHelper, meeting, calendarUid);
-        Calendar calendarCancel = calendarFactory.createCancelCalendarTemplate(dateHelper, meeting, calendarUid);
+        DateHelper dateHelper = dateHelperDefiner.definerDateHelper(appointment);
+
         for (Learner learner : learners) {
             Calendar calendar;
             if (learner.getEnrollmentType() == EnrollmentType.CONFIRMED) {
+                Calendar calendarInvite = calendarFactory.createInvitationCalendarTemplate(dateHelper, appointment, calendarUid);
                 calendar = calendarInvite;
             } else {
+                Calendar calendarCancel = calendarFactory.createCancelCalendarTemplate(dateHelper, appointment, calendarUid);
                 calendar = calendarCancel;
             }
             String email = learner.getEmail();

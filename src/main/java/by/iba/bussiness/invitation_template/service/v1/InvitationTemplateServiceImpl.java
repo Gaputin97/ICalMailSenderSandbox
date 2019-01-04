@@ -83,6 +83,6 @@ public class InvitationTemplateServiceImpl implements InvitationTemplateService 
     @Override
     public InvitationTemplate getInvitationTemplateByMeetingId(HttpServletRequest request, String MeetingId) {
         Meeting meeting = meetingService.getMeetingById(request, MeetingId);
-        return getInvitationTemplateByCode(request, meeting.getInvitationResourcesTemplate());
+        return getInvitationTemplateByCode(request, meeting.getInvitationTemplateKey());
     }
 }
