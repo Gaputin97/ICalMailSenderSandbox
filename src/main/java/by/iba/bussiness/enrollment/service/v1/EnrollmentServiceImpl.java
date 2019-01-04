@@ -1,14 +1,14 @@
 package by.iba.bussiness.enrollment.service.v1;
 
-import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.CalendarFactory;
 import by.iba.bussiness.calendar.attendee.Learner;
-import by.iba.bussiness.calendar.creator.CalendarAttendeesInstaller;
+import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
 import by.iba.bussiness.calendar.date.DateHelperDefiner;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentChecker;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
+import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.invitation_template.service.InvitationTemplateService;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.MeetingService;
@@ -32,7 +32,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
-import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -132,18 +131,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             logger.error("Invitation template of meeting " + meetingId + " is empty");
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner template");
         }
-        Appointment appointment = null;
+        InvitationTemplate invitationTemplate = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
         if (learners.isEmpty()) {
             calendarSendingResponse = new CalendarSendingResponse(false, "All learners have last version of calendar");
         } else {
-            Enrollment enrollment = enrollmentRepository.getOneByParentId(meeting.getId());
-            String calendarUid;
-            if (enrollment == null) {
-                calendarUid = "";
-            } else {
-                calendarUid = enrollment.getCurrentCalendarUid();
-            }
-            List<Calendar> calendarList = calendarAttendeesInstaller.createCalendarList(learners, appointment);
+            List<Calendar> calendarList = calendarAttendeesInstaller.createCalendarList(learners, meeting, invitationTemplate);
             calendarSendingResponse = messageSender.sendMessageToAllRecipients(calendarList, meeting);
         }
         return calendarSendingResponse;

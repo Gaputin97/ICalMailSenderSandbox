@@ -5,6 +5,7 @@ import by.iba.bussiness.calendar.creator.complex.ComplexMeetingCalendarTemplateC
 import by.iba.bussiness.calendar.creator.recurrence.RecurrenceMeetingCalendarTemplateCreator;
 import by.iba.bussiness.calendar.creator.single.SimpleMeetingCalendarTemplateCreator;
 import by.iba.bussiness.calendar.date.model.single.SingleDateHelper;
+import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.calendar.date.model.DateHelper;
 import by.iba.bussiness.calendar.date.model.complex.ComplexDateHelper;
@@ -28,39 +29,39 @@ public class CalendarFactory {
         this.complexMeetingCalendarTemplateCreator = complexMeetingCalendarTemplateCreator;
     }
 
-    public <T extends DateHelper> Calendar createInvitationCalendarTemplate(T helper, Appointment appointment, String calendarUid) {
+    public <T extends DateHelper> Calendar createInvitationCalendarTemplate(T helper, Appointment appointment, Enrollment enrollment) {
         Calendar calendar = null;
         switch (helper.getMeetingType()) {
             case SINGLE:
                 SingleDateHelper singleDateHelper = ((SingleDateHelper) helper);
-                calendar = simpleMeetingCalendarTemplateCreator.createSimpleMeetingInvitationTemplate(singleDateHelper, appointment, calendarUid);
+                calendar = simpleMeetingCalendarTemplateCreator.createSimpleMeetingInvitationTemplate(singleDateHelper, appointment, enrollment);
                 break;
             case RECURRENCE:
                 RecurrenceDateHelper recurrenceDateHelper = ((RecurrenceDateHelper) helper);
-                calendar = recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarInvitationTemplate(recurrenceDateHelper, appointment, calendarUid);
+                calendar = recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarInvitationTemplate(recurrenceDateHelper, appointment, enrollment);
                 break;
             case COMPLEX:
                 ComplexDateHelper complexDateHelper = ((ComplexDateHelper) helper);
-                calendar = complexMeetingCalendarTemplateCreator.createComplexCalendarInvitationTemplate(complexDateHelper, appointment, calendarUid);
+                calendar = complexMeetingCalendarTemplateCreator.createComplexCalendarInvitationTemplate(complexDateHelper, appointment, enrollment);
                 break;
         }
         return calendar;
     }
 
-    public <T extends DateHelper> Calendar createCancelCalendarTemplate(T helper, Appointment appointment, String calendarUid) {
+    public <T extends DateHelper> Calendar createCancelCalendarTemplate(T helper, Appointment appointment, Enrollment enrollment) {
         Calendar calendar = null;
         switch (helper.getMeetingType()) {
             case SINGLE:
                 SingleDateHelper singleDateHelper = ((SingleDateHelper) helper);
-                calendar = simpleMeetingCalendarTemplateCreator.createSimpleMeetingCancellationTemplate(singleDateHelper, appointment, calendarUid);
+                calendar = simpleMeetingCalendarTemplateCreator.createSimpleMeetingCancellationTemplate(singleDateHelper, appointment, enrollment);
                 break;
             case RECURRENCE:
                 RecurrenceDateHelper recurrenceDateHelper = ((RecurrenceDateHelper) helper);
-                calendar = recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarCancellationTemplate(recurrenceDateHelper, appointment, calendarUid);
+                calendar = recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarCancellationTemplate(recurrenceDateHelper, appointment, enrollment);
                 break;
             case COMPLEX:
                 ComplexDateHelper complexDateHelper = ((ComplexDateHelper) helper);
-                calendar = complexMeetingCalendarTemplateCreator.createComplexCalendarInvitationTemplate(complexDateHelper, appointment, calendarUid);
+                calendar = complexMeetingCalendarTemplateCreator.createComplexCalendarInvitationTemplate(complexDateHelper, appointment, enrollment);
                 break;
         }
         return calendar;

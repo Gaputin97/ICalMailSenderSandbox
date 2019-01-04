@@ -14,7 +14,6 @@ import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.Attendee;
 import net.fortuna.ical4j.model.property.Method;
-import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +78,7 @@ public class MessageSender {
             javaMailSender.send(message);
 
             logger.info("Message was sended to " + editedUserEmail);
-            ObjectId meetingId = meeting.getId();
+            BigInteger meetingId = meeting.getId();
             Enrollment enrollment = enrollmentRepository.getByEmailAndParentId(meetingId, editedUserEmail);
             if (enrollment == null) {
                 enrollment = new Enrollment();
@@ -89,6 +88,7 @@ public class MessageSender {
             EnrollmentType enrollmentType = statusParser.parseCalMethodToEnrollmentStatus(method);
             enrollment.setEnrollmentType(enrollmentType);
             enrollment.setCurrentCalendarUid(event.getUid().getValue());
+            enrollment.setCalendarVersion(event.getSequence().getValue());
             enrollmentRepository.save(enrollment);
             logger.info("New enrollment with meeting id" + meeting.getId() + " and user " + editedUserEmail + " was added");
         } catch (MessagingException e) {
@@ -99,7 +99,6 @@ public class MessageSender {
 
     public CalendarSendingResponse sendMessageToAllRecipients(List<Calendar> calendarList, Meeting meeting) {
         for (Calendar calendar : calendarList) {
-
             sendMessageToOneRecipient(calendar, meeting);
         }
         logger.info("Messages to all recipients were sended successfully");

@@ -1,10 +1,11 @@
 package by.iba.bussiness.appointment.repository;
 
 import by.iba.bussiness.appointment.Appointment;
-import org.bson.types.ObjectId;
+
+import java.math.BigInteger;
 
 public interface AppointmentRepository {
-    Appointment getByMeetingId(ObjectId code);
+    Appointment getByMeetingId(BigInteger code);
     Appointment save(Appointment appointment);
     Appointment update(Appointment appointment);
 }

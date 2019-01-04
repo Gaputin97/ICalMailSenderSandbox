@@ -2,7 +2,6 @@ package by.iba.bussiness.appointment;
 
 import by.iba.bussiness.meeting.timeslot.TimeSlot;
 import by.iba.bussiness.owner.Owner;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,8 +12,8 @@ import java.util.Objects;
 @Document(collection = "appointment")
 public class Appointment {
     @Id
-    private ObjectId id;
-    private ObjectId meetingId;
+    private BigInteger id;
+    private BigInteger meetingId;
     private String invitationTemplateKey;
     private int updateIndex;
     private int rescheduleIndex;
@@ -40,11 +39,11 @@ public class Appointment {
     public Appointment() {
     }
 
-    public ObjectId getId() {
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 
@@ -120,11 +119,11 @@ public class Appointment {
         this.subject = subject;
     }
 
-    public ObjectId getMeetingId() {
+    public BigInteger getMeetingId() {
         return meetingId;
     }
 
-    public void setMeetingId(ObjectId meetingId) {
+    public void setMeetingId(BigInteger meetingId) {
         this.meetingId = meetingId;
     }
 

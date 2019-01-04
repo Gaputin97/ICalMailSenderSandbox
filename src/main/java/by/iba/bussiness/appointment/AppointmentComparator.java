@@ -14,7 +14,7 @@ public class AppointmentComparator {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-    private Appointment comparateAppointments(Appointment newAppointment) {
+    public Appointment comparateAppointments(Appointment newAppointment) {
         Appointment oldAppointment = appointmentRepository.getByMeetingId(newAppointment.getMeetingId());
 
         Appointment appointment = null;

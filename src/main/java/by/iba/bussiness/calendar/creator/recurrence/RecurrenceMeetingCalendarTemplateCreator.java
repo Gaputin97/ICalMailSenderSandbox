@@ -1,13 +1,14 @@
 package by.iba.bussiness.calendar.creator.recurrence;
 
+import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
-import by.iba.bussiness.calendar.creator.UidDefiner;
+import by.iba.bussiness.calendar.creator.definer.UidDefiner;
 import by.iba.bussiness.calendar.date.DateHelperConstants;
 import by.iba.bussiness.calendar.date.model.reccurence.RecurrenceDateHelper;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.calendar.session.SessionParser;
-import by.iba.bussiness.meeting.Meeting;
+import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.meeting.timeslot.TimeSlot;
 import by.iba.exception.CalendarException;
 import net.fortuna.ical4j.model.*;
@@ -51,12 +52,12 @@ public class RecurrenceMeetingCalendarTemplateCreator {
         this.cancelCalendar = cancelCalendar;
     }
 
-    public Calendar createRecurrenceCalendarInvitationTemplate(RecurrenceDateHelper recurrenceDateHelper, Meeting meeting, String calendarUid) {
+    public Calendar createRecurrenceCalendarInvitationTemplate(RecurrenceDateHelper recurrenceDateHelper, Appointment appointment, Enrollment enrollment) {
         Rrule rrule = recurrenceDateHelper.getRrule();
         DateList exDatesList = new DateList();
         rrule.getExDates().forEach(x -> exDatesList.add(new Date(x)));
 
-        List<TimeSlot> meetingTimeSlots = meeting.getTimeSlots();
+        List<TimeSlot> meetingTimeSlots = appointment.getTimeSlots();
         TimeSlot firstTimeSlot = meetingTimeSlots.get(DateHelperConstants.NUMBER_OF_FIRST_TIME_SLOT);
         TimeSlot lastTimeSlot = meetingTimeSlots.get(meetingTimeSlots.size() - 1);
 
@@ -68,10 +69,10 @@ public class RecurrenceMeetingCalendarTemplateCreator {
         VEvent event;
         try {
             Sequence sequence = new Sequence("0");
-            Organizer organizer = new Organizer("mailto:" + meeting.getOwner().getEmail());
-            Location location = new Location((meeting.getLocation()));
-            Description description = new Description((meeting.getDescription()));
-            Summary summary = new Summary(meeting.getSummary());
+            Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
+            Location location = new Location((appointment.getLocation()));
+            Description description = new Description((appointment.getDescription()));
+            Summary summary = new Summary(appointment.getSummary());
             String frequency = rrule.getFrequency().toString();
             Long interval = rrule.getInterval();
             String until = iСalDateParser.parseToICalDate(increasedDate);
@@ -79,7 +80,7 @@ public class RecurrenceMeetingCalendarTemplateCreator {
 
             Recur recurrence = new Recur("FREQ=" + frequency + ";" + "INTERVAL=" + interval + ";" + "UNTIL=" + until + ";");
             RRule rRule = new RRule(recurrence);
-            Uid UID = uidDefiner.defineUid(calendarUid);
+            Uid UID = uidDefiner.defineUid(enrollment);
             DateTime startDateTime = new DateTime(firstSession.getStartDate());
             DateTime endDateTime = new DateTime(firstSession.getEndDate());
 
@@ -95,12 +96,12 @@ public class RecurrenceMeetingCalendarTemplateCreator {
         return calendar;
     }
 
-    public Calendar createRecurrenceCalendarCancellationTemplate(RecurrenceDateHelper recurrenceDateHelper, Meeting meeting, String calendarUid) {
+    public Calendar createRecurrenceCalendarCancellationTemplate(RecurrenceDateHelper recurrenceDateHelper, Appointment appointment, Enrollment enrollment) {
         Rrule rrule = recurrenceDateHelper.getRrule();
         DateList exDatesList = new DateList();
         rrule.getExDates().forEach(x -> exDatesList.add(new Date(x)));
 
-        List<TimeSlot> meetingTimeSlots = meeting.getTimeSlots();
+        List<TimeSlot> meetingTimeSlots = appointment.getTimeSlots();
         TimeSlot firstTimeSlot = meetingTimeSlots.get(DateHelperConstants.NUMBER_OF_FIRST_TIME_SLOT);
         TimeSlot lastTimeSlot = meetingTimeSlots.get(meetingTimeSlots.size() - 1);
 
@@ -112,10 +113,10 @@ public class RecurrenceMeetingCalendarTemplateCreator {
         VEvent event;
         try {
             Sequence sequence = new Sequence("0");
-            Organizer organizer = new Organizer("mailto:" + meeting.getOwner().getEmail());
-            Location location = new Location((meeting.getLocation()));
-            Description description = new Description((meeting.getDescription()));
-            Summary summary = new Summary(meeting.getSummary());
+            Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
+            Location location = new Location((appointment.getLocation()));
+            Description description = new Description((appointment.getDescription()));
+            Summary summary = new Summary(appointment.getSummary());
             String frequency = rrule.getFrequency().toString();
             Long interval = rrule.getInterval();
             String until = iСalDateParser.parseToICalDate(increasedDate);
@@ -123,7 +124,7 @@ public class RecurrenceMeetingCalendarTemplateCreator {
 
             Recur recurrence = new Recur("FREQ=" + frequency + ";" + "INTERVAL=" + interval + ";" + "UNTIL=" + until + ";");
             RRule rRule = new RRule(recurrence);
-            Uid UID = uidDefiner.defineUid(calendarUid);
+            Uid UID = uidDefiner.defineUid(enrollment);
             DateTime startDateTime = new DateTime(firstSession.getStartDate());
             DateTime endDateTime = new DateTime(firstSession.getEndDate());
 

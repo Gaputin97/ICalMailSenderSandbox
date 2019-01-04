@@ -1,9 +1,7 @@
 package by.iba.bussiness.enrollment;
 
-import by.iba.bussiness.owner.Owner;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigInteger;
@@ -12,7 +10,7 @@ import java.math.BigInteger;
 public class Enrollment {
     @Id
     private ObjectId id;
-    private ObjectId parentId;
+    private BigInteger parentId;
     private String userEmail;
     private String userName;
     private String subject;
@@ -30,11 +28,11 @@ public class Enrollment {
         this.id = id;
     }
 
-    public ObjectId getParentId() {
+    public BigInteger getParentId() {
         return parentId;
     }
 
-    public void setParentId(ObjectId parentId) {
+    public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
     }
 

@@ -2,10 +2,11 @@ package by.iba.bussiness.calendar.creator.single;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
-import by.iba.bussiness.calendar.creator.UidDefiner;
+import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
+import by.iba.bussiness.calendar.creator.definer.UidDefiner;
 import by.iba.bussiness.calendar.date.model.single.SingleDateHelper;
 import by.iba.bussiness.calendar.session.Session;
-import by.iba.bussiness.invitation_template.InvitationTemplate;
+import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.invitation_template.service.InvitationTemplateService;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.exception.CalendarException;
@@ -33,31 +34,35 @@ public class SimpleMeetingCalendarTemplateCreator {
     private Calendar cancelCalendar;
     private UidDefiner uidDefiner;
     private InvitationTemplateService invitationTemplateService;
+    private SequenceDefiner sequenceDefiner;
 
     @Autowired
     public SimpleMeetingCalendarTemplateCreator(CalendarTextEditor calendarTextEditor,
                                                 @Qualifier("requestCalendar") Calendar requestCalendar,
                                                 @Qualifier("cancelCalendar") Calendar cancelCalendar,
                                                 UidDefiner uidDefiner,
-                                                InvitationTemplateService invitationTemplateService) {
+                                                InvitationTemplateService invitationTemplateService,
+                                                SequenceDefiner sequenceDefiner) {
         this.calendarTextEditor = calendarTextEditor;
         this.requestCalendar = requestCalendar;
         this.cancelCalendar = cancelCalendar;
         this.uidDefiner = uidDefiner;
         this.invitationTemplateService = invitationTemplateService;
+        this.sequenceDefiner = sequenceDefiner;
     }
 
-    public Calendar createSimpleMeetingInvitationTemplate(SingleDateHelper singleDateHelper, Appointment appointment, String calendarUid) {
+    public Calendar createSimpleMeetingInvitationTemplate(SingleDateHelper singleDateHelper, Appointment appointment, Enrollment enrollment) {
         logger.info("Started creating invitation ics file with single meeting with id " + appointment.getMeetingId());
         Calendar calendar;
         VEvent event;
         try {
-            Sequence sequence = new Sequence("0");
+
+            Sequence sequence = sequenceDefiner.defineSequence(appointment, enrollment);
             Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
             Location location = new Location(appointment.getLocation());
             Description description = new Description((appointment.getDescription()));
             Summary summary = new Summary((appointment.getSummary()));
-            Uid UID = uidDefiner.defineUid(calendarUid);
+            Uid UID = uidDefiner.defineUid(enrollment);
             Session session = singleDateHelper.getSession();
             DateTime startDateTime = new DateTime(session.getStartDate());
             DateTime endDateTime = new DateTime(session.getEndDate());
@@ -73,17 +78,17 @@ public class SimpleMeetingCalendarTemplateCreator {
         return calendar;
     }
 
-    public Calendar createSimpleMeetingCancellationTemplate(SingleDateHelper singleDateHelper, Meeting meeting, String calendarUid) {
-        logger.info("Started creating cancellation ics file with single meeting with id " + meeting.getId());
+    public Calendar createSimpleMeetingCancellationTemplate(SingleDateHelper singleDateHelper, Appointment appointment, Enrollment enrollment) {
+        logger.info("Started creating cancellation ics file with single meeting with id " + appointment.getId());
         Calendar calendar;
         VEvent event;
         try {
-            Sequence sequence = new Sequence("0");
-            Organizer organizer = new Organizer("mailto:" + meeting.getOwner().getEmail());
-            Location location = new Location((meeting.getLocation()));
-            Description description = new Description((meeting.getDescription()));
-            Summary summary = new Summary((meeting.getSummary()));
-            Uid UID = uidDefiner.defineUid(calendarUid);
+            Sequence sequence = sequenceDefiner.defineSequence(appointment, enrollment);
+            Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
+            Location location = new Location((appointment.getLocation()));
+            Description description = new Description((appointment.getDescription()));
+            Summary summary = new Summary((appointment.getSummary()));
+            Uid UID = uidDefiner.defineUid(enrollment);
             Session session = singleDateHelper.getSession();
             DateTime startDateTime = new DateTime(session.getStartDate());
             DateTime endDateTime = new DateTime(session.getEndDate());
