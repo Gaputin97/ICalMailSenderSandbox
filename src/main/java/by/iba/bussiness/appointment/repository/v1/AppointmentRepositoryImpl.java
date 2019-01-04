@@ -40,9 +40,11 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
         return appointment;
     }
 
+
+
     @Override
     public Appointment update(Appointment appointment) {
-        Query query = new Query(Criteria.where("code").is(appointment.getCode()));
+        Query query = new Query(Criteria.where("code").is(appointment.getInvitationTemplateKey()));
         Update update = new Update();
 //        update.getUpdateObject()  //REWORK
 //        Appointment appointment1 = mongoTemplate.update

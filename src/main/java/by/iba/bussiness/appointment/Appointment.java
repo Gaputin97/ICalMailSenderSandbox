@@ -1,18 +1,18 @@
 package by.iba.bussiness.appointment;
 
+import by.iba.bussiness.meeting.timeslot.TimeSlot;
+import by.iba.bussiness.owner.Owner;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigInteger;
+import java.util.List;
 
 @Document(collection = "appointment")
 public class Appointment {
     @Id
     private String id;
     private int index;
-    private String code;
-    private String from;
-    private String fromName;
     private String blendedDescription;
     private String faceToFaceDescription;
     private String onlineDescription;
@@ -21,6 +21,18 @@ public class Appointment {
     private String locationLVC;
     private String subject;
     private BigInteger meetingId;
+    private String description;
+    private float duration;
+    private String startDateTime;
+    private String endDateTime;
+    private String invitationTemplateKey;
+    private String location;
+    private String locationInfo;
+    private Owner owner;
+    private String summary;
+    private List<TimeSlot> timeSlots;
+    private String timeZone;
+    private String title;
 
     public Appointment() {
     }
@@ -39,30 +51,6 @@ public class Appointment {
 
     public void setIndex(int index) {
         this.index = index;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public String getFromName() {
-        return fromName;
-    }
-
-    public void setFromName(String fromName) {
-        this.fromName = fromName;
     }
 
     public String getBlendedDescription() {
@@ -129,14 +117,107 @@ public class Appointment {
         this.meetingId = meetingId;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public float getDuration() {
+        return duration;
+    }
+
+    public void setDuration(float duration) {
+        this.duration = duration;
+    }
+
+    public String getStartDateTime() {
+        return startDateTime;
+    }
+
+    public void setStartDateTime(String startDateTime) {
+        this.startDateTime = startDateTime;
+    }
+
+    public String getEndDateTime() {
+        return endDateTime;
+    }
+
+    public void setEndDateTime(String endDateTime) {
+        this.endDateTime = endDateTime;
+    }
+
+    public String getInvitationTemplateKey() {
+        return invitationTemplateKey;
+    }
+
+    public void setInvitationTemplateKey(String invitationTemplateKey) {
+        this.invitationTemplateKey = invitationTemplateKey;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getLocationInfo() {
+        return locationInfo;
+    }
+
+    public void setLocationInfo(String locationInfo) {
+        this.locationInfo = locationInfo;
+    }
+
+    public Owner getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Owner owner) {
+        this.owner = owner;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public List<TimeSlot> getTimeSlots() {
+        return timeSlots;
+    }
+
+    public void setTimeSlots(List<TimeSlot> timeSlots) {
+        this.timeSlots = timeSlots;
+    }
+
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     @Override
     public String toString() {
         return "Appointment{" +
                 "id='" + id + '\'' +
                 ", index=" + index +
-                ", code='" + code + '\'' +
-                ", from='" + from + '\'' +
-                ", fromName='" + fromName + '\'' +
                 ", blendedDescription='" + blendedDescription + '\'' +
                 ", faceToFaceDescription='" + faceToFaceDescription + '\'' +
                 ", onlineDescription='" + onlineDescription + '\'' +
@@ -145,6 +226,18 @@ public class Appointment {
                 ", locationLVC='" + locationLVC + '\'' +
                 ", subject='" + subject + '\'' +
                 ", meetingId=" + meetingId +
+                ", description='" + description + '\'' +
+                ", duration=" + duration +
+                ", startDateTime='" + startDateTime + '\'' +
+                ", endDateTime='" + endDateTime + '\'' +
+                ", invitationTemplateKey='" + invitationTemplateKey + '\'' +
+                ", location='" + location + '\'' +
+                ", locationInfo='" + locationInfo + '\'' +
+                ", owner=" + owner +
+                ", summary='" + summary + '\'' +
+                ", timeSlots=" + timeSlots +
+                ", timeZone='" + timeZone + '\'' +
+                ", title='" + title + '\'' +
                 '}';
     }
 }

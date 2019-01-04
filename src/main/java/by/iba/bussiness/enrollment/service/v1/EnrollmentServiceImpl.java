@@ -123,7 +123,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     public CalendarSendingResponse enrollUsers(HttpServletRequest request, String meetingId, List<Learner> learners) {
         CalendarSendingResponse calendarSendingResponse;
         Meeting meeting = meetingService.getMeetingById(request, meetingId);
-        String invitationTemplateKey = meeting.getInvitationTemplate();
+        String invitationTemplateKey = meeting.getInvitationTemplateKey();
 //        if (invitationTemplateKey.isEmpty()) {
 //            logger.error("Invitation template of meeting " + meetingId + " is null");
 //            throw new ServiceException("Meeting " + meetingId + " doesn't have learner template");
