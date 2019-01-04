@@ -7,6 +7,7 @@ import by.iba.bussiness.owner.Owner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,6 +26,7 @@ public class AppointmentHandler {
         Appointment tempAppointment = appointmentCreator.createAppointment(updatedMeeting, updatedTemplate);
         Appointment sourceAppointment = appointmentRepository.getByMeetingId(tempAppointment.getMeetingId());
         Appointment appointment = null;
+
         String oldAppointmentDescription = sourceAppointment.getDescription();
         String tempAppointmentDescription = tempAppointment.getDescription();
 
@@ -46,6 +48,8 @@ public class AppointmentHandler {
             int rescheduleIndex = getMaximumSequence(sourceAppointment);
             tempAppointment.setUpdateIndex(rescheduleIndex);
         }
+        appointment.setId(sourceAppointment.getId());
+        appointmentRepository.save(appointment);
         return appointment;
     }
 
