@@ -11,6 +11,7 @@ import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.MeetingService;
 import by.iba.bussiness.response.CalendarSendingResponse;
 import by.iba.bussiness.sender.MessageSender;
+import by.iba.bussiness.sender.ResponseStatus;
 import by.iba.bussiness.token.model.JavaWebToken;
 import by.iba.bussiness.token.service.TokenService;
 import by.iba.exception.ServiceException;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.ParameterizedTypeReference;
+
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -115,18 +117,17 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public CalendarSendingResponse enrollLearners(HttpServletRequest request, String meetingId, List<Learner> learners) {
-        CalendarSendingResponse calendarSendingResponse;
+    public List<ResponseStatus> enrollLearners(HttpServletRequest request, String meetingId, List<Learner> learners) {
         Meeting meeting = meetingService.getMeetingById(request, meetingId);
         String invitationTemplateKey = meeting.getInvitationTemplate();
         if (invitationTemplateKey.isEmpty()) {
-            logger.error("Invitation template of meeting " + meetingId + " is empty");
-            throw new ServiceException("Meeting " + meetingId + " doesn't have learner template");
+            logger.error("Can't enroll learners to this event, cause can't find some invitation template by meeting id: " + meetingId);
+            throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
         }
         InvitationTemplate invitationTemplate = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
         enrollmentsPreInstaller.installEnrollments(learners, meetingId);
         List<Calendar> calendarList = calendarAttendeesInstaller.installCalendarListAndSaveAppointments(learners, meeting, invitationTemplate);
-        calendarSendingResponse = messageSender.sendMessageToAllRecipientsAndSaveEnrollments(calendarList, meeting);
-        return calendarSendingResponse;
+        List<ResponseStatus> responseStatusList = messageSender.sendMessageToAllRecipientsAndSaveEnrollments(calendarList, meeting);
+        return responseStatusList;
     }
 }

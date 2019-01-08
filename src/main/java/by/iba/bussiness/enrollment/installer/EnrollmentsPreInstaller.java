@@ -41,8 +41,6 @@ public class EnrollmentsPreInstaller {
                     newEnrollment.setUserEmail(email);
                     newEnrollment.setCurrentCalendarUid(UUID.randomUUID().toString());
                     enrollmentRepository.save(newEnrollment);
-
-
                 }
             }
         }

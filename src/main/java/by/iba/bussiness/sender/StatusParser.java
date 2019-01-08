@@ -1,4 +1,4 @@
-package by.iba.bussiness.sender.parser;
+package by.iba.bussiness.sender;
 
 import by.iba.bussiness.calendar.CalendarStatus;
 import by.iba.bussiness.enrollment.EnrollmentStatus;
@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class StatusParser {
-
     private static final String CANCEL_CALENDAR_METHOD = "CANCEL";
 
     public String parseCalMethodToEnrollmentStatus(Method method) {

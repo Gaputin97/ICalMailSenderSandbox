@@ -2,7 +2,7 @@ package by.iba.bussiness.enrollment.creator;
 
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
-import by.iba.bussiness.sender.parser.StatusParser;
+import by.iba.bussiness.sender.StatusParser;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.component.VEvent;

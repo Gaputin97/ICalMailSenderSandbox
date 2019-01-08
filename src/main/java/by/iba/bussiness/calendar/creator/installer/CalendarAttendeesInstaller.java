@@ -26,12 +26,8 @@ import java.util.List;
 @org.springframework.stereotype.Component
 public class CalendarAttendeesInstaller {
     private static final Logger logger = LoggerFactory.getLogger(CalendarAttendeesInstaller.class);
-    private AppointmentCalendarCreator appointmentCalendarCreator;
-
     @Autowired
-    public CalendarAttendeesInstaller(AppointmentCalendarCreator appointmentCalendarCreator) {
-        this.appointmentCalendarCreator = appointmentCalendarCreator;
-    }
+    private AppointmentCalendarCreator appointmentCalendarCreator;
 
     public List<Calendar> installCalendarListAndSaveAppointments(List<Learner> learners, Meeting meeting, InvitationTemplate invitationTemplate) {
         List<Calendar> calendarList = new ArrayList<>();
@@ -50,13 +46,12 @@ public class CalendarAttendeesInstaller {
         return calendarList;
     }
 
-    public void addAttendeeToCalendar(String email, Calendar calendar) {
+    private void addAttendeeToCalendar(String email, Calendar calendar) {
         CalendarComponent vEvent = calendar.getComponent(Component.VEVENT);
         Attendee attendee = new Attendee(URI.create("mailto:" + email));
         attendee.getParameters().add(Rsvp.FALSE);
         attendee.getParameters().add(Role.REQ_PARTICIPANT);
         attendee.getParameters().add(PartStat.ACCEPTED);
         vEvent.getProperties().add(attendee);
-
     }
 }

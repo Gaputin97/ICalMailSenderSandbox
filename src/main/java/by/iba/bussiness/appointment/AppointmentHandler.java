@@ -31,16 +31,17 @@ public class AppointmentHandler {
         String newAppointmentDescription = newAppointment.getDescription();
 
         String oldAppointmentLocation = sourceAppointment.getLocation();
-        String tempAppointmentLocation = newAppointment.getLocation();
+        String newAppointmentLocation = newAppointment.getLocation();
 
         Owner oldAppointmentOwner = sourceAppointment.getOwner();
-        Owner tempAppointmentOwner = newAppointment.getOwner();
+        Owner newAppointmentOwner = newAppointment.getOwner();
 
         BigInteger sourceId = sourceAppointment.getId();
         int sourceUpdatedIndex = sourceAppointment.getUpdateIndex();
         int sourceRescheduledIndex = sourceAppointment.getRescheduleIndex();
 
         int maximumIndex;
+
         if (sourceAppointment.equals(newAppointment)) {
             newAppointment = sourceAppointment;
         } else {
@@ -49,8 +50,8 @@ public class AppointmentHandler {
                 newAppointment.setUpdateIndex(sourceUpdatedIndex);
                 newAppointment.setRescheduleIndex(++maximumIndex);
             } else if (!oldAppointmentDescription.equals(newAppointmentDescription) ||
-                    (!oldAppointmentLocation.equals(tempAppointmentLocation)) ||
-                    (!oldAppointmentOwner.equals(tempAppointmentOwner))) {
+                    (!oldAppointmentLocation.equals(newAppointmentLocation)) ||
+                    (!oldAppointmentOwner.equals(newAppointmentOwner))) {
                 newAppointment.setRescheduleIndex(sourceRescheduledIndex);
                 newAppointment.setUpdateIndex(++maximumIndex);
             }

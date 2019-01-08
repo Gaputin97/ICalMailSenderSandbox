@@ -57,21 +57,4 @@ public class MeetingServiceImpl implements MeetingService {
         }
         return meeting;
     }
-
-    @Override
-    public List<Meeting> getAllMeetings(HttpServletRequest request) {
-        JavaWebToken javaWebToken = tokenService.getJavaWebToken(request);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set(HttpHeaders.AUTHORIZATION, "Bearer " + javaWebToken.getJwt());
-        HttpEntity httpEntity = new HttpEntity<>(httpHeaders);
-        List<Meeting> meetings;
-        try {
-            ResponseEntity<Meeting[]> meetingResponseEntity = restTemplate.exchange(ENDPOINT_FIND_ALL_MEETINGS, HttpMethod.GET, httpEntity, Meeting[].class);
-            meetings = Arrays.asList(meetingResponseEntity.getBody());
-        } catch (HttpClientErrorException | HttpServerErrorException e) {
-            logger.error("Can't get all meetings", e);
-            throw new ServiceException("Can't get all meetings");
-        }
-        return meetings;
-    }
 }

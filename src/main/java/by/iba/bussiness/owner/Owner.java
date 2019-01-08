@@ -4,6 +4,8 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Objects;
+
 @Document(collection = "owner")
 public class Owner {
     private String email;
@@ -36,6 +38,20 @@ public class Owner {
 
     public void setId(ObjectId id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Owner owner = (Owner) o;
+        return Objects.equals(email, owner.email) &&
+                Objects.equals(name, owner.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email, name, id);
     }
 
     @Override

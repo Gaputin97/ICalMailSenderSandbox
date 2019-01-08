@@ -1,7 +1,6 @@
 package by.iba.bussiness.calendar.creator.simple;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
 import by.iba.bussiness.calendar.creator.definer.UidDefiner;
 import by.iba.bussiness.calendar.date.model.single.SingleDateHelper;
@@ -25,28 +24,21 @@ import java.text.ParseException;
 import java.util.Arrays;
 
 @Component
-
 public class SimpleMeetingCalendarTemplateCreator {
     private static final Logger logger = LoggerFactory.getLogger(SimpleMeetingCalendarTemplateCreator.class);
-    private CalendarTextEditor calendarTextEditor;
     private Calendar requestCalendar;
     private Calendar cancelCalendar;
     private UidDefiner uidDefiner;
-    private InvitationTemplateService invitationTemplateService;
     private SequenceDefiner sequenceDefiner;
 
     @Autowired
-    public SimpleMeetingCalendarTemplateCreator(CalendarTextEditor calendarTextEditor,
-                                                @Qualifier("requestCalendar") Calendar requestCalendar,
+    public SimpleMeetingCalendarTemplateCreator(@Qualifier("requestCalendar") Calendar requestCalendar,
                                                 @Qualifier("cancelCalendar") Calendar cancelCalendar,
                                                 UidDefiner uidDefiner,
-                                                InvitationTemplateService invitationTemplateService,
                                                 SequenceDefiner sequenceDefiner) {
-        this.calendarTextEditor = calendarTextEditor;
         this.requestCalendar = requestCalendar;
         this.cancelCalendar = cancelCalendar;
         this.uidDefiner = uidDefiner;
-        this.invitationTemplateService = invitationTemplateService;
         this.sequenceDefiner = sequenceDefiner;
     }
 
