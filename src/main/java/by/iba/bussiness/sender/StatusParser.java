@@ -1,4 +1,4 @@
-package by.iba.bussiness.sender.parser;
+package by.iba.bussiness.sender;
 
 import by.iba.bussiness.enrollment.EnrollmentType;
 import net.fortuna.ical4j.model.property.Method;
@@ -6,12 +6,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class StatusParser {
-
     private static final String CANCEL_CALENDAR_METHOD = "CANCEL";
 
     public EnrollmentType parseCalMethodToEnrollmentStatus(Method method) {
         EnrollmentType enrollmentType;
-        if (method.getValue() == CANCEL_CALENDAR_METHOD) {
+        if (method.getValue().equals(CANCEL_CALENDAR_METHOD)) {
             enrollmentType = EnrollmentType.CANCELLED;
         } else {
             enrollmentType = EnrollmentType.CONFIRMED;

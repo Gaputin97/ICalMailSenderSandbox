@@ -5,9 +5,6 @@ import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.creator.CalendarEnrollmentCreator;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.meeting.Meeting;
-import by.iba.bussiness.response.CalendarSendingResponse;
-import by.iba.bussiness.sender.parser.StatusParser;
-import by.iba.exception.SendingException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
@@ -25,6 +22,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 @org.springframework.stereotype.Component
@@ -46,55 +44,61 @@ public class MessageSender {
         this.calendarEnrollmentCreator = calendarEnrollmentCreator;
     }
 
-    public void sendMessageToOneRecipientAndSaveEnrollment(Calendar calendar, Meeting meeting) {
+    private ResponseStatus sendCalendarToRecipientAndSaveEnrollment(Calendar calendar, Meeting meeting) {
         MimeMessage message;
+        VEvent event = (VEvent) calendar.getComponents().getComponent(Component.VEVENT);
+        Attendee attendee = event.getProperties().getProperty(Property.ATTENDEE);
+        String userName = attendee.getName();
+        String userEmail = attendee.getCalAddress().toString();
+        String editedUserEmail = calendarTextEditor.editUserEmail(userEmail);
+        ResponseStatus responseStatus;
         try {
             message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            VEvent event = (VEvent) calendar.getComponents().getComponent(Component.VEVENT);
-            Property attendee = event.getProperties().getProperty(Property.ATTENDEE);
             Method method = calendar.getMethod();
-            String address = ((Attendee) attendee).getCalAddress().toString();
             String stringMethod = calendarTextEditor.replaceColonToEqual(method.toString());
-            String editedUserEmail = calendarTextEditor.editUserEmail(address);
+
             helper.setTo(editedUserEmail);
 
             MimeMultipart multipart = new MimeMultipart();
-            MimeBodyPart iСalInline = new MimeBodyPart();
-            iСalInline.setHeader("Content-class", "urn:content-classes:calendarmessage");
-            iСalInline.setHeader("Content-ID", "<calendar_part>");
-            iСalInline.setHeader("Content-Disposition", "inline");
-            iСalInline.setContent(calendar.toString(), "text/calendar;charset=utf-8;" + stringMethod);
+            MimeBodyPart iCalInline = new MimeBodyPart();
+            iCalInline.setHeader("Content-class", "urn:content-classes:calendarmessage");
+            iCalInline.setHeader("Content-ID", "<calendar_part>");
+            iCalInline.setHeader("Content-Disposition", "inline");
+            iCalInline.setContent(calendar.toString(), "text/calendar;charset=utf-8;" + stringMethod);
 
-            iСalInline.setFileName("inlineCalendar.ics");
-            multipart.addBodyPart(iСalInline);
+            iCalInline.setFileName("inlineCalendar.ics");
+            multipart.addBodyPart(iCalInline);
 
-            MimeBodyPart iСalAttachment = new MimeBodyPart();
-            iСalAttachment.setHeader("Content-class", "urn:content-classes:calendarmessage");
-            iСalAttachment.setHeader("Content-Disposition", "attachment");
-            iСalAttachment.setContent(calendar.toString(), "text/calendar;charset=utf-8;" + stringMethod);
-            iСalAttachment.setFileName("attachedCalendar.ics");
-            multipart.addBodyPart(iСalAttachment);
+            MimeBodyPart iCalAttachment = new MimeBodyPart();
+            iCalAttachment.setHeader("Content-class", "urn:content-classes:calendarmessage");
+            iCalAttachment.setHeader("Content-Disposition", "attachment");
+            iCalAttachment.setContent(calendar.toString(), "text/calendar;charset=utf-8;" + stringMethod);
+            iCalAttachment.setFileName("attachedCalendar.ics");
+            multipart.addBodyPart(iCalAttachment);
             message.setContent(multipart);
 
             javaMailSender.send(message);
 
-            logger.info("Message was sended to " + editedUserEmail);
+            logger.info("Message was sanded to " + editedUserEmail);
             BigInteger meetingId = meeting.getId();
             Enrollment enrollment = calendarEnrollmentCreator.createEnrollment(calendar, meetingId, editedUserEmail);
             enrollmentRepository.save(enrollment);
             logger.info("New enrollment with meeting id" + meeting.getId() + " and user " + editedUserEmail + " was added");
+            responseStatus = new ResponseStatus(true, userName, editedUserEmail);
         } catch (MessagingException e) {
             logger.error("Error while trying to send message", e);
-            throw new SendingException("Error while trying to send message.");
+            responseStatus = new ResponseStatus(false, userName, editedUserEmail);
         }
+        return responseStatus;
     }
 
-    public CalendarSendingResponse sendMessageToAllRecipientsAndSaveEnrollments(List<Calendar> calendarList, Meeting meeting) {
+    public List<ResponseStatus> sendMessageToAllRecipientsAndSaveEnrollments(List<Calendar> calendarList, Meeting meeting) {
+        List<ResponseStatus> responseStatusList = new ArrayList<>();
         for (Calendar calendar : calendarList) {
-            sendMessageToOneRecipientAndSaveEnrollment(calendar, meeting);
+            responseStatusList.add(sendCalendarToRecipientAndSaveEnrollment(calendar, meeting));
         }
-        logger.info("Messages to all recipients were sended successfully");
-        return new CalendarSendingResponse(true, "All messages was sended successfully");
+        logger.info("Messages to all recipients were sanded successfully");
+        return responseStatusList;
     }
 }

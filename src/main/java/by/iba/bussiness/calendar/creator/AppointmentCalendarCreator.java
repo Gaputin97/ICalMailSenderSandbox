@@ -63,8 +63,7 @@ public class AppointmentCalendarCreator {
             Calendar calendarInvite = calendarFactory.createInvitationCalendarTemplate(dateHelper, newAppointment, enrollment);
             appointmentRepository.save(newAppointment);
             calendar = calendarInvite;
-        } else {
-            if (enrollment == null) {
+        } else if (enrollment == null) {
                 if (enrollmentChecker.wasChangedStatus(learner, meetingId)) {
                     Calendar calendarCancel = calendarFactory.createCancelCalendarTemplate(dateHelper, oldAppointment, enrollment);
                     calendar = calendarCancel;
@@ -82,8 +81,6 @@ public class AppointmentCalendarCreator {
                     calendar = calendarUpdate;
                 }
             }
-        }
         return calendar;
     }
-
 }

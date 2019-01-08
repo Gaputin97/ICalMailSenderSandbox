@@ -2,11 +2,11 @@ package by.iba.bussiness.response;
 
 public class CalendarSendingResponse {
 
-    private boolean isSended;
+    private boolean isSanded;
     private String message;
 
-    public CalendarSendingResponse(boolean isSended, String message) {
-        this.isSended = isSended;
+    public CalendarSendingResponse(boolean isSanded, String message) {
+        this.isSanded = isSanded;
         this.message = message;
     }
 
@@ -18,11 +18,11 @@ public class CalendarSendingResponse {
         this.message = message;
     }
 
-    public boolean isSended() {
-        return isSended;
+    public boolean isSanded() {
+        return isSanded;
     }
 
-    public void setIsSended(boolean isSended) {
-        this.isSended = isSended;
+    public void setIsSanded(boolean isSanded) {
+        this.isSanded = isSanded;
     }
 }

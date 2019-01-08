@@ -1,20 +1,13 @@
 package by.iba.bussiness.enrollment;
 
-import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.attendee.Learner;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
-import by.iba.bussiness.enrollment.service.EnrollmentService;
-import by.iba.bussiness.meeting.Meeting;
-import by.iba.exception.ServiceException;
-import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
-import java.util.List;
 
 @Component
 public class EnrollmentChecker {
