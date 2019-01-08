@@ -1,14 +1,7 @@
 package by.iba.bussiness.calendar.creator.installer;
 
-import by.iba.bussiness.appointment.AppointmentCreator;
-import by.iba.bussiness.appointment.AppointmentHandler;
-import by.iba.bussiness.appointment.repository.AppointmentRepository;
-import by.iba.bussiness.calendar.CalendarFactory;
 import by.iba.bussiness.calendar.attendee.Learner;
 import by.iba.bussiness.calendar.creator.AppointmentCalendarCreator;
-import by.iba.bussiness.calendar.date.DateHelperDefiner;
-import by.iba.bussiness.enrollment.EnrollmentChecker;
-import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.meeting.Meeting;
 import net.fortuna.ical4j.model.Calendar;
@@ -44,6 +37,7 @@ public class CalendarAttendeesInstaller {
         List<Calendar> calendarList = new ArrayList<>();
         for (Learner learner : learners) {
             String email = learner.getEmail();
+
             Calendar calendar = appointmentCalendarCreator.createCalendarAndSaveAppointment(learner, meeting, invitationTemplate);
             addAttendeeToCalendar(email, calendar);
             try {

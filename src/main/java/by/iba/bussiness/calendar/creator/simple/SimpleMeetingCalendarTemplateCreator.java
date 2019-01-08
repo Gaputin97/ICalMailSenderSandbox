@@ -1,4 +1,4 @@
-package by.iba.bussiness.calendar.creator.single;
+package by.iba.bussiness.calendar.creator.simple;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
@@ -8,7 +8,6 @@ import by.iba.bussiness.calendar.date.model.single.SingleDateHelper;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.invitation_template.service.InvitationTemplateService;
-import by.iba.bussiness.meeting.Meeting;
 import by.iba.exception.CalendarException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
@@ -52,12 +51,12 @@ public class SimpleMeetingCalendarTemplateCreator {
     }
 
     public Calendar createSimpleMeetingInvitationTemplate(SingleDateHelper singleDateHelper, Appointment appointment, Enrollment enrollment) {
-        logger.info("Started creating invitation ics file with single meeting with id " + appointment.getMeetingId());
+        logger.info("Started creating invitation ics file with simple meeting with id " + appointment.getMeetingId());
         Calendar calendar;
         VEvent event;
         try {
 
-            Sequence sequence = sequenceDefiner.defineSequence(appointment, enrollment);
+            Sequence sequence = sequenceDefiner.defineSequence(appointment);
             Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
             Location location = new Location(appointment.getLocation());
             Description description = new Description((appointment.getDescription()));
@@ -73,17 +72,17 @@ public class SimpleMeetingCalendarTemplateCreator {
             calendar.getComponents().add(event);
         } catch (ParseException | URISyntaxException | IOException e) {
             logger.error(e.getMessage());
-            throw new CalendarException("Can't create single calendar meeting. Try again later");
+            throw new CalendarException("Can't create simple calendar meeting. Try again later");
         }
         return calendar;
     }
 
     public Calendar createSimpleMeetingCancellationTemplate(SingleDateHelper singleDateHelper, Appointment appointment, Enrollment enrollment) {
-        logger.info("Started creating cancellation ics file with single meeting with id " + appointment.getId());
+        logger.info("Started creating cancellation ics file with simple meeting with id " + appointment.getId());
         Calendar calendar;
         VEvent event;
         try {
-            Sequence sequence = sequenceDefiner.defineSequence(appointment, enrollment);
+            Sequence sequence = sequenceDefiner.defineSequence(appointment);
             Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
             Location location = new Location((appointment.getLocation()));
             Description description = new Description((appointment.getDescription()));
@@ -99,7 +98,7 @@ public class SimpleMeetingCalendarTemplateCreator {
             calendar.getComponents().add(event);
         } catch (ParseException | URISyntaxException | IOException e) {
             logger.error(e.getMessage());
-            throw new CalendarException("Can't create single calendar meeting. Try again later");
+            throw new CalendarException("Can't create simple calendar meeting. Try again later");
         }
         return calendar;
     }

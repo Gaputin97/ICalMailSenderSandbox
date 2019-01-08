@@ -47,9 +47,9 @@ public class EnrollmentController {
 
     @ApiOperation(value = "Send calendar templates for non existing recipients")
     @RequestMapping(value = "/enrollment/add/{meetingId}", method = RequestMethod.POST)
-    public CalendarSendingResponse enrollUsers(@PathVariable String meetingId,
-                                                                       @RequestBody List<Learner> learners,
-                                                                       HttpServletRequest request) {
+    public CalendarSendingResponse enrollLearners(@PathVariable String meetingId,
+                                                  @RequestBody List<Learner> learners,
+                                                  HttpServletRequest request) {
         return enrollmentService.enrollLearners(request, meetingId, learners);
     }
 

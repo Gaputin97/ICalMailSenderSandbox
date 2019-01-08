@@ -81,7 +81,9 @@ public class MessageSender {
 
             logger.info("Message was sended to " + editedUserEmail);
             BigInteger meetingId = meeting.getId();
-            Enrollment enrollment = calendarEnrollmentCreator.createEnrollment(calendar, meetingId, editedUserEmail);
+            Enrollment enrollment = enrollmentRepository.getByEmailAndParentIdAndType(meetingId, editedUserEmail, statusParser.parseCalMethodToEnrollmentStatus(method));
+            enrollment.setCalendarStatus(statusParser.parseCalMethodToEnrollmentCalendarStatus(method));
+            enrollment.setCalendarVersion(event.getSequence().getValue());
             enrollmentRepository.save(enrollment);
             logger.info("New enrollment with meeting id" + meeting.getId() + " and user " + editedUserEmail + " was added");
         } catch (MessagingException e) {
@@ -93,6 +95,7 @@ public class MessageSender {
     public CalendarSendingResponse sendMessageToAllRecipientsAndSaveEnrollments(List<Calendar> calendarList, Meeting meeting) {
         for (Calendar calendar : calendarList) {
             sendMessageToOneRecipientAndSaveEnrollment(calendar, meeting);
+
         }
         logger.info("Messages to all recipients were sended successfully");
         return new CalendarSendingResponse(true, "All messages was sended successfully");

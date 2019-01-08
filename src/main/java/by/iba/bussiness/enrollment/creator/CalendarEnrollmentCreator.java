@@ -1,7 +1,6 @@
 package by.iba.bussiness.enrollment.creator;
 
 import by.iba.bussiness.enrollment.Enrollment;
-import by.iba.bussiness.enrollment.EnrollmentType;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.sender.parser.StatusParser;
 import net.fortuna.ical4j.model.Calendar;
@@ -23,7 +22,7 @@ public class CalendarEnrollmentCreator {
         this.statusParser = statusParser;
     }
 
-    public Enrollment createEnrollment(Calendar calendar, BigInteger meetingId, String userEmail) {
+    public Enrollment createCalendarEnrollment(Calendar calendar, BigInteger meetingId, String userEmail) {
         Method method = calendar.getMethod();
         VEvent event = (VEvent) calendar.getComponents().getComponent(Component.VEVENT);
         Enrollment enrollment = enrollmentRepository.getByEmailAndParentId(meetingId, userEmail);
@@ -32,8 +31,8 @@ public class CalendarEnrollmentCreator {
         }
         enrollment.setParentId(meetingId);
         enrollment.setUserEmail(userEmail);
-        EnrollmentType enrollmentType = statusParser.parseCalMethodToEnrollmentStatus(method);
-        enrollment.setEnrollmentType(enrollmentType);
+        String enrollmentStatus = statusParser.parseCalMethodToEnrollmentStatus(method);
+        enrollment.setStatus(enrollmentStatus);
         enrollment.setCurrentCalendarUid(event.getUid().getValue());
         enrollment.setCalendarVersion(event.getSequence().getValue());
         return enrollment;

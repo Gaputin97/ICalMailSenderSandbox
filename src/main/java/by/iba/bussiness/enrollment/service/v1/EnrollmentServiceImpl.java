@@ -3,6 +3,7 @@ package by.iba.bussiness.enrollment.service.v1;
 import by.iba.bussiness.calendar.attendee.Learner;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
 import by.iba.bussiness.enrollment.Enrollment;
+import by.iba.bussiness.enrollment.installer.EnrollmentsPreInstaller;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.invitation_template.service.InvitationTemplateService;
@@ -40,6 +41,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private CalendarAttendeesInstaller calendarAttendeesInstaller;
     private MessageSender messageSender;
     private InvitationTemplateService invitationTemplateService;
+    private EnrollmentsPreInstaller enrollmentsPreInstaller;
 
     @Value("${enrollment_by_email_and_meeting_id_endpoint}")
     private String ENDPOINT_FIND_ENROLLMENT_BY_PARENT_ID_AND_EMAIL;
@@ -53,13 +55,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                                  MeetingService meetingService,
                                  CalendarAttendeesInstaller calendarAttendeesInstaller,
                                  MessageSender messageSender,
-                                 InvitationTemplateService invitationTemplateService) {
+                                 InvitationTemplateService invitationTemplateService, EnrollmentsPreInstaller enrollmentsPreInstaller) {
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
         this.meetingService = meetingService;
         this.calendarAttendeesInstaller = calendarAttendeesInstaller;
         this.messageSender = messageSender;
         this.invitationTemplateService = invitationTemplateService;
+        this.enrollmentsPreInstaller = enrollmentsPreInstaller;
     }
 
     @Override
@@ -121,12 +124,9 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner template");
         }
         InvitationTemplate invitationTemplate = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
-        if (learners.isEmpty()) {
-            calendarSendingResponse = new CalendarSendingResponse(false, "All learners have last version of calendar");
-        } else {
-            List<Calendar> calendarList = calendarAttendeesInstaller.installCalendarListAndSaveAppointments(learners, meeting, invitationTemplate);
-            calendarSendingResponse = messageSender.sendMessageToAllRecipientsAndSaveEnrollments(calendarList, meeting);
-        }
+        enrollmentsPreInstaller.installEnrollments(learners, meetingId);
+        List<Calendar> calendarList = calendarAttendeesInstaller.installCalendarListAndSaveAppointments(learners, meeting, invitationTemplate);
+        calendarSendingResponse = messageSender.sendMessageToAllRecipientsAndSaveEnrollments(calendarList, meeting);
         return calendarSendingResponse;
     }
 }

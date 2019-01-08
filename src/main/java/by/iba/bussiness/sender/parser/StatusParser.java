@@ -1,6 +1,7 @@
 package by.iba.bussiness.sender.parser;
 
-import by.iba.bussiness.enrollment.EnrollmentType;
+import by.iba.bussiness.calendar.CalendarStatus;
+import by.iba.bussiness.enrollment.EnrollmentStatus;
 import net.fortuna.ical4j.model.property.Method;
 import org.springframework.stereotype.Component;
 
@@ -9,13 +10,23 @@ public class StatusParser {
 
     private static final String CANCEL_CALENDAR_METHOD = "CANCEL";
 
-    public EnrollmentType parseCalMethodToEnrollmentStatus(Method method) {
-        EnrollmentType enrollmentType;
-        if (method.getValue() == CANCEL_CALENDAR_METHOD) {
-            enrollmentType = EnrollmentType.CANCELLED;
+    public String parseCalMethodToEnrollmentStatus(Method method) {
+        String enrollmentStatus;
+        if (method.getValue().equals(CANCEL_CALENDAR_METHOD)) {
+            enrollmentStatus = EnrollmentStatus.CANCELLED;
         } else {
-            enrollmentType = EnrollmentType.CONFIRMED;
+            enrollmentStatus = EnrollmentStatus.CONFIRMED;
         }
-        return enrollmentType;
+        return enrollmentStatus;
+    }
+
+    public String parseCalMethodToEnrollmentCalendarStatus(Method method) {
+        String calendarStatus;
+        if (method.getValue() == CANCEL_CALENDAR_METHOD) {
+            calendarStatus = CalendarStatus.CANCELLED;
+        } else {
+            calendarStatus = CalendarStatus.INVITED;
+        }
+        return calendarStatus;
     }
 }

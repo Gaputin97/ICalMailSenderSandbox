@@ -1,6 +1,5 @@
 package by.iba.bussiness.enrollment.repository.v1;
 
-import by.iba.bussiness.enrollment.EnrollmentType;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.enrollment.Enrollment;
 
@@ -45,11 +44,11 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
     }
 
     @Override
-    public Enrollment getByEmailAndParentIdAndType(BigInteger parentId, String userEmail, EnrollmentType enrollmentType) {
-        Query query = new Query(Criteria.where("parentId").is(parentId).and("userEmail").is(userEmail).and("enrollmentType").is(enrollmentType));
+    public Enrollment getByEmailAndParentIdAndType(BigInteger parentId, String userEmail, String status) {
+        Query query = new Query(Criteria.where("parentId").is(parentId).and("userEmail").is(userEmail).and("status").is(status));
         Enrollment enrollment = mongoTemplate.findOne(query, Enrollment.class);
         if (enrollment == null) {
-            logger.info("Can't locally find enrollment with parent ID " + parentId + " and user email " + userEmail + " and enrollment type " + enrollmentType);
+            logger.info("Can't locally find enrollment with parent ID " + parentId + " and user email " + userEmail + " and enrollment type " + status);
         }
         return enrollment;
     }

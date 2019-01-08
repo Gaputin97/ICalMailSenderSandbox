@@ -11,7 +11,7 @@ import by.iba.bussiness.calendar.date.DateHelperDefiner;
 import by.iba.bussiness.calendar.date.model.DateHelper;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentChecker;
-import by.iba.bussiness.enrollment.EnrollmentType;
+import by.iba.bussiness.enrollment.EnrollmentStatus;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.meeting.Meeting;
@@ -54,9 +54,9 @@ public class AppointmentCalendarCreator {
         BigInteger meetingId = meeting.getId();
 
         String email = learner.getEmail();
-        EnrollmentType enrollmentType = learner.getEnrollmentType();
+        String enrollmentStatus = learner.getEnrollmentStatus();
 
-        Enrollment enrollment = enrollmentRepository.getByEmailAndParentIdAndType(meetingId, email, enrollmentType);
+        Enrollment enrollment = enrollmentRepository.getByEmailAndParentIdAndType(meetingId, email, enrollmentStatus);
         Appointment oldAppointment = appointmentRepository.getByMeetingId(meetingId);
         if (oldAppointment == null) {
             Appointment newAppointment = appointmentCreator.createAppointment(meeting, invitationTemplate);
@@ -64,14 +64,10 @@ public class AppointmentCalendarCreator {
             appointmentRepository.save(newAppointment);
             calendar = calendarInvite;
         } else {
-            if (enrollment == null) {
-                if (enrollmentChecker.wasChangedStatus(learner, meetingId)) {
-                    Calendar calendarCancel = calendarFactory.createCancelCalendarTemplate(dateHelper, oldAppointment, enrollment);
-                    calendar = calendarCancel;
-                } else {
-                    Calendar calendarInvite = calendarFactory.createInvitationCalendarTemplate(dateHelper, oldAppointment, enrollment);
-                    calendar = calendarInvite;
-                }
+            if (learner.getEnrollmentStatus().equals(EnrollmentStatus.CANCELLED)) {
+                Enrollment realEnrollment = enrollmentRepository.getByEmailAndParentId(meetingId, email);
+                Calendar calendarCancel = calendarFactory.createCancelCalendarTemplate(dateHelper, oldAppointment, realEnrollment);
+                calendar = calendarCancel;
             } else {
                 Appointment updatedAppointment = appointmentHandler.getUpdatedAppointment(meeting, invitationTemplate);
                 if ((updatedAppointment.getUpdateIndex() == 0 && updatedAppointment.getRescheduleIndex() == 0) ||
@@ -80,10 +76,12 @@ public class AppointmentCalendarCreator {
                     Calendar calendarUpdate = calendarFactory.createInvitationCalendarTemplate(dateHelper, updatedAppointment, enrollment);
                     appointmentRepository.save(updatedAppointment);
                     calendar = calendarUpdate;
+                } else {
+                    Calendar calendarInvite = calendarFactory.createInvitationCalendarTemplate(dateHelper, oldAppointment, enrollment);
+                    calendar = calendarInvite;
                 }
             }
         }
         return calendar;
     }
-
 }

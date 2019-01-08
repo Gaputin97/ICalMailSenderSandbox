@@ -1,14 +1,12 @@
 package by.iba.bussiness.calendar.attendee;
 
-import by.iba.bussiness.enrollment.EnrollmentType;
-
 import javax.validation.constraints.Email;
 
 public class Learner {
     private String commonName;
     @Email
     private String email;
-    private EnrollmentType enrollmentType;
+    private String enrollmentStatus;
 
     public String getCommonName() {
         return commonName;
@@ -26,11 +24,11 @@ public class Learner {
         this.email = email;
     }
 
-    public EnrollmentType getEnrollmentType() {
-        return enrollmentType;
+    public String getEnrollmentStatus() {
+        return enrollmentStatus;
     }
 
-    public void setEnrollmentType(EnrollmentType enrollmentType) {
-        this.enrollmentType = enrollmentType;
+    public void setEnrollmentStatus(String enrollmentStatus) {
+        this.enrollmentStatus = enrollmentStatus;
     }
 }

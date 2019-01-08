@@ -17,7 +17,7 @@ public class Enrollment {
     private String calendarVersion;
     private String calendarStatus;
     private String calendarDate;
-    private EnrollmentType enrollmentType;
+    private String status;
     private String currentCalendarUid;
 
     public ObjectId getId() {
@@ -84,12 +84,12 @@ public class Enrollment {
         this.calendarDate = calendarDate;
     }
 
-    public EnrollmentType getEnrollmentType() {
-        return enrollmentType;
+    public String getStatus() {
+        return status;
     }
 
-    public void setEnrollmentType(EnrollmentType enrollmentType) {
-        this.enrollmentType = enrollmentType;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getCurrentCalendarUid() {
@@ -111,7 +111,7 @@ public class Enrollment {
                 ", calendarVersion='" + calendarVersion + '\'' +
                 ", calendarStatus='" + calendarStatus + '\'' +
                 ", calendarDate='" + calendarDate + '\'' +
-                ", enrollmentStatus=" + enrollmentType +
+                ", enrollmentStatus=" + status +
                 '}';
     }
 }
