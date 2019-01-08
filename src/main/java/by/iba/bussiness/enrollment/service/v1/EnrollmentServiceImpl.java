@@ -1,12 +1,8 @@
 package by.iba.bussiness.enrollment.service.v1;
 
-import by.iba.bussiness.calendar.CalendarFactory;
 import by.iba.bussiness.calendar.attendee.Learner;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
-import by.iba.bussiness.calendar.date.DateHelperDefiner;
 import by.iba.bussiness.enrollment.Enrollment;
-import by.iba.bussiness.enrollment.EnrollmentChecker;
-import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.invitation_template.service.InvitationTemplateService;
@@ -43,9 +39,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private MeetingService meetingService;
     private CalendarAttendeesInstaller calendarAttendeesInstaller;
     private MessageSender messageSender;
-    private EnrollmentChecker enrollmentChecker;
     private InvitationTemplateService invitationTemplateService;
-    private EnrollmentRepository enrollmentRepository;
 
     @Value("${enrollment_by_email_and_meeting_id_endpoint}")
     private String ENDPOINT_FIND_ENROLLMENT_BY_PARENT_ID_AND_EMAIL;
@@ -57,20 +51,15 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     public EnrollmentServiceImpl(TokenService tokenService,
                                  RestTemplate restTemplate,
                                  MeetingService meetingService,
-                                 DateHelperDefiner dateHelperDefiner,
-                                 CalendarFactory calendarFactory,
                                  CalendarAttendeesInstaller calendarAttendeesInstaller,
                                  MessageSender messageSender,
-                                 EnrollmentChecker enrollmentChecker,
-                                 InvitationTemplateService invitationTemplateService, EnrollmentRepository enrollmentRepository) {
+                                 InvitationTemplateService invitationTemplateService) {
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
         this.meetingService = meetingService;
         this.calendarAttendeesInstaller = calendarAttendeesInstaller;
         this.messageSender = messageSender;
-        this.enrollmentChecker = enrollmentChecker;
         this.invitationTemplateService = invitationTemplateService;
-        this.enrollmentRepository = enrollmentRepository;
     }
 
     @Override
@@ -123,7 +112,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public CalendarSendingResponse enrollUsers(HttpServletRequest request, String meetingId, List<Learner> learners) {
+    public CalendarSendingResponse enrollLearners(HttpServletRequest request, String meetingId, List<Learner> learners) {
         CalendarSendingResponse calendarSendingResponse;
         Meeting meeting = meetingService.getMeetingById(request, meetingId);
         String invitationTemplateKey = meeting.getInvitationTemplate();
@@ -135,8 +124,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         if (learners.isEmpty()) {
             calendarSendingResponse = new CalendarSendingResponse(false, "All learners have last version of calendar");
         } else {
-            List<Calendar> calendarList = calendarAttendeesInstaller.createCalendarList(learners, meeting, invitationTemplate);
-            calendarSendingResponse = messageSender.sendMessageToAllRecipients(calendarList, meeting);
+            List<Calendar> calendarList = calendarAttendeesInstaller.installCalendarListAndSaveAppointments(learners, meeting, invitationTemplate);
+            calendarSendingResponse = messageSender.sendMessageToAllRecipientsAndSaveEnrollments(calendarList, meeting);
         }
         return calendarSendingResponse;
     }

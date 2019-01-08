@@ -11,5 +11,5 @@ import java.util.List;
 public interface EnrollmentService {
     Enrollment getEnrollmentByEmailAndParentId(HttpServletRequest request, BigInteger parentId, String email);
     List<Enrollment> getEnrollmentByParentId(HttpServletRequest request, BigInteger parentId);
-    CalendarSendingResponse enrollUsers(HttpServletRequest request, String meetingId, List<Learner> learners);
+    CalendarSendingResponse enrollLearners(HttpServletRequest request, String meetingId, List<Learner> learners);
 }

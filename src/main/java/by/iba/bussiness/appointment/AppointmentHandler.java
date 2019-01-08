@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigInteger;
+
 @Component
 public class AppointmentHandler {
     private static final Logger logger = LoggerFactory.getLogger(AppointmentHandler.class);
@@ -21,40 +23,44 @@ public class AppointmentHandler {
         this.appointmentCreator = appointmentCreator;
     }
 
-    public Appointment updateAndGetAppointment(Meeting updatedMeeting, InvitationTemplate updatedTemplate) {
-        Appointment tempAppointment = appointmentCreator.createAppointment(updatedMeeting, updatedTemplate);
-        Appointment sourceAppointment = appointmentRepository.getByMeetingId(tempAppointment.getMeetingId());
-        Appointment appointment = null;
+    public Appointment getUpdatedAppointment(Meeting updatedMeeting, InvitationTemplate updatedTemplate) {
+        Appointment newAppointment = appointmentCreator.createAppointment(updatedMeeting, updatedTemplate);
+        Appointment sourceAppointment = appointmentRepository.getByMeetingId(updatedMeeting.getId());
 
         String oldAppointmentDescription = sourceAppointment.getDescription();
-        String tempAppointmentDescription = tempAppointment.getDescription();
+        String newAppointmentDescription = newAppointment.getDescription();
 
         String oldAppointmentLocation = sourceAppointment.getLocation();
-        String tempAppointmentLocation = tempAppointment.getLocation();
+        String tempAppointmentLocation = newAppointment.getLocation();
 
         Owner oldAppointmentOwner = sourceAppointment.getOwner();
-        Owner tempAppointmentOwner = tempAppointment.getOwner();
+        Owner tempAppointmentOwner = newAppointment.getOwner();
+
+        BigInteger sourceId = sourceAppointment.getId();
+        int sourceUpdatedIndex = sourceAppointment.getUpdateIndex();
+        int sourceRescheduledIndex = sourceAppointment.getRescheduleIndex();
 
         int maximumIndex;
-        if (sourceAppointment.hashCode() == tempAppointment.hashCode()) {
-            appointment = sourceAppointment;
-        } else if (!sourceAppointment.getTimeSlots().equals(tempAppointment.getTimeSlots())) {
-            appointment = tempAppointment;
+        if (sourceAppointment.equals(newAppointment)) {
+            newAppointment = sourceAppointment;
+        } else {
             maximumIndex = getMaximumIndex(sourceAppointment);
-            tempAppointment.setRescheduleIndex(++maximumIndex);
-        } else if (!oldAppointmentDescription.equals(tempAppointmentDescription) ||
-                (!oldAppointmentLocation.equals(tempAppointmentLocation)) ||
-                (!oldAppointmentOwner.equals(tempAppointmentOwner))) {
-            appointment = tempAppointment;
-            maximumIndex = getMaximumIndex(sourceAppointment);
-            tempAppointment.setUpdateIndex(++maximumIndex);
+            if (!sourceAppointment.getTimeSlots().equals(newAppointment.getTimeSlots())) {
+                newAppointment.setUpdateIndex(sourceUpdatedIndex);
+                newAppointment.setRescheduleIndex(++maximumIndex);
+            } else if (!oldAppointmentDescription.equals(newAppointmentDescription) ||
+                    (!oldAppointmentLocation.equals(tempAppointmentLocation)) ||
+                    (!oldAppointmentOwner.equals(tempAppointmentOwner))) {
+                newAppointment.setRescheduleIndex(sourceRescheduledIndex);
+                newAppointment.setUpdateIndex(++maximumIndex);
+            }
         }
-        appointment.setId(sourceAppointment.getId());
-        appointmentRepository.save(appointment);
-        return appointment;
+        newAppointment.setId(sourceId);
+        appointmentRepository.save(newAppointment);
+        return newAppointment;
     }
 
-    private int getMaximumIndex(Appointment sourceAppointment) {
+    public int getMaximumIndex(Appointment sourceAppointment) {
         int updateIndex = sourceAppointment.getUpdateIndex();
         int rescheduleIndex = sourceAppointment.getRescheduleIndex();
         return updateIndex > rescheduleIndex ? updateIndex : rescheduleIndex;

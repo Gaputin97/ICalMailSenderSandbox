@@ -2,7 +2,7 @@ package by.iba.bussiness.sender;
 
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.enrollment.Enrollment;
-import by.iba.bussiness.enrollment.EnrollmentType;
+import by.iba.bussiness.enrollment.creator.CalendarEnrollmentCreator;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.response.CalendarSendingResponse;
@@ -35,16 +35,18 @@ public class MessageSender {
     private CalendarTextEditor calendarTextEditor;
     private EnrollmentRepository enrollmentRepository;
     private StatusParser statusParser;
+    private CalendarEnrollmentCreator calendarEnrollmentCreator;
 
     @Autowired
-    public MessageSender(JavaMailSender javaMailSender, CalendarTextEditor calendarTextEditor, EnrollmentRepository enrollmentRepository, StatusParser statusParser) {
+    public MessageSender(JavaMailSender javaMailSender, CalendarTextEditor calendarTextEditor, EnrollmentRepository enrollmentRepository, StatusParser statusParser, CalendarEnrollmentCreator calendarEnrollmentCreator) {
         this.javaMailSender = javaMailSender;
         this.calendarTextEditor = calendarTextEditor;
         this.enrollmentRepository = enrollmentRepository;
         this.statusParser = statusParser;
+        this.calendarEnrollmentCreator = calendarEnrollmentCreator;
     }
 
-    public void sendMessageToOneRecipient(Calendar calendar, Meeting meeting) {
+    public void sendMessageToOneRecipientAndSaveEnrollment(Calendar calendar, Meeting meeting) {
         MimeMessage message;
         try {
             message = javaMailSender.createMimeMessage();
@@ -79,16 +81,7 @@ public class MessageSender {
 
             logger.info("Message was sended to " + editedUserEmail);
             BigInteger meetingId = meeting.getId();
-            Enrollment enrollment = enrollmentRepository.getByEmailAndParentId(meetingId, editedUserEmail);
-            if (enrollment == null) {
-                enrollment = new Enrollment();
-            }
-            enrollment.setParentId(meeting.getId());
-            enrollment.setUserEmail(editedUserEmail);
-            EnrollmentType enrollmentType = statusParser.parseCalMethodToEnrollmentStatus(method);
-            enrollment.setEnrollmentType(enrollmentType);
-            enrollment.setCurrentCalendarUid(event.getUid().getValue());
-            enrollment.setCalendarVersion(event.getSequence().getValue());
+            Enrollment enrollment = calendarEnrollmentCreator.createEnrollment(calendar, meetingId, editedUserEmail);
             enrollmentRepository.save(enrollment);
             logger.info("New enrollment with meeting id" + meeting.getId() + " and user " + editedUserEmail + " was added");
         } catch (MessagingException e) {
@@ -97,9 +90,9 @@ public class MessageSender {
         }
     }
 
-    public CalendarSendingResponse sendMessageToAllRecipients(List<Calendar> calendarList, Meeting meeting) {
+    public CalendarSendingResponse sendMessageToAllRecipientsAndSaveEnrollments(List<Calendar> calendarList, Meeting meeting) {
         for (Calendar calendar : calendarList) {
-            sendMessageToOneRecipient(calendar, meeting);
+            sendMessageToOneRecipientAndSaveEnrollment(calendar, meeting);
         }
         logger.info("Messages to all recipients were sended successfully");
         return new CalendarSendingResponse(true, "All messages was sended successfully");

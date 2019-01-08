@@ -50,7 +50,7 @@ public class EnrollmentController {
     public CalendarSendingResponse enrollUsers(@PathVariable String meetingId,
                                                                        @RequestBody List<Learner> learners,
                                                                        HttpServletRequest request) {
-        return enrollmentService.enrollUsers(request, meetingId, learners);
+        return enrollmentService.enrollLearners(request, meetingId, learners);
     }
 
 }
