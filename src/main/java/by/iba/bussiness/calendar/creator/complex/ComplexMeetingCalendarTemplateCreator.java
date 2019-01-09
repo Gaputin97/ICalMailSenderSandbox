@@ -2,11 +2,9 @@ package by.iba.bussiness.calendar.creator.complex;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
-import by.iba.bussiness.calendar.creator.definer.UidDefiner;
 import by.iba.bussiness.calendar.date.model.complex.ComplexDateHelper;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.enrollment.Enrollment;
-import by.iba.bussiness.meeting.Meeting;
 import by.iba.exception.CalendarException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
@@ -29,14 +27,12 @@ public class ComplexMeetingCalendarTemplateCreator {
     private static final Logger logger = LoggerFactory.getLogger(ComplexMeetingCalendarTemplateCreator.class);
     private CalendarTextEditor calendarTextEditor;
     private Calendar publishCalendar;
-    private UidDefiner uidDefiner;
 
     @Autowired
     public ComplexMeetingCalendarTemplateCreator(CalendarTextEditor calendarTextEditor,
-                                                 @Qualifier("publishCalendar") Calendar publishCalendar, UidDefiner uidDefiner) {
+                                                 @Qualifier("publishCalendar") Calendar publishCalendar) {
         this.calendarTextEditor = calendarTextEditor;
         this.publishCalendar = publishCalendar;
-        this.uidDefiner = uidDefiner;
     }
 
     public Calendar createComplexCalendarInvitationTemplate(ComplexDateHelper complexDateHelper, Appointment appointment, Enrollment enrollment) {
@@ -50,7 +46,7 @@ public class ComplexMeetingCalendarTemplateCreator {
                 Location location = new Location((appointment.getLocation()));
                 Description description = new Description((appointment.getDescription()));
                 Summary summary = new Summary((appointment.getSummary()));
-                Uid UID = uidDefiner.defineUid(enrollment);
+                Uid UID = new Uid(enrollment.getCurrentCalendarUid());
 
                 DateTime startDateTime = new DateTime(session.getStartDate());
                 DateTime endDateTime = new DateTime(session.getEndDate());
