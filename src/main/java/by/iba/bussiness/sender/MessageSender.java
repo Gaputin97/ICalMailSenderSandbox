@@ -22,8 +22,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
 
 @org.springframework.stereotype.Component
 public class MessageSender {
