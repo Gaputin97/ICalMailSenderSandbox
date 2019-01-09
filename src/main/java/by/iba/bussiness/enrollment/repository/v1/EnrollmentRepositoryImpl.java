@@ -54,7 +54,7 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
     }
 
     @Override
-    public List<Enrollment> getAllByParentId(String parentId) {
+    public List<Enrollment> getAllByParentId(BigInteger parentId) {
         Query query = new Query(Criteria.where("parentId").is(parentId));
         List<Enrollment> enrollmentList = mongoTemplate.find(query, Enrollment.class);
         if (enrollmentList.isEmpty()) {
