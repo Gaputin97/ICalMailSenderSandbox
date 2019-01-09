@@ -1,6 +1,7 @@
 package by.iba.bussiness.calendar.creator;
 
 import by.iba.bussiness.appointment.Appointment;
+import by.iba.bussiness.appointment.AppointmentHandler;
 import by.iba.bussiness.calendar.CalendarFactory;
 import by.iba.bussiness.calendar.date.DateHelperDefiner;
 import by.iba.bussiness.calendar.date.model.DateHelper;
@@ -18,28 +19,37 @@ import java.util.List;
 public class CalendarCreator {
     private CalendarFactory calendarFactory;
     private DateHelperDefiner dateHelperDefiner;
+    private AppointmentHandler appointmentHandler;
 
     @Autowired
     public CalendarCreator(CalendarFactory calendarFactory,
-                           DateHelperDefiner dateHelperDefiner) {
+                           DateHelperDefiner dateHelperDefiner,
+                           AppointmentHandler appointmentHandler) {
         this.calendarFactory = calendarFactory;
         this.dateHelperDefiner = dateHelperDefiner;
+        this.appointmentHandler = appointmentHandler;
     }
 
     public Calendar createCalendar(Enrollment enrollment, Appointment appointment) {
-        Calendar calendar;
+        Calendar calendar = null;
         List<TimeSlot> timeSlots = appointment.getTimeSlots();
         BigInteger meetingId = appointment.getMeetingId();
         DateHelper dateHelper = dateHelperDefiner.defineDateHelper(timeSlots, meetingId);
         String enrollmentStatus = enrollment.getStatus();
+        int maximumAppointmentIndex = appointmentHandler.getMaximumIndex(appointment);
+        int calendarVersion = Integer.parseInt(enrollment.getCalendarVersion());
         if (enrollmentStatus.equals(EnrollmentStatus.CANCELLED)) {
             Calendar calendarCancel = calendarFactory.createCancelCalendarTemplate(dateHelper, appointment, enrollment);
             calendar = calendarCancel;
         } else {
-            Calendar calendarInvite = calendarFactory.createInvitationCalendarTemplate(dateHelper, appointment, enrollment);
-            calendar = calendarInvite;
+            if (!(maximumAppointmentIndex <= calendarVersion)) {
+                Calendar calendarInvite = calendarFactory.createInvitationCalendarTemplate(dateHelper, appointment, enrollment);
+                calendar = calendarInvite;
+            }
         }
         return calendar;
     }
 
 }
+
+
