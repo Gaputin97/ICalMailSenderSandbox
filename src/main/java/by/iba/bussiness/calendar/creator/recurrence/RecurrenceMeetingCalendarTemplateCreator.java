@@ -2,6 +2,7 @@ package by.iba.bussiness.calendar.creator.recurrence;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
+import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
 import by.iba.bussiness.calendar.creator.definer.UidDefiner;
 import by.iba.bussiness.calendar.date.DateHelperConstants;
 import by.iba.bussiness.calendar.date.model.reccurence.RecurrenceDateHelper;
@@ -35,6 +36,7 @@ public class RecurrenceMeetingCalendarTemplateCreator {
     private DateIncreaser dateIncreaser;
     private UidDefiner uidDefiner;
     private Calendar cancelCalendar;
+    private SequenceDefiner sequenceDefiner;
 
     @Autowired
     public RecurrenceMeetingCalendarTemplateCreator(CalendarTextEditor calendarTextEditor,
@@ -42,7 +44,8 @@ public class RecurrenceMeetingCalendarTemplateCreator {
                                                     SessionParser sessionParser,
                                                     IcalDateParser icalDateParser,
                                                     DateIncreaser dateIncreaser, UidDefiner uidDefiner,
-                                                    @Qualifier("cancelCalendar") Calendar cancelCalendar) {
+                                                    @Qualifier("cancelCalendar") Calendar cancelCalendar,
+                                                    SequenceDefiner sequenceDefiner) {
         this.calendarTextEditor = calendarTextEditor;
         this.requestCalendar = requestCalendar;
         this.sessionParser = sessionParser;
@@ -50,6 +53,7 @@ public class RecurrenceMeetingCalendarTemplateCreator {
         this.dateIncreaser = dateIncreaser;
         this.uidDefiner = uidDefiner;
         this.cancelCalendar = cancelCalendar;
+        this.sequenceDefiner = sequenceDefiner;
     }
 
     public Calendar createRecurrenceCalendarInvitationTemplate(RecurrenceDateHelper recurrenceDateHelper, Appointment appointment, Enrollment enrollment) {
@@ -68,7 +72,7 @@ public class RecurrenceMeetingCalendarTemplateCreator {
         Calendar calendar;
         VEvent event;
         try {
-            Sequence sequence = new Sequence("0");
+            Sequence sequence = sequenceDefiner.defineSequence(appointment);
             Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
             Location location = new Location((appointment.getLocation()));
             Description description = new Description((appointment.getDescription()));
@@ -112,7 +116,7 @@ public class RecurrenceMeetingCalendarTemplateCreator {
         Calendar calendar;
         VEvent event;
         try {
-            Sequence sequence = new Sequence("0");
+            Sequence sequence = sequenceDefiner.defineSequence(appointment);
             Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
             Location location = new Location((appointment.getLocation()));
             Description description = new Description((appointment.getDescription()));

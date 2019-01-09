@@ -1,11 +1,13 @@
 package by.iba.bussiness.enrollment.installer;
 
+import by.iba.bussiness.appointment.Appointment;
+import by.iba.bussiness.appointment.AppointmentHandler;
 import by.iba.bussiness.calendar.attendee.Learner;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentChecker;
-import by.iba.bussiness.enrollment.EnrollmentStatus;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.sender.StatusParser;
+import io.swagger.models.auth.In;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.component.VEvent;
@@ -21,14 +23,17 @@ public class EnrollmentsInstaller {
     private EnrollmentRepository enrollmentRepository;
     private EnrollmentChecker enrollmentChecker;
     private StatusParser statusParser;
+    private AppointmentHandler appointmentHandler;
 
     @Autowired
     public EnrollmentsInstaller(EnrollmentRepository enrollmentRepository,
                                 EnrollmentChecker enrollmentChecker,
-                                StatusParser statusParser) {
+                                StatusParser statusParser,
+                                AppointmentHandler appointmentHandler) {
         this.enrollmentRepository = enrollmentRepository;
         this.enrollmentChecker = enrollmentChecker;
         this.statusParser = statusParser;
+        this.appointmentHandler = appointmentHandler;
     }
 
     public void install(List<Learner> learners, String meetingId) {
@@ -54,11 +59,11 @@ public class EnrollmentsInstaller {
         }
     }
 
-    public void installCalendarFields(Enrollment enrollment, Calendar calendar) {
+    public void installCalendarFields(Enrollment enrollment, Calendar calendar, Appointment appointment) {
+        Integer maximumIndex = appointmentHandler.getMaximumIndex(appointment);
         Method method = calendar.getMethod();
-        VEvent event = (VEvent) calendar.getComponents().getComponent(Component.VEVENT);
         enrollment.setCalendarStatus(statusParser.parseCalMethodToEnrollmentCalendarStatus(method));
-        enrollment.setCalendarVersion(event.getSequence().getValue());
+        enrollment.setCalendarVersion(maximumIndex.toString());
         enrollmentRepository.save(enrollment);
     }
 }

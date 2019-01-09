@@ -17,7 +17,15 @@ public class SequenceDefiner {
     }
 
     public Sequence defineSequence(Appointment appointment) {
-        Sequence sequence = new Sequence(appointmentHandler.getMaximumIndex(appointment));
+        Sequence sequence;
+        int maximumIndex = appointmentHandler.getMaximumIndex(appointment);
+        int updatedIndex = appointment.getUpdateIndex();
+        int minimumIndex = appointmentHandler.getMinimumIndex(appointment);
+        if (maximumIndex == updatedIndex) {
+            sequence = new Sequence(minimumIndex);
+        } else {
+            sequence = new Sequence(maximumIndex);
+        }
         return sequence;
     }
 }

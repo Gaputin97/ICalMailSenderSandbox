@@ -4,7 +4,6 @@ import by.iba.bussiness.enrollment.Enrollment;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.component.CalendarComponent;
-import net.fortuna.ical4j.model.parameter.PartStat;
 import net.fortuna.ical4j.model.parameter.Role;
 import net.fortuna.ical4j.model.parameter.Rsvp;
 import net.fortuna.ical4j.model.property.Attendee;
@@ -23,7 +22,6 @@ public class CalendarAttendeesInstaller {
         Attendee attendee = new Attendee(URI.create("mailto:" + email));
         attendee.getParameters().add(Rsvp.FALSE);
         attendee.getParameters().add(Role.REQ_PARTICIPANT);
-        attendee.getParameters().add(PartStat.ACCEPTED);
         vEvent.getProperties().add(attendee);
         return calendar;
     }

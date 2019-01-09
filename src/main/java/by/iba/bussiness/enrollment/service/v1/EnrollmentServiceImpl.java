@@ -155,10 +155,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             logger.error("Can't enroll learners to this event, cause can't find some invitation template by meeting id: " + meetingId);
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
         }
-
         InvitationTemplate invitationTemplate = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
         Appointment appointment = appointmentInstaller.installAppointment(meeting, invitationTemplate);
-
         BigInteger bigIntegerMeetingId = new BigInteger(meetingId);
         List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(bigIntegerMeetingId);
         List<ResponseStatus> responseStatusList = new ArrayList<>();
@@ -170,7 +168,9 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, calendar);
                 ResponseStatus responseStatus = messageSender.sendCalendarToLearner(calendar, meetingId);
                 responseStatusList.add(responseStatus);
-                enrollmentsInstaller.installCalendarFields(enrollment, calendar);
+                if (responseStatus.isDelivered()) {
+                    enrollmentsInstaller.installCalendarFields(enrollment, calendar, appointment);
+                }
             }
         }
         return responseStatusList;

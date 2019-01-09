@@ -76,7 +76,6 @@ public class MessageSender {
 
             javaMailSender.send(message);
             logger.info("Message was sanded to " + editedUserEmail);
-            logger.info("New enrollment with meeting id" + meetingId + " and user " + editedUserEmail + " was added");
             responseStatus = new ResponseStatus(true, userName, editedUserEmail);
         } catch (MessagingException e) {
             logger.error("Error while trying to send message", e);

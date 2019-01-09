@@ -65,4 +65,10 @@ public class AppointmentHandler {
         int rescheduleIndex = sourceAppointment.getRescheduleIndex();
         return updateIndex > rescheduleIndex ? updateIndex : rescheduleIndex;
     }
+
+    public int getMinimumIndex(Appointment sourceAppointment){
+        int updateIndex = sourceAppointment.getUpdateIndex();
+        int rescheduleIndex = sourceAppointment.getRescheduleIndex();
+        return updateIndex < rescheduleIndex ? updateIndex : rescheduleIndex;
+    }
 }
