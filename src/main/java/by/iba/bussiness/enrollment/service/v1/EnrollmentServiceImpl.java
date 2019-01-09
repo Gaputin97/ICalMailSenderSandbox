@@ -1,5 +1,7 @@
 package by.iba.bussiness.enrollment.service.v1;
 
+import by.iba.bussiness.appointment.Appointment;
+import by.iba.bussiness.appointment.AppointmentInstaller;
 import by.iba.bussiness.calendar.attendee.Learner;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
 import by.iba.bussiness.enrollment.Enrollment;
@@ -9,7 +11,6 @@ import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.invitation_template.service.InvitationTemplateService;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.MeetingService;
-import by.iba.bussiness.response.CalendarSendingResponse;
 import by.iba.bussiness.sender.MessageSender;
 import by.iba.bussiness.sender.ResponseStatus;
 import by.iba.bussiness.token.model.JavaWebToken;
@@ -44,6 +45,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private MessageSender messageSender;
     private InvitationTemplateService invitationTemplateService;
     private EnrollmentsPreInstaller enrollmentsPreInstaller;
+    private AppointmentInstaller appointmentInstaller;
 
     @Value("${enrollment_by_email_and_meeting_id_endpoint}")
     private String ENDPOINT_FIND_ENROLLMENT_BY_PARENT_ID_AND_EMAIL;
@@ -57,7 +59,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                                  MeetingService meetingService,
                                  CalendarAttendeesInstaller calendarAttendeesInstaller,
                                  MessageSender messageSender,
-                                 InvitationTemplateService invitationTemplateService, EnrollmentsPreInstaller enrollmentsPreInstaller) {
+                                 InvitationTemplateService invitationTemplateService,
+                                 EnrollmentsPreInstaller enrollmentsPreInstaller, AppointmentInstaller appointmentInstaller) {
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
         this.meetingService = meetingService;
@@ -65,6 +68,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         this.messageSender = messageSender;
         this.invitationTemplateService = invitationTemplateService;
         this.enrollmentsPreInstaller = enrollmentsPreInstaller;
+        this.appointmentInstaller = appointmentInstaller;
     }
 
     @Override
@@ -126,7 +130,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         }
         InvitationTemplate invitationTemplate = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
         enrollmentsPreInstaller.installEnrollments(learners, meetingId);
-        List<Calendar> calendarList = calendarAttendeesInstaller.installCalendarListAndSaveAppointments(learners, meeting, invitationTemplate);
+        Appointment appointment = appointmentInstaller.installAppointment(meeting, invitationTemplate);
+        List<Calendar> calendarList = calendarAttendeesInstaller.installCalendarList(learners, appointment);
         List<ResponseStatus> responseStatusList = messageSender.sendMessageToAllRecipientsAndSaveEnrollments(calendarList, meeting);
         return responseStatusList;
     }

@@ -17,11 +17,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Component
 public class DateHelperDefiner {
-    private static final  Logger logger = LoggerFactory.getLogger(DateHelperDefiner.class);
+    private static final Logger logger = LoggerFactory.getLogger(DateHelperDefiner.class);
     private SessionParser sessionParser;
     private RruleDefiner rruleDefiner;
     private SessionChecker sessionChecker;
@@ -35,33 +36,32 @@ public class DateHelperDefiner {
         this.sessionChecker = sessionChecker;
     }
 
-    public DateHelper defineDateHelper(Meeting meeting) {
+    public DateHelper defineDateHelper(List<TimeSlot> timeSlots, BigInteger meetingId) {
         DateHelper dateHelper;
-        int amountOfTimeSlots = meeting.getTimeSlots().size();
+        int amountOfTimeSlots = timeSlots.size();
         if (amountOfTimeSlots == DateHelperConstants.AMOUNT_OF_SESSIONS_FOR_SINGLE_EVENT) {
-            TimeSlot meetingTimeSlot = meeting.getTimeSlots().get(DateHelperConstants.NUMBER_OF_FIRST_TIME_SLOT);
+            TimeSlot meetingTimeSlot = timeSlots.get(DateHelperConstants.NUMBER_OF_FIRST_TIME_SLOT);
             Session meetingSession = sessionParser.timeSlotToSession(meetingTimeSlot);
             SimpleDateHelperBuilder simpleDateHelperBuilder = new SimpleDateHelperBuilder();
             dateHelper = simpleDateHelperBuilder
                     .setSession(meetingSession)
                     .build();
-            logger.debug("Meeting type of meeting with id " + meeting.getId() + " is simple");
+            logger.debug("Meeting type of meeting with id " + meetingId + " is simple");
         } else {
-            List<TimeSlot> appointmentTimeSlots = meeting.getTimeSlots();
-            List<Session> sessions = sessionParser.timeSlotListToSessionList(appointmentTimeSlots);
-            if (sessionChecker.doAllSessionsTheSame(appointmentTimeSlots)) {
+            List<Session> sessions = sessionParser.timeSlotListToSessionList(timeSlots);
+            if (sessionChecker.doAllSessionsTheSame(timeSlots)) {
                 Rrule rrule = rruleDefiner.defineRrule(sessions);
                 RecurrenceDateHelperBuilder recurrenceDateHelperBuilder = new RecurrenceDateHelperBuilder();
                 dateHelper = recurrenceDateHelperBuilder
                         .setRrule(rrule)
                         .build();
-                logger.debug("Meeting type of meeting with id " + meeting.getId() + " is recurrence");
+                logger.debug("Meeting type of meeting with id " + meetingId + " is recurrence");
             } else {
                 ComplexDateHelperBuilder complexDateHelperBuilder = new ComplexDateHelperBuilder();
                 dateHelper = complexDateHelperBuilder
                         .setSessionList(sessions)
                         .build();
-                logger.debug("Meeting type of meeting with id " + meeting.getId() + " is complex");
+                logger.debug("Meeting type of meeting with id " + meetingId + " is complex");
             }
         }
         return dateHelper;

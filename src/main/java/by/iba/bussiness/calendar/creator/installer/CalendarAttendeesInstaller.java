@@ -1,9 +1,8 @@
 package by.iba.bussiness.calendar.creator.installer;
 
+import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.attendee.Learner;
 import by.iba.bussiness.calendar.creator.AppointmentCalendarCreator;
-import by.iba.bussiness.invitation_template.InvitationTemplate;
-import by.iba.bussiness.meeting.Meeting;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.CalendarException;
 import net.fortuna.ical4j.model.Component;
@@ -29,12 +28,11 @@ public class CalendarAttendeesInstaller {
     @Autowired
     private AppointmentCalendarCreator appointmentCalendarCreator;
 
-    public List<Calendar> installCalendarListAndSaveAppointments(List<Learner> learners, Meeting meeting, InvitationTemplate invitationTemplate) {
+    public List<Calendar> installCalendarList(List<Learner> learners, Appointment appointment) {
         List<Calendar> calendarList = new ArrayList<>();
         for (Learner learner : learners) {
             String email = learner.getEmail();
-
-            Calendar calendar = appointmentCalendarCreator.createCalendarAndSaveAppointment(learner, meeting, invitationTemplate);
+            Calendar calendar = appointmentCalendarCreator.createCalendar(learner, appointment);
             addAttendeeToCalendar(email, calendar);
             try {
                 calendarList.add(new Calendar(calendar));
