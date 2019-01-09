@@ -32,7 +32,7 @@ public class AppointmentInstaller {
         Appointment appointment = null;
         BigInteger meetingId = meeting.getId();
         Appointment oldAppointment = appointmentRepository.getByMeetingId(meetingId);
-        if (oldAppointment.equals(null)) {
+        if (oldAppointment == null) {
             appointment = appointmentCreator.createAppointment(meeting, invitationTemplate);
             appointmentRepository.save(appointment);
         } else {
