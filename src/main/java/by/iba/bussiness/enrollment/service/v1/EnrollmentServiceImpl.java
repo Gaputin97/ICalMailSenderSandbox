@@ -140,9 +140,6 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public List<ResponseStatus> sendCalendar(HttpServletRequest request, String meetingId) {
-        List<ResponseStatus> responseStatusList = null;
-        List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(meetingId);
-
         Meeting meeting = meetingService.getMeetingById(request, meetingId);
         String invitationTemplateKey = meeting.getInvitationTemplate();
         if (invitationTemplateKey.isEmpty()) {
@@ -155,7 +152,6 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
         for (Enrollment enrollment : enrollmentList) {
             Calendar calendar = null;
-
             ResponseStatus responseStatus = messageSender.sendCalendarToLearner(calendar, meetingId);
             responseStatusList.add(responseStatus);
 
