@@ -159,16 +159,19 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         InvitationTemplate invitationTemplate = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
         Appointment appointment = appointmentInstaller.installAppointment(meeting, invitationTemplate);
 
-        List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(meetingId);
+        BigInteger bigIntegerMeetingId = new BigInteger(meetingId);
+        List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(bigIntegerMeetingId);
         List<ResponseStatus> responseStatusList = new ArrayList<>();
         for (Enrollment enrollment : enrollmentList) {
             Calendar calendar = calendarCreator.createCalendar(enrollment, appointment);
-            calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, calendar);
-
-            ResponseStatus responseStatus = messageSender.sendCalendarToLearner(calendar, meetingId);
-            responseStatusList.add(responseStatus);
-
-            enrollmentsInstaller.installCalendarFields(enrollment, calendar);
+            if (calendar == null) {
+                continue;
+            } else {
+                calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, calendar);
+                ResponseStatus responseStatus = messageSender.sendCalendarToLearner(calendar, meetingId);
+                responseStatusList.add(responseStatus);
+                enrollmentsInstaller.installCalendarFields(enrollment, calendar);
+            }
         }
         return responseStatusList;
     }
