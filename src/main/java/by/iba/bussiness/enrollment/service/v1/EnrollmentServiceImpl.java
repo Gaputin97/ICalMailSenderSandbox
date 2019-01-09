@@ -126,8 +126,9 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public List<ResponseStatus> enrollLearners(HttpServletRequest request, String
-            meetingId, List<Learner> learners) {
+    public void enrollLearners(HttpServletRequest request,
+                               String meetingId,
+                               List<Learner> learners) {
         Meeting meeting = meetingService.getMeetingById(request, meetingId);
         String invitationTemplateKey = meeting.getInvitationTemplate();
         if (invitationTemplateKey.isEmpty()) {
@@ -135,24 +136,28 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
         }
         enrollmentsPreInstaller.installEnrollments(learners, meetingId);
-
-        InvitationTemplate invitationTemplate = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
-        Appointment appointment = appointmentInstaller.installAppointment(meeting, invitationTemplate);
-        List<Calendar> calendarList = calendarAttendeesInstaller.installCalendarList(learners, appointment);
-        List<ResponseStatus> responseStatusList = messageSender.sendMessageToAllRecipientsAndSaveEnrollments(calendarList, meeting);
-        return responseStatusList;
     }
 
     @Override
-    public List<ResponseStatus> sendCalendar(String meetingId) {
-        List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(meetingId);
-        for (Enrollment enrollment : enrollmentList) {
-
-            messageSender.sendCalendarToLearner();
+    public List<ResponseStatus> sendCalendar(HttpServletRequest request, String meetingId) {
+        Meeting meeting = meetingService.getMeetingById(request, meetingId);
+        String invitationTemplateKey = meeting.getInvitationTemplate();
+        if (invitationTemplateKey.isEmpty()) {
+            logger.error("Can't enroll learners to this event, cause can't find some invitation template by meeting id: " + meetingId);
+            throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
         }
 
-        return null;
+        InvitationTemplate invitationTemplate = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
+        Appointment appointment = appointmentInstaller.installAppointment(meeting, invitationTemplate);
+
+        for (Enrollment enrollment : enrollmentList) {
+            Calendar calendar = null;
+            ResponseStatus responseStatus = messageSender.sendCalendarToLearner(calendar, meetingId);
+            responseStatusList.add(responseStatus);
+            enrollment.setCalendarStatus(statusParser.parseCalMethodToEnrollmentCalendarStatus(method));
+            enrollment.setCalendarVersion(event.getSequence().getValue());
+            enrollmentRepository.save(enrollment);
+        }
+        return responseStatusList;
     }
-
 }
-

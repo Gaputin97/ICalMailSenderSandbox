@@ -45,11 +45,18 @@ public class EnrollmentController {
         return enrollmentRepository.save(enrollment);
     }
 
-    @ApiOperation(value = "Send calendar templates for non existing recipients")
+    @ApiOperation(value = "Enroll users to meeting")
     @RequestMapping(value = "/enrollment/add/{meetingId}", method = RequestMethod.POST)
-    public List<ResponseStatus> enrollUsers(@PathVariable String meetingId,
-                                            @RequestBody List<Learner> learners,
-                                            HttpServletRequest request) {
-        return enrollmentService.enrollLearners(request, meetingId, learners);
+    public void enrollUsers(@PathVariable String meetingId,
+                            @RequestBody List<Learner> learners,
+                            HttpServletRequest request) {
+        enrollmentService.enrollLearners(request, meetingId, learners);
+    }
+
+    @ApiOperation(value = "Send calendar to existing users")
+    @RequestMapping(value = "/enrollment/send/{meetingId}", method = RequestMethod.GET)
+    public List<ResponseStatus> sendCalendar(@PathVariable String meetingId,
+                                             HttpServletRequest request) {
+        return enrollmentService.sendCalendar(request, meetingId);
     }
 }

@@ -21,13 +21,9 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
 
 @org.springframework.stereotype.Component
 public class MessageSender {
-
     private static final Logger logger = LoggerFactory.getLogger(MessageSender.class);
     private JavaMailSender javaMailSender;
     private CalendarTextEditor calendarTextEditor;
@@ -44,7 +40,7 @@ public class MessageSender {
         this.calendarEnrollmentCreator = calendarEnrollmentCreator;
     }
 
-    public ResponseStatus sendCalendarToLearner(Calendar calendar, Meeting meeting) {
+    public ResponseStatus sendCalendarToLearner(Calendar calendar, String meetingId) {
         MimeMessage message;
         VEvent event = (VEvent) calendar.getComponents().getComponent(Component.VEVENT);
         Attendee attendee = event.getProperties().getProperty(Property.ATTENDEE);
@@ -79,9 +75,8 @@ public class MessageSender {
             message.setContent(multipart);
 
             javaMailSender.send(message);
-
             logger.info("Message was sanded to " + editedUserEmail);
-            logger.info("New enrollment with meeting id" + meeting.getId() + " and user " + editedUserEmail + " was added");
+            logger.info("New enrollment with meeting id" + meetingId + " and user " + editedUserEmail + " was added");
             responseStatus = new ResponseStatus(true, userName, editedUserEmail);
         } catch (MessagingException e) {
             logger.error("Error while trying to send message", e);
