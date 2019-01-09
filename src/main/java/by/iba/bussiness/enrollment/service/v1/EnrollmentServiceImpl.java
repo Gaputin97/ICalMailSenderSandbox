@@ -146,7 +146,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     @Override
     public List<ResponseStatus> sendCalendar(String meetingId) {
         List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(meetingId);
-        enrollmentList.forEach(enrollment -> messageSender.sendCalendarToLearner());
+        for (Enrollment enrollment : enrollmentList) {
+
+            messageSender.sendCalendarToLearner();
+        }
+
         return null;
     }
 
