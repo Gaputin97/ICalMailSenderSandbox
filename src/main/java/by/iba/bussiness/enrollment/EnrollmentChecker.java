@@ -32,7 +32,7 @@ public class EnrollmentChecker {
             } else {
                 wasChanged = false;
             }
-            logger.info("Enrollment with meeting id " + meetingId + " and email " + email + " and enrollment type " + enrollmentStatus + " exists. ");
+            logger.info("Enrollment with meeting id " + meetingId + " and email " + email + " and enrollment type " + learnerStatus + " exists. ");
         } else {
             wasChanged = false;
         }

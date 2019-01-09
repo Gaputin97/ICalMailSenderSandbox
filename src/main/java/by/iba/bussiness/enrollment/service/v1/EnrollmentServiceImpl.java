@@ -35,6 +35,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -68,7 +69,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                                  InvitationTemplateService invitationTemplateService,
                                  EnrollmentsInstaller enrollmentsInstaller,
                                  EnrollmentRepository enrollmentRepository,
-                                 CalendarCreator calendarCreator,
+                                 AppointmentInstaller appointmentInstaller, CalendarCreator calendarCreator,
                                  StatusParser statusParser) {
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
@@ -78,6 +79,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         this.invitationTemplateService = invitationTemplateService;
         this.enrollmentsInstaller = enrollmentsInstaller;
         this.enrollmentRepository = enrollmentRepository;
+        this.appointmentInstaller = appointmentInstaller;
         this.calendarCreator = calendarCreator;
         this.statusParser = statusParser;
     }
@@ -158,7 +160,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         Appointment appointment = appointmentInstaller.installAppointment(meeting, invitationTemplate);
 
         List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(meetingId);
-        List<ResponseStatus> responseStatusList = null;
+        List<ResponseStatus> responseStatusList = new ArrayList<>();
         for (Enrollment enrollment : enrollmentList) {
             Calendar calendar = calendarCreator.createCalendar(enrollment, appointment);
             calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, calendar);

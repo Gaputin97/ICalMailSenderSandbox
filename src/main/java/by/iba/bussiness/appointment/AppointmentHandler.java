@@ -57,7 +57,6 @@ public class AppointmentHandler {
             }
         }
         newAppointment.setId(sourceId);
-        appointmentRepository.save(newAppointment);
         return newAppointment;
     }
 

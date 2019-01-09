@@ -41,5 +41,4 @@ public class CalendarCreator {
         }
         return calendar;
     }
-
 }
