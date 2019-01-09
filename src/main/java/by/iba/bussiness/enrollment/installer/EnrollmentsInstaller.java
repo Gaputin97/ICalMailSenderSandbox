@@ -3,6 +3,7 @@ package by.iba.bussiness.enrollment.installer;
 import by.iba.bussiness.calendar.attendee.Learner;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentChecker;
+import by.iba.bussiness.enrollment.EnrollmentStatus;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -45,6 +46,4 @@ public class EnrollmentsInstaller {
             }
         }
     }
-
-    public
 }
