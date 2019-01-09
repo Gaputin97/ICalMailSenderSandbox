@@ -11,13 +11,13 @@ import by.iba.bussiness.calendar.date.model.DateHelper;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentStatus;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
-import by.iba.bussiness.invitation_template.InvitationTemplate;
-import by.iba.bussiness.meeting.Meeting;
+import by.iba.bussiness.meeting.timeslot.TimeSlot;
 import net.fortuna.ical4j.model.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
+import java.util.List;
 
 @Component
 public class AppointmentCalendarCreator {
@@ -43,36 +43,22 @@ public class AppointmentCalendarCreator {
         this.dateHelperDefiner = dateHelperDefiner;
     }
 
-    public Calendar createCalendarAndSaveAppointment(Learner learner, Meeting meeting, InvitationTemplate invitationTemplate) {
+    public Calendar createCalendar(Learner learner, Appointment appointment) {
         Calendar calendar;
-        DateHelper dateHelper = dateHelperDefiner.defineDateHelper(meeting);
-        BigInteger meetingId = meeting.getId();
-
+        List<TimeSlot> timeSlots = appointment.getTimeSlots();
+        BigInteger meetingId = appointment.getMeetingId();
+        DateHelper dateHelper = dateHelperDefiner.defineDateHelper(timeSlots, meetingId);
         String email = learner.getEmail();
         String enrollmentStatus = learner.getEnrollmentStatus();
-
         Enrollment enrollment = enrollmentRepository.getByEmailAndParentIdAndType(meetingId, email, enrollmentStatus);
-        Appointment oldAppointment = appointmentRepository.getByMeetingId(meetingId);
-        if (oldAppointment == null) {
-            Appointment newAppointment = appointmentCreator.createAppointment(meeting, invitationTemplate);
-            Calendar calendarInvite = calendarFactory.createInvitationCalendarTemplate(dateHelper, newAppointment, enrollment);
-            appointmentRepository.save(newAppointment);
-            calendar = calendarInvite;
-        } else if (learner.getEnrollmentStatus().equals(EnrollmentStatus.CANCELLED)) {
-            Enrollment realEnrollment = enrollmentRepository.getByEmailAndParentId(meetingId, email);
-            calendar = calendarFactory.createCancelCalendarTemplate(dateHelper, oldAppointment, realEnrollment);
+        if (learner.getEnrollmentStatus().equals(EnrollmentStatus.CANCELLED)) {
+            Calendar calendarCancel = calendarFactory.createCancelCalendarTemplate(dateHelper, appointment, enrollment);
+            calendar = calendarCancel;
         } else {
-            Appointment updatedAppointment = appointmentHandler.getUpdatedAppointment(meeting, invitationTemplate);
-            if ((updatedAppointment.getUpdateIndex() == 0 && updatedAppointment.getRescheduleIndex() == 0) ||
-                (updatedAppointment.getRescheduleIndex() > oldAppointment.getRescheduleIndex() ||
-                    updatedAppointment.getUpdateIndex() > oldAppointment.getUpdateIndex())) {
-                Calendar calendarUpdate = calendarFactory.createInvitationCalendarTemplate(dateHelper, updatedAppointment, enrollment);
-                appointmentRepository.save(updatedAppointment);
-                calendar = calendarUpdate;
-            } else {
-                calendar = calendarFactory.createInvitationCalendarTemplate(dateHelper, oldAppointment, enrollment);
-            }
+            Calendar calendarInvite = calendarFactory.createInvitationCalendarTemplate(dateHelper, appointment, enrollment);
+            calendar = calendarInvite;
         }
         return calendar;
     }
+
 }

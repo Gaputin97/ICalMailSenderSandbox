@@ -1,6 +1,7 @@
 package by.iba.bussiness.enrollment.service.v1;
 
 import by.iba.bussiness.appointment.Appointment;
+import by.iba.bussiness.appointment.AppointmentInstaller;
 import by.iba.bussiness.calendar.attendee.Learner;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
 import by.iba.bussiness.enrollment.Enrollment;
@@ -16,6 +17,7 @@ import by.iba.bussiness.sender.ResponseStatus;
 import by.iba.bussiness.token.model.JavaWebToken;
 import by.iba.bussiness.token.service.TokenService;
 import by.iba.exception.ServiceException;
+import net.fortuna.ical4j.model.Calendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private InvitationTemplateService invitationTemplateService;
     private EnrollmentsPreInstaller enrollmentsPreInstaller;
     private EnrollmentRepository enrollmentRepository;
+    private AppointmentInstaller appointmentInstaller;
 
     @Value("${enrollment_by_email_and_meeting_id_endpoint}")
     private String ENDPOINT_FIND_ENROLLMENT_BY_PARENT_ID_AND_EMAIL;
@@ -69,10 +72,12 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         this.invitationTemplateService = invitationTemplateService;
         this.enrollmentsPreInstaller = enrollmentsPreInstaller;
         this.enrollmentRepository = enrollmentRepository;
+        this.appointmentInstaller = appointmentInstaller;
     }
 
     @Override
-    public Enrollment getEnrollmentByEmailAndParentId(HttpServletRequest request, BigInteger parentId, String email) {
+    public Enrollment getEnrollmentByEmailAndParentId(HttpServletRequest request, BigInteger parentId, String
+            email) {
         JavaWebToken javaWebToken = tokenService.getJavaWebToken(request);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set(HttpHeaders.AUTHORIZATION, "Bearer " + javaWebToken.getJwt());
@@ -121,7 +126,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public List<ResponseStatus> enrollLearners(HttpServletRequest request, String meetingId, List<Learner> learners) {
+    public List<ResponseStatus> enrollLearners(HttpServletRequest request, String
+            meetingId, List<Learner> learners) {
         Meeting meeting = meetingService.getMeetingById(request, meetingId);
         String invitationTemplateKey = meeting.getInvitationTemplate();
         if (invitationTemplateKey.isEmpty()) {
@@ -131,10 +137,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         enrollmentsPreInstaller.installEnrollments(learners, meetingId);
 
         InvitationTemplate invitationTemplate = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
-        Appointment currentAppointment =
-        Calendar calendar =
-        List<Calendar> calendarList = calendarAttendeesInstaller.setAttendeesToCalendar(learners, calendar);
-
+        Appointment appointment = appointmentInstaller.installAppointment(meeting, invitationTemplate);
+        List<Calendar> calendarList = calendarAttendeesInstaller.installCalendarList(learners, appointment);
         List<ResponseStatus> responseStatusList = messageSender.sendMessageToAllRecipientsAndSaveEnrollments(calendarList, meeting);
         return responseStatusList;
     }
@@ -147,3 +151,4 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
 }
+
