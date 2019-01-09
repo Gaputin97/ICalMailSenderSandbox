@@ -1,8 +1,5 @@
 package by.iba.bussiness.calendar.creator.installer;
 
-import by.iba.bussiness.appointment.AppointmentCreator;
-import by.iba.bussiness.appointment.repository.AppointmentRepository;
-import by.iba.bussiness.calendar.creator.CalendarCreator;
 import by.iba.bussiness.enrollment.Enrollment;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
@@ -13,26 +10,12 @@ import net.fortuna.ical4j.model.parameter.Rsvp;
 import net.fortuna.ical4j.model.property.Attendee;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.URI;
 
 @org.springframework.stereotype.Component
 public class CalendarAttendeesInstaller {
     private static final Logger logger = LoggerFactory.getLogger(CalendarAttendeesInstaller.class);
-    private CalendarCreator calendarCreator;
-    private AppointmentRepository appointmentRepository;
-    private AppointmentCreator appointmentCreator;
-
-    @Autowired
-    public CalendarAttendeesInstaller(CalendarCreator CalendarCreator,
-                                      AppointmentRepository appointmentRepository,
-                                      AppointmentCreator appointmentCreator) {
-        this.calendarCreator = CalendarCreator;
-        this.appointmentRepository = appointmentRepository;
-        this.appointmentCreator = appointmentCreator;
-    }
-
 
     public Calendar addAttendeeToCalendar(Enrollment enrollment, Calendar calendar) {
         String email = enrollment.getUserEmail();
