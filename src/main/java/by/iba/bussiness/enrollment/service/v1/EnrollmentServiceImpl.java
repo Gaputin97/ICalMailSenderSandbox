@@ -158,6 +158,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
             ResponseStatus responseStatus = messageSender.sendCalendarToLearner(calendar, meetingId);
             responseStatusList.add(responseStatus);
+
             enrollment.setCalendarStatus(statusParser.parseCalMethodToEnrollmentCalendarStatus(method));
             enrollment.setCalendarVersion(event.getSequence().getValue());
             enrollmentRepository.save(enrollment);
