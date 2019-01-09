@@ -44,7 +44,7 @@ public class MessageSender {
         this.calendarEnrollmentCreator = calendarEnrollmentCreator;
     }
 
-    private ResponseStatus sendCalendarToRecipientAndSaveEnrollment(Calendar calendar, Meeting meeting) {
+    public ResponseStatus sendCalendarToLearner(Calendar calendar, Meeting meeting) {
         MimeMessage message;
         VEvent event = (VEvent) calendar.getComponents().getComponent(Component.VEVENT);
         Attendee attendee = event.getProperties().getProperty(Property.ATTENDEE);
@@ -93,14 +93,5 @@ public class MessageSender {
             responseStatus = new ResponseStatus(false, userName, editedUserEmail);
         }
         return responseStatus;
-    }
-
-    public List<ResponseStatus> sendMessageToAllRecipientsAndSaveEnrollments(List<Calendar> calendarList, Meeting meeting) {
-        List<ResponseStatus> responseStatusList = new ArrayList<>();
-        for (Calendar calendar : calendarList) {
-            responseStatusList.add(sendCalendarToRecipientAndSaveEnrollment(calendar, meeting));
-        }
-        logger.info("Messages to all recipients were sanded successfully");
-        return responseStatusList;
     }
 }

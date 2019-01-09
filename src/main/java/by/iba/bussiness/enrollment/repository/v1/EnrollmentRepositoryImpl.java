@@ -54,22 +54,12 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
     }
 
     @Override
-    public List<Enrollment> getAllByParentId(BigInteger parentId) {
+    public List<Enrollment> getAllByParentId(String parentId) {
         Query query = new Query(Criteria.where("parentId").is(parentId));
         List<Enrollment> enrollmentList = mongoTemplate.find(query, Enrollment.class);
         if (enrollmentList.isEmpty()) {
             logger.info("Can't locally find any enrollments with parent ID: " + parentId);
         }
         return enrollmentList;
-    }
-
-    @Override
-    public Enrollment getOneByParentId(BigInteger parentId) {
-        Query query = new Query(Criteria.where("parentId").is(parentId));
-        Enrollment enrollment = mongoTemplate.findOne(query, Enrollment.class);
-        if (enrollment == null) {
-            logger.info("Can't locally find any enrollments with parent ID: " + parentId);
-        }
-        return enrollment;
     }
 }

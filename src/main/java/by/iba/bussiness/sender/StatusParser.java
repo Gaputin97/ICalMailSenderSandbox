@@ -21,7 +21,7 @@ public class StatusParser {
 
     public String parseCalMethodToEnrollmentCalendarStatus(Method method) {
         String calendarStatus;
-        if (method.getValue() == CANCEL_CALENDAR_METHOD) {
+        if (method.getValue().equals(CANCEL_CALENDAR_METHOD)) {
             calendarStatus = CalendarStatus.CANCELLED;
         } else {
             calendarStatus = CalendarStatus.INVITED;

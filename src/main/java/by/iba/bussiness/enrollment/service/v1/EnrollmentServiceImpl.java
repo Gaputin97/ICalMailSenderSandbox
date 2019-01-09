@@ -1,21 +1,21 @@
 package by.iba.bussiness.enrollment.service.v1;
 
+import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.attendee.Learner;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.installer.EnrollmentsPreInstaller;
+import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.invitation_template.service.InvitationTemplateService;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.MeetingService;
-import by.iba.bussiness.response.CalendarSendingResponse;
 import by.iba.bussiness.sender.MessageSender;
 import by.iba.bussiness.sender.ResponseStatus;
 import by.iba.bussiness.token.model.JavaWebToken;
 import by.iba.bussiness.token.service.TokenService;
 import by.iba.exception.ServiceException;
-import net.fortuna.ical4j.model.Calendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +44,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private MessageSender messageSender;
     private InvitationTemplateService invitationTemplateService;
     private EnrollmentsPreInstaller enrollmentsPreInstaller;
+    private EnrollmentRepository enrollmentRepository;
 
     @Value("${enrollment_by_email_and_meeting_id_endpoint}")
     private String ENDPOINT_FIND_ENROLLMENT_BY_PARENT_ID_AND_EMAIL;
@@ -57,7 +58,9 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                                  MeetingService meetingService,
                                  CalendarAttendeesInstaller calendarAttendeesInstaller,
                                  MessageSender messageSender,
-                                 InvitationTemplateService invitationTemplateService, EnrollmentsPreInstaller enrollmentsPreInstaller) {
+                                 InvitationTemplateService invitationTemplateService,
+                                 EnrollmentsPreInstaller enrollmentsPreInstaller,
+                                 EnrollmentRepository enrollmentRepository) {
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
         this.meetingService = meetingService;
@@ -65,6 +68,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         this.messageSender = messageSender;
         this.invitationTemplateService = invitationTemplateService;
         this.enrollmentsPreInstaller = enrollmentsPreInstaller;
+        this.enrollmentRepository = enrollmentRepository;
     }
 
     @Override
@@ -92,7 +96,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public List<Enrollment> getEnrollmentByParentId(HttpServletRequest request, BigInteger parentId) {
+    public List<Enrollment> getEnrollmentsByParentId(HttpServletRequest request, BigInteger parentId) {
         JavaWebToken javaWebToken = tokenService.getJavaWebToken(request);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set(HttpHeaders.AUTHORIZATION, "Bearer " + javaWebToken.getJwt());
@@ -124,10 +128,22 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             logger.error("Can't enroll learners to this event, cause can't find some invitation template by meeting id: " + meetingId);
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
         }
-        InvitationTemplate invitationTemplate = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
         enrollmentsPreInstaller.installEnrollments(learners, meetingId);
-        List<Calendar> calendarList = calendarAttendeesInstaller.installCalendarListAndSaveAppointments(learners, meeting, invitationTemplate);
+
+        InvitationTemplate invitationTemplate = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
+        Appointment currentAppointment =
+        Calendar calendar =
+        List<Calendar> calendarList = calendarAttendeesInstaller.setAttendeesToCalendar(learners, calendar);
+
         List<ResponseStatus> responseStatusList = messageSender.sendMessageToAllRecipientsAndSaveEnrollments(calendarList, meeting);
         return responseStatusList;
     }
+
+    @Override
+    public List<ResponseStatus> sendCalendar(String meetingId) {
+        List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(meetingId);
+        enrollmentList.forEach(enrollment -> messageSender.sendCalendarToLearner());
+        return null;
+    }
+
 }

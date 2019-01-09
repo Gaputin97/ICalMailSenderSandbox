@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface EnrollmentService {
     Enrollment getEnrollmentByEmailAndParentId(HttpServletRequest request, BigInteger parentId, String email);
-    List<Enrollment> getEnrollmentByParentId(HttpServletRequest request, BigInteger parentId);
+    List<Enrollment> getEnrollmentsByParentId(HttpServletRequest request, BigInteger parentId);
     List<ResponseStatus> enrollLearners(HttpServletRequest request, String meetingId, List<Learner> learners);
+    List<ResponseStatus> sendCalendar(String meetingId);
 }
