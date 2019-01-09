@@ -165,7 +165,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         for (Enrollment enrollment : enrollmentList) {
             Calendar calendar = calendarCreator.createCalendar(enrollment, appointment);
             if (calendar == null) {
-                continue;
+                responseStatusList.add(new ResponseStatus(false, enrollment.getUserName(), enrollment.getUserEmail()));
             } else {
                 calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, calendar);
                 ResponseStatus responseStatus = messageSender.sendCalendarToLearner(calendar, meetingId);
