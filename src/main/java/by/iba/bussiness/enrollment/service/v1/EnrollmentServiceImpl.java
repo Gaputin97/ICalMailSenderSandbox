@@ -47,7 +47,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private CalendarAttendeesInstaller calendarAttendeesInstaller;
     private MessageSender messageSender;
     private InvitationTemplateService invitationTemplateService;
-    private EnrollmentsInstaller enrollmentsPreInstaller;
+    private EnrollmentsInstaller enrollmentsInstaller;
     private EnrollmentRepository enrollmentRepository;
     private AppointmentInstaller appointmentInstaller;
     private CalendarCreator calendarCreator;
@@ -66,7 +66,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                                  CalendarAttendeesInstaller calendarAttendeesInstaller,
                                  MessageSender messageSender,
                                  InvitationTemplateService invitationTemplateService,
-                                 EnrollmentsInstaller enrollmentsPreInstaller,
+                                 EnrollmentsInstaller enrollmentsInstaller,
                                  EnrollmentRepository enrollmentRepository,
                                  CalendarCreator calendarCreator,
                                  StatusParser statusParser) {
@@ -76,7 +76,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         this.calendarAttendeesInstaller = calendarAttendeesInstaller;
         this.messageSender = messageSender;
         this.invitationTemplateService = invitationTemplateService;
-        this.enrollmentsPreInstaller = enrollmentsPreInstaller;
+        this.enrollmentsInstaller = enrollmentsInstaller;
         this.enrollmentRepository = enrollmentRepository;
         this.calendarCreator = calendarCreator;
         this.statusParser = statusParser;
@@ -142,7 +142,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             logger.error("Can't enroll learners to this event, cause can't find some invitation template by meeting id: " + meetingId);
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
         }
-        enrollmentsPreInstaller.install(learners, meetingId);
+        enrollmentsInstaller.install(learners, meetingId);
     }
 
     @Override
@@ -166,9 +166,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             ResponseStatus responseStatus = messageSender.sendCalendarToLearner(calendar, meetingId);
             responseStatusList.add(responseStatus);
 
-            enrollment.setCalendarStatus(statusParser.parseCalMethodToEnrollmentCalendarStatus(method));
-            enrollment.setCalendarVersion(event.getSequence().getValue());
-            enrollmentRepository.save(enrollment);
+            enrollmentsInstaller.installCalendarFields(enrollment, calendar);
         }
         return responseStatusList;
     }
