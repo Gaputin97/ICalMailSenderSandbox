@@ -12,18 +12,18 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-public class EnrollmentsPreInstaller {
+public class EnrollmentsInstaller {
     private EnrollmentRepository enrollmentRepository;
     private EnrollmentChecker enrollmentChecker;
 
     @Autowired
-    public EnrollmentsPreInstaller(EnrollmentRepository enrollmentRepository,
-                                   EnrollmentChecker enrollmentChecker) {
+    public EnrollmentsInstaller(EnrollmentRepository enrollmentRepository,
+                                EnrollmentChecker enrollmentChecker) {
         this.enrollmentRepository = enrollmentRepository;
         this.enrollmentChecker = enrollmentChecker;
     }
 
-    public void installEnrollments(List<Learner> learners, String meetingId) {
+    public void install(List<Learner> learners, String meetingId) {
         BigInteger bigIntegerMeetingId = new BigInteger(meetingId);
         for (Learner learner : learners) {
             String email = learner.getEmail();
@@ -45,4 +45,6 @@ public class EnrollmentsPreInstaller {
             }
         }
     }
+
+    public
 }
