@@ -75,13 +75,7 @@ public class MessageSender {
             message.setContent(multipart);
 
             javaMailSender.send(message);
-
             logger.info("Message was sanded to " + editedUserEmail);
-            Enrollment enrollment = enrollmentRepository.getByEmailAndParentIdAndType(meetingId, editedUserEmail, statusParser.parseCalMethodToEnrollmentStatus(method));
-            enrollment.setCalendarStatus(statusParser.parseCalMethodToEnrollmentCalendarStatus(method));
-            enrollment.setCalendarVersion(event.getSequence().getValue());
-            enrollmentRepository.save(enrollment);
-            logger.info("New enrollment with meeting id" + meetingId + " and user " + editedUserEmail + " was added");
             responseStatus = new ResponseStatus(true, userName, editedUserEmail);
         } catch (MessagingException e) {
             logger.error("Error while trying to send message", e);
