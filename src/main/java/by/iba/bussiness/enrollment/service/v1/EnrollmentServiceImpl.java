@@ -160,6 +160,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             Calendar calendar = calendarCreator.createCalendar(enrollment, appointment);
             if (calendar == null) {
                 responseStatusList.add(new ResponseStatus(false, enrollment.getUserName(), enrollment.getUserEmail()));
+                logger.info("Don't need to send message to " + enrollment.getUserEmail());
             } else {
                 calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, calendar);
                 ResponseStatus responseStatus = messageSender.sendCalendarToLearner(calendar);

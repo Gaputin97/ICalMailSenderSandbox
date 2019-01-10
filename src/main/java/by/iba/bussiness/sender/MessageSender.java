@@ -66,7 +66,7 @@ public class MessageSender {
             message.setContent(multipart);
 
             javaMailSender.send(message);
-            logger.info("Message was sanded to " + editedUserEmail);
+            logger.info("Message was sent to " + editedUserEmail);
             responseStatus = new ResponseStatus(true, userName, editedUserEmail);
         } catch (MessagingException e) {
             logger.error("Error while trying to send message", e);

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AppointmentCreator {
-    public Appointment createAppointment(Meeting meeting, InvitationTemplate  invitationTemplate) {
+    public Appointment createAppointment(Meeting meeting, InvitationTemplate invitationTemplate) {
         Appointment appointment = new Appointment();
         appointment.setMeetingId(meeting.getId());
         appointment.setInvitationTemplateKey(invitationTemplate.getKey());
@@ -23,6 +23,8 @@ public class AppointmentCreator {
         appointment.setLocationBLD(invitationTemplate.getLocationBLD());
         appointment.setLocationILT(invitationTemplate.getLocationILT());
         appointment.setLocationLVC(invitationTemplate.getLocationLVC());
+
+        appointment.setSummary(meeting.getSummary());
 
         appointment.setSubject(invitationTemplate.getSubject());
         appointment.setTitle(meeting.getTitle());

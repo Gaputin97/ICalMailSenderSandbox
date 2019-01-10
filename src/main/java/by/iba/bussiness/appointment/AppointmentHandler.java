@@ -36,6 +36,9 @@ public class AppointmentHandler {
         Owner oldAppointmentOwner = sourceAppointment.getOwner();
         Owner newAppointmentOwner = newAppointment.getOwner();
 
+        String oldAppointmentSummary = sourceAppointment.getSummary();
+        String newAppointmentSummary = newAppointment.getSummary();
+
         BigInteger sourceId = sourceAppointment.getId();
         int sourceUpdatedIndex = sourceAppointment.getUpdateIndex();
         int sourceRescheduledIndex = sourceAppointment.getRescheduleIndex();
@@ -51,7 +54,8 @@ public class AppointmentHandler {
                 newAppointment.setRescheduleIndex(++maximumIndex);
             } else if (!oldAppointmentDescription.equals(newAppointmentDescription) ||
                     (!oldAppointmentLocation.equals(newAppointmentLocation)) ||
-                    (!oldAppointmentOwner.equals(newAppointmentOwner))) {
+                    (!oldAppointmentOwner.equals(newAppointmentOwner)) ||
+                    (!oldAppointmentSummary.equals(newAppointmentSummary))) {
                 newAppointment.setRescheduleIndex(sourceRescheduledIndex);
                 newAppointment.setUpdateIndex(++maximumIndex);
             }
@@ -66,7 +70,7 @@ public class AppointmentHandler {
         return updateIndex > rescheduleIndex ? updateIndex : rescheduleIndex;
     }
 
-    public int getMinimumIndex(Appointment sourceAppointment){
+    public int getMinimumIndex(Appointment sourceAppointment) {
         int updateIndex = sourceAppointment.getUpdateIndex();
         int rescheduleIndex = sourceAppointment.getRescheduleIndex();
         return updateIndex < rescheduleIndex ? updateIndex : rescheduleIndex;
