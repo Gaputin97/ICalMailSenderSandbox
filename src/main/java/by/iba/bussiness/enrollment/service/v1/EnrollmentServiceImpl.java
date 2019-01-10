@@ -6,7 +6,7 @@ import by.iba.bussiness.calendar.attendee.Learner;
 import by.iba.bussiness.calendar.creator.CalendarCreator;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
 import by.iba.bussiness.enrollment.Enrollment;
-import by.iba.bussiness.enrollment.installer.EnrollmentsInstaller;
+import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.invitation_template.InvitationTemplate;
@@ -15,7 +15,7 @@ import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.MeetingService;
 import by.iba.bussiness.sender.MessageSender;
 import by.iba.bussiness.sender.ResponseStatus;
-import by.iba.bussiness.sender.StatusParser;
+import by.iba.bussiness.enrollment.status.EnrollmentCalendarStatusDefiner;
 import by.iba.bussiness.token.model.JavaWebToken;
 import by.iba.bussiness.token.service.TokenService;
 import by.iba.exception.ServiceException;
@@ -52,7 +52,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private EnrollmentRepository enrollmentRepository;
     private AppointmentInstaller appointmentInstaller;
     private CalendarCreator calendarCreator;
-    private StatusParser statusParser;
+    private EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner;
 
     @Value("${enrollment_by_email_and_meeting_id_endpoint}")
     private String ENDPOINT_FIND_ENROLLMENT_BY_PARENT_ID_AND_EMAIL;
@@ -70,7 +70,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                                  EnrollmentsInstaller enrollmentsInstaller,
                                  EnrollmentRepository enrollmentRepository,
                                  AppointmentInstaller appointmentInstaller, CalendarCreator calendarCreator,
-                                 StatusParser statusParser) {
+                                 EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner) {
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
         this.meetingService = meetingService;
@@ -81,7 +81,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         this.enrollmentRepository = enrollmentRepository;
         this.appointmentInstaller = appointmentInstaller;
         this.calendarCreator = calendarCreator;
-        this.statusParser = statusParser;
+        this.enrollmentCalendarStatusDefiner = enrollmentCalendarStatusDefiner;
     }
 
     @Override
@@ -144,7 +144,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             logger.error("Can't enroll learners to this event, cause can't find some invitation template by meeting id: " + meetingId);
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
         }
-        enrollmentsInstaller.install(learners, meetingId);
+        enrollmentsInstaller.installEnrollmentCommonFields(learners, meetingId);
     }
 
     @Override
@@ -166,10 +166,10 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 responseStatusList.add(new ResponseStatus(false, enrollment.getUserName(), enrollment.getUserEmail()));
             } else {
                 calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, calendar);
-                ResponseStatus responseStatus = messageSender.sendCalendarToLearner(calendar, meetingId);
+                ResponseStatus responseStatus = messageSender.sendCalendarToLearner(calendar);
                 responseStatusList.add(responseStatus);
                 if (responseStatus.isDelivered()) {
-                    enrollmentsInstaller.installCalendarFields(enrollment, calendar, appointment);
+                    enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, appointment);
                 }
             }
         }

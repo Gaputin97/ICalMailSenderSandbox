@@ -1,10 +1,6 @@
 package by.iba.bussiness.sender;
 
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
-import by.iba.bussiness.enrollment.Enrollment;
-import by.iba.bussiness.enrollment.creator.CalendarEnrollmentCreator;
-import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
-import by.iba.bussiness.meeting.Meeting;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
@@ -27,20 +23,15 @@ public class MessageSender {
     private static final Logger logger = LoggerFactory.getLogger(MessageSender.class);
     private JavaMailSender javaMailSender;
     private CalendarTextEditor calendarTextEditor;
-    private EnrollmentRepository enrollmentRepository;
-    private StatusParser statusParser;
-    private CalendarEnrollmentCreator calendarEnrollmentCreator;
 
     @Autowired
-    public MessageSender(JavaMailSender javaMailSender, CalendarTextEditor calendarTextEditor, EnrollmentRepository enrollmentRepository, StatusParser statusParser, CalendarEnrollmentCreator calendarEnrollmentCreator) {
+    public MessageSender(JavaMailSender javaMailSender,
+                         CalendarTextEditor calendarTextEditor) {
         this.javaMailSender = javaMailSender;
         this.calendarTextEditor = calendarTextEditor;
-        this.enrollmentRepository = enrollmentRepository;
-        this.statusParser = statusParser;
-        this.calendarEnrollmentCreator = calendarEnrollmentCreator;
     }
 
-    public ResponseStatus sendCalendarToLearner(Calendar calendar, String meetingId) {
+    public ResponseStatus sendCalendarToLearner(Calendar calendar) {
         MimeMessage message;
         VEvent event = (VEvent) calendar.getComponents().getComponent(Component.VEVENT);
         Attendee attendee = event.getProperties().getProperty(Property.ATTENDEE);

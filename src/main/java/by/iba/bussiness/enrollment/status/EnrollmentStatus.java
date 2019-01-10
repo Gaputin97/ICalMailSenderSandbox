@@ -1,4 +1,4 @@
-package by.iba.bussiness.enrollment;
+package by.iba.bussiness.enrollment.status;
 
 public class EnrollmentStatus {
     public static final String CANCELLED = "CANCELLED";

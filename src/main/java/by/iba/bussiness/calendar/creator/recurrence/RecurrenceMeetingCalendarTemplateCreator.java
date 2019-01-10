@@ -36,8 +36,7 @@ public class RecurrenceMeetingCalendarTemplateCreator {
     private SequenceDefiner sequenceDefiner;
 
     @Autowired
-    public RecurrenceMeetingCalendarTemplateCreator(CalendarTextEditor calendarTextEditor,
-                                                    @Qualifier("requestCalendar") Calendar requestCalendar,
+    public RecurrenceMeetingCalendarTemplateCreator(@Qualifier("requestCalendar") Calendar requestCalendar,
                                                     SessionParser sessionParser,
                                                     IcalDateParser icalDateParser,
                                                     DateIncreaser dateIncreaser,

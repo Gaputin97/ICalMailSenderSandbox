@@ -1,17 +1,10 @@
-package by.iba.bussiness.enrollment.installer;
+package by.iba.bussiness.enrollment;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.AppointmentHandler;
 import by.iba.bussiness.calendar.attendee.Learner;
-import by.iba.bussiness.enrollment.Enrollment;
-import by.iba.bussiness.enrollment.EnrollmentChecker;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
-import by.iba.bussiness.sender.StatusParser;
-import io.swagger.models.auth.In;
-import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Component;
-import net.fortuna.ical4j.model.component.VEvent;
-import net.fortuna.ical4j.model.property.Method;
+import by.iba.bussiness.enrollment.status.EnrollmentCalendarStatusDefiner;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigInteger;
@@ -22,21 +15,21 @@ import java.util.UUID;
 public class EnrollmentsInstaller {
     private EnrollmentRepository enrollmentRepository;
     private EnrollmentChecker enrollmentChecker;
-    private StatusParser statusParser;
+    private EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner;
     private AppointmentHandler appointmentHandler;
 
     @Autowired
     public EnrollmentsInstaller(EnrollmentRepository enrollmentRepository,
                                 EnrollmentChecker enrollmentChecker,
-                                StatusParser statusParser,
+                                EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner,
                                 AppointmentHandler appointmentHandler) {
         this.enrollmentRepository = enrollmentRepository;
         this.enrollmentChecker = enrollmentChecker;
-        this.statusParser = statusParser;
+        this.enrollmentCalendarStatusDefiner = enrollmentCalendarStatusDefiner;
         this.appointmentHandler = appointmentHandler;
     }
 
-    public void install(List<Learner> learners, String meetingId) {
+    public void installEnrollmentCommonFields(List<Learner> learners, String meetingId) {
         BigInteger bigIntegerMeetingId = new BigInteger(meetingId);
         for (Learner learner : learners) {
             String email = learner.getEmail();
@@ -59,10 +52,10 @@ public class EnrollmentsInstaller {
         }
     }
 
-    public void installCalendarFields(Enrollment enrollment, Calendar calendar, Appointment appointment) {
+    public void installEnrollmentCalendarFields(Enrollment enrollment, Appointment appointment) {
         Integer maximumIndex = appointmentHandler.getMaximumIndex(appointment);
-        Method method = calendar.getMethod();
-        enrollment.setCalendarStatus(statusParser.parseCalMethodToEnrollmentCalendarStatus(method));
+        String calendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
+        enrollment.setCalendarStatus(calendarStatus);
         enrollment.setCalendarVersion(maximumIndex.toString());
         enrollmentRepository.save(enrollment);
     }

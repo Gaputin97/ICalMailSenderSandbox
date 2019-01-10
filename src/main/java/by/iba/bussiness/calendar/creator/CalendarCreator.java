@@ -6,7 +6,7 @@ import by.iba.bussiness.calendar.CalendarFactory;
 import by.iba.bussiness.calendar.date.DateHelperDefiner;
 import by.iba.bussiness.calendar.date.model.DateHelper;
 import by.iba.bussiness.enrollment.Enrollment;
-import by.iba.bussiness.enrollment.EnrollmentStatus;
+import by.iba.bussiness.enrollment.status.EnrollmentStatus;
 import by.iba.bussiness.meeting.timeslot.TimeSlot;
 import net.fortuna.ical4j.model.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
