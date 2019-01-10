@@ -58,6 +58,7 @@ public class SimpleMeetingCalendarTemplateCreator {
             Description description = new Description((appointment.getDescription()));
             Summary summary = new Summary((appointment.getSummary()));
             Uid UID = new Uid(enrollment.getCurrentCalendarUid());
+
             Session session = singleDateHelper.getSession();
             DateTime startDateTime = new DateTime(session.getStartDate());
             DateTime endDateTime = new DateTime(session.getEndDate());

@@ -50,12 +50,12 @@ public class RecurrenceMeetingCalendarTemplateCreator {
     }
 
     public Calendar createRecurrenceCalendarInvitationTemplate(RecurrenceDateHelper recurrenceDateHelper, Appointment appointment, Enrollment enrollment) {
-        logger.debug("Started creating inv/update ics file with recurr meeting with id " + appointment.getId());
+        logger.debug("Started creating inv/update ics file with recurrence meeting with id " + appointment.getId());
         return createCommonRecurrenceTemplate(recurrenceDateHelper, appointment, enrollment, requestCalendar);
     }
 
     public Calendar createRecurrenceCalendarCancellationTemplate(RecurrenceDateHelper recurrenceDateHelper, Appointment appointment, Enrollment enrollment) {
-        logger.debug("Started creating cancellation ics file with recurr meeting with id " + appointment.getId());
+        logger.debug("Started creating cancellation ics file with recurrence meeting with id " + appointment.getId());
         return createCommonRecurrenceTemplate(recurrenceDateHelper, appointment, enrollment, cancelCalendar);
 
     }

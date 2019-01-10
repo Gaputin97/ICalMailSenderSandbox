@@ -31,12 +31,13 @@ public class CalendarCreator {
     }
 
     public Calendar createCalendar(Enrollment enrollment, Appointment appointment) {
-        Calendar calendar = null;
         List<TimeSlot> timeSlots = appointment.getTimeSlots();
         BigInteger meetingId = appointment.getMeetingId();
         DateHelper dateHelper = dateHelperDefiner.defineDateHelper(timeSlots, meetingId);
         String enrollmentStatus = enrollment.getStatus();
         int maximumAppointmentIndex = appointmentHandler.getMaximumIndex(appointment);
+
+        Calendar calendar = null;
         if (enrollmentStatus.equals(EnrollmentStatus.CANCELLED)) {
             calendar = calendarFactory.createCancelCalendarTemplate(dateHelper, appointment, enrollment);
         } else {
