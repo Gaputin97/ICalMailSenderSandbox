@@ -1,15 +1,13 @@
 package by.iba.bussiness.calendar.date;
 
-import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.date.builder.ComplexDateHelperBuilder;
 import by.iba.bussiness.calendar.date.builder.RecurrenceDateHelperBuilder;
 import by.iba.bussiness.calendar.date.builder.SimpleDateHelperBuilder;
 import by.iba.bussiness.calendar.date.model.DateHelper;
-import by.iba.bussiness.meeting.Meeting;
-import by.iba.bussiness.calendar.rrule.definer.RruleDefiner;
 import by.iba.bussiness.calendar.rrule.Rrule;
-import by.iba.bussiness.calendar.session.SessionChecker;
+import by.iba.bussiness.calendar.rrule.definer.RruleDefiner;
 import by.iba.bussiness.calendar.session.Session;
+import by.iba.bussiness.calendar.session.SessionChecker;
 import by.iba.bussiness.calendar.session.SessionParser;
 import by.iba.bussiness.meeting.timeslot.TimeSlot;
 import org.slf4j.Logger;

@@ -38,18 +38,15 @@ public class CalendarCreator {
         String enrollmentStatus = enrollment.getStatus();
         int maximumAppointmentIndex = appointmentHandler.getMaximumIndex(appointment);
         if (enrollmentStatus.equals(EnrollmentStatus.CANCELLED)) {
-            Calendar calendarCancel = calendarFactory.createCancelCalendarTemplate(dateHelper, appointment, enrollment);
-            calendar = calendarCancel;
+            calendar = calendarFactory.createCancelCalendarTemplate(dateHelper, appointment, enrollment);
         } else {
             String enrollmentCalendarVersion = enrollment.getCalendarVersion();
             if (enrollmentCalendarVersion == null) {
-                Calendar calendarInvite = calendarFactory.createInvitationCalendarTemplate(dateHelper, appointment, enrollment);
-                calendar = calendarInvite;
+                calendar = calendarFactory.createInvitationCalendarTemplate(dateHelper, appointment, enrollment);
             } else {
                 int calendarVersion = Integer.parseInt(enrollment.getCalendarVersion());
                 if (maximumAppointmentIndex > calendarVersion) {
-                    Calendar calendarInvite = calendarFactory.createInvitationCalendarTemplate(dateHelper, appointment, enrollment);
-                    calendar = calendarInvite;
+                    calendar = calendarFactory.createInvitationCalendarTemplate(dateHelper, appointment, enrollment);
                 }
             }
         }

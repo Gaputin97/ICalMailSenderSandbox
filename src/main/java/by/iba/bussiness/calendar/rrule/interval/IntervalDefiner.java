@@ -1,7 +1,6 @@
 package by.iba.bussiness.calendar.rrule.interval;
 
 import by.iba.bussiness.calendar.rrule.frequence.Frequency;
-import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

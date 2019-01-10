@@ -1,12 +1,8 @@
 package by.iba.bussiness.calendar.session;
 
-import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.timeslot.TimeSlot;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component

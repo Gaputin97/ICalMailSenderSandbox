@@ -1,7 +1,6 @@
 package by.iba.bussiness.appointment;
 
 import by.iba.bussiness.appointment.repository.AppointmentRepository;
-import by.iba.bussiness.calendar.CalendarFactory;
 import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.meeting.Meeting;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,23 +12,20 @@ import java.math.BigInteger;
 public class AppointmentInstaller {
 
     private AppointmentRepository appointmentRepository;
-    private CalendarFactory calendarFactory;
     private AppointmentCreator appointmentCreator;
     private AppointmentHandler appointmentHandler;
 
     @Autowired
     public AppointmentInstaller(AppointmentRepository appointmentRepository,
-                                CalendarFactory calendarFactory,
                                 AppointmentCreator appointmentCreator,
                                 AppointmentHandler appointmentHandler) {
         this.appointmentRepository = appointmentRepository;
-        this.calendarFactory = calendarFactory;
         this.appointmentCreator = appointmentCreator;
         this.appointmentHandler = appointmentHandler;
     }
 
     public Appointment installAppointment(Meeting meeting, InvitationTemplate invitationTemplate) {
-        Appointment appointment = null;
+        Appointment appointment;
         BigInteger meetingId = meeting.getId();
         Appointment oldAppointment = appointmentRepository.getByMeetingId(meetingId);
         if (oldAppointment == null) {

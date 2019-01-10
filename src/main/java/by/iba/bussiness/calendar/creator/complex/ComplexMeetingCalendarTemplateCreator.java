@@ -25,13 +25,10 @@ import java.util.List;
 @Component
 public class ComplexMeetingCalendarTemplateCreator {
     private static final Logger logger = LoggerFactory.getLogger(ComplexMeetingCalendarTemplateCreator.class);
-    private CalendarTextEditor calendarTextEditor;
     private Calendar publishCalendar;
 
     @Autowired
-    public ComplexMeetingCalendarTemplateCreator(CalendarTextEditor calendarTextEditor,
-                                                 @Qualifier("publishCalendar") Calendar publishCalendar) {
-        this.calendarTextEditor = calendarTextEditor;
+    public ComplexMeetingCalendarTemplateCreator(@Qualifier("publishCalendar") Calendar publishCalendar) {
         this.publishCalendar = publishCalendar;
     }
 

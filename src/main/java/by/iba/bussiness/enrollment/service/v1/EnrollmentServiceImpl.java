@@ -52,7 +52,6 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private EnrollmentRepository enrollmentRepository;
     private AppointmentInstaller appointmentInstaller;
     private CalendarCreator calendarCreator;
-    private EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner;
 
     @Value("${enrollment_by_email_and_meeting_id_endpoint}")
     private String ENDPOINT_FIND_ENROLLMENT_BY_PARENT_ID_AND_EMAIL;
@@ -69,8 +68,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                                  InvitationTemplateService invitationTemplateService,
                                  EnrollmentsInstaller enrollmentsInstaller,
                                  EnrollmentRepository enrollmentRepository,
-                                 AppointmentInstaller appointmentInstaller, CalendarCreator calendarCreator,
-                                 EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner) {
+                                 AppointmentInstaller appointmentInstaller, CalendarCreator calendarCreator) {
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
         this.meetingService = meetingService;
@@ -81,12 +79,10 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         this.enrollmentRepository = enrollmentRepository;
         this.appointmentInstaller = appointmentInstaller;
         this.calendarCreator = calendarCreator;
-        this.enrollmentCalendarStatusDefiner = enrollmentCalendarStatusDefiner;
     }
 
     @Override
-    public Enrollment getEnrollmentByEmailAndParentId(HttpServletRequest request, BigInteger parentId, String
-            email) {
+    public Enrollment getEnrollmentByEmailAndParentId(HttpServletRequest request, BigInteger parentId, String email) {
         JavaWebToken javaWebToken = tokenService.getJavaWebToken(request);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set(HttpHeaders.AUTHORIZATION, "Bearer " + javaWebToken.getJwt());

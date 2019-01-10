@@ -13,7 +13,7 @@ public class EnrollmentCalendarStatusDefiner {
         if (enrollment.getCalendarStatus() == null) {
             calendarStatus = CalendarStatus.INVITED;
         } else {
-            if (enrollment.getStatus() == EnrollmentStatus.CANCELLED) {
+            if (enrollment.getStatus().equals(EnrollmentStatus.CANCELLED)) {
                 calendarStatus = CalendarStatus.CANCELLED;
             } else {
                 calendarStatus = CalendarStatus.UPDATED;

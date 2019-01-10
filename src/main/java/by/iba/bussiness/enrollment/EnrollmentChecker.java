@@ -27,7 +27,7 @@ public class EnrollmentChecker {
         if (isExistLocalEnrollment) {
             String enrollmentStatus = enrollment.getStatus();
             String learnerStatus = learner.getEnrollmentStatus();
-            if (enrollmentStatus != learnerStatus) {
+            if (!enrollmentStatus.equals(learnerStatus)) {
                 wasChanged = true;
             } else {
                 wasChanged = false;

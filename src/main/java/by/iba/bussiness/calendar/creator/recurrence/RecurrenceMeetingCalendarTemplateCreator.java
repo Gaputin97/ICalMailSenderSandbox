@@ -1,7 +1,6 @@
 package by.iba.bussiness.calendar.creator.recurrence;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
 import by.iba.bussiness.calendar.date.DateHelperConstants;
 import by.iba.bussiness.calendar.date.model.reccurence.RecurrenceDateHelper;

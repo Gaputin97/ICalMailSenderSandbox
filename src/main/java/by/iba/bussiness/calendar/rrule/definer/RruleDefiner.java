@@ -17,7 +17,7 @@ import java.util.List;
 
 @Component
 public class RruleDefiner {
-    private static final  Logger logger = LoggerFactory.getLogger(RruleDefiner.class);
+    private static final Logger logger = LoggerFactory.getLogger(RruleDefiner.class);
     private FrequencyDefiner frequencyDefiner;
     private IntervalDefiner intervalDefiner;
     private ExDatesDefiner exDatesDefiner;
@@ -48,7 +48,7 @@ public class RruleDefiner {
         logger.info("Interval of rrule is " + interval + " and freq type is " + frequency.toString());
 
         exDatesDefiner.defineExDates(rrule, startDateOfFirstSession, startDateOfLastSession, startDatesOfSessions);
-//        logger.info("Amount of exdates is " + rrule.getExDates().size());
+        logger.info("Amount of exdates is " + rrule.getExDates().size());
         return rrule;
     }
 }

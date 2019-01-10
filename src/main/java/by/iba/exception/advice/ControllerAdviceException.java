@@ -1,9 +1,8 @@
 package by.iba.exception.advice;
 
-import by.iba.exception.SendingException;
 import by.iba.exception.RepositoryException;
+import by.iba.exception.SendingException;
 import by.iba.exception.ServiceException;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
