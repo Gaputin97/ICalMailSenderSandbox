@@ -26,10 +26,13 @@ import java.util.List;
 public class ComplexMeetingCalendarTemplateCreator {
     private static final Logger logger = LoggerFactory.getLogger(ComplexMeetingCalendarTemplateCreator.class);
     private Calendar publishCalendar;
+    private CalendarTextEditor calendarTextEditor;
 
     @Autowired
-    public ComplexMeetingCalendarTemplateCreator(@Qualifier("publishCalendar") Calendar publishCalendar) {
+    public ComplexMeetingCalendarTemplateCreator(@Qualifier("publishCalendar") Calendar publishCalendar,
+                                                 CalendarTextEditor calendarTextEditor) {
         this.publishCalendar = publishCalendar;
+        this.calendarTextEditor = calendarTextEditor;
     }
 
     public Calendar createComplexCalendarInvitationTemplate(ComplexDateHelper complexDateHelper, Appointment appointment, Enrollment enrollment) {
@@ -43,6 +46,7 @@ public class ComplexMeetingCalendarTemplateCreator {
                 Location location = new Location((appointment.getLocation()));
                 Description description = new Description((appointment.getDescription()));
                 Summary summary = new Summary((appointment.getSummary()));
+                summary.setValue(calendarTextEditor.deleteSummaryWord(summary.getValue()));
                 Uid UID = new Uid(enrollment.getCurrentCalendarUid());
 
                 DateTime startDateTime = new DateTime(session.getStartDate());

@@ -41,7 +41,12 @@ public class RruleDefiner {
         sessions.forEach(x -> startDatesOfSessions.add(x.getStartDate()));
 
         Frequency frequency = frequencyDefiner.defineFrequence(startDatesOfSessions);
-        long interval = intervalDefiner.defineInterval(startDatesOfSessions, frequency);
+        long interval;
+        if (startDatesOfSessions.size() == 1) {
+            interval = 1;
+        } else {
+            interval = intervalDefiner.defineInterval(startDatesOfSessions, frequency);
+        }
         Rrule rrule = new Rrule();
         rrule.setInterval(interval);
         rrule.setFrequency(frequency);

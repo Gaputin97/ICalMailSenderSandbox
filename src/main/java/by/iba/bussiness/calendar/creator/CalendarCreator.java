@@ -3,6 +3,7 @@ package by.iba.bussiness.calendar.creator;
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.AppointmentHandler;
 import by.iba.bussiness.calendar.CalendarFactory;
+import by.iba.bussiness.calendar.CalendarStatus;
 import by.iba.bussiness.calendar.date.DateHelperDefiner;
 import by.iba.bussiness.calendar.date.model.DateHelper;
 import by.iba.bussiness.enrollment.Enrollment;
@@ -30,14 +31,11 @@ public class CalendarCreator {
         this.appointmentHandler = appointmentHandler;
     }
 
-    public Calendar createCalendar(Enrollment enrollment, Appointment appointment) {
+    public Calendar createCalendar(Enrollment enrollment, Appointment appointment, DateHelper dateHelper) {
         Calendar calendar = null;
-        List<TimeSlot> timeSlots = appointment.getTimeSlots();
-        BigInteger meetingId = appointment.getMeetingId();
-        DateHelper dateHelper = dateHelperDefiner.defineDateHelper(timeSlots, meetingId);
         String enrollmentStatus = enrollment.getStatus();
         int maximumAppointmentIndex = appointmentHandler.getMaximumIndex(appointment);
-        if (enrollmentStatus.equals(EnrollmentStatus.CANCELLED)) {
+        if (enrollmentStatus.equals(EnrollmentStatus.CANCELLED) && !(enrollment.getCalendarStatus().equals(CalendarStatus.CANCELLED))) {
             calendar = calendarFactory.createCancelCalendarTemplate(dateHelper, appointment, enrollment);
         } else {
             String enrollmentCalendarVersion = enrollment.getCalendarVersion();

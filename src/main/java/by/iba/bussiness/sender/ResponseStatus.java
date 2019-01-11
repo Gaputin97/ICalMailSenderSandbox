@@ -2,12 +2,12 @@ package by.iba.bussiness.sender;
 
 public class ResponseStatus {
     private boolean isDelivered;
-    private String recipientName;
+    private String message;
     private String recipientEmail;
 
-    public ResponseStatus(boolean isDelivered, String recipientName, String recipientEmail) {
+    public ResponseStatus(boolean isDelivered, String message, String recipientEmail) {
         this.isDelivered = isDelivered;
-        this.recipientName = recipientName;
+        this.message = message;
         this.recipientEmail = recipientEmail;
     }
 
@@ -19,12 +19,12 @@ public class ResponseStatus {
         isDelivered = delivered;
     }
 
-    public String getRecipientName() {
-        return recipientName;
+    public String getMessage() {
+        return message;
     }
 
-    public void setRecipientName(String recipientName) {
-        this.recipientName = recipientName;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getRecipientEmail() {

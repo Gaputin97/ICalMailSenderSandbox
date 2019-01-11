@@ -36,6 +36,7 @@ public class AppointmentInstaller {
             if ((updatedAppointment.getUpdateIndex() == 0 && updatedAppointment.getRescheduleIndex() == 0) ||
                     (updatedAppointment.getRescheduleIndex() > oldAppointment.getRescheduleIndex() ||
                             updatedAppointment.getUpdateIndex() > oldAppointment.getUpdateIndex())) {
+
                 appointment = updatedAppointment;
                 appointmentRepository.save(appointment);
             } else {

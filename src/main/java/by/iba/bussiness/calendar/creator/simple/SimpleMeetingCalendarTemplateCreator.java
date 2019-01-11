@@ -1,6 +1,7 @@
 package by.iba.bussiness.calendar.creator.simple;
 
 import by.iba.bussiness.appointment.Appointment;
+import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
 import by.iba.bussiness.calendar.date.model.single.SingleDateHelper;
 import by.iba.bussiness.calendar.session.Session;
@@ -27,14 +28,17 @@ public class SimpleMeetingCalendarTemplateCreator {
     private Calendar requestCalendar;
     private Calendar cancelCalendar;
     private SequenceDefiner sequenceDefiner;
+    private CalendarTextEditor calendarTextEditor;
 
     @Autowired
     public SimpleMeetingCalendarTemplateCreator(@Qualifier("requestCalendar") Calendar requestCalendar,
                                                 @Qualifier("cancelCalendar") Calendar cancelCalendar,
-                                                SequenceDefiner sequenceDefiner) {
+                                                SequenceDefiner sequenceDefiner,
+                                                CalendarTextEditor calendarTextEditor) {
         this.requestCalendar = requestCalendar;
         this.cancelCalendar = cancelCalendar;
         this.sequenceDefiner = sequenceDefiner;
+        this.calendarTextEditor = calendarTextEditor;
     }
 
     public Calendar createSimpleMeetingInvitationTemplate(SingleDateHelper singleDateHelper, Appointment appointment, Enrollment enrollment) {
@@ -57,6 +61,7 @@ public class SimpleMeetingCalendarTemplateCreator {
             Location location = new Location((appointment.getLocation()));
             Description description = new Description((appointment.getDescription()));
             Summary summary = new Summary((appointment.getSummary()));
+            summary.setValue(calendarTextEditor.deleteSummaryWord(summary.getValue()));
             Uid UID = new Uid(enrollment.getCurrentCalendarUid());
             Session session = singleDateHelper.getSession();
             DateTime startDateTime = new DateTime(session.getStartDate());

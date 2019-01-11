@@ -5,6 +5,8 @@ import by.iba.bussiness.appointment.AppointmentInstaller;
 import by.iba.bussiness.calendar.attendee.Learner;
 import by.iba.bussiness.calendar.creator.CalendarCreator;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
+import by.iba.bussiness.calendar.date.DateHelperDefiner;
+import by.iba.bussiness.calendar.date.model.DateHelper;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
@@ -15,7 +17,6 @@ import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.MeetingService;
 import by.iba.bussiness.sender.MessageSender;
 import by.iba.bussiness.sender.ResponseStatus;
-import by.iba.bussiness.enrollment.status.EnrollmentCalendarStatusDefiner;
 import by.iba.bussiness.token.model.JavaWebToken;
 import by.iba.bussiness.token.service.TokenService;
 import by.iba.exception.ServiceException;
@@ -52,6 +53,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private EnrollmentRepository enrollmentRepository;
     private AppointmentInstaller appointmentInstaller;
     private CalendarCreator calendarCreator;
+    private DateHelperDefiner dateHelperDefiner;
 
     @Value("${enrollment_by_email_and_meeting_id_endpoint}")
     private String ENDPOINT_FIND_ENROLLMENT_BY_PARENT_ID_AND_EMAIL;
@@ -68,7 +70,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                                  InvitationTemplateService invitationTemplateService,
                                  EnrollmentsInstaller enrollmentsInstaller,
                                  EnrollmentRepository enrollmentRepository,
-                                 AppointmentInstaller appointmentInstaller, CalendarCreator calendarCreator) {
+                                 AppointmentInstaller appointmentInstaller, CalendarCreator calendarCreator,
+                                 DateHelperDefiner dateHelperDefiner) {
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
         this.meetingService = meetingService;
@@ -79,6 +82,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         this.enrollmentRepository = enrollmentRepository;
         this.appointmentInstaller = appointmentInstaller;
         this.calendarCreator = calendarCreator;
+        this.dateHelperDefiner = dateHelperDefiner;
     }
 
     @Override
@@ -144,7 +148,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public List<ResponseStatus> sendCalendar(HttpServletRequest request, String meetingId) {
+    public List<ResponseStatus> sendCalendarToAllEnrollmentsOfMeeting(HttpServletRequest request, String meetingId) {
         Meeting meeting = meetingService.getMeetingById(request, meetingId);
         String invitationTemplateKey = meeting.getInvitationTemplate();
         if (invitationTemplateKey.isEmpty()) {
@@ -156,10 +160,13 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         BigInteger bigIntegerMeetingId = new BigInteger(meetingId);
         List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(bigIntegerMeetingId);
         List<ResponseStatus> responseStatusList = new ArrayList<>();
+        DateHelper dateHelper = dateHelperDefiner.defineDateHelper(appointment.getTimeSlots());
         for (Enrollment enrollment : enrollmentList) {
-            Calendar calendar = calendarCreator.createCalendar(enrollment, appointment);
+            Calendar calendar = calendarCreator.createCalendar(enrollment, appointment, dateHelper);
             if (calendar == null) {
-                responseStatusList.add(new ResponseStatus(false, enrollment.getUserName(), enrollment.getUserEmail()));
+                ResponseStatus badResponseStatus =
+                        new ResponseStatus(false, "User has already updated version. ", enrollment.getUserEmail());
+                responseStatusList.add(badResponseStatus);
                 logger.info("Don't need to send message to " + enrollment.getUserEmail());
             } else {
                 calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, calendar);
