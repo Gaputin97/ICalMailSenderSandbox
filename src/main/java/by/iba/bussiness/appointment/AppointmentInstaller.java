@@ -24,24 +24,18 @@ public class AppointmentInstaller {
         this.appointmentHandler = appointmentHandler;
     }
 
-    public Appointment installAppointment(Meeting meeting, InvitationTemplate invitationTemplate) {
-        Appointment appointment;
-        BigInteger meetingId = meeting.getId();
-        Appointment oldAppointment = appointmentRepository.getByMeetingId(meetingId);
-        if (oldAppointment == null) {
-            appointment = appointmentCreator.createAppointment(meeting, invitationTemplate);
-            appointmentRepository.save(appointment);
+    public Appointment installAppointment(Meeting meeting, InvitationTemplate invitationTemplate, Appointment oldAppointment) {
+        Appointment newAppointment;
+        Appointment updatedAppointment = appointmentHandler.getUpdatedAppointment(meeting, invitationTemplate);
+        if ((updatedAppointment.getUpdateIndex() == 0 && updatedAppointment.getRescheduleIndex() == 0) ||
+                (updatedAppointment.getRescheduleIndex() > oldAppointment.getRescheduleIndex() ||
+                        updatedAppointment.getUpdateIndex() > oldAppointment.getUpdateIndex())) {
+            newAppointment = updatedAppointment;
+            appointmentRepository.save(newAppointment);
         } else {
-            Appointment updatedAppointment = appointmentHandler.getUpdatedAppointment(meeting, invitationTemplate);
-            if ((updatedAppointment.getUpdateIndex() == 0 && updatedAppointment.getRescheduleIndex() == 0) ||
-                    (updatedAppointment.getRescheduleIndex() > oldAppointment.getRescheduleIndex() ||
-                            updatedAppointment.getUpdateIndex() > oldAppointment.getUpdateIndex())) {
-                appointment = updatedAppointment;
-                appointmentRepository.save(appointment);
-            } else {
-                appointment = oldAppointment;
-            }
+            newAppointment = oldAppointment;
         }
-        return appointment;
+
+        return newAppointment;
     }
 }

@@ -1,7 +1,9 @@
 package by.iba.bussiness.enrollment.service.v1;
 
 import by.iba.bussiness.appointment.Appointment;
+import by.iba.bussiness.appointment.AppointmentCreator;
 import by.iba.bussiness.appointment.AppointmentInstaller;
+import by.iba.bussiness.appointment.repository.AppointmentRepository;
 import by.iba.bussiness.calendar.attendee.Learner;
 import by.iba.bussiness.calendar.creator.CalendarCreator;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
@@ -50,6 +52,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private EnrollmentRepository enrollmentRepository;
     private AppointmentInstaller appointmentInstaller;
     private CalendarCreator calendarCreator;
+    private AppointmentRepository appointmentRepository;
+    private AppointmentCreator appointmentCreator;
 
     @Value("${enrollment_by_email_and_meeting_id_endpoint}")
     private String ENDPOINT_FIND_ENROLLMENT_BY_PARENT_ID_AND_EMAIL;
@@ -66,7 +70,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                                  InvitationTemplateService invitationTemplateService,
                                  EnrollmentsInstaller enrollmentsInstaller,
                                  EnrollmentRepository enrollmentRepository,
-                                 AppointmentInstaller appointmentInstaller, CalendarCreator calendarCreator) {
+                                 AppointmentInstaller appointmentInstaller, CalendarCreator calendarCreator, AppointmentRepository appointmentRepository, AppointmentCreator appointmentCreator) {
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
         this.meetingService = meetingService;
@@ -77,6 +81,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         this.enrollmentRepository = enrollmentRepository;
         this.appointmentInstaller = appointmentInstaller;
         this.calendarCreator = calendarCreator;
+        this.appointmentRepository = appointmentRepository;
+        this.appointmentCreator = appointmentCreator;
     }
 
     @Override
@@ -156,14 +162,22 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         }
 
         InvitationTemplate invitationTemplate = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
-        Appointment appointment = appointmentInstaller.installAppointment(meeting, invitationTemplate);
+        BigInteger meetingIdInt = new BigInteger(meetingId);
+        Appointment oldAppointment = appointmentRepository.getByMeetingId(meetingIdInt);
+        Appointment newAppointment;
+        if(oldAppointment == null) {
+            newAppointment = appointmentCreator.createAppointment(meeting, invitationTemplate);
+            appointmentRepository.save(newAppointment);
+        } else {
+            newAppointment = appointmentInstaller.installAppointment(meeting, invitationTemplate, oldAppointment);
+        }
 
         BigInteger bigIntegerMeetingId = new BigInteger(meetingId);
         List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(bigIntegerMeetingId);
 
         List<ResponseStatus> responseStatusList = new ArrayList<>();
         for (Enrollment enrollment : enrollmentList) {
-            Calendar calendar = calendarCreator.createCalendar(enrollment, appointment);
+            Calendar calendar = calendarCreator.createCalendar(enrollment, newAppointment);
             if (calendar == null) {
                 responseStatusList.add(new ResponseStatus(false, enrollment.getUserName(), enrollment.getUserEmail()));
                 logger.info("Don't need to send message to " + enrollment.getUserEmail());
@@ -172,7 +186,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 ResponseStatus responseStatus = messageSender.sendCalendarToLearner(calendar);
                 responseStatusList.add(responseStatus);
                 if (responseStatus.isDelivered()) {
-                    enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, appointment);
+                    enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, newAppointment);
                 }
             }
         }

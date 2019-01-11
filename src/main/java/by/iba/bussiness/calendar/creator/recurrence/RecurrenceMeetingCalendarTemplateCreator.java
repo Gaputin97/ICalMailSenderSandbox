@@ -2,7 +2,6 @@ package by.iba.bussiness.calendar.creator.recurrence;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
-import by.iba.bussiness.calendar.date.DateHelperConstants;
 import by.iba.bussiness.calendar.date.model.reccurence.RecurrenceDateHelper;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.session.Session;
@@ -27,6 +26,7 @@ import java.util.List;
 @org.springframework.stereotype.Component
 public class RecurrenceMeetingCalendarTemplateCreator {
     private static final Logger logger = LoggerFactory.getLogger(RecurrenceMeetingCalendarTemplateCreator.class);
+    private static final int NUMBER_OF_FIRST_TIME_SLOT = 0;
     private Calendar requestCalendar;
     private SessionParser sessionParser;
     private IcalDateParser iСalDateParser;
@@ -60,7 +60,7 @@ public class RecurrenceMeetingCalendarTemplateCreator {
 
     }
 
-    public Calendar createCommonRecurrenceTemplate(RecurrenceDateHelper recurrenceDateHelper,
+    private Calendar createCommonRecurrenceTemplate(RecurrenceDateHelper recurrenceDateHelper,
                                                    Appointment appointment,
                                                    Enrollment enrollment,
                                                    Calendar concreteCalendar) {
@@ -70,7 +70,7 @@ public class RecurrenceMeetingCalendarTemplateCreator {
         rrule.getExDates().forEach(x -> exDatesList.add(new Date(x)));
 
         List<TimeSlot> meetingTimeSlots = appointment.getTimeSlots();
-        TimeSlot firstTimeSlot = meetingTimeSlots.get(DateHelperConstants.NUMBER_OF_FIRST_TIME_SLOT);
+        TimeSlot firstTimeSlot = meetingTimeSlots.get(NUMBER_OF_FIRST_TIME_SLOT);
         TimeSlot lastTimeSlot = meetingTimeSlots.get(meetingTimeSlots.size() - 1);
 
         Session firstSession = sessionParser.timeSlotToSession(firstTimeSlot);

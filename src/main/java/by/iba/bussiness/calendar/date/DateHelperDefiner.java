@@ -21,6 +21,8 @@ import java.util.List;
 @Component
 public class DateHelperDefiner {
     private static final Logger logger = LoggerFactory.getLogger(DateHelperDefiner.class);
+    private static final int NUMBER_OF_THE_FIRST_TIME_SLOT = 0;
+    private static final int AMOUNT_OF_SESSIONS_FOR_SINGLE_EVENT = 1;
     private SessionParser sessionParser;
     private RruleDefiner rruleDefiner;
     private SessionChecker sessionChecker;
@@ -37,8 +39,8 @@ public class DateHelperDefiner {
     public DateHelper defineDateHelper(List<TimeSlot> timeSlots, BigInteger meetingId) {
         DateHelper dateHelper;
         int amountOfTimeSlots = timeSlots.size();
-        if (amountOfTimeSlots == DateHelperConstants.AMOUNT_OF_SESSIONS_FOR_SINGLE_EVENT) {
-            TimeSlot meetingTimeSlot = timeSlots.get(DateHelperConstants.NUMBER_OF_FIRST_TIME_SLOT);
+        if (amountOfTimeSlots == AMOUNT_OF_SESSIONS_FOR_SINGLE_EVENT) {
+            TimeSlot meetingTimeSlot = timeSlots.get(NUMBER_OF_THE_FIRST_TIME_SLOT);
             Session meetingSession = sessionParser.timeSlotToSession(meetingTimeSlot);
             SimpleDateHelperBuilder simpleDateHelperBuilder = new SimpleDateHelperBuilder();
             dateHelper = simpleDateHelperBuilder

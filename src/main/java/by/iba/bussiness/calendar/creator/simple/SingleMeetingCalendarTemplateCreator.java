@@ -22,14 +22,14 @@ import java.text.ParseException;
 import java.util.Arrays;
 
 @Component
-public class SimpleMeetingCalendarTemplateCreator {
-    private static final Logger logger = LoggerFactory.getLogger(SimpleMeetingCalendarTemplateCreator.class);
+public class SingleMeetingCalendarTemplateCreator {
+    private static final Logger logger = LoggerFactory.getLogger(SingleMeetingCalendarTemplateCreator.class);
     private Calendar requestCalendar;
     private Calendar cancelCalendar;
     private SequenceDefiner sequenceDefiner;
 
     @Autowired
-    public SimpleMeetingCalendarTemplateCreator(@Qualifier("requestCalendar") Calendar requestCalendar,
+    public SingleMeetingCalendarTemplateCreator(@Qualifier("requestCalendar") Calendar requestCalendar,
                                                 @Qualifier("cancelCalendar") Calendar cancelCalendar,
                                                 SequenceDefiner sequenceDefiner) {
         this.requestCalendar = requestCalendar;
