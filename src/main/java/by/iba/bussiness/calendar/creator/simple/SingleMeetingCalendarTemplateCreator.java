@@ -37,17 +37,17 @@ public class SimpleMeetingCalendarTemplateCreator {
         this.sequenceDefiner = sequenceDefiner;
     }
 
-    public Calendar createSimpleMeetingInvitationTemplate(SingleDateHelper singleDateHelper, Appointment appointment, Enrollment enrollment) {
+    public Calendar createSingleMeetingInvitationTemplate(SingleDateHelper singleDateHelper, Appointment appointment, Enrollment enrollment) {
         logger.debug("Started creating invitation ics file with simple meeting with id " + appointment.getMeetingId());
         return createCommonSimpleTemplate(singleDateHelper, appointment, enrollment, requestCalendar);
     }
 
-    public Calendar createSimpleMeetingCancellationTemplate(SingleDateHelper singleDateHelper, Appointment appointment, Enrollment enrollment) {
+    public Calendar createSingleMeetingCancellationTemplate(SingleDateHelper singleDateHelper, Appointment appointment, Enrollment enrollment) {
         logger.debug("Started creating cancellation ics file with simple meeting with id " + appointment.getId());
         return createCommonSimpleTemplate(singleDateHelper, appointment, enrollment, cancelCalendar);
     }
 
-    public Calendar createCommonSimpleTemplate(SingleDateHelper singleDateHelper, Appointment appointment, Enrollment enrollment, Calendar concreteCalendar) {
+    private Calendar createCommonSimpleTemplate(SingleDateHelper singleDateHelper, Appointment appointment, Enrollment enrollment, Calendar concreteCalendar) {
         logger.debug("Started creating cancellation ics file with simple meeting with id " + appointment.getId());
         Calendar calendar;
         VEvent event;
