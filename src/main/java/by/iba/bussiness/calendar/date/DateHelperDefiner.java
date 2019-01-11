@@ -17,34 +17,25 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.math.BigInteger;
 import java.util.List;
 
 @Component
 public class DateHelperDefiner {
-<<<<<<< HEAD
     private static final Logger logger = LoggerFactory.getLogger(DateHelperDefiner.class);
     private static final int NUMBER_OF_THE_FIRST_TIME_SLOT = 0;
     private static final int AMOUNT_OF_SESSIONS_FOR_SINGLE_EVENT = 1;
-=======
-    private static final Logger logger = LoggerFactory.getLogger(ComplexMeetingCalendarTemplateCreator.class);
->>>>>>> 42997cd815a7b34f311677762a87ff67dd3052d4
+
     private SessionParser sessionParser;
-    private RruleDefiner rruleDefiner;
-    private SessionChecker sessionChecker;
 
     @Autowired
     public DateHelperDefiner(SessionParser sessionParser,
                              RruleDefiner rruleDefiner,
                              SessionChecker sessionChecker) {
         this.sessionParser = sessionParser;
-        this.rruleDefiner = rruleDefiner;
-        this.sessionChecker = sessionChecker;
     }
 
     public DateHelper defineDateHelper(List<TimeSlot> timeSlots) {
         DateHelper dateHelper;
-<<<<<<< HEAD
         int amountOfTimeSlots = timeSlots.size();
         if (amountOfTimeSlots == AMOUNT_OF_SESSIONS_FOR_SINGLE_EVENT) {
             TimeSlot meetingTimeSlot = timeSlots.get(NUMBER_OF_THE_FIRST_TIME_SLOT);
@@ -52,14 +43,6 @@ public class DateHelperDefiner {
             SimpleDateHelperBuilder simpleDateHelperBuilder = new SimpleDateHelperBuilder();
             dateHelper = simpleDateHelperBuilder
                     .setSession(meetingSession)
-=======
-        List<Session> sessions = sessionParser.timeSlotListToSessionList(timeSlots);
-        if (sessionChecker.doAllSessionsTheSame(timeSlots)) {
-            Rrule rrule = rruleDefiner.defineRrule(sessions);
-            RecurrenceDateHelperBuilder recurrenceDateHelperBuilder = new RecurrenceDateHelperBuilder();
-            dateHelper = recurrenceDateHelperBuilder
-                    .setRrule(rrule)
->>>>>>> 42997cd815a7b34f311677762a87ff67dd3052d4
                     .build();
         } else {
             logger.error("Timeslots from this meeting can't be transform to simple event");

@@ -6,21 +6,16 @@ import by.iba.bussiness.meeting.Meeting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.math.BigInteger;
-
 @Component
 public class AppointmentInstaller {
 
     private AppointmentRepository appointmentRepository;
-    private AppointmentCreator appointmentCreator;
     private AppointmentHandler appointmentHandler;
 
     @Autowired
     public AppointmentInstaller(AppointmentRepository appointmentRepository,
-                                AppointmentCreator appointmentCreator,
                                 AppointmentHandler appointmentHandler) {
         this.appointmentRepository = appointmentRepository;
-        this.appointmentCreator = appointmentCreator;
         this.appointmentHandler = appointmentHandler;
     }
 
@@ -33,22 +28,8 @@ public class AppointmentInstaller {
             newAppointment = updatedAppointment;
             appointmentRepository.save(newAppointment);
         } else {
-<<<<<<< HEAD
             newAppointment = oldAppointment;
-=======
-            Appointment updatedAppointment = appointmentHandler.getUpdatedAppointment(meeting, invitationTemplate);
-            if ((updatedAppointment.getUpdateIndex() == 0 && updatedAppointment.getRescheduleIndex() == 0) ||
-                    (updatedAppointment.getRescheduleIndex() > oldAppointment.getRescheduleIndex() ||
-                            updatedAppointment.getUpdateIndex() > oldAppointment.getUpdateIndex())) {
-
-                appointment = updatedAppointment;
-                appointmentRepository.save(appointment);
-            } else {
-                appointment = oldAppointment;
-            }
->>>>>>> 42997cd815a7b34f311677762a87ff67dd3052d4
         }
-
         return newAppointment;
     }
 }

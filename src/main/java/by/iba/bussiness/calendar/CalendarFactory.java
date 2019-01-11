@@ -28,7 +28,7 @@ public class CalendarFactory {
         this.complexMeetingCalendarTemplateCreator = complexMeetingCalendarTemplateCreator;
     }
 
-    public <T extends DateHelper> Calendar createInvitationCalendarTemplate(T helper, Appointment appointment, Enrollment enrollment) {
+    public <T extends DateHelper> Calendar createCalendarTemplate(T helper, Appointment appointment, Enrollment enrollment) {
         Calendar calendar = null;
         switch (helper.getMeetingType()) {
             case SINGLE:

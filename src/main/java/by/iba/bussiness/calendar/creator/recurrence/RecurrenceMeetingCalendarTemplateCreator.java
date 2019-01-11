@@ -85,18 +85,13 @@ public class RecurrenceMeetingCalendarTemplateCreator {
         rrule.getExDates().forEach(
                 x -> exDatesList.add(new DateTime(x)));
         List<TimeSlot> meetingTimeSlots = appointment.getTimeSlots();
-<<<<<<< HEAD
+
         TimeSlot firstTimeSlot = meetingTimeSlots.get(NUMBER_OF_FIRST_TIME_SLOT);
         TimeSlot lastTimeSlot = meetingTimeSlots.get(meetingTimeSlots.size() - 1);
 
         Session firstSession = sessionParser.timeSlotToSession(firstTimeSlot);
         Session lastSession = sessionParser.timeSlotToSession(lastTimeSlot);
-=======
-        List<Session> sessions = sessionParser.timeSlotListToSessionList(meetingTimeSlots);
-        Collections.sort(sessions);
-        Session firstSession = sessions.get(0);
-        Session lastSession = sessions.get(sessions.size() - 1);
->>>>>>> 42997cd815a7b34f311677762a87ff67dd3052d4
+
 
         String increasedDate = dateIncreaser.increaseAndParse(rrule.getFrequency(), rrule.getInterval(), lastSession.getStartDate());
         Calendar calendar;

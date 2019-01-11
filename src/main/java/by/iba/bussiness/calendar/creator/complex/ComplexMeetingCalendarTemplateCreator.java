@@ -1,6 +1,7 @@
 package by.iba.bussiness.calendar.creator.complex;
 
 import by.iba.bussiness.appointment.Appointment;
+import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.calendar.date.model.complex.ComplexDateHelper;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.enrollment.Enrollment;
@@ -27,13 +28,10 @@ import java.util.List;
 public class ComplexMeetingCalendarTemplateCreator {
     private static final Logger logger = LoggerFactory.getLogger(ComplexMeetingCalendarTemplateCreator.class);
     private Calendar publishCalendar;
-    private CalendarTextEditor calendarTextEditor;
 
     @Autowired
-    public ComplexMeetingCalendarTemplateCreator(@Qualifier("publishCalendar") Calendar publishCalendar,
-                                                 CalendarTextEditor calendarTextEditor) {
+    public ComplexMeetingCalendarTemplateCreator(@Qualifier("publishCalendar") Calendar publishCalendar) {
         this.publishCalendar = publishCalendar;
-        this.calendarTextEditor = calendarTextEditor;
     }
 
 //    public Calendar createInitialComplexCalendarTemplate(ComplexDateHelper complexDateHelper, Appointment appointment, Enrollment enrollment) {
@@ -71,18 +69,11 @@ public class ComplexMeetingCalendarTemplateCreator {
         for (Session session : sessionList) {
             try {
                 Sequence sequence = new Sequence("0");
-<<<<<<< HEAD
                 Organizer organizer = new Organizer("mailto:" + oldAppointment.getOwner().getEmail());
                 Location location = new Location((oldAppointment.getLocation()));
                 Description description = new Description((oldAppointment.getDescription()));
                 Summary summary = new Summary((oldAppointment.getSummary()));
-=======
-                Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
-                Location location = new Location((appointment.getLocation()));
-                Description description = new Description((appointment.getDescription()));
-                Summary summary = new Summary((appointment.getSummary()));
-                summary.setValue(calendarTextEditor.deleteSummaryWord(summary.getValue()));
->>>>>>> 42997cd815a7b34f311677762a87ff67dd3052d4
+
                 Uid UID = new Uid(enrollment.getCurrentCalendarUid());
 
                 DateTime startDateTime = new DateTime(session.getStartDate());
@@ -102,31 +93,35 @@ public class ComplexMeetingCalendarTemplateCreator {
 
     private List<Property> getEventPropertiesForInitial(Appointment appointment, Enrollment enrollment) {
         List<Property> propertyList = new ArrayList<>();
+
+        Sequence sequence = new Sequence("0");
+        Location location = new Location((appointment.getLocation()));
+        Description description = new Description((appointment.getDescription()));
+        Summary summary = new Summary((appointment.getSummary()));
+        Uid UID = new Uid(enrollment.getCurrentCalendarUid());
         try {
-            Sequence sequence = new Sequence("0");
             Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
-            Location location = new Location((appointment.getLocation()));
-            Description description = new Description((appointment.getDescription()));
-            Summary summary = new Summary((appointment.getSummary()));
-            Uid UID = new Uid(enrollment.getCurrentCalendarUid());
         } catch (URISyntaxException e) {
             logger.error("Can't parse email for organizer, cause: " + e.getStackTrace());
             throw new CalendarException("Can't parse organizer email");
         }
-
         return propertyList;
     }
 
-    private List<Property> getEventPropertiesForUpdate(Appointment oldAppointment, Appointment newAppointment) {
-        List<Property> propertyList = new ArrayList<>();
-
-        Sequence sequence = new Sequence("0");
-        Organizer organizer = new Organizer("mailto:" + oldAppointment.getOwner().getEmail());
-        Location location = new Location((oldAppointment.getLocation()));
-        Description description = new Description((oldAppointment.getDescription()));
-        Summary summary = new Summary((oldAppointment.getSummary()));
-        Uid UID = new Uid(enrollment.getCurrentCalendarUid());
-
-        return propertyList;
-    }
+//    private List<Property> getEventPropertiesForUpdate(Appointment oldAppointment, Appointment newAppointment, Enrollment enrollment) {
+//        List<Property> propertyList = new ArrayList<>();
+//
+//        Sequence sequence = new Sequence("0");
+//        Location location = new Location((appointment.getLocation()));
+//        Description description = new Description((appointment.getDescription()));
+//        Summary summary = new Summary((appointment.getSummary()));
+//        Uid UID = new Uid(enrollment.getCurrentCalendarUid());
+//        try {
+//            Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
+//        } catch (URISyntaxException e) {
+//            logger.error("Can't parse email for organizer, cause: " + e.getStackTrace());
+//            throw new CalendarException("Can't parse organizer email");
+//        }
+//        return propertyList;
+//    }
 }

@@ -17,6 +17,7 @@ import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.invitation_template.service.InvitationTemplateService;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.MeetingService;
+import by.iba.bussiness.meeting.timeslot.TimeSlot;
 import by.iba.bussiness.sender.MessageSender;
 import by.iba.bussiness.sender.ResponseStatus;
 import by.iba.bussiness.token.model.JavaWebToken;
@@ -54,12 +55,9 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private EnrollmentRepository enrollmentRepository;
     private AppointmentInstaller appointmentInstaller;
     private CalendarCreator calendarCreator;
-<<<<<<< HEAD
     private AppointmentRepository appointmentRepository;
     private AppointmentCreator appointmentCreator;
-=======
     private DateHelperDefiner dateHelperDefiner;
->>>>>>> 42997cd815a7b34f311677762a87ff67dd3052d4
 
     @Value("${enrollment_by_email_and_meeting_id_endpoint}")
     private String ENDPOINT_FIND_ENROLLMENT_BY_PARENT_ID_AND_EMAIL;
@@ -76,12 +74,12 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                                  InvitationTemplateService invitationTemplateService,
                                  EnrollmentsInstaller enrollmentsInstaller,
                                  EnrollmentRepository enrollmentRepository,
-<<<<<<< HEAD
-                                 AppointmentInstaller appointmentInstaller, CalendarCreator calendarCreator, AppointmentRepository appointmentRepository, AppointmentCreator appointmentCreator) {
-=======
-                                 AppointmentInstaller appointmentInstaller, CalendarCreator calendarCreator,
+                                 AppointmentInstaller appointmentInstaller,
+                                 CalendarCreator calendarCreator,
+                                 AppointmentRepository appointmentRepository,
+                                 AppointmentCreator appointmentCreator,
                                  DateHelperDefiner dateHelperDefiner) {
->>>>>>> 42997cd815a7b34f311677762a87ff67dd3052d4
+
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
         this.meetingService = meetingService;
@@ -92,12 +90,9 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         this.enrollmentRepository = enrollmentRepository;
         this.appointmentInstaller = appointmentInstaller;
         this.calendarCreator = calendarCreator;
-<<<<<<< HEAD
         this.appointmentRepository = appointmentRepository;
         this.appointmentCreator = appointmentCreator;
-=======
         this.dateHelperDefiner = dateHelperDefiner;
->>>>>>> 42997cd815a7b34f311677762a87ff67dd3052d4
     }
 
     @Override
@@ -180,24 +175,21 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         BigInteger meetingIdInt = new BigInteger(meetingId);
         Appointment oldAppointment = appointmentRepository.getByMeetingId(meetingIdInt);
         Appointment newAppointment;
+
         if(oldAppointment == null) {
             newAppointment = appointmentCreator.createAppointment(meeting, invitationTemplate);
             appointmentRepository.save(newAppointment);
         } else {
             newAppointment = appointmentInstaller.installAppointment(meeting, invitationTemplate, oldAppointment);
         }
-
-        BigInteger bigIntegerMeetingId = new BigInteger(meetingId);
-        List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(bigIntegerMeetingId);
+        List<TimeSlot> timeSlots = newAppointment.getTimeSlots();
+        DateHelper dateHelper = dateHelperDefiner.defineDateHelper(timeSlots);
 
         List<ResponseStatus> responseStatusList = new ArrayList<>();
-        DateHelper dateHelper = dateHelperDefiner.defineDateHelper(appointment.getTimeSlots());
+        List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(meetingIdInt);
         for (Enrollment enrollment : enrollmentList) {
-<<<<<<< HEAD
-            Calendar calendar = calendarCreator.createCalendar(enrollment, newAppointment);
-=======
-            Calendar calendar = calendarCreator.createCalendar(enrollment, appointment, dateHelper);
->>>>>>> 42997cd815a7b34f311677762a87ff67dd3052d4
+            Calendar calendar = calendarCreator.createCalendar(enrollment, newAppointment, dateHelper);
+
             if (calendar == null) {
                 ResponseStatus badResponseStatus =
                         new ResponseStatus(false, "User has already updated version. ", enrollment.getUserEmail());
