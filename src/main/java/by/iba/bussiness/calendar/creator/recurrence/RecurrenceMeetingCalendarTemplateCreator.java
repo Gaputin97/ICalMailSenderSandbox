@@ -3,10 +3,10 @@ package by.iba.bussiness.calendar.creator.recurrence;
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
+import by.iba.bussiness.calendar.date.DateHelperConstants;
 import by.iba.bussiness.calendar.date.model.reccurence.RecurrenceDateHelper;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.session.Session;
-import by.iba.bussiness.calendar.session.SessionConstants;
 import by.iba.bussiness.calendar.session.SessionParser;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.meeting.timeslot.TimeSlot;
@@ -24,17 +24,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 @org.springframework.stereotype.Component
 public class RecurrenceMeetingCalendarTemplateCreator {
-    private DateFormat dateFormatter = new SimpleDateFormat(SessionConstants.DATE_FORMAT);
-    private DateFormat helperFormat = new SimpleDateFormat(SessionConstants.DATE_FORMAT);
     private static final Logger logger = LoggerFactory.getLogger(RecurrenceMeetingCalendarTemplateCreator.class);
     private Calendar requestCalendar;
     private SessionParser sessionParser;
@@ -79,19 +75,14 @@ public class RecurrenceMeetingCalendarTemplateCreator {
 
         Rrule rrule = recurrenceDateHelper.getRrule();
         DateList exDatesList = new DateList();
-        dateFormatter.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
-        helperFormat.setTimeZone(java.util.TimeZone.getDefault());
-        rrule.getExDates().forEach(
-                x -> exDatesList.add(new DateTime(x)));
+        rrule.getExDates().forEach(x -> exDatesList.add(new DateTime(x)));
         List<TimeSlot> meetingTimeSlots = appointment.getTimeSlots();
         List<Session> sessions = sessionParser.timeSlotListToSessionList(meetingTimeSlots);
         Collections.sort(sessions);
-        Session firstSession = sessions.get(0);
+        Session firstSession = sessions.get(DateHelperConstants.NUMBER_OF_FIRST_TIME_SLOT);
         Session lastSession = sessions.get(sessions.size() - 1);
-
-        String increasedDate = dateIncreaser.increaseAndParse(rrule.getFrequency(), rrule.getInterval(), lastSession.getStartDate());
+        String increasedUntilDate = dateIncreaser.increaseAndParse(rrule.getFrequency(), rrule.getInterval(), lastSession.getStartDate());
         Calendar calendar;
-        VEvent event;
         try {
             Sequence sequence = sequenceDefiner.defineSequence(appointment);
             Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
@@ -101,7 +92,7 @@ public class RecurrenceMeetingCalendarTemplateCreator {
             summary.setValue(calendarTextEditor.deleteSummaryWord(summary.getValue()));
             String frequency = rrule.getFrequency().toString();
             Long interval = rrule.getInterval();
-            String until = iСalDateParser.parseToICalDate(increasedDate);
+            String until = iСalDateParser.parseToICalDate(increasedUntilDate);
             exDatesList.add(new DateTime(until));
 
             Recur recurrence = new Recur("FREQ=" + frequency + ";" + "INTERVAL=" + interval + ";" + "UNTIL=" + until + ";");
@@ -111,15 +102,15 @@ public class RecurrenceMeetingCalendarTemplateCreator {
             DateTime endDateTime = new DateTime(firstSession.getEndDate());
 
             calendar = new Calendar(concreteCalendar);
-            event = new VEvent(startDateTime, endDateTime, summary.toString());
-            if (exDatesList.size() != 0) {
+            VEvent event = new VEvent(startDateTime, endDateTime, summary.toString());
+            if (!exDatesList.isEmpty()) {
                 ExDate exDates = new ExDate(exDatesList);
                 event.getProperties().add(exDates);
             }
             event.getProperties().addAll(Arrays.asList(sequence, organizer, location, description, UID, rRule));
             calendar.getComponents().add(event);
         } catch (ParseException | URISyntaxException | IOException e) {
-            logger.error(e.getMessage());
+            logger.error("Cant create recur calendar meeting" + e.getMessage());
             throw new CalendarException("Can't create recurrence calendar meeting. Try again later");
         }
 

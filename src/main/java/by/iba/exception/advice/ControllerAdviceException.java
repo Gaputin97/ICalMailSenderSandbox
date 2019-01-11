@@ -1,5 +1,6 @@
 package by.iba.exception.advice;
 
+import by.iba.exception.CalendarException;
 import by.iba.exception.RepositoryException;
 import by.iba.exception.SendingException;
 import by.iba.exception.ServiceException;
@@ -25,6 +26,12 @@ public class ControllerAdviceException {
     public ResponseEntity<AdditionalException> handleCalendarSendingException(SendingException ex) {
         return new ResponseEntity<>(new AdditionalException(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(CalendarException.class)
+    public ResponseEntity<AdditionalException> handleCalendarException(CalendarException ex) {
+        return new ResponseEntity<>(new AdditionalException(ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
 
 }
 

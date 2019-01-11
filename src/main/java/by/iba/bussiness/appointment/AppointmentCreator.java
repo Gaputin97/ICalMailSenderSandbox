@@ -11,13 +11,11 @@ public class AppointmentCreator {
         appointment.setMeetingId(meeting.getId());
         appointment.setInvitationTemplateKey(invitationTemplate.getKey());
 
-        //Description - is face to face description
         appointment.setDescription(invitationTemplate.getFaceToFaceDescription());
         appointment.setBlendedDescription(invitationTemplate.getBlendedDescription());
         appointment.setOnlineDescription(invitationTemplate.getOnlineDescription());
         appointment.setFaceToFaceDescription(invitationTemplate.getFaceToFaceDescription());
 
-        //Location - is ILT description
         appointment.setLocation(invitationTemplate.getLocationILT());
         appointment.setLocationInfo(meeting.getLocationInfo());
         appointment.setLocationBLD(invitationTemplate.getLocationBLD());

@@ -31,14 +31,13 @@ public class MessageSender {
         this.calendarTextEditor = calendarTextEditor;
     }
 
-    public ResponseStatus sendCalendarToLearner(Calendar calendar) {
+    public MailSendingResponseStatus sendCalendarToLearner(Calendar calendar) {
         MimeMessage message;
         VEvent event = (VEvent) calendar.getComponents().getComponent(Component.VEVENT);
         Attendee attendee = event.getProperties().getProperty(Property.ATTENDEE);
-        String userName = attendee.getName();
         String userEmail = attendee.getCalAddress().toString();
         String editedUserEmail = calendarTextEditor.editUserEmail(userEmail);
-        ResponseStatus responseStatus;
+        MailSendingResponseStatus mailSendingResponseStatus;
         try {
             message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -67,11 +66,11 @@ public class MessageSender {
 
             javaMailSender.send(message);
             logger.info("Message was sent to " + editedUserEmail);
-            responseStatus = new ResponseStatus(true, userName, editedUserEmail);
+            mailSendingResponseStatus = new MailSendingResponseStatus(true, "Message was sent successfully", editedUserEmail);
         } catch (MessagingException e) {
             logger.error("Error while trying to send message", e);
-            responseStatus = new ResponseStatus(false, userName, editedUserEmail);
+            mailSendingResponseStatus = new MailSendingResponseStatus(false, "Message was not delivered", editedUserEmail);
         }
-        return responseStatus;
+        return mailSendingResponseStatus;
     }
 }

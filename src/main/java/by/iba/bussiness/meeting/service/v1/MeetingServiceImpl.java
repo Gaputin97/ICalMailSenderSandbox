@@ -22,12 +22,10 @@ import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class MeetingServiceImpl implements MeetingService {
-    private static final  Logger logger = LoggerFactory.getLogger(MeetingServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(MeetingServiceImpl.class);
     private TokenService tokenService;
     @Value("${meeting_by_id_endpoint}")
     private String ENDPOINT_FIND_MEETING_BY_ID;
-    @Value("${all_meetings_endpoint}")
-    private String ENDPOINT_FIND_ALL_MEETINGS;
 
     private RestTemplate restTemplate;
 
@@ -51,7 +49,7 @@ public class MeetingServiceImpl implements MeetingService {
             meeting = meetingResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             logger.error("Cant find meeting by id", e);
-            throw new ServiceException("Can't find meeting with id " + id);
+            throw new ServiceException("Can't get meeting from third-party service with id " + id + ". " + e.getMessage());
         }
         return meeting;
     }

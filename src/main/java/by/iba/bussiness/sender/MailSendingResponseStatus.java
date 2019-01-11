@@ -1,11 +1,11 @@
 package by.iba.bussiness.sender;
 
-public class ResponseStatus {
+public class MailSendingResponseStatus {
     private boolean isDelivered;
     private String message;
     private String recipientEmail;
 
-    public ResponseStatus(boolean isDelivered, String message, String recipientEmail) {
+    public MailSendingResponseStatus(boolean isDelivered, String message, String recipientEmail) {
         this.isDelivered = isDelivered;
         this.message = message;
         this.recipientEmail = recipientEmail;

@@ -1,6 +1,6 @@
 package by.iba.bussiness.enrollment;
 
-import by.iba.bussiness.calendar.attendee.Learner;
+import by.iba.bussiness.calendar.learner.Learner;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

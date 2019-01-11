@@ -45,24 +45,6 @@ public class InvitationTemplateServiceImpl implements InvitationTemplateService 
     }
 
     @Override
-    public InvitationTemplate getInvitationTemplateById(HttpServletRequest request, String id) {
-        JavaWebToken javaWebToken = tokenService.getJavaWebToken(request);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set(HttpHeaders.AUTHORIZATION, "Bearer " + javaWebToken.getJwt());
-        HttpEntity httpEntity = new HttpEntity<>(httpHeaders);
-        InvitationTemplate invitationTemplate;
-        try {
-            ResponseEntity<InvitationTemplate> invitationTemplateResponseEntity = restTemplate.exchange(ENDPOINT_GET_TEMPLATE_BY_ID + id,
-                    HttpMethod.GET, httpEntity, InvitationTemplate.class);
-            invitationTemplate = invitationTemplateResponseEntity.getBody();
-        } catch (HttpClientErrorException | HttpServerErrorException e) {
-            logger.error("Can't exchange invitation template by id: " + e.getStackTrace());
-            throw new ServiceException(e.getMessage());
-        }
-        return invitationTemplate;
-    }
-
-    @Override
     public InvitationTemplate getInvitationTemplateByCode(HttpServletRequest request, String code) {
         JavaWebToken javaWebToken = tokenService.getJavaWebToken(request);
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -78,11 +60,5 @@ public class InvitationTemplateServiceImpl implements InvitationTemplateService 
             throw new ServiceException(e.getMessage());
         }
         return invitationTemplate;
-    }
-
-    @Override
-    public InvitationTemplate getInvitationTemplateByMeetingId(HttpServletRequest request, String MeetingId) {
-        Meeting meeting = meetingService.getMeetingById(request, MeetingId);
-        return getInvitationTemplateByCode(request, meeting.getInvitationTemplate());
     }
 }

@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class TokenServiceImpl implements TokenService {
-    private static final  Logger logger = LoggerFactory.getLogger(TokenServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(TokenServiceImpl.class);
 
     @Autowired
     private RestTemplate restTemplate;
@@ -38,7 +38,7 @@ public class TokenServiceImpl implements TokenService {
             javaWebToken = javaWebTokenResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             logger.error("Error while try to get token: ", e);
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException("Error while trying to get token from third-party service" + e.getMessage());
         }
         return javaWebToken;
     }

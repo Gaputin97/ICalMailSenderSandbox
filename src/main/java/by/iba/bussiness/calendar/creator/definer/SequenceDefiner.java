@@ -22,7 +22,6 @@ public class SequenceDefiner {
         int updatedIndex = appointment.getUpdateIndex();
         int minimumIndex = appointmentHandler.getMinimumIndex(appointment);
         if (maximumIndex == updatedIndex) {
-
             sequence = new Sequence(minimumIndex);
         } else {
             sequence = new Sequence(maximumIndex);

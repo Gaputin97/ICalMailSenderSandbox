@@ -1,9 +1,6 @@
 package by.iba.bussiness.calendar.date;
 
-import by.iba.bussiness.calendar.creator.complex.ComplexMeetingCalendarTemplateCreator;
-import by.iba.bussiness.calendar.date.builder.ComplexDateHelperBuilder;
 import by.iba.bussiness.calendar.date.builder.RecurrenceDateHelperBuilder;
-import by.iba.bussiness.calendar.date.builder.SimpleDateHelperBuilder;
 import by.iba.bussiness.calendar.date.model.DateHelper;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.definer.RruleDefiner;
@@ -17,12 +14,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.math.BigInteger;
 import java.util.List;
 
 @Component
 public class DateHelperDefiner {
-    private static final Logger logger = LoggerFactory.getLogger(ComplexMeetingCalendarTemplateCreator.class);
+    private static final Logger logger = LoggerFactory.getLogger(DateHelperDefiner.class);
     private SessionParser sessionParser;
     private RruleDefiner rruleDefiner;
     private SessionChecker sessionChecker;

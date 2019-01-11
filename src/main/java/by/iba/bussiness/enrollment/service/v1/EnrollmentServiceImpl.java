@@ -2,12 +2,14 @@ package by.iba.bussiness.enrollment.service.v1;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.AppointmentInstaller;
-import by.iba.bussiness.calendar.attendee.Learner;
+import by.iba.bussiness.calendar.CalendarStatus;
+import by.iba.bussiness.calendar.learner.Learner;
 import by.iba.bussiness.calendar.creator.CalendarCreator;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
 import by.iba.bussiness.calendar.date.DateHelperDefiner;
 import by.iba.bussiness.calendar.date.model.DateHelper;
 import by.iba.bussiness.enrollment.Enrollment;
+import by.iba.bussiness.enrollment.EnrollmentLearnerStatus;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
@@ -16,7 +18,7 @@ import by.iba.bussiness.invitation_template.service.InvitationTemplateService;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.MeetingService;
 import by.iba.bussiness.sender.MessageSender;
-import by.iba.bussiness.sender.ResponseStatus;
+import by.iba.bussiness.sender.MailSendingResponseStatus;
 import by.iba.bussiness.token.model.JavaWebToken;
 import by.iba.bussiness.token.service.TokenService;
 import by.iba.exception.ServiceException;
@@ -86,69 +88,20 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public Enrollment getEnrollmentByEmailAndParentId(HttpServletRequest request, BigInteger parentId, String email) {
-        JavaWebToken javaWebToken = tokenService.getJavaWebToken(request);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set(HttpHeaders.AUTHORIZATION, "Bearer " + javaWebToken.getJwt());
-        HttpEntity httpEntity = new HttpEntity(httpHeaders);
-        Enrollment enrollment = null;
-        try {
-            ResponseEntity<Enrollment> enrollmentResponseEntity = restTemplate.exchange(
-                    ENDPOINT_FIND_ENROLLMENT_BY_PARENT_ID_AND_EMAIL + parentId + "/" + email,
-                    HttpMethod.GET,
-                    httpEntity,
-                    Enrollment.class);
-            enrollment = enrollmentResponseEntity.getBody();
-        } catch (HttpClientErrorException | HttpServerErrorException e) {
-            HttpStatus errorStatus = e.getStatusCode();
-            if (errorStatus.equals(HttpStatus.NOT_FOUND) || errorStatus.equals(HttpStatus.UNAUTHORIZED) || errorStatus.equals(HttpStatus.FORBIDDEN)) {
-                logger.error("Get enrollment error from ec3 service: " + e.getStackTrace());
-                throw new ServiceException(e.getMessage());
-            }
-        }
-        return enrollment;
-    }
-
-    @Override
-    public List<Enrollment> getEnrollmentsByParentId(HttpServletRequest request, BigInteger parentId) {
-        JavaWebToken javaWebToken = tokenService.getJavaWebToken(request);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set(HttpHeaders.AUTHORIZATION, "Bearer " + javaWebToken.getJwt());
-        HttpEntity httpEntity = new HttpEntity(httpHeaders);
-        List<Enrollment> enrollmentList = null;
-        try {
-            ResponseEntity<List<Enrollment>> resultEnrollmentList = restTemplate.exchange(
-                    ENDPOINT_FIND_ENROLLMENT_BY_PARENT_ID + parentId,
-                    HttpMethod.GET,
-                    httpEntity,
-                    new ParameterizedTypeReference<List<Enrollment>>() {
-                    });
-            enrollmentList = resultEnrollmentList.getBody();
-        } catch (HttpClientErrorException | HttpServerErrorException e) {
-            HttpStatus errorStatus = e.getStatusCode();
-            if (errorStatus.equals(HttpStatus.NOT_FOUND) || errorStatus.equals(HttpStatus.UNAUTHORIZED) || errorStatus.equals(HttpStatus.FORBIDDEN)) {
-                logger.error("Get enrollment error from ec3 service: " + e.getStackTrace());
-                throw new ServiceException(e.getMessage());
-            }
-        }
-        return enrollmentList;
-    }
-
-    @Override
-    public void enrollLearners(HttpServletRequest request,
-                               String meetingId,
-                               List<Learner> learners) {
+    public List<EnrollmentLearnerStatus> enrollLearners(HttpServletRequest request,
+                                                        String meetingId,
+                                                        List<Learner> learners) {
         Meeting meeting = meetingService.getMeetingById(request, meetingId);
         String invitationTemplateKey = meeting.getInvitationTemplate();
         if (invitationTemplateKey.isEmpty()) {
             logger.error("Can't enroll learners to this event, cause can't find some invitation template by meeting id: " + meetingId);
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
         }
-        enrollmentsInstaller.installEnrollmentCommonFields(learners, meetingId);
+        return enrollmentsInstaller.installEnrollmentsByLearners(learners, meetingId);
     }
 
     @Override
-    public List<ResponseStatus> sendCalendarToAllEnrollmentsOfMeeting(HttpServletRequest request, String meetingId) {
+    public List<MailSendingResponseStatus> sendCalendarToAllEnrollmentsOfMeeting(HttpServletRequest request, String meetingId) {
         Meeting meeting = meetingService.getMeetingById(request, meetingId);
         String invitationTemplateKey = meeting.getInvitationTemplate();
         if (invitationTemplateKey.isEmpty()) {
@@ -159,24 +112,31 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         Appointment appointment = appointmentInstaller.installAppointment(meeting, invitationTemplate);
         BigInteger bigIntegerMeetingId = new BigInteger(meetingId);
         List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(bigIntegerMeetingId);
-        List<ResponseStatus> responseStatusList = new ArrayList<>();
+        List<MailSendingResponseStatus> mailSendingResponseStatusList = new ArrayList<>();
         DateHelper dateHelper = dateHelperDefiner.defineDateHelper(appointment.getTimeSlots());
         for (Enrollment enrollment : enrollmentList) {
-            Calendar calendar = calendarCreator.createCalendar(enrollment, appointment, dateHelper);
-            if (calendar == null) {
-                ResponseStatus badResponseStatus =
-                        new ResponseStatus(false, "User has already updated version. ", enrollment.getUserEmail());
-                responseStatusList.add(badResponseStatus);
-                logger.info("Don't need to send message to " + enrollment.getUserEmail());
+            if (enrollment.getCalendarStatus().equals(CalendarStatus.CANCELLED)
+                    && enrollment.getStatus().equals(CalendarStatus.CANCELLED)) {
+                MailSendingResponseStatus badMailSendingResponseStatus =
+                        new MailSendingResponseStatus(false, "User has cancelled status. ", enrollment.getUserEmail());
+                mailSendingResponseStatusList.add(badMailSendingResponseStatus);
             } else {
-                calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, calendar);
-                ResponseStatus responseStatus = messageSender.sendCalendarToLearner(calendar);
-                responseStatusList.add(responseStatus);
-                if (responseStatus.isDelivered()) {
-                    enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, appointment);
+                Calendar calendar = calendarCreator.createCalendar(enrollment, appointment, dateHelper);
+                if (calendar == null) {
+                    MailSendingResponseStatus badMailSendingResponseStatus =
+                            new MailSendingResponseStatus(false, "User has already updated version. ", enrollment.getUserEmail());
+                    mailSendingResponseStatusList.add(badMailSendingResponseStatus);
+                    logger.info("Don't need to send message to " + enrollment.getUserEmail());
+                } else {
+                    calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, calendar);
+                    MailSendingResponseStatus mailSendingResponseStatus = messageSender.sendCalendarToLearner(calendar);
+                    mailSendingResponseStatusList.add(mailSendingResponseStatus);
+                    if (mailSendingResponseStatus.isDelivered()) {
+                        enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, appointment);
+                    }
                 }
             }
         }
-        return responseStatusList;
+        return mailSendingResponseStatusList;
     }
 }

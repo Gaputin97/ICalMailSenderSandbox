@@ -19,15 +19,12 @@ import java.util.List;
 @Component
 public class CalendarCreator {
     private CalendarFactory calendarFactory;
-    private DateHelperDefiner dateHelperDefiner;
     private AppointmentHandler appointmentHandler;
 
     @Autowired
     public CalendarCreator(CalendarFactory calendarFactory,
-                           DateHelperDefiner dateHelperDefiner,
                            AppointmentHandler appointmentHandler) {
         this.calendarFactory = calendarFactory;
-        this.dateHelperDefiner = dateHelperDefiner;
         this.appointmentHandler = appointmentHandler;
     }
 

@@ -41,20 +41,4 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
         return appointment;
     }
 
-    @Override
-    public Appointment update(Appointment sourceAppointment) {
-        Query query = new Query(Criteria.where("meetingId").is(sourceAppointment.getMeetingId()));
-        try {
-            Appointment appointment = mongoTemplate.findOne(query, Appointment.class);
-            if (appointment == null) {
-                logger.error("Can't update non existing appointment with meeting ID: " + sourceAppointment.getMeetingId());
-                throw new RepositoryException("Can't update non existing appointment");
-            } else {
-                mongoTemplate.save(sourceAppointment);
-            }
-        } catch (RuntimeException e) {
-            logger.info("Can't update appointment with meeting id: " + sourceAppointment.getMeetingId() + ", error: " + e.getStackTrace());
-        }
-        return sourceAppointment;
-    }
 }
