@@ -6,6 +6,7 @@ import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
 import by.iba.bussiness.calendar.date.DateHelperConstants;
 import by.iba.bussiness.calendar.date.model.reccurence.RecurrenceDateHelper;
 import by.iba.bussiness.calendar.rrule.Rrule;
+import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.calendar.session.SessionParser;
 import by.iba.bussiness.enrollment.Enrollment;
@@ -27,6 +28,7 @@ import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @org.springframework.stereotype.Component
@@ -72,16 +74,22 @@ public class RecurrenceMeetingCalendarTemplateCreator {
                                                    Appointment appointment,
                                                    Enrollment enrollment,
                                                    Calendar concreteCalendar) {
-
         Rrule rrule = recurrenceDateHelper.getRrule();
         DateList exDatesList = new DateList();
         rrule.getExDates().forEach(x -> exDatesList.add(new DateTime(x)));
         List<TimeSlot> meetingTimeSlots = appointment.getTimeSlots();
         List<Session> sessions = sessionParser.timeSlotListToSessionList(meetingTimeSlots);
         Collections.sort(sessions);
+
         Session firstSession = sessions.get(DateHelperConstants.NUMBER_OF_FIRST_TIME_SLOT);
         Session lastSession = sessions.get(sessions.size() - 1);
-        String increasedUntilDate = dateIncreaser.increaseAndParse(rrule.getFrequency(), rrule.getInterval(), lastSession.getStartDate());
+        Date startDateOfLastSession = lastSession.getStartDate();
+        Date startDateOfFirstSession = firstSession.getStartDate();
+        Date endDateOfFirstSession = firstSession.getEndDate();
+
+        long interval = rrule.getInterval();
+        Frequency frequency = rrule.getFrequency();
+        String increasedUntilDate = dateIncreaser.increaseAndParse(frequency, interval, startDateOfLastSession);
         Calendar calendar;
         try {
             Sequence sequence = sequenceDefiner.defineSequence(appointment);
@@ -90,16 +98,15 @@ public class RecurrenceMeetingCalendarTemplateCreator {
             Description description = new Description((appointment.getDescription()));
             Summary summary = new Summary(appointment.getSummary());
             summary.setValue(calendarTextEditor.deleteSummaryWord(summary.getValue()));
-            String frequency = rrule.getFrequency().toString();
-            Long interval = rrule.getInterval();
-            String until = iСalDateParser.parseToICalDate(increasedUntilDate);
-            exDatesList.add(new DateTime(until));
+            String increasedUntilString = iСalDateParser.parseToICalDate(increasedUntilDate);
+            exDatesList.add(new DateTime(increasedUntilString));
 
-            Recur recurrence = new Recur("FREQ=" + frequency + ";" + "INTERVAL=" + interval + ";" + "UNTIL=" + until + ";");
+            Recur recurrence = new Recur("FREQ=" + frequency.toString() + ";" + "INTERVAL="
+                    + interval + ";" + "UNTIL=" + increasedUntilString + ";");
             RRule rRule = new RRule(recurrence);
             Uid UID = new Uid(enrollment.getCurrentCalendarUid());
-            DateTime startDateTime = new DateTime(firstSession.getStartDate());
-            DateTime endDateTime = new DateTime(firstSession.getEndDate());
+            DateTime startDateTime = new DateTime(startDateOfFirstSession);
+            DateTime endDateTime = new DateTime(endDateOfFirstSession);
 
             calendar = new Calendar(concreteCalendar);
             VEvent event = new VEvent(startDateTime, endDateTime, summary.toString());

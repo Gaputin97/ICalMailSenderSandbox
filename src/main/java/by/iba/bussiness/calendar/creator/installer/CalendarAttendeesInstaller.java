@@ -13,13 +13,12 @@ import java.net.URI;
 @org.springframework.stereotype.Component
 public class CalendarAttendeesInstaller {
 
-    public Calendar addAttendeeToCalendar(Enrollment enrollment, Calendar calendar) {
+    public void addAttendeeToCalendar(Enrollment enrollment, Calendar calendar) {
         String email = enrollment.getUserEmail();
         CalendarComponent vEvent = calendar.getComponent(Component.VEVENT);
         Attendee attendee = new Attendee(URI.create("mailto:" + email));
         attendee.getParameters().add(Rsvp.FALSE);
         attendee.getParameters().add(Role.REQ_PARTICIPANT);
         vEvent.getProperties().add(attendee);
-        return calendar;
     }
 }

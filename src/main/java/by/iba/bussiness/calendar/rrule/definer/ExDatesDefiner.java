@@ -21,7 +21,7 @@ public class ExDatesDefiner {
             } else {
                 ((LinkedList<Date>) startDatesOfSessions).removeFirst();
             }
-            startCalendar.add(rrule.getFrequency().getFrequency(), rrule.getInterval().intValue());
+            startCalendar.add(rrule.getFrequency().getCalendarFrequency(), rrule.getInterval().intValue());
         }
     }
 }

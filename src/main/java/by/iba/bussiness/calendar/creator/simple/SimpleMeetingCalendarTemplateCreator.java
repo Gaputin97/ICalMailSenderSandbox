@@ -72,7 +72,7 @@ public class SimpleMeetingCalendarTemplateCreator {
             event.getProperties().addAll(Arrays.asList(sequence, organizer, location, description, summary, UID));
             calendar.getComponents().add(event);
         } catch (ParseException | URISyntaxException | IOException e) {
-            logger.error(e.getMessage());
+            logger.error("Cant create single calendar meeting" + e.getMessage());
             throw new CalendarException("Can't create simple calendar meeting. Try again later");
         }
         return calendar;

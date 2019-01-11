@@ -1,12 +1,10 @@
 package by.iba.bussiness.invitation_template.service.v1;
 
+import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.invitation_template.service.InvitationTemplateService;
-import by.iba.bussiness.meeting.service.MeetingService;
+import by.iba.bussiness.token.model.JavaWebToken;
 import by.iba.bussiness.token.service.TokenService;
 import by.iba.exception.ServiceException;
-import by.iba.bussiness.invitation_template.InvitationTemplate;
-import by.iba.bussiness.meeting.Meeting;
-import by.iba.bussiness.token.model.JavaWebToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +31,12 @@ public class InvitationTemplateServiceImpl implements InvitationTemplateService 
     private String ENDPOINT_GET_TEMPLATE_BY_ID;
     @Value("${template_by_code_endpoint}")
     private String ENDPOINT_GET_TEMPLATE_BY_CODE;
-    private MeetingService meetingService;
 
     @Autowired
     public InvitationTemplateServiceImpl(TokenService tokenService,
-                                         RestTemplate restTemplate,
-                                         MeetingService meetingService) {
+                                         RestTemplate restTemplate) {
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
-        this.meetingService = meetingService;
     }
 
     @Override

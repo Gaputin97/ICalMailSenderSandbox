@@ -36,10 +36,9 @@ public class BasicCalendarTemplateInstaller {
         return calendar;
     }
 
-    private Calendar setUpCommonFields(Calendar calendar) {
+    private void setUpCommonFields(Calendar calendar) {
         calendar.getProperties().add(Version.VERSION_2_0);
         calendar.getProperties().add(CalScale.GREGORIAN);
         calendar.getProperties().add(new ProdId(PRODUCT_IDENTIFIER));
-        return calendar;
     }
 }
