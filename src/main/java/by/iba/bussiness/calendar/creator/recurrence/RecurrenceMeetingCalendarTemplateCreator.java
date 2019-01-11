@@ -96,9 +96,6 @@ public class RecurrenceMeetingCalendarTemplateCreator {
             Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
             Location location = new Location((appointment.getLocation()));
             Description description = new Description((appointment.getDescription()));
-            Summary summary = new Summary(appointment.getSummary());
-            String summaryWithoutWordSummary = calendarTextEditor.deleteSummaryWord(summary.getValue());
-            summary.setValue(summaryWithoutWordSummary);
             String increasedUntilString = iСalDateParser.parseToICalDate(increasedUntilDate);
             exDatesList.add(new DateTime(increasedUntilString));
 
@@ -110,7 +107,7 @@ public class RecurrenceMeetingCalendarTemplateCreator {
             DateTime endDateTime = new DateTime(endDateOfFirstSession);
 
             calendar = new Calendar(concreteCalendar);
-            VEvent event = new VEvent(startDateTime, endDateTime, summary.toString());
+            VEvent event = new VEvent(startDateTime, endDateTime, appointment.getSummary());
             if (!exDatesList.isEmpty()) {
                 ExDate exDates = new ExDate(exDatesList);
                 event.getProperties().add(exDates);

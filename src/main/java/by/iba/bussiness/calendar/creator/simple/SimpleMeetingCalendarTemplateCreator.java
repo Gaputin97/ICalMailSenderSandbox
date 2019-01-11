@@ -60,16 +60,14 @@ public class SimpleMeetingCalendarTemplateCreator {
             Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
             Location location = new Location((appointment.getLocation()));
             Description description = new Description((appointment.getDescription()));
-            Summary summary = new Summary((appointment.getSummary()));
-            summary.setValue(calendarTextEditor.deleteSummaryWord(summary.getValue()));
             Uid UID = new Uid(enrollment.getCurrentCalendarUid());
             Session session = singleDateHelper.getSession();
             DateTime startDateTime = new DateTime(session.getStartDate());
             DateTime endDateTime = new DateTime(session.getEndDate());
 
             calendar = new Calendar(concreteCalendar);
-            event = new VEvent(startDateTime, endDateTime, summary.toString());
-            event.getProperties().addAll(Arrays.asList(sequence, organizer, location, description, summary, UID));
+            event = new VEvent(startDateTime, endDateTime, appointment.getSummary());
+            event.getProperties().addAll(Arrays.asList(sequence, organizer, location, description, UID));
             calendar.getComponents().add(event);
         } catch (ParseException | URISyntaxException | IOException e) {
             logger.error("Cant create single calendar meeting" + e.getMessage());

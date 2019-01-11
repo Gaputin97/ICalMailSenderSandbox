@@ -2,7 +2,6 @@ package by.iba.exception.advice;
 
 import by.iba.exception.CalendarException;
 import by.iba.exception.RepositoryException;
-import by.iba.exception.SendingException;
 import by.iba.exception.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +18,6 @@ public class ControllerAdviceException {
 
     @ExceptionHandler(RepositoryException.class)
     public ResponseEntity<AdditionalException> handleRepositoryException(RepositoryException ex) {
-        return new ResponseEntity<>(new AdditionalException(ex.getMessage()), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(SendingException.class)
-    public ResponseEntity<AdditionalException> handleCalendarSendingException(SendingException ex) {
         return new ResponseEntity<>(new AdditionalException(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
