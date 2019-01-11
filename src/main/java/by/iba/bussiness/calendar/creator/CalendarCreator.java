@@ -7,6 +7,7 @@ import by.iba.bussiness.calendar.EnrollmentCalendarStatus;
 import by.iba.bussiness.calendar.date.model.DateHelper;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.status.EnrollmentStatus;
+import by.iba.bussiness.meeting.MeetingType;
 import net.fortuna.ical4j.model.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,8 +30,11 @@ public class CalendarCreator {
         int maximumAppointmentIndex = appointmentHandler.getMaximumIndex(appointment);
 
         Calendar calendar = null;
-        if ((enrollmentStatus.equals(EnrollmentStatus.CANCELLED)  &&
+        if ((enrollmentStatus.equals(EnrollmentStatus.CANCELLED) &&
                 (enrollmentCalendarStatus.equals(EnrollmentCalendarStatus.INVITED) || (enrollmentCalendarStatus.equals(EnrollmentCalendarStatus.UPDATED))))) {
+            if(dateHelper.getMeetingType().equals(MeetingType.COMPLEX)) {
+
+            }
             calendar = calendarFactory.createCancelCalendarTemplate(dateHelper, appointment, enrollment);
         } else {
             String enrollmentCalendarVersion = enrollment.getCalendarVersion();

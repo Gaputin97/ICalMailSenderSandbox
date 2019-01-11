@@ -189,7 +189,6 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(meetingIdInt);
         for (Enrollment enrollment : enrollmentList) {
             Calendar calendar = calendarCreator.createCalendar(enrollment, newAppointment, dateHelper);
-
             if (calendar == null) {
                 ResponseStatus badResponseStatus =
                         new ResponseStatus(false, "User has already updated version. ", enrollment.getUserEmail());

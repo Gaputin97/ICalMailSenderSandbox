@@ -47,26 +47,26 @@ public class CalendarFactory {
         return calendar;
     }
 
-    public <T extends DateHelper> Calendar createCancelCalendarTemplate(T helper, Appointment appointment, Enrollment enrollment) {
+    public <T extends DateHelper> Calendar createCancelCalendarTemplate(T helper,Appointment oldAppointment, Appointment newAppointment, Enrollment enrollment) {
         Calendar calendar = null;
         switch (helper.getMeetingType()) {
             case SINGLE:
                 SingleDateHelper singleDateHelper = ((SingleDateHelper) helper);
-                calendar = singleMeetingCalendarTemplateCreator.createSingleMeetingCancellationTemplate(singleDateHelper, appointment, enrollment);
+                calendar = singleMeetingCalendarTemplateCreator.createSingleMeetingCancellationTemplate(singleDateHelper, newAppointment, enrollment);
                 break;
             case RECURRENCE:
                 RecurrenceDateHelper recurrenceDateHelper = ((RecurrenceDateHelper) helper);
-                calendar = recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarCancellationTemplate(recurrenceDateHelper, appointment, enrollment);
+                calendar = recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarCancellationTemplate(recurrenceDateHelper, newAppointment, enrollment);
                 break;
             case COMPLEX:
                 ComplexDateHelper complexDateHelper = ((ComplexDateHelper) helper);
-                calendar = complexMeetingCalendarTemplateCreator.createInitialComplexCalendarTemplate(complexDateHelper, appointment, enrollment);
+                calendar = complexMeetingCalendarTemplateCreator.createInitialComplexCalendarTemplate(complexDateHelper,oldAppointment, newAppointment, enrollment);
                 break;
         }
         return calendar;
     }
 
-    public Calendar createInitialCalendarTemplate(ComplexDateHelper complexDateHelper, Appointment oldAppointment, Enrollment enrollment) {
+    public Calendar createInitialCalendarTemplate(ComplexDateHelper complexDateHelper, Appointment appointment, Enrollment enrollment) {
         Calendar calendar = complexMeetingCalendarTemplateCreator.createInitialComplexCalendarTemplate();
         return calendar;
     }
