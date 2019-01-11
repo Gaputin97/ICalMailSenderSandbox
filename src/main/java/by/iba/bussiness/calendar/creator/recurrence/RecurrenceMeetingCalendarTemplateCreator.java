@@ -97,7 +97,8 @@ public class RecurrenceMeetingCalendarTemplateCreator {
             Location location = new Location((appointment.getLocation()));
             Description description = new Description((appointment.getDescription()));
             Summary summary = new Summary(appointment.getSummary());
-            summary.setValue(calendarTextEditor.deleteSummaryWord(summary.getValue()));
+            String summaryWithoutWordSummary = calendarTextEditor.deleteSummaryWord(summary.getValue());
+            summary.setValue(summaryWithoutWordSummary);
             String increasedUntilString = iСalDateParser.parseToICalDate(increasedUntilDate);
             exDatesList.add(new DateTime(increasedUntilString));
 

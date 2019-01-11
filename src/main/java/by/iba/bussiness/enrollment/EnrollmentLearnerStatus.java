@@ -11,7 +11,7 @@ public class EnrollmentLearnerStatus {
         this.learnerEmail = learnerEmail;
     }
 
-    public boolean WasEnroll() {
+    public boolean isWasEnroll() {
         return wasEnroll;
     }
 

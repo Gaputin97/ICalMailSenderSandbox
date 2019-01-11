@@ -30,7 +30,7 @@ public class EnrollmentController {
 
     @ApiOperation(value = "Send calendar notifications to all learners of meeting. ")
     @RequestMapping(value = "/enrollment/send/{meetingId}", method = RequestMethod.GET)
-    public List<MailSendingResponseStatus> sendCalendar(@PathVariable  String meetingId,
+    public List<MailSendingResponseStatus> sendCalendar(@PathVariable String meetingId,
                                                         HttpServletRequest request) {
         return enrollmentService.sendCalendarToAllEnrollmentsOfMeeting(request, meetingId);
     }

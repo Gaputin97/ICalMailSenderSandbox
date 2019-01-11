@@ -13,6 +13,7 @@ import by.iba.bussiness.enrollment.EnrollmentLearnerStatus;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
+import by.iba.bussiness.enrollment.status.EnrollmentStatus;
 import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.invitation_template.service.InvitationTemplateService;
 import by.iba.bussiness.meeting.Meeting;
@@ -101,8 +102,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         List<MailSendingResponseStatus> mailSendingResponseStatusList = new ArrayList<>();
         DateHelper dateHelper = dateHelperDefiner.defineDateHelper(appointment.getTimeSlots());
         for (Enrollment enrollment : enrollmentList) {
-            if (enrollment.getCalendarStatus().equals(CalendarStatus.CANCELLED)
-                    && enrollment.getStatus().equals(CalendarStatus.CANCELLED)) {
+            if (CalendarStatus.CANCELLED.equals(enrollment.getCalendarStatus())
+                    && EnrollmentStatus.CANCELLED.equals(enrollment.getStatus())) {
                 MailSendingResponseStatus badMailSendingResponseStatus =
                         new MailSendingResponseStatus(false, "User has cancelled status. ", enrollment.getUserEmail());
                 mailSendingResponseStatusList.add(badMailSendingResponseStatus);
