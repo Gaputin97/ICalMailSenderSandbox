@@ -7,6 +7,8 @@ import by.iba.bussiness.appointment.repository.AppointmentRepository;
 import by.iba.bussiness.calendar.attendee.Learner;
 import by.iba.bussiness.calendar.creator.CalendarCreator;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
+import by.iba.bussiness.calendar.date.DateHelperDefiner;
+import by.iba.bussiness.calendar.date.model.DateHelper;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
@@ -52,8 +54,12 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private EnrollmentRepository enrollmentRepository;
     private AppointmentInstaller appointmentInstaller;
     private CalendarCreator calendarCreator;
+<<<<<<< HEAD
     private AppointmentRepository appointmentRepository;
     private AppointmentCreator appointmentCreator;
+=======
+    private DateHelperDefiner dateHelperDefiner;
+>>>>>>> 42997cd815a7b34f311677762a87ff67dd3052d4
 
     @Value("${enrollment_by_email_and_meeting_id_endpoint}")
     private String ENDPOINT_FIND_ENROLLMENT_BY_PARENT_ID_AND_EMAIL;
@@ -70,7 +76,12 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                                  InvitationTemplateService invitationTemplateService,
                                  EnrollmentsInstaller enrollmentsInstaller,
                                  EnrollmentRepository enrollmentRepository,
+<<<<<<< HEAD
                                  AppointmentInstaller appointmentInstaller, CalendarCreator calendarCreator, AppointmentRepository appointmentRepository, AppointmentCreator appointmentCreator) {
+=======
+                                 AppointmentInstaller appointmentInstaller, CalendarCreator calendarCreator,
+                                 DateHelperDefiner dateHelperDefiner) {
+>>>>>>> 42997cd815a7b34f311677762a87ff67dd3052d4
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
         this.meetingService = meetingService;
@@ -81,8 +92,12 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         this.enrollmentRepository = enrollmentRepository;
         this.appointmentInstaller = appointmentInstaller;
         this.calendarCreator = calendarCreator;
+<<<<<<< HEAD
         this.appointmentRepository = appointmentRepository;
         this.appointmentCreator = appointmentCreator;
+=======
+        this.dateHelperDefiner = dateHelperDefiner;
+>>>>>>> 42997cd815a7b34f311677762a87ff67dd3052d4
     }
 
     @Override
@@ -148,7 +163,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public List<ResponseStatus> sendCalendar(HttpServletRequest request, String meetingId) {
+    public List<ResponseStatus> sendCalendarToAllEnrollmentsOfMeeting(HttpServletRequest request, String meetingId) {
         Meeting meeting = meetingService.getMeetingById(request, meetingId);
         if (meeting == null) {
             logger.info("Can't find meeting in ec3 with meetingId: " + meetingId);
@@ -176,10 +191,17 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(bigIntegerMeetingId);
 
         List<ResponseStatus> responseStatusList = new ArrayList<>();
+        DateHelper dateHelper = dateHelperDefiner.defineDateHelper(appointment.getTimeSlots());
         for (Enrollment enrollment : enrollmentList) {
+<<<<<<< HEAD
             Calendar calendar = calendarCreator.createCalendar(enrollment, newAppointment);
+=======
+            Calendar calendar = calendarCreator.createCalendar(enrollment, appointment, dateHelper);
+>>>>>>> 42997cd815a7b34f311677762a87ff67dd3052d4
             if (calendar == null) {
-                responseStatusList.add(new ResponseStatus(false, enrollment.getUserName(), enrollment.getUserEmail()));
+                ResponseStatus badResponseStatus =
+                        new ResponseStatus(false, "User has already updated version. ", enrollment.getUserEmail());
+                responseStatusList.add(badResponseStatus);
                 logger.info("Don't need to send message to " + enrollment.getUserEmail());
             } else {
                 calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, calendar);

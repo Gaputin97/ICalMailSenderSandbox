@@ -1,5 +1,6 @@
 package by.iba.bussiness.calendar.date;
 
+import by.iba.bussiness.calendar.creator.complex.ComplexMeetingCalendarTemplateCreator;
 import by.iba.bussiness.calendar.date.builder.ComplexDateHelperBuilder;
 import by.iba.bussiness.calendar.date.builder.RecurrenceDateHelperBuilder;
 import by.iba.bussiness.calendar.date.builder.SimpleDateHelperBuilder;
@@ -10,6 +11,7 @@ import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.calendar.session.SessionChecker;
 import by.iba.bussiness.calendar.session.SessionParser;
 import by.iba.bussiness.meeting.timeslot.TimeSlot;
+import by.iba.exception.CalendarException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +22,13 @@ import java.util.List;
 
 @Component
 public class DateHelperDefiner {
+<<<<<<< HEAD
     private static final Logger logger = LoggerFactory.getLogger(DateHelperDefiner.class);
     private static final int NUMBER_OF_THE_FIRST_TIME_SLOT = 0;
     private static final int AMOUNT_OF_SESSIONS_FOR_SINGLE_EVENT = 1;
+=======
+    private static final Logger logger = LoggerFactory.getLogger(ComplexMeetingCalendarTemplateCreator.class);
+>>>>>>> 42997cd815a7b34f311677762a87ff67dd3052d4
     private SessionParser sessionParser;
     private RruleDefiner rruleDefiner;
     private SessionChecker sessionChecker;
@@ -36,8 +42,9 @@ public class DateHelperDefiner {
         this.sessionChecker = sessionChecker;
     }
 
-    public DateHelper defineDateHelper(List<TimeSlot> timeSlots, BigInteger meetingId) {
+    public DateHelper defineDateHelper(List<TimeSlot> timeSlots) {
         DateHelper dateHelper;
+<<<<<<< HEAD
         int amountOfTimeSlots = timeSlots.size();
         if (amountOfTimeSlots == AMOUNT_OF_SESSIONS_FOR_SINGLE_EVENT) {
             TimeSlot meetingTimeSlot = timeSlots.get(NUMBER_OF_THE_FIRST_TIME_SLOT);
@@ -45,24 +52,18 @@ public class DateHelperDefiner {
             SimpleDateHelperBuilder simpleDateHelperBuilder = new SimpleDateHelperBuilder();
             dateHelper = simpleDateHelperBuilder
                     .setSession(meetingSession)
+=======
+        List<Session> sessions = sessionParser.timeSlotListToSessionList(timeSlots);
+        if (sessionChecker.doAllSessionsTheSame(timeSlots)) {
+            Rrule rrule = rruleDefiner.defineRrule(sessions);
+            RecurrenceDateHelperBuilder recurrenceDateHelperBuilder = new RecurrenceDateHelperBuilder();
+            dateHelper = recurrenceDateHelperBuilder
+                    .setRrule(rrule)
+>>>>>>> 42997cd815a7b34f311677762a87ff67dd3052d4
                     .build();
-            logger.debug("Meeting type of meeting with id " + meetingId + " is simple");
         } else {
-            List<Session> sessions = sessionParser.timeSlotListToSessionList(timeSlots);
-            if (sessionChecker.doAllSessionsTheSame(timeSlots)) {
-                Rrule rrule = rruleDefiner.defineRrule(sessions);
-                RecurrenceDateHelperBuilder recurrenceDateHelperBuilder = new RecurrenceDateHelperBuilder();
-                dateHelper = recurrenceDateHelperBuilder
-                        .setRrule(rrule)
-                        .build();
-                logger.debug("Meeting type of meeting with id " + meetingId + " is recurrence");
-            } else {
-                ComplexDateHelperBuilder complexDateHelperBuilder = new ComplexDateHelperBuilder();
-                dateHelper = complexDateHelperBuilder
-                        .setSessionList(sessions)
-                        .build();
-                logger.debug("Meeting type of meeting with id " + meetingId + " is complex");
-            }
+            logger.error("Timeslots from this meeting can't be transform to simple event");
+            throw new CalendarException("Timeslots from this meeting can't be transform to simple event");
         }
         return dateHelper;
     }

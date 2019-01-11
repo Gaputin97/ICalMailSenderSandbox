@@ -27,10 +27,13 @@ import java.util.List;
 public class ComplexMeetingCalendarTemplateCreator {
     private static final Logger logger = LoggerFactory.getLogger(ComplexMeetingCalendarTemplateCreator.class);
     private Calendar publishCalendar;
+    private CalendarTextEditor calendarTextEditor;
 
     @Autowired
-    public ComplexMeetingCalendarTemplateCreator(@Qualifier("publishCalendar") Calendar publishCalendar) {
+    public ComplexMeetingCalendarTemplateCreator(@Qualifier("publishCalendar") Calendar publishCalendar,
+                                                 CalendarTextEditor calendarTextEditor) {
         this.publishCalendar = publishCalendar;
+        this.calendarTextEditor = calendarTextEditor;
     }
 
 //    public Calendar createInitialComplexCalendarTemplate(ComplexDateHelper complexDateHelper, Appointment appointment, Enrollment enrollment) {
@@ -68,10 +71,18 @@ public class ComplexMeetingCalendarTemplateCreator {
         for (Session session : sessionList) {
             try {
                 Sequence sequence = new Sequence("0");
+<<<<<<< HEAD
                 Organizer organizer = new Organizer("mailto:" + oldAppointment.getOwner().getEmail());
                 Location location = new Location((oldAppointment.getLocation()));
                 Description description = new Description((oldAppointment.getDescription()));
                 Summary summary = new Summary((oldAppointment.getSummary()));
+=======
+                Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
+                Location location = new Location((appointment.getLocation()));
+                Description description = new Description((appointment.getDescription()));
+                Summary summary = new Summary((appointment.getSummary()));
+                summary.setValue(calendarTextEditor.deleteSummaryWord(summary.getValue()));
+>>>>>>> 42997cd815a7b34f311677762a87ff67dd3052d4
                 Uid UID = new Uid(enrollment.getCurrentCalendarUid());
 
                 DateTime startDateTime = new DateTime(session.getStartDate());

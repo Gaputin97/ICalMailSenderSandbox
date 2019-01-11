@@ -12,5 +12,5 @@ public interface EnrollmentService {
     Enrollment getEnrollmentByEmailAndParentId(HttpServletRequest request, BigInteger parentId, String email);
     List<Enrollment> getEnrollmentsByParentId(HttpServletRequest request, BigInteger parentId);
     void enrollLearners(HttpServletRequest request, String meetingId, List<Learner> learners);
-    List<ResponseStatus> sendCalendar(HttpServletRequest request, String meetingId);
+    List<ResponseStatus> sendCalendarToAllEnrollmentsOfMeeting(HttpServletRequest request, String meetingId);
 }

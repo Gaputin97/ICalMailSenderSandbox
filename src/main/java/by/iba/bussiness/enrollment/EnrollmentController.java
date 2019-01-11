@@ -57,6 +57,6 @@ public class EnrollmentController {
     @RequestMapping(value = "/enrollment/send/{meetingId}", method = RequestMethod.GET)
     public List<ResponseStatus> sendCalendar(@PathVariable String meetingId,
                                              HttpServletRequest request) {
-        return enrollmentService.sendCalendar(request, meetingId);
+        return enrollmentService.sendCalendarToAllEnrollmentsOfMeeting(request, meetingId);
     }
 }

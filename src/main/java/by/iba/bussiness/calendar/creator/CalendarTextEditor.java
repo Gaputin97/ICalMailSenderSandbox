@@ -6,7 +6,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CalendarTextEditor {
-    private static final  Logger logger = LoggerFactory.getLogger(CalendarTextEditor.class);
+    private static final Logger logger = LoggerFactory.getLogger(CalendarTextEditor.class);
+    private static final String SUMMARY = "SUMMARY:";
 
     public String replaceColonToEqual(String method) {
         logger.debug("Replaced string: " + method);
@@ -19,5 +20,10 @@ public class CalendarTextEditor {
         }
         logger.debug("Recipient string: " + email);
         return email;
+    }
+
+    public String deleteSummaryWord(String summary) {
+        return summary.replace(SUMMARY, "");
+
     }
 }
