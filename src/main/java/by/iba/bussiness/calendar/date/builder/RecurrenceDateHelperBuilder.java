@@ -13,8 +13,8 @@ public class RecurrenceDateHelperBuilder {
     }
 
     public RecurrenceDateHelper build() {
-        RecurrenceDateHelper recurrenceMeetingWrapper = new RecurrenceDateHelper();
-        recurrenceMeetingWrapper.setRrule(rrule);
-        return recurrenceMeetingWrapper;
+        RecurrenceDateHelper recurrenceMeetingHelper = new RecurrenceDateHelper();
+        recurrenceMeetingHelper.setRrule(rrule);
+        return recurrenceMeetingHelper;
     }
 }

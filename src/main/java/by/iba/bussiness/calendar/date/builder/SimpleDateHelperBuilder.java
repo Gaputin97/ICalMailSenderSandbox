@@ -3,7 +3,6 @@ package by.iba.bussiness.calendar.date.builder;
 import by.iba.bussiness.calendar.date.model.single.SingleDateHelper;
 import by.iba.bussiness.calendar.session.Session;
 
-
 public class SimpleDateHelperBuilder {
     private Session session;
 

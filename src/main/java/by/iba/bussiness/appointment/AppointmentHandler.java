@@ -3,6 +3,7 @@ package by.iba.bussiness.appointment;
 import by.iba.bussiness.appointment.repository.AppointmentRepository;
 import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.meeting.Meeting;
+import by.iba.bussiness.meeting.timeslot.TimeSlot;
 import by.iba.bussiness.owner.Owner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
+import java.util.List;
 
 @Component
 public class AppointmentHandler {
@@ -49,7 +51,9 @@ public class AppointmentHandler {
             newAppointment = sourceAppointment;
         } else {
             maximumIndex = getMaximumIndex(sourceAppointment);
-            if (!sourceAppointment.getTimeSlots().equals(newAppointment.getTimeSlots())) {
+            List<TimeSlot> sourceTimeSlots = sourceAppointment.getTimeSlots();
+            List<TimeSlot> newTimeSlots = newAppointment.getTimeSlots();
+            if (!sourceTimeSlots.equals(newTimeSlots)) {
                 newAppointment.setUpdateIndex(sourceUpdatedIndex);
                 newAppointment.setRescheduleIndex(++maximumIndex);
             } else if (!oldAppointmentDescription.equals(newAppointmentDescription) ||

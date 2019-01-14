@@ -1,5 +1,6 @@
 package by.iba.bussiness.calendar.date;
 
+import by.iba.bussiness.calendar.date.builder.ComplexDateHelperBuilder;
 import by.iba.bussiness.calendar.date.builder.RecurrenceDateHelperBuilder;
 import by.iba.bussiness.calendar.date.model.DateHelper;
 import by.iba.bussiness.calendar.rrule.Rrule;
@@ -8,7 +9,6 @@ import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.calendar.session.SessionChecker;
 import by.iba.bussiness.calendar.session.SessionParser;
 import by.iba.bussiness.meeting.timeslot.TimeSlot;
-import by.iba.exception.CalendarException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,15 +37,15 @@ public class DateHelperDefiner {
         List<Session> sessions = sessionParser.timeSlotListToSessionList(timeSlots);
         if (sessionChecker.doAllSessionsTheSame(timeSlots)) {
             Rrule rrule = rruleDefiner.defineRrule(sessions);
-            RecurrenceDateHelperBuilder recurrenceDateHelperBuilder = new RecurrenceDateHelperBuilder();
-            dateHelper = recurrenceDateHelperBuilder
+            dateHelper = new RecurrenceDateHelperBuilder()
                     .setRrule(rrule)
                     .build();
         } else {
-            logger.error("Timeslots from this meeting can't be transform to simple event");
-            throw new CalendarException("Timeslots from this meeting can't be transform to simple event");
+            dateHelper = new ComplexDateHelperBuilder()
+                    .setSessionList(sessions)
+                    .build();
         }
         return dateHelper;
     }
-}
 
+}

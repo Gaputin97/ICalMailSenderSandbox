@@ -1,7 +1,9 @@
 package by.iba.bussiness.enrollment.service.v1;
 
 import by.iba.bussiness.appointment.Appointment;
+import by.iba.bussiness.appointment.AppointmentCreator;
 import by.iba.bussiness.appointment.AppointmentInstaller;
+import by.iba.bussiness.appointment.repository.AppointmentRepository;
 import by.iba.bussiness.calendar.CalendarStatus;
 import by.iba.bussiness.calendar.creator.CalendarCreator;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
@@ -46,6 +48,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private EnrollmentRepository enrollmentRepository;
     private AppointmentInstaller appointmentInstaller;
     private CalendarCreator calendarCreator;
+    private AppointmentRepository appointmentRepository;
+    private AppointmentCreator appointmentCreator;
     private DateHelperDefiner dateHelperDefiner;
 
     @Value("${enrollment_by_email_and_meeting_id_endpoint}")
@@ -61,7 +65,10 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                                  InvitationTemplateService invitationTemplateService,
                                  EnrollmentsInstaller enrollmentsInstaller,
                                  EnrollmentRepository enrollmentRepository,
-                                 AppointmentInstaller appointmentInstaller, CalendarCreator calendarCreator,
+                                 AppointmentInstaller appointmentInstaller,
+                                 CalendarCreator calendarCreator,
+                                 AppointmentRepository appointmentRepository,
+                                 AppointmentCreator appointmentCreator,
                                  DateHelperDefiner dateHelperDefiner) {
         this.meetingService = meetingService;
         this.calendarAttendeesInstaller = calendarAttendeesInstaller;
@@ -71,6 +78,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         this.enrollmentRepository = enrollmentRepository;
         this.appointmentInstaller = appointmentInstaller;
         this.calendarCreator = calendarCreator;
+        this.appointmentRepository = appointmentRepository;
+        this.appointmentCreator = appointmentCreator;
         this.dateHelperDefiner = dateHelperDefiner;
     }
 
@@ -90,6 +99,10 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     @Override
     public List<MailSendingResponseStatus> sendCalendarToAllEnrollmentsOfMeeting(HttpServletRequest request, String meetingId) {
         Meeting meeting = meetingService.getMeetingById(request, meetingId);
+        if (meeting == null) {
+            logger.info("Can't find meeting in ec3 with meetingId: " + meetingId);
+            throw new ServiceException("Can't find meeting with id " + meetingId);
+        }
         String invitationTemplateKey = meeting.getInvitationTemplate();
         if (invitationTemplateKey.isEmpty()) {
             logger.error("Can't enroll learners to this event, cause can't find some invitation template by meeting id: " + meetingId);
