@@ -3,8 +3,7 @@ package by.iba.bussiness.calendar.creator.recurrence;
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
-import by.iba.bussiness.calendar.date.DateHelperConstants;
-import by.iba.bussiness.calendar.date.model.reccurence.RecurrenceDateHelper;
+import by.iba.bussiness.calendar.date.helper.model.reccurence.RecurrenceDateHelper;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 import by.iba.bussiness.calendar.session.Session;
@@ -34,6 +33,7 @@ import java.util.List;
 @org.springframework.stereotype.Component
 public class RecurrenceMeetingCalendarTemplateCreator {
     private static final Logger logger = LoggerFactory.getLogger(RecurrenceMeetingCalendarTemplateCreator.class);
+    private static final int NUMBER_OF_FIRST_TIME_SLOT = 0;
     private Calendar requestCalendar;
     private SessionParser sessionParser;
     private IcalDateParser iСalDateParser;
@@ -60,17 +60,17 @@ public class RecurrenceMeetingCalendarTemplateCreator {
     }
 
     public Calendar createRecurrenceCalendarInvitationTemplate(RecurrenceDateHelper recurrenceDateHelper, Appointment appointment, Enrollment enrollment) {
-        logger.debug("Started creating inv/update ics file with recurr meeting with id " + appointment.getId());
+        logger.debug("Started creating inv/update ics file with recurrence meeting with id " + appointment.getId());
         return createCommonRecurrenceTemplate(recurrenceDateHelper, appointment, enrollment, requestCalendar);
     }
 
     public Calendar createRecurrenceCalendarCancellationTemplate(RecurrenceDateHelper recurrenceDateHelper, Appointment appointment, Enrollment enrollment) {
-        logger.debug("Started creating cancellation ics file with recurr meeting with id " + appointment.getId());
+        logger.debug("Started creating cancellation ics file with recurrence meeting with id " + appointment.getId());
         return createCommonRecurrenceTemplate(recurrenceDateHelper, appointment, enrollment, cancelCalendar);
 
     }
 
-    public Calendar createCommonRecurrenceTemplate(RecurrenceDateHelper recurrenceDateHelper,
+    private Calendar createCommonRecurrenceTemplate(RecurrenceDateHelper recurrenceDateHelper,
                                                    Appointment appointment,
                                                    Enrollment enrollment,
                                                    Calendar concreteCalendar) {
@@ -81,11 +81,12 @@ public class RecurrenceMeetingCalendarTemplateCreator {
         List<Session> sessions = sessionParser.timeSlotListToSessionList(meetingTimeSlots);
         Collections.sort(sessions);
 
-        Session firstSession = sessions.get(DateHelperConstants.NUMBER_OF_FIRST_TIME_SLOT);
+        Session firstSession = sessions.get(NUMBER_OF_FIRST_TIME_SLOT);
         Session lastSession = sessions.get(sessions.size() - 1);
         Date startDateOfLastSession = lastSession.getStartDate();
         Date startDateOfFirstSession = firstSession.getStartDate();
         Date endDateOfFirstSession = firstSession.getEndDate();
+
 
         long interval = rrule.getInterval();
         Frequency frequency = rrule.getFrequency();

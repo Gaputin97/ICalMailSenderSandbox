@@ -1,6 +1,7 @@
 package by.iba.bussiness.sender;
 
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
+import by.iba.bussiness.template.Template;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
@@ -77,5 +78,25 @@ public class MessageSender {
     public MailSendingResponseStatus sendTextToLearner(String text, String to) {
         return null;
 
+=======
+    public MailSendingResponseStatus sendTemplate(Template template, String userEmail) {
+        MimeMessage message;
+        MailSendingResponseStatus mailSendingResponseStatus;
+        try {
+            message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setTo(userEmail);
+            message.setText("THIS IS " + template.getType() + "; DESCRIPTION = " + template.getDescription() + "; LOCATION = " + template.getLocation()
+                    + "; SUMMARY = " + template.getSummary() + "; ORGANIZER = " + template.getOwner().getEmail() + "; DATES = " + template.getTimeSlots());
+            javaMailSender.send(message);
+            logger.info("Message was sent to " + userEmail);
+            mailSendingResponseStatus = new MailSendingResponseStatus(true, "Message was sent successfully", userEmail);
+        } catch (MessagingException e) {
+            logger.error("Error while trying to send message", e);
+            mailSendingResponseStatus = new MailSendingResponseStatus(false, "Message was not delivered", userEmail);
+        }
+        return mailSendingResponseStatus;
+>>>>>>> dev1
     }
 }

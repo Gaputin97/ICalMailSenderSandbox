@@ -3,7 +3,7 @@ package by.iba.bussiness.calendar.creator.simple;
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
-import by.iba.bussiness.calendar.date.model.single.SingleDateHelper;
+import by.iba.bussiness.calendar.date.helper.model.single.SingleDateHelper;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.exception.CalendarException;
@@ -23,15 +23,15 @@ import java.text.ParseException;
 import java.util.Arrays;
 
 @Component
-public class SimpleMeetingCalendarTemplateCreator {
-    private static final Logger logger = LoggerFactory.getLogger(SimpleMeetingCalendarTemplateCreator.class);
+public class SingleMeetingCalendarTemplateCreator {
+    private static final Logger logger = LoggerFactory.getLogger(SingleMeetingCalendarTemplateCreator.class);
     private Calendar requestCalendar;
     private Calendar cancelCalendar;
     private SequenceDefiner sequenceDefiner;
     private CalendarTextEditor calendarTextEditor;
 
     @Autowired
-    public SimpleMeetingCalendarTemplateCreator(@Qualifier("requestCalendar") Calendar requestCalendar,
+    public SingleMeetingCalendarTemplateCreator(@Qualifier("requestCalendar") Calendar requestCalendar,
                                                 @Qualifier("cancelCalendar") Calendar cancelCalendar,
                                                 SequenceDefiner sequenceDefiner,
                                                 CalendarTextEditor calendarTextEditor) {
@@ -41,17 +41,17 @@ public class SimpleMeetingCalendarTemplateCreator {
         this.calendarTextEditor = calendarTextEditor;
     }
 
-    public Calendar createSimpleMeetingInvitationTemplate(SingleDateHelper singleDateHelper, Appointment appointment, Enrollment enrollment) {
+    public Calendar createSingleMeetingInvitationTemplate(SingleDateHelper singleDateHelper, Appointment appointment, Enrollment enrollment) {
         logger.debug("Started creating invitation ics file with simple meeting with id " + appointment.getMeetingId());
         return createCommonSimpleTemplate(singleDateHelper, appointment, enrollment, requestCalendar);
     }
 
-    public Calendar createSimpleMeetingCancellationTemplate(SingleDateHelper singleDateHelper, Appointment appointment, Enrollment enrollment) {
+    public Calendar createSingleMeetingCancellationTemplate(SingleDateHelper singleDateHelper, Appointment appointment, Enrollment enrollment) {
         logger.debug("Started creating cancellation ics file with simple meeting with id " + appointment.getId());
         return createCommonSimpleTemplate(singleDateHelper, appointment, enrollment, cancelCalendar);
     }
 
-    public Calendar createCommonSimpleTemplate(SingleDateHelper singleDateHelper, Appointment appointment, Enrollment enrollment, Calendar concreteCalendar) {
+    private Calendar createCommonSimpleTemplate(SingleDateHelper singleDateHelper, Appointment appointment, Enrollment enrollment, Calendar concreteCalendar) {
         logger.debug("Started creating cancellation ics file with simple meeting with id " + appointment.getId());
         Calendar calendar;
         VEvent event;
@@ -61,6 +61,7 @@ public class SimpleMeetingCalendarTemplateCreator {
             Location location = new Location((appointment.getLocation()));
             Description description = new Description((appointment.getDescription()));
             Uid UID = new Uid(enrollment.getCurrentCalendarUid());
+
             Session session = singleDateHelper.getSession();
             DateTime startDateTime = new DateTime(session.getStartDate());
             DateTime endDateTime = new DateTime(session.getEndDate());

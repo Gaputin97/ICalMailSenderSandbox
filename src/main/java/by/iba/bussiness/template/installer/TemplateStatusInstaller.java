@@ -1,47 +1,42 @@
-package by.iba.bussiness.calendar.creator;
+package by.iba.bussiness.template.installer;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.AppointmentHandler;
-import by.iba.bussiness.calendar.CalendarFactory;
-import by.iba.bussiness.calendar.date.helper.model.DateHelper;
+import by.iba.bussiness.calendar.EnrollmentCalendarStatus;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.status.EnrollmentStatus;
-import net.fortuna.ical4j.model.Calendar;
+import by.iba.bussiness.template.Template;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
-public class CalendarCreator {
-    private CalendarFactory calendarFactory;
+public class TemplateStatusInstaller {
+
     private AppointmentHandler appointmentHandler;
 
     @Autowired
-    public CalendarCreator(CalendarFactory calendarFactory,
-                           AppointmentHandler appointmentHandler) {
-        this.calendarFactory = calendarFactory;
+    public TemplateStatusInstaller(AppointmentHandler appointmentHandler) {
         this.appointmentHandler = appointmentHandler;
     }
 
-    public Calendar createCalendar(Enrollment enrollment, Appointment appointment, DateHelper dateHelper) {
+    public void installTemplateType(Enrollment enrollment, Appointment appointment) {
         String enrollmentStatus = enrollment.getStatus();
         int maximumAppointmentIndex = appointmentHandler.getMaximumIndex(appointment);
-        Calendar calendar = null;
+        Template template = null;
         if (enrollmentStatus.equals(EnrollmentStatus.CANCELLED)) {
             if ((enrollmentStatus.equals(EnrollmentStatus.CANCELLED))) {
-                calendar = calendarFactory.createCancelCalendarTemplate(dateHelper, appointment, enrollment);
+                template.setType(EnrollmentCalendarStatus.CANCELLED);
             } else {
                 String enrollmentCalendarVersion = enrollment.getCalendarVersion();
                 if (enrollmentCalendarVersion == null) {
-                    calendar = calendarFactory.createCalendarTemplate(dateHelper, appointment, enrollment);
+                    template.setType(EnrollmentCalendarStatus.INVITED);
                 } else {
                     int calendarVersion = Integer.parseInt(enrollment.getCalendarVersion());
                     if (maximumAppointmentIndex > calendarVersion) {
-                        calendar = calendarFactory.createCalendarTemplate(dateHelper, appointment, enrollment);
+                        template.setType(EnrollmentCalendarStatus.UPDATED);
                     }
                 }
             }
-
         }
-        return calendar;
     }
+
+
 }
