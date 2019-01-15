@@ -2,12 +2,14 @@ package by.iba.bussiness.template.installer;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.AppointmentHandler;
-import by.iba.bussiness.calendar.EnrollmentCalendarStatus;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.status.EnrollmentStatus;
 import by.iba.bussiness.template.Template;
+import by.iba.bussiness.template.TemplateType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TemplateStatusInstaller {
 
     private AppointmentHandler appointmentHandler;
@@ -17,22 +19,19 @@ public class TemplateStatusInstaller {
         this.appointmentHandler = appointmentHandler;
     }
 
-    public void installTemplateType(Enrollment enrollment, Appointment appointment) {
+    public void installTemplateType(Enrollment enrollment, Appointment appointment, Template template) {
         String enrollmentStatus = enrollment.getStatus();
         int maximumAppointmentIndex = appointmentHandler.getMaximumIndex(appointment);
-        Template template = null;
-        if (enrollmentStatus.equals(EnrollmentStatus.CANCELLED)) {
-            if ((enrollmentStatus.equals(EnrollmentStatus.CANCELLED))) {
-                template.setType(EnrollmentCalendarStatus.CANCELLED);
+        if ((enrollmentStatus.equals(EnrollmentStatus.CANCELLED))) {
+            template.setType(TemplateType.CANCELLATION);
+        } else {
+            String enrollmentCalendarVersion = enrollment.getCalendarVersion();
+            if (enrollmentCalendarVersion == null) {
+                template.setType(TemplateType.INVITATION);
             } else {
-                String enrollmentCalendarVersion = enrollment.getCalendarVersion();
-                if (enrollmentCalendarVersion == null) {
-                    template.setType(EnrollmentCalendarStatus.INVITED);
-                } else {
-                    int calendarVersion = Integer.parseInt(enrollment.getCalendarVersion());
-                    if (maximumAppointmentIndex > calendarVersion) {
-                        template.setType(EnrollmentCalendarStatus.UPDATED);
-                    }
+                int calendarVersion = Integer.parseInt(enrollment.getCalendarVersion());
+                if (maximumAppointmentIndex > calendarVersion) {
+                    template.setType(TemplateType.UPDATE);
                 }
             }
         }

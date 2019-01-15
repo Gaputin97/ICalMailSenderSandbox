@@ -26,7 +26,6 @@ public class CalendarCreator {
         String enrollmentStatus = enrollment.getStatus();
         int maximumAppointmentIndex = appointmentHandler.getMaximumIndex(appointment);
         Calendar calendar = null;
-        if (enrollmentStatus.equals(EnrollmentStatus.CANCELLED)) {
             if ((enrollmentStatus.equals(EnrollmentStatus.CANCELLED))) {
                 calendar = calendarFactory.createCancelCalendarTemplate(dateHelper, appointment, enrollment);
             } else {
@@ -40,8 +39,6 @@ public class CalendarCreator {
                     }
                 }
             }
-
-        }
         return calendar;
     }
 }

@@ -16,11 +16,13 @@ import net.fortuna.ical4j.model.Calendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class SimpleCalendarSenderFacade {
 
     private static final Logger logger = LoggerFactory.getLogger(EnrollmentServiceImpl.class);
