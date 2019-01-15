@@ -3,7 +3,7 @@ package by.iba.bussiness.calendar.creator.recurrence;
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
-import by.iba.bussiness.calendar.date.model.reccurence.RecurrenceDateHelper;
+import by.iba.bussiness.calendar.date.helper.model.reccurence.RecurrenceDateHelper;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 import by.iba.bussiness.calendar.session.Session;

@@ -1,6 +1,6 @@
-package by.iba.bussiness.calendar.date.model.complex;
+package by.iba.bussiness.calendar.date.helper.model.complex;
 
-import by.iba.bussiness.calendar.date.model.DateHelper;
+import by.iba.bussiness.calendar.date.helper.model.DateHelper;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.meeting.MeetingType;
 

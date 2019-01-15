@@ -1,6 +1,6 @@
-package by.iba.bussiness.calendar.date.builder;
+package by.iba.bussiness.calendar.date.helper.builder;
 
-import by.iba.bussiness.calendar.date.model.reccurence.RecurrenceDateHelper;
+import by.iba.bussiness.calendar.date.helper.model.reccurence.RecurrenceDateHelper;
 import by.iba.bussiness.calendar.rrule.Rrule;
 
 

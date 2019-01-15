@@ -1,8 +1,7 @@
 package by.iba.bussiness.calendar.creator.complex;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.calendar.creator.CalendarTextEditor;
-import by.iba.bussiness.calendar.date.model.complex.ComplexDateHelper;
+import by.iba.bussiness.calendar.date.helper.model.complex.ComplexDateHelper;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.exception.CalendarException;

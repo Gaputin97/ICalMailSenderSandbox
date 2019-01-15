@@ -4,7 +4,7 @@ import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.CalendarStatus;
 import by.iba.bussiness.calendar.creator.CalendarCreator;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
-import by.iba.bussiness.calendar.date.model.DateHelper;
+import by.iba.bussiness.calendar.date.helper.model.DateHelper;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;

@@ -1,4 +1,4 @@
-package by.iba.bussiness.calendar.date.model;
+package by.iba.bussiness.calendar.date.helper.model;
 
 import by.iba.bussiness.meeting.MeetingType;
 

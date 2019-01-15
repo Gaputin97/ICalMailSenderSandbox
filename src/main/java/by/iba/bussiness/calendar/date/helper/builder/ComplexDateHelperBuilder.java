@@ -1,6 +1,6 @@
-package by.iba.bussiness.calendar.date.builder;
+package by.iba.bussiness.calendar.date.helper.builder;
 
-import by.iba.bussiness.calendar.date.model.complex.ComplexDateHelper;
+import by.iba.bussiness.calendar.date.helper.model.complex.ComplexDateHelper;
 import by.iba.bussiness.calendar.session.Session;
 
 import java.util.List;

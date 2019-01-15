@@ -3,7 +3,7 @@ package by.iba.bussiness.calendar.creator.simple;
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
-import by.iba.bussiness.calendar.date.model.single.SingleDateHelper;
+import by.iba.bussiness.calendar.date.helper.model.single.SingleDateHelper;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.exception.CalendarException;

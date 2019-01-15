@@ -2,13 +2,14 @@ package by.iba.bussiness.enrollment.service.v1;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.AppointmentInstaller;
-import by.iba.bussiness.calendar.date.DateHelperDefiner;
-import by.iba.bussiness.calendar.date.model.DateHelper;
+import by.iba.bussiness.appointment.repository.AppointmentRepository;
+import by.iba.bussiness.calendar.date.helper.DateHelperDefiner;
+import by.iba.bussiness.calendar.date.helper.model.DateHelper;
 import by.iba.bussiness.calendar.learner.Learner;
 import by.iba.bussiness.enrollment.EnrollmentLearnerStatus;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
-import by.iba.bussiness.facade.ComplexCalendarSenderFacade;
+import by.iba.bussiness.facade.ComplexTemplateSenderFacade;
 import by.iba.bussiness.facade.SimpleCalendarSenderFacade;
 import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.invitation_template.service.InvitationTemplateService;
@@ -25,7 +26,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
+import java.math.BigInteger;
 import java.util.List;
 
 @Service
@@ -37,8 +38,9 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private EnrollmentsInstaller enrollmentsInstaller;
     private AppointmentInstaller appointmentInstaller;
     private DateHelperDefiner dateHelperDefiner;
-    private ComplexCalendarSenderFacade complexCalendarSenderFacade;
+    private ComplexTemplateSenderFacade complexTemplateSenderFacade;
     private SimpleCalendarSenderFacade simpleCalendarSenderFacade;
+    private AppointmentRepository appointmentRepository;
 
     @Value("${enrollment_by_email_and_meeting_id_endpoint}")
     private String ENDPOINT_FIND_ENROLLMENT_BY_PARENT_ID_AND_EMAIL;
@@ -52,15 +54,17 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                                  EnrollmentsInstaller enrollmentsInstaller,
                                  AppointmentInstaller appointmentInstaller,
                                  DateHelperDefiner dateHelperDefiner,
-                                 ComplexCalendarSenderFacade complexCalendarSenderFacade,
-                                 SimpleCalendarSenderFacade simpleCalendarSenderFacade) {
+                                 ComplexTemplateSenderFacade complexTemplateSenderFacade,
+                                 SimpleCalendarSenderFacade simpleCalendarSenderFacade,
+                                 AppointmentRepository appointmentRepository) {
         this.meetingService = meetingService;
         this.invitationTemplateService = invitationTemplateService;
         this.enrollmentsInstaller = enrollmentsInstaller;
         this.appointmentInstaller = appointmentInstaller;
         this.dateHelperDefiner = dateHelperDefiner;
-        this.complexCalendarSenderFacade = complexCalendarSenderFacade;
+        this.complexTemplateSenderFacade = complexTemplateSenderFacade;
         this.simpleCalendarSenderFacade = simpleCalendarSenderFacade;
+        this.appointmentRepository = appointmentRepository;
     }
 
     @Override
@@ -89,13 +93,15 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
         }
         InvitationTemplate invitationTemplate = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
-        Appointment appointment = appointmentInstaller.installAppointment(meeting, invitationTemplate);
-        List<MailSendingResponseStatus> mailSendingResponseStatusList = new ArrayList<>();
+        Appointment oldAppointment = appointmentRepository.getByMeetingId(new BigInteger(meetingId));
+        Appointment appointment = appointmentInstaller.installAppointment(meeting, invitationTemplate, oldAppointment);
+        List<MailSendingResponseStatus> mailSendingResponseStatusList;
         DateHelper dateHelper = dateHelperDefiner.defineDateHelper(appointment.getTimeSlots());
         if (dateHelper.getMeetingType().equals(MeetingType.RECURRENCE)) {
             mailSendingResponseStatusList = simpleCalendarSenderFacade.sendCalendar(dateHelper, appointment);
         } else {
-            mailSendingResponseStatusList = complexCalendarSenderFacade.sendCalendar(dateHelper, appointment);
+            mailSendingResponseStatusList = complexTemplateSenderFacade.sendTemplate(appointment, oldAppointment);
         }
+        return mailSendingResponseStatusList;
     }
 }
