@@ -11,24 +11,32 @@ public class AppointmentInstaller {
 
     private AppointmentRepository appointmentRepository;
     private AppointmentHandler appointmentHandler;
+    private AppointmentCreator appointmentCreator;
 
     @Autowired
     public AppointmentInstaller(AppointmentRepository appointmentRepository,
-                                AppointmentHandler appointmentHandler) {
+                                AppointmentHandler appointmentHandler,
+                                AppointmentCreator appointmentCreator) {
         this.appointmentRepository = appointmentRepository;
         this.appointmentHandler = appointmentHandler;
+        this.appointmentCreator = appointmentCreator;
     }
 
     public Appointment installAppointment(Meeting meeting, InvitationTemplate invitationTemplate, Appointment oldAppointment) {
         Appointment newAppointment;
-        Appointment updatedAppointment = appointmentHandler.getUpdatedAppointment(meeting, invitationTemplate);
-        if ((updatedAppointment.getUpdateIndex() == 0 && updatedAppointment.getRescheduleIndex() == 0) ||
-                (updatedAppointment.getRescheduleIndex() > oldAppointment.getRescheduleIndex() ||
-                        updatedAppointment.getUpdateIndex() > oldAppointment.getUpdateIndex())) {
-            newAppointment = updatedAppointment;
+        if (oldAppointment == null) {
+            newAppointment = appointmentCreator.createAppointment(meeting, invitationTemplate);
             appointmentRepository.save(newAppointment);
         } else {
-            newAppointment = oldAppointment;
+            Appointment updatedAppointment = appointmentHandler.getUpdatedAppointment(meeting, invitationTemplate);
+            if ((updatedAppointment.getUpdateIndex() == 0 && updatedAppointment.getRescheduleIndex() == 0) ||
+                    (updatedAppointment.getRescheduleIndex() > oldAppointment.getRescheduleIndex() ||
+                            updatedAppointment.getUpdateIndex() > oldAppointment.getUpdateIndex())) {
+                newAppointment = updatedAppointment;
+                appointmentRepository.save(newAppointment);
+            } else {
+                newAppointment = oldAppointment;
+            }
         }
         return newAppointment;
     }

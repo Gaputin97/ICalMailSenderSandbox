@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class TemplateTimeSlotInstaller {
@@ -24,29 +25,47 @@ public class TemplateTimeSlotInstaller {
         List<TimeSlot> oldAppTimeSlots = oldAppointment.getTimeSlots();
         int newAppTimeSlotsMaxId = templateTimeSlotDefiner.defineHighestIdOfTimeSlots(newAppTimeSlots);
         int oldAppTimeSlotsMaxId = templateTimeSlotDefiner.defineHighestIdOfTimeSlots(oldAppTimeSlots);
+        int newAppTimeSlotsMinId = templateTimeSlotDefiner.defineLowestIdOfTimeSlots(newAppTimeSlots);
+        int oldAppTimeSlotsMinId = templateTimeSlotDefiner.defineLowestIdOfTimeSlots(oldAppTimeSlots);
         int commonMaxId;
-        if (newAppTimeSlotsMaxId > oldAppTimeSlotsMaxId) {
-            commonMaxId = newAppTimeSlotsMaxId;
-        } else {
-            commonMaxId = oldAppTimeSlotsMaxId;
-        }
+        int commonMinId;
+        commonMaxId = newAppTimeSlotsMaxId > oldAppTimeSlotsMaxId ? newAppTimeSlotsMaxId : oldAppTimeSlotsMaxId;
+        commonMinId = newAppTimeSlotsMinId < oldAppTimeSlotsMinId ? newAppTimeSlotsMinId : oldAppTimeSlotsMinId;
         StringBuilder timeSlots = new StringBuilder();
-        for (int timeSlotId = 0; timeSlotId < commonMaxId; timeSlotId++) {
-            TimeSlot newAppTimeSlot = newAppTimeSlots.get(timeSlotId);
-            TimeSlot oldAppTimeSlot = oldAppTimeSlots.get(timeSlotId);
+        for (int timeSlotId = commonMinId; timeSlotId <= commonMaxId; timeSlotId++) {
+            int finalTimeSlotId = timeSlotId;
+            Optional<TimeSlot> optionalNewAppTimeSlots = newAppTimeSlots.stream().filter(x -> x.getId() == finalTimeSlotId).findFirst();
+            Optional<TimeSlot> optionalOldAppTimeSlots = oldAppTimeSlots.stream().filter(x -> x.getId() == finalTimeSlotId).findFirst();
+            TimeSlot newAppTimeSlot = optionalNewAppTimeSlots.orElse(null);
+            TimeSlot oldAppTimeSlot = optionalOldAppTimeSlots.orElse(null);
             if (newAppTimeSlot == null && oldAppTimeSlot != null) {
-                timeSlots.append("<s>" + oldAppointment + "</s>" + " (was deleted)");
+                timeSlots.append("<s>" + oldAppTimeSlot.getStartDateTime() + oldAppTimeSlot.getEndDateTime() + "</s>" + " (was deleted)");
+                timeSlots.append("<br>");
             } else if (oldAppTimeSlot == null && newAppTimeSlot != null) {
-                timeSlots.append(newAppTimeSlot);
+                timeSlots.append(newAppTimeSlot.getStartDateTime() + "----" + newAppTimeSlot.getEndDateTime() + " (was added)");
             } else if (oldAppointment != null && newAppTimeSlot != null) {
-                if (oldAppointment.equals(newAppTimeSlot)) {
-                    timeSlots.append(newAppTimeSlot + " (was not changed)");
+                if (oldAppTimeSlot.equals(newAppTimeSlot)) {
+                    timeSlots.append(newAppTimeSlot.getStartDateTime() + "----" + newAppTimeSlot.getEndDateTime() + " (was not changed)");
+                    timeSlots.append("<br>");
                 } else {
-                    timeSlots.append(newAppTimeSlot + " (" + "rescheduled from " + oldAppTimeSlot);
+                    timeSlots.append(newAppTimeSlot.getStartDateTime() + "----" + newAppTimeSlot.getEndDateTime()
+                            + " (" + "rescheduled from " + oldAppTimeSlot.getStartDateTime() + "----" + oldAppTimeSlot.getEndDateTime() + " )");
+                    timeSlots.append("<br>");
                 }
             }
         }
         template.setTimeSlots(timeSlots.toString());
+    }
+
+    public void installTimeSlotsIfInvitation(Appointment appointment, Template template) {
+        List<TimeSlot> newAppTimeSlots = appointment.getTimeSlots();
+        StringBuilder timeSlots = new StringBuilder();
+        newAppTimeSlots.forEach(x -> {
+            timeSlots.append(timeSlots.append(x.getStartDateTime() + "----" + x.getEndDateTime() + " (was added)"));
+            timeSlots.append("<br>");
+        });
+        template.setTimeSlots(timeSlots.toString());
+
     }
 
 

@@ -20,7 +20,11 @@ public class TemplateInstaller {
         template.setLocation(appointment.getLocation());
         template.setSummary(appointment.getSummary());
         template.setOwner(appointment.getOwner());
-        templateTimeSlotInstaller.installTimeSlots(appointment, oldAppointment, template);
+        if (oldAppointment == null) {
+            templateTimeSlotInstaller.installTimeSlotsIfInvitation(appointment, template);
+        } else {
+            templateTimeSlotInstaller.installTimeSlots(appointment, oldAppointment, template);
+        }
 
     }
 }

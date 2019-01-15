@@ -17,7 +17,7 @@ public class CalendarAttendeesInstaller {
         String email = enrollment.getUserEmail();
         CalendarComponent vEvent = calendar.getComponent(Component.VEVENT);
         Attendee attendee = new Attendee(URI.create("mailto:" + email));
-        attendee.getParameters().add(Rsvp.TRUE);
+        attendee.getParameters().add(Rsvp.FALSE);
         attendee.getParameters().add(Role.REQ_PARTICIPANT);
         vEvent.getProperties().add(attendee);
     }

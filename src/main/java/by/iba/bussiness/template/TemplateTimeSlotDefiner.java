@@ -12,4 +12,8 @@ public class TemplateTimeSlotDefiner {
     public int defineHighestIdOfTimeSlots(List<TimeSlot> timeSlots) {
         return timeSlots.stream().map(TimeSlot::getId).mapToInt(x -> x).max().orElseThrow(NoSuchElementException::new);
     }
+
+    public int defineLowestIdOfTimeSlots(List<TimeSlot> timeSlots) {
+        return timeSlots.stream().map(TimeSlot::getId).mapToInt(x -> x).min().orElseThrow(NoSuchElementException::new);
+    }
 }
