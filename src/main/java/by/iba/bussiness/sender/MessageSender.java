@@ -75,10 +75,6 @@ public class MessageSender {
         return mailSendingResponseStatus;
     }
 
-    public MailSendingResponseStatus sendTextToLearner(String text, String to) {
-        return null;
-
-=======
     public MailSendingResponseStatus sendTemplate(Template template, String userEmail) {
         MimeMessage message;
         MailSendingResponseStatus mailSendingResponseStatus;
@@ -97,6 +93,5 @@ public class MessageSender {
             mailSendingResponseStatus = new MailSendingResponseStatus(false, "Message was not delivered", userEmail);
         }
         return mailSendingResponseStatus;
->>>>>>> dev1
     }
 }
