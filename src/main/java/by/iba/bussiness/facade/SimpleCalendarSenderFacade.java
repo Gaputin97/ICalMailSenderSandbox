@@ -1,15 +1,17 @@
 package by.iba.bussiness.facade;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.calendar.CalendarStatus;
+import by.iba.bussiness.calendar.EnrollmentCalendarStatus;
+import by.iba.bussiness.calendar.EnrollmentStatus;
 import by.iba.bussiness.calendar.creator.CalendarCreator;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
-import by.iba.bussiness.calendar.date.helper.model.DateHelper;
+import by.iba.bussiness.calendar.creator.installer.CalendarInstaller;
+import by.iba.bussiness.calendar.date.helper.model.reccurence.SimpleDateHelper;
+import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.enrollment.service.v1.EnrollmentServiceImpl;
-import by.iba.bussiness.enrollment.status.EnrollmentStatus;
 import by.iba.bussiness.sender.MailSendingResponseStatus;
 import by.iba.bussiness.sender.MessageSender;
 import net.fortuna.ical4j.model.Calendar;
@@ -31,32 +33,38 @@ public class SimpleCalendarSenderFacade {
     private EnrollmentsInstaller enrollmentsInstaller;
     private EnrollmentRepository enrollmentRepository;
     private CalendarCreator calendarCreator;
+    private CalendarInstaller calendarInstaller;
 
     @Autowired
     public SimpleCalendarSenderFacade(CalendarAttendeesInstaller calendarAttendeesInstaller,
                                       MessageSender messageSender,
                                       EnrollmentsInstaller enrollmentsInstaller,
                                       EnrollmentRepository enrollmentRepository,
-                                      CalendarCreator calendarCreator) {
+                                      CalendarCreator calendarCreator,
+                                      CalendarInstaller calendarInstaller) {
         this.calendarAttendeesInstaller = calendarAttendeesInstaller;
         this.messageSender = messageSender;
         this.enrollmentsInstaller = enrollmentsInstaller;
         this.enrollmentRepository = enrollmentRepository;
         this.calendarCreator = calendarCreator;
+        this.calendarInstaller = calendarInstaller;
     }
 
-    public List<MailSendingResponseStatus> sendCalendar(DateHelper dateHelper, Appointment appointment) {
+    public List<MailSendingResponseStatus> sendCalendar(Rrule rrule, Appointment appointment) {
         BigInteger meetingId = appointment.getMeetingId();
         List<MailSendingResponseStatus> mailSendingResponseStatusList = new ArrayList<>();
+        Calendar installedCalendar = new Calendar();
+        calendarInstaller.installCalendarCommonParts(rrule, appointment, installedCalendar);
         List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(meetingId);
         for (Enrollment enrollment : enrollmentList) {
-            if (CalendarStatus.CANCELLED.equals(enrollment.getCalendarStatus())
+            if (EnrollmentCalendarStatus.CANCELLED.equals(enrollment.getCalendarStatus())
                     && EnrollmentStatus.CANCELLED.equals(enrollment.getStatus())) {
                 MailSendingResponseStatus badMailSendingResponseStatus =
                         new MailSendingResponseStatus(false, "User has cancelled status. ", enrollment.getUserEmail());
                 mailSendingResponseStatusList.add(badMailSendingResponseStatus);
             } else {
-                Calendar calendar = calendarCreator.createCalendar(enrollment, appointment, dateHelper);
+                Calendar calendar = installedCalendar;
+                calendarCreator.createCalendar(calendar, enrollment, appointment);
                 if (calendar == null) {
                     MailSendingResponseStatus badMailSendingResponseStatus =
                             new MailSendingResponseStatus(false, "User has already updated version. ", enrollment.getUserEmail());

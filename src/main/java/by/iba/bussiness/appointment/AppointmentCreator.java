@@ -38,10 +38,10 @@ public class AppointmentCreator {
         appointment.setEndDateTime(meeting.getEndDateTime());
 
         List<TimeSlot> timeSlots = meeting.getTimeSlots();
-        for (TimeSlot timeSlot : timeSlots) {
+        timeSlots.forEach(timeSlot -> {
             String timeSlotId = Integer.toString(timeSlot.getId());
             timeSlot.setUuid(timeSlotUidDefiner.defineTimeSlotUid(meetingId, timeSlotId));
-        }
+        });
         appointment.setSessionList(sessionParser.timeSlotListToSessionList(meeting.getTimeSlots()));
         appointment.setDuration(meeting.getDuration());
         appointment.setOwner(meeting.getOwner());

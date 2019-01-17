@@ -3,9 +3,11 @@ package by.iba.bussiness.enrollment.service.v1;
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.AppointmentInstaller;
 import by.iba.bussiness.appointment.repository.AppointmentRepository;
-import by.iba.bussiness.calendar.date.helper.DateHelperDefiner;
-import by.iba.bussiness.calendar.date.helper.model.DateHelper;
+import by.iba.bussiness.calendar.date.helper.MeetingTypeDefiner;
 import by.iba.bussiness.calendar.learner.Learner;
+import by.iba.bussiness.calendar.rrule.Rrule;
+import by.iba.bussiness.calendar.rrule.definer.RruleDefiner;
+import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.enrollment.EnrollmentLearnerStatus;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
@@ -34,28 +36,31 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private InvitationTemplateService invitationTemplateService;
     private EnrollmentsInstaller enrollmentsInstaller;
     private AppointmentInstaller appointmentInstaller;
-    private DateHelperDefiner dateHelperDefiner;
+    private MeetingTypeDefiner meetingTypeDefiner;
     private ComplexTemplateSenderFacade complexTemplateSenderFacade;
     private SimpleCalendarSenderFacade simpleCalendarSenderFacade;
     private AppointmentRepository appointmentRepository;
+    private RruleDefiner rruleDefiner;
 
     @Autowired
     public EnrollmentServiceImpl(MeetingService meetingService,
                                  InvitationTemplateService invitationTemplateService,
                                  EnrollmentsInstaller enrollmentsInstaller,
                                  AppointmentInstaller appointmentInstaller,
-                                 DateHelperDefiner dateHelperDefiner,
+                                 MeetingTypeDefiner meetingTypeDefiner,
                                  ComplexTemplateSenderFacade complexTemplateSenderFacade,
                                  SimpleCalendarSenderFacade simpleCalendarSenderFacade,
-                                 AppointmentRepository appointmentRepository) {
+                                 AppointmentRepository appointmentRepository,
+                                 RruleDefiner rruleDefiner) {
         this.meetingService = meetingService;
         this.invitationTemplateService = invitationTemplateService;
         this.enrollmentsInstaller = enrollmentsInstaller;
         this.appointmentInstaller = appointmentInstaller;
-        this.dateHelperDefiner = dateHelperDefiner;
+        this.meetingTypeDefiner = meetingTypeDefiner;
         this.complexTemplateSenderFacade = complexTemplateSenderFacade;
         this.simpleCalendarSenderFacade = simpleCalendarSenderFacade;
         this.appointmentRepository = appointmentRepository;
+        this.rruleDefiner = rruleDefiner;
     }
 
     @Override
@@ -83,20 +88,22 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             logger.error("Can't enroll learners to this event, cause can't find some invitation template by meeting id: " + meetingId);
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
         }
-
         InvitationTemplate invitationTemplate = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
         Appointment oldAppointment = appointmentRepository.getByMeetingId(new BigInteger(meetingId));
         Appointment appointment = appointmentInstaller.installAppointment(meeting, invitationTemplate, oldAppointment);
         List<MailSendingResponseStatus> mailSendingResponseStatusList;
-        DateHelper newAppointmentDateHelper = dateHelperDefiner.defineDateHelper(meeting.getTimeSlots());
-        DateHelper oldMeetingDateHelper = null;
+
+        MeetingType newAppointmentMeetingType = meetingTypeDefiner.defineMeetingType(appointment.getSessionList());
+        List<Session> sessions = null;
+        MeetingType oldAppointmentMeetingType = null;
         if (oldAppointment != null) {
-            oldMeetingDateHelper = dateHelperDefiner.defineDateHelper(meeting.getTimeSlots());
+            oldAppointmentMeetingType = meetingTypeDefiner.defineMeetingType(oldAppointment.getSessionList());
         }
-        if (newAppointmentDateHelper.getMeetingType().equals(MeetingType.RECURRENCE)) {
-            mailSendingResponseStatusList = simpleCalendarSenderFacade.sendCalendar(newAppointmentDateHelper, appointment);
+        if (newAppointmentMeetingType.equals(MeetingType.SIMPLE)) {
+            Rrule rrule = rruleDefiner.defineRrule(sessions);
+            mailSendingResponseStatusList = simpleCalendarSenderFacade.sendCalendar(rrule, appointment);
         } else {
-            mailSendingResponseStatusList = complexTemplateSenderFacade.sendTemplate(appointment, oldAppointment, oldMeetingDateHelper);
+            mailSendingResponseStatusList = complexTemplateSenderFacade.sendTemplate(appointment, oldAppointment, oldAppointmentMeetingType);
         }
         return mailSendingResponseStatusList;
     }

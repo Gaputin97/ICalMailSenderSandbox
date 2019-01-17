@@ -26,7 +26,6 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
             mongoTemplate.save(appointment);
         } catch (RuntimeException e) {
             logger.info("Can't save appointment into database: " + e.getStackTrace());
-            throw new RepositoryException("Can't save appointment to database" + appointment.toString());
         }
         return appointment;
     }
@@ -35,7 +34,7 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
     public Appointment getByMeetingId(BigInteger meetingId) {
         Query query = new Query(Criteria.where("meetingId").is(meetingId));
         Appointment appointment = mongoTemplate.findOne(query, Appointment.class);
-        if(appointment == null){
+        if (appointment == null) {
             logger.info("Can't get appointment from database by meeting ID " + meetingId);
         }
         return appointment;
