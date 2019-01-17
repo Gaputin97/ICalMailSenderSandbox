@@ -10,10 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class RruleDefiner {
@@ -52,7 +49,8 @@ public class RruleDefiner {
         rrule.setFrequency(frequency);
         logger.info("Interval of rrule is " + interval + " and freq type is " + frequency.toString());
 
-        exDatesDefiner.defineExDates(rrule, startDateOfFirstSession, startDateOfLastSession, startDatesOfSessions);
+        List<Date> exDates = exDatesDefiner.defineExDates(rrule, startDateOfFirstSession, startDateOfLastSession, startDatesOfSessions);
+        rrule.setExDates(exDates);
         logger.info("Amount of exdates is " + rrule.getExDates().size());
         return rrule;
     }

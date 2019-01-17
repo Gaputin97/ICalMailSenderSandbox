@@ -46,9 +46,8 @@ public class CalendarInstaller {
     }
 
 
-    public void installCalendarCommonParts(Rrule rrule,
-                                           Appointment appointment,
-                                           Calendar calendar) {
+    public Calendar installCalendarCommonParts(Rrule rrule,
+                                               Appointment appointment) {
         DateList exDatesList = new DateList();
         rrule.getExDates().forEach(x -> exDatesList.add(new DateTime(x)));
         List<Session> sessions = appointment.getSessionList();
@@ -64,6 +63,7 @@ public class CalendarInstaller {
         long interval = rrule.getInterval();
         Frequency frequency = rrule.getFrequency();
         String increasedUntilDate = dateIncreaser.increaseAndParse(frequency, interval, startDateOfLastSession);
+        Calendar calendar = null;
         try {
             Sequence sequence = sequenceDefiner.defineSequence(appointment);
             Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
@@ -90,5 +90,6 @@ public class CalendarInstaller {
             logger.error("Cant create recur calendar meeting" + e.getMessage());
             throw new CalendarException("Can't create recurrence calendar meeting. Try again later");
         }
+        return calendar;
     }
 }

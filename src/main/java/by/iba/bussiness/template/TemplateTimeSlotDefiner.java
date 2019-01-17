@@ -10,16 +10,16 @@ import java.util.Optional;
 
 @Component
 public class TemplateTimeSlotDefiner {
-    public int defineHighestIdOfSessions(List<Session> timeSlots) {
-        return timeSlots.stream().map(Session::getId).mapToInt(x -> x).max().orElseThrow(NoSuchElementException::new);
+    public int defineHighestIdOfSessions(List<Session> sessions) {
+        return sessions.stream().map(Session::getId).mapToInt(x -> x).max().orElseThrow(NoSuchElementException::new);
     }
 
-    public int defineLowestIdOfSessions(List<Session> timeSlots) {
-        return timeSlots.stream().map(Session::getId).mapToInt(x -> x).min().orElseThrow(NoSuchElementException::new);
+    public int defineLowestIdOfSessions(List<Session> sessions) {
+        return sessions.stream().map(Session::getId).mapToInt(x -> x).min().orElseThrow(NoSuchElementException::new);
     }
 
-    public TimeSlot defineTimeSlotWithId(int timeSlotId, List<TimeSlot> timeSlots) {
-        Optional<TimeSlot> optionalNewAppTimeSlots = timeSlots.stream().filter(x -> x.getId() == timeSlotId).findFirst();
+    public Session defineSessionById(int sessionId, List<Session> sessions) {
+        Optional<Session> optionalNewAppTimeSlots = sessions.stream().filter(x -> x.getId() == sessionId).findFirst();
         return optionalNewAppTimeSlots.orElse(null);
     }
 }

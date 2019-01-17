@@ -15,15 +15,20 @@ public class TemplateInstaller {
         this.templateTimeSlotInstaller = templateTimeSlotInstaller;
     }
 
-    public void installCommonPartsOfTemplate(Appointment appointment, Appointment oldAppointment, Template template) {
+    public Template installCommonPartsOfTemplate(Appointment appointment, Appointment oldAppointment) {
+        Template template = new Template();
         template.setDescription(appointment.getDescription());
         template.setLocation(appointment.getLocation());
         template.setSummary(appointment.getSummary());
         template.setOwner(appointment.getOwner());
+        String sessions;
         if (oldAppointment == null) {
-            templateTimeSlotInstaller.installTimeSlotsIfInvitation(appointment, template);
+            sessions = templateTimeSlotInstaller.installSessionsIfInvitation(appointment);
+            template.setSessions(sessions);
         } else {
-            templateTimeSlotInstaller.installTimeSlots(appointment, oldAppointment, template);
+            sessions = templateTimeSlotInstaller.installSessions(appointment, oldAppointment);
+            template.setSessions(sessions);
         }
+        return template;
     }
 }

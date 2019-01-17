@@ -93,17 +93,17 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         Appointment appointment = appointmentInstaller.installAppointment(meeting, invitationTemplate, oldAppointment);
         List<MailSendingResponseStatus> mailSendingResponseStatusList;
 
-        MeetingType newAppointmentMeetingType = meetingTypeDefiner.defineMeetingType(appointment.getSessionList());
+        MeetingType newMeetingType = meetingTypeDefiner.defineMeetingType(appointment.getSessionList());
         List<Session> sessions = null;
-        MeetingType oldAppointmentMeetingType = null;
+        MeetingType oldMeetingType = null;
         if (oldAppointment != null) {
-            oldAppointmentMeetingType = meetingTypeDefiner.defineMeetingType(oldAppointment.getSessionList());
+            oldMeetingType = meetingTypeDefiner.defineMeetingType(oldAppointment.getSessionList());
         }
-        if (newAppointmentMeetingType.equals(MeetingType.SIMPLE)) {
+        if (newMeetingType.equals(MeetingType.SIMPLE)) {
             Rrule rrule = rruleDefiner.defineRrule(sessions);
             mailSendingResponseStatusList = simpleCalendarSenderFacade.sendCalendar(rrule, appointment);
         } else {
-            mailSendingResponseStatusList = complexTemplateSenderFacade.sendTemplate(appointment, oldAppointment, oldAppointmentMeetingType);
+            mailSendingResponseStatusList = complexTemplateSenderFacade.sendTemplate(appointment, oldMeetingType);
         }
         return mailSendingResponseStatusList;
     }

@@ -19,22 +19,24 @@ public class TemplateStatusInstaller {
         this.appointmentHandler = appointmentHandler;
     }
 
-    public void installTemplateType(Enrollment enrollment, Appointment appointment, Template template) {
+    public String installTemplateType(Enrollment enrollment, Appointment appointment) {
         String enrollmentStatus = enrollment.getStatus();
+        String templateType = null;
         int maximumAppointmentIndex = appointmentHandler.getMaximumIndex(appointment);
         if ((enrollmentStatus.equals(EnrollmentStatus.CANCELLED))) {
-            template.setType(TemplateType.CANCELLATION.toString());
+            templateType = TemplateType.CANCELLATION.toString();
         } else {
             String enrollmentCalendarVersion = enrollment.getCalendarVersion();
             if (enrollmentCalendarVersion == null) {
-                template.setType(TemplateType.INVITATION.toString());
+                templateType = TemplateType.INVITATION.toString();
             } else {
                 int calendarVersion = Integer.parseInt(enrollment.getCalendarVersion());
                 if (maximumAppointmentIndex > calendarVersion) {
-                    template.setType(TemplateType.UPDATE.toString());
+                    templateType = TemplateType.UPDATE.toString();
                 }
             }
         }
+        return templateType;
     }
 
 
