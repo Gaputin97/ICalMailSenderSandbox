@@ -1,7 +1,6 @@
 package by.iba.bussiness.calendar.session;
 
 import java.util.Date;
-import java.util.Objects;
 
 public class Session implements Comparable<Session> {
     private int id;

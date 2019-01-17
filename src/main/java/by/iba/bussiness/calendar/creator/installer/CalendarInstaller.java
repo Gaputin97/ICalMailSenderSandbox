@@ -8,7 +8,6 @@ import by.iba.bussiness.calendar.creator.recurrence.RecurrenceMeetingCalendarTem
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 import by.iba.bussiness.calendar.session.Session;
-import by.iba.bussiness.calendar.session.SessionParser;
 import by.iba.exception.CalendarException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateList;

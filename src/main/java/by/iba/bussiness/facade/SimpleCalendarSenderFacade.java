@@ -6,14 +6,13 @@ import by.iba.bussiness.calendar.EnrollmentStatus;
 import by.iba.bussiness.calendar.creator.CalendarCreator;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
 import by.iba.bussiness.calendar.creator.installer.CalendarInstaller;
-import by.iba.bussiness.calendar.date.helper.model.reccurence.SimpleDateHelper;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
-import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
+import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.enrollment.service.v1.EnrollmentServiceImpl;
 import by.iba.bussiness.sender.MailSendingResponseStatus;
-import by.iba.bussiness.sender.MessageSender;
+import by.iba.bussiness.sender.SenderMessage;
 import net.fortuna.ical4j.model.Calendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,26 +25,25 @@ import java.util.List;
 
 @Component
 public class SimpleCalendarSenderFacade {
-
     private static final Logger logger = LoggerFactory.getLogger(EnrollmentServiceImpl.class);
     private CalendarAttendeesInstaller calendarAttendeesInstaller;
-    private MessageSender messageSender;
+    private SenderMessage senderMessage;
     private EnrollmentsInstaller enrollmentsInstaller;
-    private EnrollmentRepository enrollmentRepository;
+    private EnrollmentService enrollmentService;
     private CalendarCreator calendarCreator;
     private CalendarInstaller calendarInstaller;
 
     @Autowired
     public SimpleCalendarSenderFacade(CalendarAttendeesInstaller calendarAttendeesInstaller,
-                                      MessageSender messageSender,
+                                      SenderMessage senderMessage,
                                       EnrollmentsInstaller enrollmentsInstaller,
-                                      EnrollmentRepository enrollmentRepository,
+                                      EnrollmentService enrollmentService,
                                       CalendarCreator calendarCreator,
                                       CalendarInstaller calendarInstaller) {
         this.calendarAttendeesInstaller = calendarAttendeesInstaller;
-        this.messageSender = messageSender;
+        this.senderMessage = senderMessage;
         this.enrollmentsInstaller = enrollmentsInstaller;
-        this.enrollmentRepository = enrollmentRepository;
+        this.enrollmentService = enrollmentService;
         this.calendarCreator = calendarCreator;
         this.calendarInstaller = calendarInstaller;
     }
@@ -55,7 +53,7 @@ public class SimpleCalendarSenderFacade {
         List<MailSendingResponseStatus> mailSendingResponseStatusList = new ArrayList<>();
         Calendar installedCalendar = new Calendar();
         calendarInstaller.installCalendarCommonParts(rrule, appointment, installedCalendar);
-        List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(meetingId);
+        List<Enrollment> enrollmentList = enrollmentService.getAllByParentId(meetingId);
         for (Enrollment enrollment : enrollmentList) {
             if (EnrollmentCalendarStatus.CANCELLED.equals(enrollment.getCalendarStatus())
                     && EnrollmentStatus.CANCELLED.equals(enrollment.getStatus())) {
@@ -72,7 +70,7 @@ public class SimpleCalendarSenderFacade {
                     logger.info("Don't need to send message to " + enrollment.getUserEmail());
                 } else {
                     calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, calendar);
-                    MailSendingResponseStatus mailSendingResponseStatus = messageSender.sendCalendarToLearner(calendar);
+                    MailSendingResponseStatus mailSendingResponseStatus = senderMessage.sendCalendarToLearner(calendar);
                     mailSendingResponseStatusList.add(mailSendingResponseStatus);
                     if (mailSendingResponseStatus.isDelivered()) {
                         enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, appointment);
@@ -81,6 +79,5 @@ public class SimpleCalendarSenderFacade {
             }
         }
         return mailSendingResponseStatusList;
-
     }
 }

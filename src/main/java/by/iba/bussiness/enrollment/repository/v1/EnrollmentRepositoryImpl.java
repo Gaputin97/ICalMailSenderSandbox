@@ -1,10 +1,8 @@
 package by.iba.bussiness.enrollment.repository.v1;
 
-import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.enrollment.Enrollment;
-
+import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.exception.RepositoryException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

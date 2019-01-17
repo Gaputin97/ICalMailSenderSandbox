@@ -11,11 +11,11 @@ import by.iba.bussiness.calendar.rrule.definer.RruleDefiner;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
-import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
+import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.enrollment.service.v1.EnrollmentServiceImpl;
 import by.iba.bussiness.meeting.MeetingType;
 import by.iba.bussiness.sender.MailSendingResponseStatus;
-import by.iba.bussiness.sender.MessageSender;
+import by.iba.bussiness.sender.SenderMessage;
 import by.iba.bussiness.template.Template;
 import by.iba.bussiness.template.installer.TemplateInstaller;
 import by.iba.bussiness.template.installer.TemplateStatusInstaller;
@@ -33,9 +33,9 @@ import java.util.List;
 public class ComplexTemplateSenderFacade {
 
     private static final Logger logger = LoggerFactory.getLogger(EnrollmentServiceImpl.class);
-    private MessageSender messageSender;
+    private SenderMessage senderMessage;
     private EnrollmentsInstaller enrollmentsInstaller;
-    private EnrollmentRepository enrollmentRepository;
+    private EnrollmentService enrollmentService;
     private TemplateStatusInstaller templateStatusInstaller;
     private TemplateInstaller templateInstaller;
     private CalendarAttendeesInstaller calendarAttendeesInstaller;
@@ -45,18 +45,18 @@ public class ComplexTemplateSenderFacade {
 
 
     @Autowired
-    public ComplexTemplateSenderFacade(MessageSender messageSender,
+    public ComplexTemplateSenderFacade(SenderMessage senderMessage,
                                        EnrollmentsInstaller enrollmentsInstaller,
-                                       EnrollmentRepository enrollmentRepository,
+                                       EnrollmentService enrollmentService,
                                        TemplateStatusInstaller templateStatusInstaller,
                                        TemplateInstaller templateInstaller,
                                        CalendarAttendeesInstaller calendarAttendeesInstaller,
                                        CalendarInstaller calendarInstaller,
                                        RruleDefiner rruleDefiner,
                                        RecurrenceMeetingCalendarTemplateCreator recurrenceMeetingCalendarTemplateCreator) {
-        this.messageSender = messageSender;
+        this.senderMessage = senderMessage;
         this.enrollmentsInstaller = enrollmentsInstaller;
-        this.enrollmentRepository = enrollmentRepository;
+        this.enrollmentService = enrollmentService;
         this.templateStatusInstaller = templateStatusInstaller;
         this.templateInstaller = templateInstaller;
         this.calendarAttendeesInstaller = calendarAttendeesInstaller;
@@ -68,7 +68,7 @@ public class ComplexTemplateSenderFacade {
     public List<MailSendingResponseStatus> sendTemplate(Appointment appointment, Appointment oldAppointment, MeetingType oldMeetingType) {
         BigInteger meetingId = appointment.getMeetingId();
         List<MailSendingResponseStatus> mailSendingResponseStatusList = new ArrayList<>();
-        List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(meetingId);
+        List<Enrollment> enrollmentList = enrollmentService.getAllByParentId(meetingId);
         Template installedTemplate = new Template();
         templateInstaller.installCommonPartsOfTemplate(appointment, oldAppointment, installedTemplate);
         if (oldMeetingType == MeetingType.SIMPLE) {
@@ -82,7 +82,7 @@ public class ComplexTemplateSenderFacade {
                 Calendar cancelCalendar = new Calendar();
                 recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarCancellationTemplate(cancelCalendar);
                 calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, cancelCalendar);
-                messageSender.sendCalendarToLearner(cancelCalendar);
+                senderMessage.sendCalendarToLearner(cancelCalendar);
             }
             if (EnrollmentCalendarStatus.CANCELLED.equals(enrollment.getCalendarStatus())
                     && EnrollmentStatus.CANCELLED.equals(enrollment.getStatus())) {
@@ -99,7 +99,7 @@ public class ComplexTemplateSenderFacade {
                     logger.info("Don't need to send message to " + enrollment.getUserEmail());
                 } else {
                     String userEmail = enrollment.getUserEmail();
-                    MailSendingResponseStatus mailSendingResponseStatus = messageSender.sendTemplate(template, userEmail);
+                    MailSendingResponseStatus mailSendingResponseStatus = senderMessage.sendTemplate(template, userEmail);
                     mailSendingResponseStatusList.add(mailSendingResponseStatus);
                     if (mailSendingResponseStatus.isDelivered()) {
                         enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, appointment);
@@ -108,6 +108,5 @@ public class ComplexTemplateSenderFacade {
             }
         }
         return mailSendingResponseStatusList;
-
     }
 }

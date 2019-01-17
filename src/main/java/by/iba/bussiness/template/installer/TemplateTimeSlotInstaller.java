@@ -2,7 +2,6 @@ package by.iba.bussiness.template.installer;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.session.Session;
-import by.iba.bussiness.meeting.timeslot.TimeSlot;
 import by.iba.bussiness.template.Template;
 import by.iba.bussiness.template.TemplateTimeSlotDefiner;
 import org.springframework.beans.factory.annotation.Autowired;

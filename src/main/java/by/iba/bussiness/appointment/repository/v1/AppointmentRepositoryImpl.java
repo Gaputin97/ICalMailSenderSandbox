@@ -2,7 +2,6 @@ package by.iba.bussiness.appointment.repository.v1;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.repository.AppointmentRepository;
-import by.iba.exception.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

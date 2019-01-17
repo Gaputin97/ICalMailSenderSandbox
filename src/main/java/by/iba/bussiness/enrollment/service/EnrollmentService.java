@@ -1,13 +1,13 @@
 package by.iba.bussiness.enrollment.service;
 
-import by.iba.bussiness.calendar.learner.Learner;
-import by.iba.bussiness.enrollment.EnrollmentLearnerStatus;
-import by.iba.bussiness.sender.MailSendingResponseStatus;
+import by.iba.bussiness.enrollment.Enrollment;
 
-import javax.servlet.http.HttpServletRequest;
+import java.math.BigInteger;
 import java.util.List;
 
 public interface EnrollmentService {
-    List<EnrollmentLearnerStatus> enrollLearners(HttpServletRequest request, String meetingId, List<Learner> learners);
-    List<MailSendingResponseStatus> sendCalendarToAllEnrollmentsOfMeeting(HttpServletRequest request, String meetingId);
+    Enrollment save(Enrollment enrollment);
+    Enrollment getByEmailAndParentId(BigInteger parentId, String userEmail);
+    Enrollment getByEmailAndParentIdAndType(BigInteger parentId, String userEmail, String enrollmentStatus);
+    List<Enrollment> getAllByParentId(BigInteger parentId);
 }

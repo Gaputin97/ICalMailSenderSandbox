@@ -29,14 +29,14 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 @org.springframework.stereotype.Component
-public class MessageSender {
-    private static final Logger logger = LoggerFactory.getLogger(MessageSender.class);
+public class SenderMessage {
+    private static final Logger logger = LoggerFactory.getLogger(SenderMessage.class);
     private JavaMailSender javaMailSender;
     private CalendarTextEditor calendarTextEditor;
     private Configuration freeMarkerConfiguration;
 
     @Autowired
-    public MessageSender(JavaMailSender javaMailSender,
+    public SenderMessage(JavaMailSender javaMailSender,
                          CalendarTextEditor calendarTextEditor,
                          Configuration freeMarkerConfiguration) {
         this.javaMailSender = javaMailSender;

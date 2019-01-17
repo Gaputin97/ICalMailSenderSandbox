@@ -4,7 +4,7 @@ import by.iba.bussiness.calendar.learner.Learner;
 
 import java.util.List;
 
-public class EnrollmentRequestWrapper {
+public class EnrollRequestWrapper {
     private String meetingId;
     private List<Learner> learners;
 
