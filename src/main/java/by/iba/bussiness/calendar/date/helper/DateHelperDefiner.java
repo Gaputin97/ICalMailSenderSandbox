@@ -3,7 +3,6 @@ package by.iba.bussiness.calendar.date.helper;
 import by.iba.bussiness.calendar.date.helper.builder.ComplexDateHelperBuilder;
 import by.iba.bussiness.calendar.date.helper.builder.RecurrenceDateHelperBuilder;
 import by.iba.bussiness.calendar.date.helper.model.DateHelper;
-import by.iba.bussiness.calendar.date.helper.model.complex.ComplexDateHelper;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.definer.RruleDefiner;
 import by.iba.bussiness.calendar.rrule.frequence.Frequency;
@@ -21,23 +20,22 @@ import java.util.List;
 @Component
 public class DateHelperDefiner {
     private static final Logger logger = LoggerFactory.getLogger(DateHelperDefiner.class);
-    private SessionParser sessionParser;
     private RruleDefiner rruleDefiner;
     private SessionChecker sessionChecker;
+    private SessionParser sessionParser;
 
     @Autowired
-    public DateHelperDefiner(SessionParser sessionParser,
-                             RruleDefiner rruleDefiner,
-                             SessionChecker sessionChecker) {
-        this.sessionParser = sessionParser;
+    public DateHelperDefiner(RruleDefiner rruleDefiner,
+                             SessionChecker sessionChecker, SessionParser sessionParser) {
         this.rruleDefiner = rruleDefiner;
         this.sessionChecker = sessionChecker;
+        this.sessionParser = sessionParser;
     }
 
     public DateHelper defineDateHelper(List<TimeSlot> timeSlots) {
         DateHelper dateHelper;
         List<Session> sessions = sessionParser.timeSlotListToSessionList(timeSlots);
-        if (sessionChecker.doAllSessionsTheSame(timeSlots)) {
+        if (sessionChecker.doAllSessionsTheSame(sessions)) {
             Rrule rrule = rruleDefiner.defineRrule(sessions);
             dateHelper = new RecurrenceDateHelperBuilder()
                     .setRrule(rrule)
@@ -55,5 +53,4 @@ public class DateHelperDefiner {
         }
         return dateHelper;
     }
-
 }

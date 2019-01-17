@@ -15,7 +15,7 @@ public class TemplateInstaller {
         this.templateTimeSlotInstaller = templateTimeSlotInstaller;
     }
 
-    public void installCommontPartsOfTemplate(Appointment appointment, Appointment oldAppointment, Template template) {
+    public void installCommonPartsOfTemplate(Appointment appointment, Appointment oldAppointment, Template template) {
         template.setDescription(appointment.getDescription());
         template.setLocation(appointment.getLocation());
         template.setSummary(appointment.getSummary());
@@ -25,6 +25,5 @@ public class TemplateInstaller {
         } else {
             templateTimeSlotInstaller.installTimeSlots(appointment, oldAppointment, template);
         }
-
     }
 }

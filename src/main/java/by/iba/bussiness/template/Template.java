@@ -55,7 +55,7 @@ public class Template {
         return timeSlots;
     }
 
-    public void setTimeSlots(String timeSlots) {
+    public void setSessions(String timeSlots) {
         this.timeSlots = timeSlots;
     }
 }

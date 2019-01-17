@@ -59,8 +59,8 @@ public class SingleMeetingCalendarTemplateCreator {
             Uid UID = new Uid(enrollment.getCurrentCalendarUid());
 
             Session session = singleDateHelper.getSession();
-            DateTime startDateTime = new DateTime(session.getStartDate());
-            DateTime endDateTime = new DateTime(session.getEndDate());
+            DateTime startDateTime = new DateTime(session.getStartDateTime());
+            DateTime endDateTime = new DateTime(session.getEndDateTime());
 
             calendar = new Calendar(concreteCalendar);
             event = new VEvent(startDateTime, endDateTime, appointment.getSummary());

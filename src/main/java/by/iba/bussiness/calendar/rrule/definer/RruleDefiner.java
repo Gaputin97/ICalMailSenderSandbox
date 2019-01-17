@@ -34,11 +34,11 @@ public class RruleDefiner {
         Session lastSession = sessions.get(sessions.size() - 1);
         Session firstSession = sessions.get(0);
 
-        Date startDateOfFirstSession = firstSession.getStartDate();
-        Date startDateOfLastSession = lastSession.getEndDate();
+        Date startDateOfFirstSession = firstSession.getStartDateTime();
+        Date startDateOfLastSession = lastSession.getEndDateTime();
 
         List<Date> startDatesOfSessions = new LinkedList();
-        sessions.forEach(x -> startDatesOfSessions.add(x.getStartDate()));
+        sessions.forEach(x -> startDatesOfSessions.add(x.getStartDateTime()));
 
         Frequency frequency = frequencyDefiner.defineFrequence(startDatesOfSessions);
         long interval;

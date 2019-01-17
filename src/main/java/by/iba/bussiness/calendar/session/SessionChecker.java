@@ -8,7 +8,7 @@ import java.util.List;
 @Component
 public class SessionChecker {
 
-    public boolean doAllSessionsTheSame(List<TimeSlot> timeSlots) {
-        return timeSlots.stream().map(TimeSlot::getDuration).distinct().count() == 1;
+    public boolean doAllSessionsTheSame(List<Session> timeSlots) {
+        return timeSlots.stream().map(Session::getDuration).distinct().count() == 1;
     }
 }

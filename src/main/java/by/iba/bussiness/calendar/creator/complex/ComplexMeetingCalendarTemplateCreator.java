@@ -46,8 +46,8 @@ public class ComplexMeetingCalendarTemplateCreator {
 //                Summary summary = new Summary((appointment.getSummary()));
 //                Uid UID = new Uid(enrollment.getCurrentCalendarUid());
 //
-//                DateTime startDateTime = new DateTime(session.getStartDate());
-//                DateTime endDateTime = new DateTime(session.getEndDate());
+//                DateTime startDateTime = new DateTime(session.getStartDateTime());
+//                DateTime endDateTime = new DateTime(session.getEndDateTime());
 //
 //                calendar = new Calendar(publishCalendar);
 //                event = new VEvent(startDateTime, endDateTime, summary.toString());
@@ -75,8 +75,8 @@ public class ComplexMeetingCalendarTemplateCreator {
 
                 Uid UID = new Uid(enrollment.getCurrentCalendarUid());
 
-                DateTime startDateTime = new DateTime(session.getStartDate());
-                DateTime endDateTime = new DateTime(session.getEndDate());
+                DateTime startDateTime = new DateTime(session.getStartDateTime());
+                DateTime endDateTime = new DateTime(session.getEndDateTime());
 
                 calendar = new Calendar(publishCalendar);
                 event = new VEvent(startDateTime, endDateTime, summary.toString());

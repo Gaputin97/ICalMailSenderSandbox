@@ -35,28 +35,23 @@ public class RecurrenceMeetingCalendarTemplateCreator {
     private static final Logger logger = LoggerFactory.getLogger(RecurrenceMeetingCalendarTemplateCreator.class);
     private static final int NUMBER_OF_FIRST_TIME_SLOT = 0;
     private Calendar requestCalendar;
-    private SessionParser sessionParser;
     private IcalDateParser iСalDateParser;
     private DateIncreaser dateIncreaser;
     private Calendar cancelCalendar;
     private SequenceDefiner sequenceDefiner;
-    private CalendarTextEditor calendarTextEditor;
 
     @Autowired
     public RecurrenceMeetingCalendarTemplateCreator(@Qualifier("requestCalendar") Calendar requestCalendar,
-                                                    SessionParser sessionParser,
                                                     IcalDateParser icalDateParser,
                                                     DateIncreaser dateIncreaser,
                                                     @Qualifier("cancelCalendar") Calendar cancelCalendar,
-                                                    SequenceDefiner sequenceDefiner,
-                                                    CalendarTextEditor calendarTextEditor) {
+                                                    SequenceDefiner sequenceDefiner)
+    {
         this.requestCalendar = requestCalendar;
-        this.sessionParser = sessionParser;
         this.iСalDateParser = icalDateParser;
         this.dateIncreaser = dateIncreaser;
         this.cancelCalendar = cancelCalendar;
         this.sequenceDefiner = sequenceDefiner;
-        this.calendarTextEditor = calendarTextEditor;
     }
 
     public Calendar createRecurrenceCalendarInvitationTemplate(RecurrenceDateHelper recurrenceDateHelper, Appointment appointment, Enrollment enrollment) {
@@ -77,16 +72,14 @@ public class RecurrenceMeetingCalendarTemplateCreator {
         Rrule rrule = recurrenceDateHelper.getRrule();
         DateList exDatesList = new DateList();
         rrule.getExDates().forEach(x -> exDatesList.add(new DateTime(x)));
-        List<TimeSlot> meetingTimeSlots = appointment.getTimeSlots();
-        List<Session> sessions = sessionParser.timeSlotListToSessionList(meetingTimeSlots);
+        List<Session> sessions = appointment.getSessionList();
         Collections.sort(sessions);
 
         Session firstSession = sessions.get(NUMBER_OF_FIRST_TIME_SLOT);
         Session lastSession = sessions.get(sessions.size() - 1);
-        Date startDateOfLastSession = lastSession.getStartDate();
-        Date startDateOfFirstSession = firstSession.getStartDate();
-        Date endDateOfFirstSession = firstSession.getEndDate();
-
+        Date startDateOfLastSession = lastSession.getStartDateTime();
+        Date startDateOfFirstSession = firstSession.getStartDateTime();
+        Date endDateOfFirstSession = firstSession.getEndDateTime();
 
         long interval = rrule.getInterval();
         Frequency frequency = rrule.getFrequency();

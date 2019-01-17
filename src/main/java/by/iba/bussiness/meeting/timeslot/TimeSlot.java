@@ -67,18 +67,4 @@ public class TimeSlot{
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TimeSlot timeSlot = (TimeSlot) o;
-        return Objects.equals(endDateTime, timeSlot.endDateTime) &&
-                Objects.equals(startDateTime, timeSlot.startDateTime);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(endDateTime, startDateTime);
-    }
 }

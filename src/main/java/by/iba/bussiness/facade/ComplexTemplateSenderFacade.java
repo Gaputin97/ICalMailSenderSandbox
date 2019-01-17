@@ -61,7 +61,7 @@ public class ComplexTemplateSenderFacade {
         List<MailSendingResponseStatus> mailSendingResponseStatusList = new ArrayList<>();
         List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(meetingId);
         Template template = new Template();
-        templateInstaller.installCommontPartsOfTemplate(appointment, oldAppointment, template);
+        templateInstaller.installCommonPartsOfTemplate(appointment, oldAppointment, template);
         boolean isRecentMeetingRecurr = false;
         if (oldMeetingDateHelper != null) {
             isRecentMeetingRecurr = oldMeetingDateHelper.getMeetingType().equals(MeetingType.RECURRENCE);

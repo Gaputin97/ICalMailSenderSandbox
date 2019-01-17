@@ -1,32 +1,43 @@
 package by.iba.bussiness.calendar.session;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Session implements Comparable<Session> {
-    private Date startDate;
-    private Date endDate;
+    private int id;
+    private Date startDateTime;
+    private Date endDateTime;
     private long duration;
 
-    public Session(Date startDate, Date endDate) {
-        this.startDate = startDate;
-        this.endDate = endDate;
-        duration = endDate.getTime() - startDate.getTime();
+    public Session(int id, Date startDateTime, Date endDateTime) {
+        this.id = id;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        duration = endDateTime.getTime() - startDateTime.getTime();
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public int getId() {
+        return id;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public Date getStartDateTime() {
+        return startDateTime;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setStartDateTime(Date startDateTime) {
+        this.startDateTime = startDateTime;
+    }
+
+    public Date getEndDateTime() {
+        return endDateTime;
+    }
+
+    public void setEndDateTime(Date endDateTime) {
+        this.endDateTime = endDateTime;
     }
 
     public long getDuration() {
@@ -39,8 +50,13 @@ public class Session implements Comparable<Session> {
 
     @Override
     public int compareTo(Session anotherSession) {
-        long thisSessionStart = this.getStartDate().getTime();
-        long anotherSessionStart = anotherSession.getStartDate().getTime();
-        return thisSessionStart < anotherSessionStart ? -1 : thisSessionStart > anotherSessionStart ? 1 : 0;
+        long thisSessionStart = this.getStartDateTime().getTime();
+        long anotherSessionStart = anotherSession.getStartDateTime().getTime();
+        return Long.compare(thisSessionStart, anotherSessionStart);
+    }
+
+    @Override
+    public String toString() {
+        return startDateTime.toString() + " ---- " + endDateTime.toString();
     }
 }

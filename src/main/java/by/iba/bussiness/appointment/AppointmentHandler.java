@@ -1,10 +1,9 @@
 package by.iba.bussiness.appointment;
 
 import by.iba.bussiness.appointment.repository.AppointmentRepository;
+import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.meeting.Meeting;
-import by.iba.bussiness.meeting.timeslot.TimeSlot;
-import by.iba.bussiness.owner.Owner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,37 +28,20 @@ public class AppointmentHandler {
         Appointment newAppointment = appointmentCreator.createAppointment(updatedMeeting, updatedTemplate);
         Appointment sourceAppointment = appointmentRepository.getByMeetingId(updatedMeeting.getId());
 
-        String oldAppointmentDescription = sourceAppointment.getDescription();
-        String newAppointmentDescription = newAppointment.getDescription();
-
-        String oldAppointmentLocation = sourceAppointment.getLocation();
-        String newAppointmentLocation = newAppointment.getLocation();
-
-        Owner oldAppointmentOwner = sourceAppointment.getOwner();
-        Owner newAppointmentOwner = newAppointment.getOwner();
-
-        String oldAppointmentSummary = sourceAppointment.getSummary();
-        String newAppointmentSummary = newAppointment.getSummary();
-
         BigInteger sourceId = sourceAppointment.getId();
         int sourceUpdatedIndex = sourceAppointment.getUpdateIndex();
         int sourceRescheduledIndex = sourceAppointment.getRescheduleIndex();
 
-        int maximumIndex;
-
         if (sourceAppointment.equals(newAppointment)) {
             newAppointment = sourceAppointment;
         } else {
-            maximumIndex = getMaximumIndex(sourceAppointment);
-            List<TimeSlot> sourceTimeSlots = sourceAppointment.getTimeSlots();
-            List<TimeSlot> newTimeSlots = newAppointment.getTimeSlots();
+            int maximumIndex = getMaximumIndex(sourceAppointment);
+            List<Session> sourceTimeSlots = sourceAppointment.getSessionList();
+            List<Session> newTimeSlots = newAppointment.getSessionList();
             if (!sourceTimeSlots.equals(newTimeSlots)) {
                 newAppointment.setUpdateIndex(sourceUpdatedIndex);
                 newAppointment.setRescheduleIndex(++maximumIndex);
-            } else if (!oldAppointmentDescription.equals(newAppointmentDescription) ||
-                    (!oldAppointmentLocation.equals(newAppointmentLocation)) ||
-                    (!oldAppointmentOwner.equals(newAppointmentOwner)) ||
-                    (!oldAppointmentSummary.equals(newAppointmentSummary))) {
+            } else {
                 newAppointment.setRescheduleIndex(sourceRescheduledIndex);
                 newAppointment.setUpdateIndex(++maximumIndex);
             }

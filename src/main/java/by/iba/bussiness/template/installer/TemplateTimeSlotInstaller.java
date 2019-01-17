@@ -1,7 +1,7 @@
 package by.iba.bussiness.template.installer;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.meeting.timeslot.TimeSlot;
+import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.template.Template;
 import by.iba.bussiness.template.TemplateTimeSlotDefiner;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,54 +21,54 @@ public class TemplateTimeSlotInstaller {
     }
 
     public void installTimeSlots(Appointment appointment, Appointment oldAppointment, Template template) {
-        List<TimeSlot> newAppTimeSlots = appointment.getTimeSlots();
-        List<TimeSlot> oldAppTimeSlots = oldAppointment.getTimeSlots();
-        int newAppTimeSlotsMaxId = templateTimeSlotDefiner.defineHighestIdOfTimeSlots(newAppTimeSlots);
-        int oldAppTimeSlotsMaxId = templateTimeSlotDefiner.defineHighestIdOfTimeSlots(oldAppTimeSlots);
-        int newAppTimeSlotsMinId = templateTimeSlotDefiner.defineLowestIdOfTimeSlots(newAppTimeSlots);
-        int oldAppTimeSlotsMinId = templateTimeSlotDefiner.defineLowestIdOfTimeSlots(oldAppTimeSlots);
-        int commonMaxId;
-        int commonMinId;
-        commonMaxId = newAppTimeSlotsMaxId > oldAppTimeSlotsMaxId ? newAppTimeSlotsMaxId : oldAppTimeSlotsMaxId;
-        commonMinId = newAppTimeSlotsMinId < oldAppTimeSlotsMinId ? newAppTimeSlotsMinId : oldAppTimeSlotsMinId;
-        StringBuilder timeSlots = new StringBuilder();
-        for (int timeSlotId = commonMinId; timeSlotId <= commonMaxId; timeSlotId++) {
-            int finalTimeSlotId = timeSlotId;
-            Optional<TimeSlot> optionalNewAppTimeSlots = newAppTimeSlots.stream().filter(x -> x.getId() == finalTimeSlotId).findFirst();
-            Optional<TimeSlot> optionalOldAppTimeSlots = oldAppTimeSlots.stream().filter(x -> x.getId() == finalTimeSlotId).findFirst();
-            TimeSlot newAppTimeSlot = optionalNewAppTimeSlots.orElse(null);
-            TimeSlot oldAppTimeSlot = optionalOldAppTimeSlots.orElse(null);
-            if (newAppTimeSlot == null && oldAppTimeSlot != null) {
-                timeSlots.append("<s>" + oldAppTimeSlot.getStartDateTime() + oldAppTimeSlot.getEndDateTime() + "</s>" + " (was deleted)");
-                timeSlots.append("<br>");
-            } else if (oldAppTimeSlot == null && newAppTimeSlot != null) {
-                timeSlots.append(newAppTimeSlot.getStartDateTime() + "----" + newAppTimeSlot.getEndDateTime() + " (was added)");
-            } else if (oldAppointment != null && newAppTimeSlot != null) {
-                if (oldAppTimeSlot.equals(newAppTimeSlot)) {
-                    timeSlots.append(newAppTimeSlot.getStartDateTime() + "----" + newAppTimeSlot.getEndDateTime() + " (was not changed)");
-                    timeSlots.append("<br>");
+        List<Session> newAppSessions = appointment.getSessionList();
+        List<Session> oldAppSessions = oldAppointment.getSessionList();
+
+        int newAppSessionsMaxId = templateTimeSlotDefiner.defineHighestIdOfSessions(newAppSessions);
+        int oldAppSessionsMaxId = templateTimeSlotDefiner.defineHighestIdOfSessions(oldAppSessions);
+        int newAppSessionsMinId = templateTimeSlotDefiner.defineLowestIdOfSessions(newAppSessions);
+        int oldAppSessionsMinId = templateTimeSlotDefiner.defineLowestIdOfSessions(oldAppSessions);
+
+        int commonMaxId = newAppSessionsMaxId > oldAppSessionsMaxId ? newAppSessionsMaxId : oldAppSessionsMaxId;
+        int commonMinId = newAppSessionsMinId < oldAppSessionsMinId ? newAppSessionsMinId : oldAppSessionsMinId;
+
+        StringBuilder sessionsBuilder = new StringBuilder();
+        for (int sessionId = commonMinId; sessionId <= commonMaxId; sessionId++) {
+            int finalSessionId = sessionId;
+            Optional<Session> optionalNewAppSessions = newAppSessions.stream().filter(x -> x.getId() == finalSessionId).findFirst();
+            Optional<Session> optionalOldAppSessions = oldAppSessions.stream().filter(x -> x.getId() == finalSessionId).findFirst();
+            Session newAppSession = optionalNewAppSessions.orElse(null);
+            Session oldAppSession = optionalOldAppSessions.orElse(null);
+
+            if (newAppSession == null && oldAppSession != null) {
+                sessionsBuilder.append("<s>")
+                        .append(oldAppSession.getStartDateTime())
+                        .append(oldAppSession.getEndDateTime())
+                        .append("</s>(was deleted)<br>");
+            } else if (oldAppSession == null && newAppSession != null) {
+                sessionsBuilder.append(newAppSession.toString())
+                        .append(" (was added)");
+            } else if (newAppSession != null) {
+                if (oldAppSession.equals(newAppSession)) {
+                    sessionsBuilder.append(newAppSession.toString())
+                            .append(" (was not changed)<br>");
                 } else {
-                    timeSlots.append(newAppTimeSlot.getStartDateTime() + "----" + newAppTimeSlot.getEndDateTime()
-                            + " (" + "rescheduled from " + oldAppTimeSlot.getStartDateTime() + "----" + oldAppTimeSlot.getEndDateTime() + " )");
-                    timeSlots.append("<br>");
+                    sessionsBuilder.append(newAppSession.toString())
+                            .append(" (rescheduled from ")
+                            .append(oldAppSession.toString())
+                            .append(" )<br>");
                 }
             }
         }
-        template.setTimeSlots(timeSlots.toString());
+        template.setSessions(sessionsBuilder.toString());
     }
 
     public void installTimeSlotsIfInvitation(Appointment appointment, Template template) {
-        List<TimeSlot> newAppTimeSlots = appointment.getTimeSlots();
-        StringBuilder timeSlots = new StringBuilder();
-        newAppTimeSlots.forEach(x -> {
-            timeSlots.append(timeSlots.append(x.getStartDateTime() + "----" + x.getEndDateTime() + " (was added)"));
-            timeSlots.append("<br>");
-        });
-        template.setTimeSlots(timeSlots.toString());
-
+        List<Session> newAppSessions = appointment.getSessionList();
+        StringBuilder sessions = new StringBuilder();
+        newAppSessions.forEach(session -> sessions.append(session.toString()).append(" (was added)<br>"));
+        template.setSessions(sessions.toString());
     }
-
-
 }
 
 

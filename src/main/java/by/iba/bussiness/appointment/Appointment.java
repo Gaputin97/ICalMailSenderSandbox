@@ -1,5 +1,6 @@
 package by.iba.bussiness.appointment;
 
+import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.meeting.timeslot.TimeSlot;
 import by.iba.bussiness.owner.Owner;
 import org.springframework.data.annotation.Id;
@@ -16,13 +17,7 @@ public class Appointment {
     private BigInteger meetingId;
     private int updateIndex;
     private int rescheduleIndex;
-    private String blendedDescription;
-    private String onlineDescription;
-    private String faceToFaceDescription;
     private String description;
-    private String locationBLD;
-    private String locationLVC;
-    private String locationILT;
     private String location;
     private String locationInfo;
     private String subject;
@@ -32,7 +27,7 @@ public class Appointment {
     private String endDateTime;
     private short duration;
     private Owner owner;
-    private List<TimeSlot> timeSlots;
+    private List<Session> sessionList;
     private String timeZone;
 
     public Appointment() {
@@ -60,54 +55,6 @@ public class Appointment {
 
     public void setRescheduleIndex(int rescheduleIndex) {
         this.rescheduleIndex = rescheduleIndex;
-    }
-
-    public String getBlendedDescription() {
-        return blendedDescription;
-    }
-
-    public void setBlendedDescription(String blendedDescription) {
-        this.blendedDescription = blendedDescription;
-    }
-
-    public String getFaceToFaceDescription() {
-        return faceToFaceDescription;
-    }
-
-    public void setFaceToFaceDescription(String faceToFaceDescription) {
-        this.faceToFaceDescription = faceToFaceDescription;
-    }
-
-    public String getOnlineDescription() {
-        return onlineDescription;
-    }
-
-    public void setOnlineDescription(String onlineDescription) {
-        this.onlineDescription = onlineDescription;
-    }
-
-    public String getLocationBLD() {
-        return locationBLD;
-    }
-
-    public void setLocationBLD(String locationBLD) {
-        this.locationBLD = locationBLD;
-    }
-
-    public String getLocationILT() {
-        return locationILT;
-    }
-
-    public void setLocationILT(String locationILT) {
-        this.locationILT = locationILT;
-    }
-
-    public String getLocationLVC() {
-        return locationLVC;
-    }
-
-    public void setLocationLVC(String locationLVC) {
-        this.locationLVC = locationLVC;
     }
 
     public String getSubject() {
@@ -190,12 +137,12 @@ public class Appointment {
         this.summary = summary;
     }
 
-    public List<TimeSlot> getTimeSlots() {
-        return timeSlots;
+    public List<Session> getSessionList() {
+        return sessionList;
     }
 
-    public void setTimeSlots(List<TimeSlot> timeSlots) {
-        this.timeSlots = timeSlots;
+    public void setSessionList(List<Session> sessionList) {
+        this.sessionList = sessionList;
     }
 
     public String getTimeZone() {
@@ -220,12 +167,6 @@ public class Appointment {
                 "id=" + id +
                 ", updateIndex=" + updateIndex +
                 ", rescheduleIndex=" + rescheduleIndex +
-                ", blendedDescription='" + blendedDescription + '\'' +
-                ", faceToFaceDescription='" + faceToFaceDescription + '\'' +
-                ", onlineDescription='" + onlineDescription + '\'' +
-                ", locationBLD='" + locationBLD + '\'' +
-                ", locationILT='" + locationILT + '\'' +
-                ", locationLVC='" + locationLVC + '\'' +
                 ", subject='" + subject + '\'' +
                 ", meetingId=" + meetingId +
                 ", description='" + description + '\'' +
@@ -236,7 +177,7 @@ public class Appointment {
                 ", locationInfo='" + locationInfo + '\'' +
                 ", owner=" + owner +
                 ", summary='" + summary + '\'' +
-                ", timeSlots=" + timeSlots +
+                ", sessionList=" + sessionList +
                 ", timeZone='" + timeZone + '\'' +
                 ", title='" + title + '\'' +
                 '}';
@@ -249,25 +190,19 @@ public class Appointment {
         Appointment that = (Appointment) o;
         return duration == that.duration &&
                 Objects.equals(meetingId, that.meetingId) &&
-                Objects.equals(blendedDescription, that.blendedDescription) &&
-                Objects.equals(onlineDescription, that.onlineDescription) &&
-                Objects.equals(faceToFaceDescription, that.faceToFaceDescription) &&
                 Objects.equals(description, that.description) &&
-                Objects.equals(locationBLD, that.locationBLD) &&
-                Objects.equals(locationLVC, that.locationLVC) &&
-                Objects.equals(locationILT, that.locationILT) &&
                 Objects.equals(location, that.location) &&
                 Objects.equals(locationInfo, that.locationInfo) &&
                 Objects.equals(summary, that.summary) &&
                 Objects.equals(startDateTime, that.startDateTime) &&
                 Objects.equals(endDateTime, that.endDateTime) &&
                 Objects.equals(owner, that.owner) &&
-                Objects.equals(timeSlots, that.timeSlots) &&
+                Objects.equals(sessionList, that.sessionList) &&
                 Objects.equals(timeZone, that.timeZone);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(meetingId, blendedDescription, onlineDescription, faceToFaceDescription, description, locationBLD, locationLVC, locationILT, location, locationInfo, summary, startDateTime, endDateTime, duration, owner, timeSlots, timeZone);
+        return Objects.hash(meetingId, description, location, locationInfo, summary, startDateTime, endDateTime, duration, owner, sessionList, timeZone);
     }
 }
