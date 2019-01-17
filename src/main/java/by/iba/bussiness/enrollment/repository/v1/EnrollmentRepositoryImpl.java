@@ -25,7 +25,7 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
         try {
             mongoTemplate.save(enrollment);
         } catch (RuntimeException e) {
-            logger.info("Can't save enrollment in database" + e.getStackTrace());
+            logger.info("Can't save enrollment in database", e);
             throw new RepositoryException("Can't locally save enrollment to database " + enrollment.toString());
         }
         return enrollment;

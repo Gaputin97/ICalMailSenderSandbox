@@ -67,7 +67,7 @@ public class SimpleCalendarSenderFacade {
                     MailSendingResponseStatus badMailSendingResponseStatus =
                             new MailSendingResponseStatus(false, "User has already updated version. ", enrollment.getUserEmail());
                     mailSendingResponseStatusList.add(badMailSendingResponseStatus);
-                    logger.info("Don't need to send message to " + enrollment.getUserEmail());
+                    logger.info("Not need to send message to " + enrollment.getUserEmail());
                 } else {
                     calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, calendar);
                     MailSendingResponseStatus mailSendingResponseStatus = senderMessage.sendCalendarToLearner(calendar);

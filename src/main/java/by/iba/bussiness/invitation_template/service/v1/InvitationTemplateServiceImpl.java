@@ -51,7 +51,7 @@ public class InvitationTemplateServiceImpl implements InvitationTemplateService 
                     HttpMethod.GET, httpEntity, InvitationTemplate.class);
             invitationTemplate = invitationTemplateResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            logger.error("Can't exchange invitation template by code: " + e.getStackTrace());
+            logger.error("Can't exchange invitation template by code: ", e);
             throw new ServiceException(e.getMessage());
         }
         return invitationTemplate;

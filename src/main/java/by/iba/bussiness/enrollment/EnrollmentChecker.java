@@ -27,11 +27,7 @@ public class EnrollmentChecker {
         if (isExistLocalEnrollment) {
             String enrollmentStatus = enrollment.getStatus();
             String learnerStatus = learner.getEnrollmentStatus();
-            if (!enrollmentStatus.equals(learnerStatus)) {
-                wasChanged = true;
-            } else {
-                wasChanged = false;
-            }
+            wasChanged = !enrollmentStatus.equals(learnerStatus);
             logger.info("Enrollment with meeting id " + meetingId + " and email " + email + " and enrollment type " + learnerStatus + " exists. ");
         } else {
             wasChanged = false;

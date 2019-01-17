@@ -96,7 +96,7 @@ public class ComplexTemplateSenderFacade {
                     MailSendingResponseStatus badMailSendingResponseStatus =
                             new MailSendingResponseStatus(false, "User has already updated version. ", enrollment.getUserEmail());
                     mailSendingResponseStatusList.add(badMailSendingResponseStatus);
-                    logger.info("Don't need to send message to " + enrollment.getUserEmail());
+                    logger.info("Not need to send message to " + enrollment.getUserEmail());
                 } else {
                     String userEmail = enrollment.getUserEmail();
                     MailSendingResponseStatus mailSendingResponseStatus = senderMessage.sendTemplate(template, userEmail);
