@@ -21,6 +21,8 @@ dependencies {
     compile group: 'org.mnode.ical4j', name: 'ical4j', version: '3.0.1'
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+    compile group: 'org.freemarker', name: 'freemarker', version: '2.3.23'
+    compile group: 'org.springframework', name: 'spring-context-support', version: '5.0.8.RELEASE'
 
     compile("org.springframework.boot:spring-boot-starter-web:$springVersion")
     compile("org.springframework.boot:spring-boot-devtools:$springVersion")

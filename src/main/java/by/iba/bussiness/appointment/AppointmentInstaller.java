@@ -6,42 +6,37 @@ import by.iba.bussiness.meeting.Meeting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.math.BigInteger;
-
 @Component
 public class AppointmentInstaller {
     private AppointmentRepository appointmentRepository;
-    private AppointmentCreator appointmentCreator;
     private AppointmentHandler appointmentHandler;
+    private AppointmentCreator appointmentCreator;
 
     @Autowired
     public AppointmentInstaller(AppointmentRepository appointmentRepository,
-                                AppointmentCreator appointmentCreator,
-                                AppointmentHandler appointmentHandler) {
+                                AppointmentHandler appointmentHandler,
+                                AppointmentCreator appointmentCreator) {
         this.appointmentRepository = appointmentRepository;
-        this.appointmentCreator = appointmentCreator;
         this.appointmentHandler = appointmentHandler;
+        this.appointmentCreator = appointmentCreator;
     }
 
-    public Appointment installAppointment(Meeting meeting, InvitationTemplate invitationTemplate) {
-        Appointment appointment;
-        BigInteger meetingId = meeting.getId();
-        Appointment oldAppointment = appointmentRepository.getByMeetingId(meetingId);
+    public Appointment installAppointment(Meeting meeting, InvitationTemplate invitationTemplate, Appointment oldAppointment) {
+        Appointment newAppointment;
         if (oldAppointment == null) {
-            appointment = appointmentCreator.createAppointment(meeting, invitationTemplate);
-            appointmentRepository.save(appointment);
+            newAppointment = appointmentCreator.createAppointment(meeting, invitationTemplate);
+            appointmentRepository.save(newAppointment);
         } else {
             Appointment updatedAppointment = appointmentHandler.getUpdatedAppointment(meeting, invitationTemplate);
             if ((updatedAppointment.getUpdateIndex() == 0 && updatedAppointment.getRescheduleIndex() == 0) ||
                     (updatedAppointment.getRescheduleIndex() > oldAppointment.getRescheduleIndex() ||
                             updatedAppointment.getUpdateIndex() > oldAppointment.getUpdateIndex())) {
-
-                appointment = updatedAppointment;
-                appointmentRepository.save(appointment);
+                newAppointment = updatedAppointment;
+                appointmentRepository.save(newAppointment);
             } else {
-                appointment = oldAppointment;
+                newAppointment = oldAppointment;
             }
         }
-        return appointment;
+        return newAppointment;
     }
 }

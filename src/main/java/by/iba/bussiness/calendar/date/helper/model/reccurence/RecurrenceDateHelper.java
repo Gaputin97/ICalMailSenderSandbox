@@ -1,7 +1,7 @@
-package by.iba.bussiness.calendar.date.model.reccurence;
+package by.iba.bussiness.calendar.date.helper.model.reccurence;
 
 import by.iba.bussiness.meeting.MeetingType;
-import by.iba.bussiness.calendar.date.model.DateHelper;
+import by.iba.bussiness.calendar.date.helper.model.DateHelper;
 import by.iba.bussiness.calendar.rrule.Rrule;
 
 public class RecurrenceDateHelper extends DateHelper {

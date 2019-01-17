@@ -3,7 +3,7 @@ package by.iba.bussiness.meeting;
 import net.fortuna.ical4j.model.property.Method;
 
 public enum MeetingType {
-    SINGLE(Method.REQUEST), RECURRENCE(Method.REQUEST);
+    SINGLE(Method.REQUEST), RECURRENCE(Method.REQUEST), COMPLEX(Method.PUBLISH);
 
     private Method method;
 

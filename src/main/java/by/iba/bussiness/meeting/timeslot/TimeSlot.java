@@ -4,12 +4,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class TimeSlot{
+    private int id;
     private long duration;
     private String endDateTime;
     private String facilityInformation;
-    private int id;
     private List<String> resourceEmails;
     private String startDateTime;
+    private String uuid;
 
     public long getDuration() {
         return duration;
@@ -57,6 +58,14 @@ public class TimeSlot{
 
     public void setStartDateTime(String startDateTime) {
         this.startDateTime = startDateTime;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     @Override
