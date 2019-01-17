@@ -1,7 +1,6 @@
 package by.iba.bussiness.calendar.creator.simple;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
 import by.iba.bussiness.calendar.date.model.single.SingleDateHelper;
 import by.iba.bussiness.calendar.session.Session;
@@ -28,17 +27,14 @@ public class SimpleMeetingCalendarTemplateCreator {
     private Calendar requestCalendar;
     private Calendar cancelCalendar;
     private SequenceDefiner sequenceDefiner;
-    private CalendarTextEditor calendarTextEditor;
 
     @Autowired
     public SimpleMeetingCalendarTemplateCreator(@Qualifier("requestCalendar") Calendar requestCalendar,
                                                 @Qualifier("cancelCalendar") Calendar cancelCalendar,
-                                                SequenceDefiner sequenceDefiner,
-                                                CalendarTextEditor calendarTextEditor) {
+                                                SequenceDefiner sequenceDefiner) {
         this.requestCalendar = requestCalendar;
         this.cancelCalendar = cancelCalendar;
         this.sequenceDefiner = sequenceDefiner;
-        this.calendarTextEditor = calendarTextEditor;
     }
 
     public Calendar createSimpleMeetingInvitationTemplate(SingleDateHelper singleDateHelper, Appointment appointment, Enrollment enrollment) {
@@ -51,7 +47,7 @@ public class SimpleMeetingCalendarTemplateCreator {
         return createCommonSimpleTemplate(singleDateHelper, appointment, enrollment, cancelCalendar);
     }
 
-    public Calendar createCommonSimpleTemplate(SingleDateHelper singleDateHelper, Appointment appointment, Enrollment enrollment, Calendar concreteCalendar) {
+    private Calendar createCommonSimpleTemplate(SingleDateHelper singleDateHelper, Appointment appointment, Enrollment enrollment, Calendar concreteCalendar) {
         logger.debug("Started creating cancellation ics file with simple meeting with id " + appointment.getId());
         Calendar calendar;
         VEvent event;

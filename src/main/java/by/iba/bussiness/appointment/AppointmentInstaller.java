@@ -10,7 +10,6 @@ import java.math.BigInteger;
 
 @Component
 public class AppointmentInstaller {
-
     private AppointmentRepository appointmentRepository;
     private AppointmentCreator appointmentCreator;
     private AppointmentHandler appointmentHandler;

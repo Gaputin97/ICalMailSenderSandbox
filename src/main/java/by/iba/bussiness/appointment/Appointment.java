@@ -14,7 +14,6 @@ public class Appointment {
     @Id
     private BigInteger id;
     private BigInteger meetingId;
-    private String invitationTemplateKey;
     private int updateIndex;
     private int rescheduleIndex;
     private String blendedDescription;
@@ -159,14 +158,6 @@ public class Appointment {
         this.endDateTime = endDateTime;
     }
 
-    public String getInvitationTemplateKey() {
-        return invitationTemplateKey;
-    }
-
-    public void setInvitationTemplateKey(String invitationTemplateKey) {
-        this.invitationTemplateKey = invitationTemplateKey;
-    }
-
     public String getLocation() {
         return location;
     }
@@ -241,7 +232,6 @@ public class Appointment {
                 ", duration=" + duration +
                 ", startDateTime='" + startDateTime + '\'' +
                 ", endDateTime='" + endDateTime + '\'' +
-                ", invitationTemplateKey='" + invitationTemplateKey + '\'' +
                 ", location='" + location + '\'' +
                 ", locationInfo='" + locationInfo + '\'' +
                 ", owner=" + owner +
@@ -259,7 +249,6 @@ public class Appointment {
         Appointment that = (Appointment) o;
         return duration == that.duration &&
                 Objects.equals(meetingId, that.meetingId) &&
-                Objects.equals(invitationTemplateKey, that.invitationTemplateKey) &&
                 Objects.equals(blendedDescription, that.blendedDescription) &&
                 Objects.equals(onlineDescription, that.onlineDescription) &&
                 Objects.equals(faceToFaceDescription, that.faceToFaceDescription) &&
@@ -279,6 +268,6 @@ public class Appointment {
 
     @Override
     public int hashCode() {
-        return Objects.hash(meetingId, invitationTemplateKey, blendedDescription, onlineDescription, faceToFaceDescription, description, locationBLD, locationLVC, locationILT, location, locationInfo, summary, startDateTime, endDateTime, duration, owner, timeSlots, timeZone);
+        return Objects.hash(meetingId, blendedDescription, onlineDescription, faceToFaceDescription, description, locationBLD, locationLVC, locationILT, location, locationInfo, summary, startDateTime, endDateTime, duration, owner, timeSlots, timeZone);
     }
 }
