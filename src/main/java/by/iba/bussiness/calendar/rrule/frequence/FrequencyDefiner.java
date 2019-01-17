@@ -16,7 +16,7 @@ public class FrequencyDefiner {
     @Autowired
     private FrequencyHelper frequencyHelper;
 
-    public Frequency defineFrequence(List<Date> startDatesOfSessions) {
+    public Frequency defineFrequency(List<Date> startDatesOfSessions) {
         final int amountOfDurationsBetweenDates = startDatesOfSessions.size() - 1;
         int amountOfDurationsWhichMultipleToMinute = 0;
         int amountOfDurationsWhichMultipleToHour = 0;

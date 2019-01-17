@@ -40,7 +40,7 @@ public class RruleDefiner {
         List<Date> startDatesOfSessions = new LinkedList();
         sessions.forEach(x -> startDatesOfSessions.add(x.getStartDateTime()));
 
-        Frequency frequency = frequencyDefiner.defineFrequence(startDatesOfSessions);
+        Frequency frequency = frequencyDefiner.defineFrequency(startDatesOfSessions);
         long interval;
         if (startDatesOfSessions.size() == 1) {
             interval = 1;
