@@ -1,15 +1,9 @@
 package by.iba.bussiness.calendar.date.helper.model.reccurence;
 
-import by.iba.bussiness.meeting.MeetingType;
-import by.iba.bussiness.calendar.date.helper.model.DateHelper;
 import by.iba.bussiness.calendar.rrule.Rrule;
 
-public class RecurrenceDateHelper extends DateHelper {
+public class SimpleDateHelper {
     private Rrule rrule;
-
-    public RecurrenceDateHelper() {
-        super(MeetingType.RECURRENCE);
-    }
 
     public Rrule getRrule() {
         return rrule;

@@ -1,15 +1,18 @@
 package by.iba.bussiness.facade;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.calendar.CalendarFactory;
-import by.iba.bussiness.calendar.CalendarStatus;
+import by.iba.bussiness.calendar.EnrollmentCalendarStatus;
+import by.iba.bussiness.calendar.EnrollmentStatus;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
-import by.iba.bussiness.calendar.date.helper.model.DateHelper;
+import by.iba.bussiness.calendar.creator.installer.CalendarInstaller;
+import by.iba.bussiness.calendar.creator.recurrence.RecurrenceMeetingCalendarTemplateCreator;
+import by.iba.bussiness.calendar.rrule.Rrule;
+import by.iba.bussiness.calendar.rrule.definer.RruleDefiner;
+import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.enrollment.service.v1.EnrollmentServiceImpl;
-import by.iba.bussiness.enrollment.status.EnrollmentStatus;
 import by.iba.bussiness.meeting.MeetingType;
 import by.iba.bussiness.sender.MailSendingResponseStatus;
 import by.iba.bussiness.sender.MessageSender;
@@ -35,8 +38,10 @@ public class ComplexTemplateSenderFacade {
     private EnrollmentRepository enrollmentRepository;
     private TemplateStatusInstaller templateStatusInstaller;
     private TemplateInstaller templateInstaller;
-    private CalendarFactory calendarFactory;
     private CalendarAttendeesInstaller calendarAttendeesInstaller;
+    private CalendarInstaller calendarInstaller;
+    private RruleDefiner rruleDefiner;
+    private RecurrenceMeetingCalendarTemplateCreator recurrenceMeetingCalendarTemplateCreator;
 
 
     @Autowired
@@ -45,39 +50,47 @@ public class ComplexTemplateSenderFacade {
                                        EnrollmentRepository enrollmentRepository,
                                        TemplateStatusInstaller templateStatusInstaller,
                                        TemplateInstaller templateInstaller,
-                                       CalendarFactory calendarFactory,
-                                       CalendarAttendeesInstaller calendarAttendeesInstaller) {
+                                       CalendarAttendeesInstaller calendarAttendeesInstaller,
+                                       CalendarInstaller calendarInstaller,
+                                       RruleDefiner rruleDefiner,
+                                       RecurrenceMeetingCalendarTemplateCreator recurrenceMeetingCalendarTemplateCreator) {
         this.messageSender = messageSender;
         this.enrollmentsInstaller = enrollmentsInstaller;
         this.enrollmentRepository = enrollmentRepository;
         this.templateStatusInstaller = templateStatusInstaller;
         this.templateInstaller = templateInstaller;
-        this.calendarFactory = calendarFactory;
         this.calendarAttendeesInstaller = calendarAttendeesInstaller;
+        this.calendarInstaller = calendarInstaller;
+        this.rruleDefiner = rruleDefiner;
+        this.recurrenceMeetingCalendarTemplateCreator = recurrenceMeetingCalendarTemplateCreator;
     }
 
-    public List<MailSendingResponseStatus> sendTemplate(Appointment appointment, Appointment oldAppointment, DateHelper oldMeetingDateHelper) {
+    public List<MailSendingResponseStatus> sendTemplate(Appointment appointment, Appointment oldAppointment, MeetingType oldMeetingType) {
         BigInteger meetingId = appointment.getMeetingId();
         List<MailSendingResponseStatus> mailSendingResponseStatusList = new ArrayList<>();
         List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(meetingId);
-        Template template = new Template();
-        templateInstaller.installCommontPartsOfTemplate(appointment, oldAppointment, template);
-        boolean isRecentMeetingRecurr = false;
-        if (oldMeetingDateHelper != null) {
-            isRecentMeetingRecurr = oldMeetingDateHelper.getMeetingType().equals(MeetingType.RECURRENCE);
+        Template installedTemplate = new Template();
+        templateInstaller.installCommontPartsOfTemplate(appointment, oldAppointment, installedTemplate);
+        if (oldMeetingType == MeetingType.SIMPLE) {
+            List<Session> sessions = null;
+            Calendar cancelCalendar = new Calendar();
+            Rrule rrule = rruleDefiner.defineRrule(sessions);
+            calendarInstaller.installCalendarCommonParts(rrule, appointment, cancelCalendar);
         }
         for (Enrollment enrollment : enrollmentList) {
-            if (isRecentMeetingRecurr) {
-                Calendar cancelCalendar = calendarFactory.createCancelCalendarTemplate(oldMeetingDateHelper, appointment, enrollment);
+            if (oldMeetingType == MeetingType.SIMPLE) {
+                Calendar cancelCalendar = new Calendar();
+                recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarCancellationTemplate(cancelCalendar);
                 calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, cancelCalendar);
                 messageSender.sendCalendarToLearner(cancelCalendar);
             }
-            if (CalendarStatus.CANCELLED.equals(enrollment.getCalendarStatus())
+            if (EnrollmentCalendarStatus.CANCELLED.equals(enrollment.getCalendarStatus())
                     && EnrollmentStatus.CANCELLED.equals(enrollment.getStatus())) {
                 MailSendingResponseStatus badMailSendingResponseStatus =
                         new MailSendingResponseStatus(false, "User has cancelled status. ", enrollment.getUserEmail());
                 mailSendingResponseStatusList.add(badMailSendingResponseStatus);
             } else {
+                Template template = installedTemplate;
                 templateStatusInstaller.installTemplateType(enrollment, appointment, template);
                 if (template.getType() == null) {
                     MailSendingResponseStatus badMailSendingResponseStatus =

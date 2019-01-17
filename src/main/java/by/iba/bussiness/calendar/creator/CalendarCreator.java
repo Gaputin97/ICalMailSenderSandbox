@@ -2,43 +2,41 @@ package by.iba.bussiness.calendar.creator;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.AppointmentHandler;
-import by.iba.bussiness.calendar.CalendarFactory;
-import by.iba.bussiness.calendar.date.helper.model.DateHelper;
+import by.iba.bussiness.calendar.EnrollmentStatus;
+import by.iba.bussiness.calendar.creator.recurrence.RecurrenceMeetingCalendarTemplateCreator;
 import by.iba.bussiness.enrollment.Enrollment;
-import by.iba.bussiness.enrollment.status.EnrollmentStatus;
 import net.fortuna.ical4j.model.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CalendarCreator {
-    private CalendarFactory calendarFactory;
     private AppointmentHandler appointmentHandler;
+    private RecurrenceMeetingCalendarTemplateCreator recurrenceMeetingCalendarTemplateCreator;
 
     @Autowired
-    public CalendarCreator(CalendarFactory calendarFactory,
-                           AppointmentHandler appointmentHandler) {
-        this.calendarFactory = calendarFactory;
+    public CalendarCreator(AppointmentHandler appointmentHandler,
+                           RecurrenceMeetingCalendarTemplateCreator recurrenceMeetingCalendarTemplateCreator) {
         this.appointmentHandler = appointmentHandler;
+        this.recurrenceMeetingCalendarTemplateCreator = recurrenceMeetingCalendarTemplateCreator;
     }
 
-    public Calendar createCalendar(Enrollment enrollment, Appointment appointment, DateHelper dateHelper) {
+    public Calendar createCalendar(Calendar calendar, Enrollment enrollment, Appointment appointment) {
         String enrollmentStatus = enrollment.getStatus();
         int maximumAppointmentIndex = appointmentHandler.getMaximumIndex(appointment);
-        Calendar calendar = null;
-            if ((enrollmentStatus.equals(EnrollmentStatus.CANCELLED))) {
-                calendar = calendarFactory.createCancelCalendarTemplate(dateHelper, appointment, enrollment);
+        if ((enrollmentStatus.equals(EnrollmentStatus.CANCELLED))) {
+            recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarCancellationTemplate(calendar);
+        } else {
+            String enrollmentCalendarVersion = enrollment.getCalendarVersion();
+            if (enrollmentCalendarVersion == null) {
+                recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarInvitationTemplate(calendar);
             } else {
-                String enrollmentCalendarVersion = enrollment.getCalendarVersion();
-                if (enrollmentCalendarVersion == null) {
-                    calendar = calendarFactory.createCalendarTemplate(dateHelper, appointment, enrollment);
-                } else {
-                    int calendarVersion = Integer.parseInt(enrollment.getCalendarVersion());
-                    if (maximumAppointmentIndex > calendarVersion) {
-                        calendar = calendarFactory.createCalendarTemplate(dateHelper, appointment, enrollment);
-                    }
+                int calendarVersion = Integer.parseInt(enrollment.getCalendarVersion());
+                if (maximumAppointmentIndex > calendarVersion) {
+                    recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarInvitationTemplate(calendar);
                 }
             }
+        }
         return calendar;
     }
 }

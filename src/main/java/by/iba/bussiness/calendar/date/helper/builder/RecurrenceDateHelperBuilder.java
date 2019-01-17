@@ -1,6 +1,6 @@
 package by.iba.bussiness.calendar.date.helper.builder;
 
-import by.iba.bussiness.calendar.date.helper.model.reccurence.RecurrenceDateHelper;
+import by.iba.bussiness.calendar.date.helper.model.reccurence.SimpleDateHelper;
 import by.iba.bussiness.calendar.rrule.Rrule;
 
 
@@ -12,8 +12,8 @@ public class RecurrenceDateHelperBuilder {
         return this;
     }
 
-    public RecurrenceDateHelper build() {
-        RecurrenceDateHelper recurrenceMeetingHelper = new RecurrenceDateHelper();
+    public SimpleDateHelper build() {
+        SimpleDateHelper recurrenceMeetingHelper = new SimpleDateHelper();
         recurrenceMeetingHelper.setRrule(rrule);
         return recurrenceMeetingHelper;
     }

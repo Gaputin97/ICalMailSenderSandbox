@@ -8,20 +8,22 @@ import java.util.*;
 @Component
 public class ExDatesDefiner {
     public void defineExDates(Rrule rrule, Date startDateOfFirstSession, Date startDateOfLastSession, List<Date> startDatesOfSessions) {
+        LinkedList<Date> linkedStartDatesOfSessions = new LinkedList<>(startDatesOfSessions);
         Calendar startCalendar = new GregorianCalendar();
         startCalendar.setTime(startDateOfFirstSession);
-
         Calendar endCalendar = new GregorianCalendar();
         endCalendar.setTime(startDateOfLastSession);
-
+        int frequency = rrule.getFrequency().getCalendarFrequency();
+        int interval = rrule.getInterval().intValue();
         while (startCalendar.before(endCalendar)) {
             Date result = startCalendar.getTime();
-            if (!((LinkedList<Date>) startDatesOfSessions).getFirst().equals(result)) {
+            Date firstDate = linkedStartDatesOfSessions.getFirst();
+            if (firstDate.equals(result)) {
                 rrule.getExDates().add(result);
             } else {
-                ((LinkedList<Date>) startDatesOfSessions).removeFirst();
+                linkedStartDatesOfSessions.removeFirst();
             }
-            startCalendar.add(rrule.getFrequency().getCalendarFrequency(), rrule.getInterval().intValue());
+            startCalendar.add(frequency, interval);
         }
     }
 }
