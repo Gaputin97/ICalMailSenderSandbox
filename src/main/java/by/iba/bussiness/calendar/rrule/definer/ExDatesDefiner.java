@@ -14,14 +14,16 @@ public class ExDatesDefiner {
         List<Instant> exDates = new ArrayList<>();
         long milisOfFrequency = rrule.getFrequency().getMillisecondsInFreq();
         int interval = rrule.getInterval().intValue();
-        while (startDateOfFirstSession.isBefore(startDateOfLastSession)) {
-            Instant firstStartDate = linkedStartDatesOfSessions.getFirst();
-            if (firstStartDate.equals(startDateOfFirstSession)) {
-                exDates.add(startDateOfFirstSession);
-            } else {
-                linkedStartDatesOfSessions.removeFirst();
+        if (!linkedStartDatesOfSessions.isEmpty()) {
+            while (startDateOfFirstSession.isBefore(startDateOfLastSession)) {
+                Instant firstStartDate = linkedStartDatesOfSessions.getFirst();
+                if (firstStartDate.equals(startDateOfFirstSession)) {
+                    exDates.add(startDateOfFirstSession);
+                } else {
+                    linkedStartDatesOfSessions.removeFirst();
+                }
+                startDateOfFirstSession = startDateOfFirstSession.plusMillis(milisOfFrequency * interval);
             }
-            startDateOfFirstSession = startDateOfFirstSession.plusMillis(milisOfFrequency * interval);
         }
         return exDates;
     }

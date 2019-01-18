@@ -75,8 +75,8 @@ public class CalendarInstaller {
                     + interval + ";" + "UNTIL=" + increasedUntilString + ";");
             RRule rRule = new RRule(recurrence);
             Uid UID = new Uid(appointment.getId().toString());
-            DateTime startDateTime = new DateTime(startDateOfFirstSession.getNano());
-            DateTime endDateTime = new DateTime(endDateOfFirstSession.getNano());
+            DateTime startDateTime = new DateTime(startDateOfFirstSession.toEpochMilli());
+            DateTime endDateTime = new DateTime(endDateOfFirstSession.toEpochMilli());
 
             VEvent event = new VEvent(startDateTime, endDateTime, appointment.getSummary());
             if (!exDatesList.isEmpty()) {
