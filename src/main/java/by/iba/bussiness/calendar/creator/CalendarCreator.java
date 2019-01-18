@@ -32,12 +32,6 @@ public class CalendarCreator {
         String enrollmentStatus = enrollment.getStatus();
         Calendar calendar = null;
         int maximumAppointmentIndex = appointmentHandler.getMaximumIndex(appointment);
-        Calendar newCalendar = null;
-        try {
-            newCalendar = new Calendar(calendar);
-        } catch (ParseException | IOException | URISyntaxException e) {
-            logger.error("Error cause with parse calendar data:", e);
-        }
         if ((enrollmentStatus.equals(EnrollmentStatus.CANCELLED))) {
             calendar = simpleMetingCalendarTemplateCreator.createSimpleCancellationCalendarTemplate(installedCalendar);
         } else {
@@ -51,6 +45,6 @@ public class CalendarCreator {
                 }
             }
         }
-        return newCalendar;
+        return calendar;
     }
 }
