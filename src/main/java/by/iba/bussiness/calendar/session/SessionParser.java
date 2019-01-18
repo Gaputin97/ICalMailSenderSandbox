@@ -1,16 +1,20 @@
 package by.iba.bussiness.calendar.session;
 
 import by.iba.bussiness.meeting.timeslot.TimeSlot;
+import by.iba.exception.CalendarException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Component
 public class SessionParser {
+    private static final Logger logger = LoggerFactory.getLogger(SessionParser.class);
     private final SimpleDateFormat dateFormat = new SimpleDateFormat(SessionConstants.DATE_FORMAT);
 
     public List<Session> timeSlotListToSessionList(List<TimeSlot> timeSlots) {
@@ -18,17 +22,17 @@ public class SessionParser {
         for (TimeSlot timeSlot : timeSlots) {
             String stringStartDate = timeSlot.getStartDateTime();
             String stringEndDate = timeSlot.getEndDateTime();
-            int id;
-            Date startDate;
-            Date endDate;
+            int id = timeSlot.getId();
             try {
-                id = timeSlot.getId();
-                startDate = dateFormat.parse(stringStartDate);
-                endDate = dateFormat.parse(stringEndDate);
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
+                Instant startDate = dateFormat.parse(stringStartDate).toInstant();
+                Instant endDate = dateFormat.parse(stringEndDate).toInstant();
+                Session session = new Session(id, startDate, endDate);
+                sessionList.add(session);
+            } catch (ParseException ex) {
+                logger.error("Can't parse time slot to date", ex);
+                throw new CalendarException("Wrong time slot in meeting");
             }
-            sessionList.add(new Session(id, startDate, endDate));
+
         }
         return sessionList;
     }

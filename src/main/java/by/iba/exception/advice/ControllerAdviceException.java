@@ -12,18 +12,18 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ControllerAdviceException {
 
     @ExceptionHandler(ServiceException.class)
-    public ResponseEntity<AdditionalException> handleServiceException(ServiceException ex) {
-        return new ResponseEntity<>(new AdditionalException(ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<ControllerAdviceHelper> handleServiceException(ServiceException ex) {
+        return new ResponseEntity<>(new ControllerAdviceHelper(ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(RepositoryException.class)
-    public ResponseEntity<AdditionalException> handleRepositoryException(RepositoryException ex) {
-        return new ResponseEntity<>(new AdditionalException(ex.getMessage()), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ControllerAdviceHelper> handleRepositoryException(RepositoryException ex) {
+        return new ResponseEntity<>(new ControllerAdviceHelper(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(CalendarException.class)
-    public ResponseEntity<AdditionalException> handleCalendarException(CalendarException ex) {
-        return new ResponseEntity<>(new AdditionalException(ex.getMessage()), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ControllerAdviceHelper> handleCalendarException(CalendarException ex) {
+        return new ResponseEntity<>(new ControllerAdviceHelper(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
 

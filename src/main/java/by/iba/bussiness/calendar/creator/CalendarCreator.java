@@ -3,7 +3,7 @@ package by.iba.bussiness.calendar.creator;
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.AppointmentHandler;
 import by.iba.bussiness.calendar.EnrollmentStatus;
-import by.iba.bussiness.calendar.creator.recurrence.RecurrenceMeetingCalendarTemplateCreator;
+import by.iba.bussiness.calendar.creator.simple.SimpleMetingCalendarTemplateCreator;
 import by.iba.bussiness.enrollment.Enrollment;
 import net.fortuna.ical4j.model.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,28 +12,29 @@ import org.springframework.stereotype.Component;
 @Component
 public class CalendarCreator {
     private AppointmentHandler appointmentHandler;
-    private RecurrenceMeetingCalendarTemplateCreator recurrenceMeetingCalendarTemplateCreator;
+    private SimpleMetingCalendarTemplateCreator simpleMetingCalendarTemplateCreator;
 
     @Autowired
     public CalendarCreator(AppointmentHandler appointmentHandler,
-                           RecurrenceMeetingCalendarTemplateCreator recurrenceMeetingCalendarTemplateCreator) {
+                           SimpleMetingCalendarTemplateCreator simpleMetingCalendarTemplateCreator) {
         this.appointmentHandler = appointmentHandler;
-        this.recurrenceMeetingCalendarTemplateCreator = recurrenceMeetingCalendarTemplateCreator;
+        this.simpleMetingCalendarTemplateCreator = simpleMetingCalendarTemplateCreator;
     }
 
-    public Calendar createCalendar(Calendar calendar, Enrollment enrollment, Appointment appointment) {
+    public Calendar createCalendar(Calendar installedCalendar, Enrollment enrollment, Appointment appointment) {
         String enrollmentStatus = enrollment.getStatus();
+        Calendar calendar = null;
         int maximumAppointmentIndex = appointmentHandler.getMaximumIndex(appointment);
         if ((enrollmentStatus.equals(EnrollmentStatus.CANCELLED))) {
-            recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarCancellationTemplate(calendar);
+            calendar = simpleMetingCalendarTemplateCreator.createSimpleCancellationCalendarTemplate(installedCalendar);
         } else {
             String enrollmentCalendarVersion = enrollment.getCalendarVersion();
             if (enrollmentCalendarVersion == null) {
-                recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarInvitationTemplate(calendar);
+                calendar = simpleMetingCalendarTemplateCreator.createSimpleCalendarTemplate(installedCalendar);
             } else {
                 int calendarVersion = Integer.parseInt(enrollment.getCalendarVersion());
                 if (maximumAppointmentIndex > calendarVersion) {
-                    recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarInvitationTemplate(calendar);
+                    calendar = simpleMetingCalendarTemplateCreator.createSimpleCalendarTemplate(installedCalendar);
                 }
             }
         }

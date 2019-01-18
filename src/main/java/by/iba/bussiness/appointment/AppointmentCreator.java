@@ -23,7 +23,6 @@ public class AppointmentCreator {
     }
 
     public Appointment createAppointment(Meeting meeting, InvitationTemplate invitationTemplate) {
-        String meetingId = meeting.getId().toString();
 
         Appointment appointment = new Appointment();
         appointment.setMeetingId(meeting.getId());
@@ -38,11 +37,7 @@ public class AppointmentCreator {
         appointment.setEndDateTime(meeting.getEndDateTime());
 
         List<TimeSlot> timeSlots = meeting.getTimeSlots();
-        timeSlots.forEach(timeSlot -> {
-            String timeSlotId = Integer.toString(timeSlot.getId());
-            timeSlot.setUuid(timeSlotUidDefiner.defineTimeSlotUid(meetingId, timeSlotId));
-        });
-        appointment.setSessionList(sessionParser.timeSlotListToSessionList(meeting.getTimeSlots()));
+        appointment.setSessionList(sessionParser.timeSlotListToSessionList(timeSlots));
         appointment.setDuration(meeting.getDuration());
         appointment.setOwner(meeting.getOwner());
         appointment.setTimeZone(meeting.getTimeZone());

@@ -9,7 +9,10 @@ import org.springframework.context.annotation.Import;
 
 @Import({
         MongoConfiguration.class,
-        RestTemplateConfiguration.class, SwaggerConfiguration.class, MailConfiguration.class, FreeMarkerConfiguration.class})
+        RestTemplateConfiguration.class,
+        SwaggerConfiguration.class,
+        MailConfiguration.class,
+        FreeMarkerConfiguration.class})
 public class ApplicationConfiguration {
 
 }

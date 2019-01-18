@@ -1,18 +1,19 @@
 package by.iba.bussiness.calendar.session;
 
-import java.util.Date;
+import java.time.Instant;
+import java.util.Objects;
 
 public class Session implements Comparable<Session> {
     private int id;
-    private Date startDateTime;
-    private Date endDateTime;
+    private Instant startDateTime;
+    private Instant endDateTime;
     private long duration;
 
-    public Session(int id, Date startDateTime, Date endDateTime) {
+    public Session(int id, Instant startDateTime, Instant endDateTime) {
         this.id = id;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
-        duration = endDateTime.getTime() - startDateTime.getTime();
+        duration = endDateTime.toEpochMilli() - startDateTime.toEpochMilli();
     }
 
     public int getId() {
@@ -23,19 +24,19 @@ public class Session implements Comparable<Session> {
         this.id = id;
     }
 
-    public Date getStartDateTime() {
+    public Instant getStartDateTime() {
         return startDateTime;
     }
 
-    public void setStartDateTime(Date startDateTime) {
+    public void setStartDateTime(Instant startDateTime) {
         this.startDateTime = startDateTime;
     }
 
-    public Date getEndDateTime() {
+    public Instant getEndDateTime() {
         return endDateTime;
     }
 
-    public void setEndDateTime(Date endDateTime) {
+    public void setEndDateTime(Instant endDateTime) {
         this.endDateTime = endDateTime;
     }
 
@@ -49,9 +50,24 @@ public class Session implements Comparable<Session> {
 
     @Override
     public int compareTo(Session anotherSession) {
-        long thisSessionStart = this.getStartDateTime().getTime();
-        long anotherSessionStart = anotherSession.getStartDateTime().getTime();
+        long thisSessionStart = this.getStartDateTime().getNano();
+        long anotherSessionStart = anotherSession.getStartDateTime().getNano();
         return Long.compare(thisSessionStart, anotherSessionStart);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Session session = (Session) o;
+        return duration == session.duration &&
+                Objects.equals(startDateTime, session.startDateTime) &&
+                Objects.equals(endDateTime, session.endDateTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(startDateTime, endDateTime, duration);
     }
 
     @Override

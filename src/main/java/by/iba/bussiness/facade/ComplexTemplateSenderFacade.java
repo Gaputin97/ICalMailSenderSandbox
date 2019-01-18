@@ -5,14 +5,14 @@ import by.iba.bussiness.calendar.EnrollmentCalendarStatus;
 import by.iba.bussiness.calendar.EnrollmentStatus;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
 import by.iba.bussiness.calendar.creator.installer.CalendarInstaller;
-import by.iba.bussiness.calendar.creator.recurrence.RecurrenceMeetingCalendarTemplateCreator;
+import by.iba.bussiness.calendar.creator.simple.SimpleMetingCalendarTemplateCreator;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.definer.RruleDefiner;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
-import by.iba.bussiness.meeting.MeetingType;
+import by.iba.bussiness.meeting.type.MeetingType;
 import by.iba.bussiness.sender.MailSendingResponseStatus;
 import by.iba.bussiness.sender.MessageSender;
 import by.iba.bussiness.template.Template;
@@ -40,7 +40,7 @@ public class ComplexTemplateSenderFacade {
     private CalendarAttendeesInstaller calendarAttendeesInstaller;
     private CalendarInstaller calendarInstaller;
     private RruleDefiner rruleDefiner;
-    private RecurrenceMeetingCalendarTemplateCreator recurrenceMeetingCalendarTemplateCreator;
+    private SimpleMetingCalendarTemplateCreator simpleMetingCalendarTemplateCreator;
 
 
     @Autowired
@@ -52,7 +52,7 @@ public class ComplexTemplateSenderFacade {
                                        CalendarAttendeesInstaller calendarAttendeesInstaller,
                                        CalendarInstaller calendarInstaller,
                                        RruleDefiner rruleDefiner,
-                                       RecurrenceMeetingCalendarTemplateCreator recurrenceMeetingCalendarTemplateCreator) {
+                                       SimpleMetingCalendarTemplateCreator simpleMetingCalendarTemplateCreator) {
         this.messageSender = messageSender;
         this.enrollmentsInstaller = enrollmentsInstaller;
         this.enrollmentService = enrollmentService;
@@ -61,7 +61,7 @@ public class ComplexTemplateSenderFacade {
         this.calendarAttendeesInstaller = calendarAttendeesInstaller;
         this.calendarInstaller = calendarInstaller;
         this.rruleDefiner = rruleDefiner;
-        this.recurrenceMeetingCalendarTemplateCreator = recurrenceMeetingCalendarTemplateCreator;
+        this.simpleMetingCalendarTemplateCreator = simpleMetingCalendarTemplateCreator;
     }
 
     public List<MailSendingResponseStatus> sendTemplate(Appointment appointment, MeetingType oldMeetingType) {
@@ -78,7 +78,7 @@ public class ComplexTemplateSenderFacade {
         for (Enrollment enrollment : enrollmentList) {
             if (oldMeetingType == MeetingType.SIMPLE) {
                 Calendar cancelCalendarWithoutAttendee =
-                        recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarCancellationTemplate(installedCalendar);
+                        simpleMetingCalendarTemplateCreator.createSimpleCancellationCalendarTemplate(installedCalendar);
                 Calendar cancelCalendarWithAttendee =
                         calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, cancelCalendarWithoutAttendee);
                 messageSender.sendCalendarToLearner(cancelCalendarWithAttendee);

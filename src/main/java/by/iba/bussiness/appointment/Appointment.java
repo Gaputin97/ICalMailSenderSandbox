@@ -185,8 +185,20 @@ public class Appointment {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
+
         if (o == null || getClass() != o.getClass()) return false;
         Appointment that = (Appointment) o;
+        System.out.println(Objects.equals(description, that.description));
+        System.out.println(Objects.equals(meetingId, that.meetingId));
+        System.out.println(Objects.equals(description, that.description));
+        System.out.println(Objects.equals(location, that.location));
+        System.out.println(Objects.equals(locationInfo, that.locationInfo));
+        System.out.println(Objects.equals(summary, that.summary));
+        System.out.println(Objects.equals(startDateTime, that.startDateTime));
+        System.out.println(Objects.equals(endDateTime, that.endDateTime));
+        System.out.println(Objects.equals(owner, that.owner));
+        System.out.println(Objects.equals(sessionList, that.sessionList));
+        System.out.println(Objects.equals(timeZone, that.timeZone));
         return duration == that.duration &&
                 Objects.equals(meetingId, that.meetingId) &&
                 Objects.equals(description, that.description) &&
@@ -198,6 +210,7 @@ public class Appointment {
                 Objects.equals(owner, that.owner) &&
                 Objects.equals(sessionList, that.sessionList) &&
                 Objects.equals(timeZone, that.timeZone);
+
     }
 
     @Override

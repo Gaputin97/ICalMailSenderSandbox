@@ -9,7 +9,6 @@ public class TimeSlot{
     private String facilityInformation;
     private List<String> resourceEmails;
     private String startDateTime;
-    private String uuid;
 
     public long getDuration() {
         return duration;
@@ -59,11 +58,4 @@ public class TimeSlot{
         this.startDateTime = startDateTime;
     }
 
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
 }

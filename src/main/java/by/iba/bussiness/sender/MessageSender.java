@@ -93,10 +93,9 @@ public class MessageSender {
         try {
             message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message,
-                    MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
-                    StandardCharsets.UTF_8.name());
+                    true,
+                    "utf-8");
             URL url = new URL("https://preview.ibb.co/hXyhQL/Meeting.jpg");
-            helper.addAttachment("pic.png", new URLDataSource(url));
 
             helper.setTo(userEmail);
             helper.setFrom(template.getOwner().getEmail());
