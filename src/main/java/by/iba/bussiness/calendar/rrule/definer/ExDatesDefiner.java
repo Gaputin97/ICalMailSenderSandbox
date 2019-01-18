@@ -3,28 +3,25 @@ package by.iba.bussiness.calendar.rrule.definer;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Component
 public class ExDatesDefiner {
-    public List<Date> defineExDates(Rrule rrule, Date startDateOfFirstSession, Date startDateOfLastSession, List<Date> startDatesOfSessions) {
-        LinkedList<Date> linkedStartDatesOfSessions = new LinkedList<>(startDatesOfSessions);
-        Calendar startCalendar = new GregorianCalendar();
-        startCalendar.setTime(startDateOfFirstSession);
-        Calendar endCalendar = new GregorianCalendar();
-        endCalendar.setTime(startDateOfLastSession);
-        List<Date> exDates = new ArrayList<>();
-        int frequency = rrule.getFrequency().getCalendarFrequency();
+    public List<Instant> defineExDates(Rrule rrule, Instant startDateOfFirstSession, Instant startDateOfLastSession, List<Instant> startDatesOfSessions) {
+        LinkedList<Instant> linkedStartDatesOfSessions = new LinkedList<>(startDatesOfSessions);
+        List<Instant> exDates = new ArrayList<>();
+        long milisOfFrequency = rrule.getFrequency().getMillisecondsInFreq();
         int interval = rrule.getInterval().intValue();
-        while (startCalendar.before(endCalendar)) {
-            Date result = startCalendar.getTime();
-            Date firstDate = linkedStartDatesOfSessions.getFirst();
-            if (firstDate.equals(result)) {
-                exDates.add(result);
+        while (startDateOfFirstSession.isBefore(startDateOfLastSession)) {
+            Instant firstStartDate = linkedStartDatesOfSessions.getFirst();
+            if (firstStartDate.equals(startDateOfFirstSession)) {
+                exDates.add(startDateOfFirstSession);
             } else {
                 linkedStartDatesOfSessions.removeFirst();
             }
-            startCalendar.add(frequency, interval);
+            startDateOfFirstSession = startDateOfFirstSession.plusMillis(milisOfFrequency * interval);
         }
         return exDates;
     }

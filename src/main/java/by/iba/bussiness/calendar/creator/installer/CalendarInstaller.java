@@ -2,9 +2,9 @@ package by.iba.bussiness.calendar.creator.installer;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
-import by.iba.bussiness.calendar.creator.recurrence.DateIncreaser;
-import by.iba.bussiness.calendar.creator.recurrence.IcalDateParser;
-import by.iba.bussiness.calendar.creator.recurrence.RecurrenceMeetingCalendarTemplateCreator;
+import by.iba.bussiness.calendar.creator.simple.DateIncreaser;
+import by.iba.bussiness.calendar.creator.simple.IcalDateParser;
+import by.iba.bussiness.calendar.creator.simple.SimpleMetingCalendarTemplateCreator;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 import by.iba.bussiness.calendar.session.Session;
@@ -24,14 +24,14 @@ import org.springframework.stereotype.Component;
 
 import java.net.URISyntaxException;
 import java.text.ParseException;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 @Component
 public class CalendarInstaller {
-    private static final Logger logger = LoggerFactory.getLogger(RecurrenceMeetingCalendarTemplateCreator.class);
+    private static final Logger logger = LoggerFactory.getLogger(CalendarInstaller.class);
     private static final String RICH_TEXT_CID = "calendar_rich_text_description";
     private static final int NUMBER_OF_FIRST_TIME_SLOT = 0;
     private IcalDateParser iСalDateParser;
@@ -49,15 +49,15 @@ public class CalendarInstaller {
 
     public Calendar installCalendarCommonParts(Rrule rrule, Appointment appointment) {
         DateList exDatesList = new DateList();
-        rrule.getExDates().forEach(x -> exDatesList.add(new DateTime(x)));
+        rrule.getExDates().forEach(x -> exDatesList.add(new DateTime(x.toEpochMilli())));
         List<Session> sessions = appointment.getSessionList();
         Collections.sort(sessions);
 
         Session firstSession = sessions.get(NUMBER_OF_FIRST_TIME_SLOT);
         Session lastSession = sessions.get(sessions.size() - 1);
-        Date startDateOfLastSession = lastSession.getStartDateTime();
-        Date startDateOfFirstSession = firstSession.getStartDateTime();
-        Date endDateOfFirstSession = firstSession.getEndDateTime();
+        Instant startDateOfLastSession = lastSession.getStartDateTime();
+        Instant startDateOfFirstSession = firstSession.getStartDateTime();
+        Instant endDateOfFirstSession = firstSession.getEndDateTime();
 
         long interval = rrule.getInterval();
         Frequency frequency = rrule.getFrequency();
@@ -75,8 +75,8 @@ public class CalendarInstaller {
                     + interval + ";" + "UNTIL=" + increasedUntilString + ";");
             RRule rRule = new RRule(recurrence);
             Uid UID = new Uid(appointment.getId().toString());
-            DateTime startDateTime = new DateTime(startDateOfFirstSession);
-            DateTime endDateTime = new DateTime(endDateOfFirstSession);
+            DateTime startDateTime = new DateTime(startDateOfFirstSession.getNano());
+            DateTime endDateTime = new DateTime(endDateOfFirstSession.getNano());
 
             Description description = new Description("HAARDCOOOOODE!!!!!");
             AltRep altRep = new AltRep("CID:" + RICH_TEXT_CID);
@@ -95,7 +95,7 @@ public class CalendarInstaller {
             calendar.getComponents().add(event);
         } catch (ParseException | URISyntaxException e) {
             logger.error("Cant create recur calendar meeting" + e.getMessage());
-            throw new CalendarException("Can't create recurrence calendar meeting. Try again later");
+            throw new CalendarException("Can't create simple calendar meeting. Try again later");
         }
         return calendar;
     }

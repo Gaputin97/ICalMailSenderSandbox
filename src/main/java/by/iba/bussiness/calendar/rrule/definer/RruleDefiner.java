@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.Collections;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,10 +34,10 @@ public class RruleDefiner {
         Session lastSession = sessions.get(sessions.size() - 1);
         Session firstSession = sessions.get(0);
 
-        Date startDateOfFirstSession = firstSession.getStartDateTime();
-        Date startDateOfLastSession = lastSession.getEndDateTime();
+        Instant startDateOfFirstSession = firstSession.getStartDateTime();
+        Instant startDateOfLastSession = lastSession.getEndDateTime();
 
-        List<Date> startDatesOfSessions = new LinkedList();
+        List<Instant> startDatesOfSessions = new LinkedList();
         sessions.forEach(x -> startDatesOfSessions.add(x.getStartDateTime()));
 
         Frequency frequency = frequencyDefiner.defineFrequency(startDatesOfSessions);
@@ -52,7 +52,7 @@ public class RruleDefiner {
         rrule.setFrequency(frequency);
         logger.info("Interval of rrule is " + interval + " and freq type is " + frequency.toString());
 
-        List<Date> exDates = exDatesDefiner.defineExDates(rrule, startDateOfFirstSession, startDateOfLastSession, startDatesOfSessions);
+        List<Instant> exDates = exDatesDefiner.defineExDates(rrule, startDateOfFirstSession, startDateOfLastSession, startDatesOfSessions);
         rrule.setExDates(exDates);
         logger.info("Amount of exdates is " + rrule.getExDates().size());
         return rrule;

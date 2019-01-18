@@ -1,9 +1,9 @@
 package by.iba.exception.advice;
 
-public class AdditionalException {
+public class ControllerAdviceHelper {
     private String message;
 
-    public AdditionalException(String message) {
+    public ControllerAdviceHelper(String message) {
         this.message = message;
     }
 
@@ -13,12 +13,5 @@ public class AdditionalException {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    @Override
-    public String toString() {
-        return "AdditionalException{" +
-                "message='" + message + '\'' +
-                '}';
     }
 }

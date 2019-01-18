@@ -2,14 +2,14 @@ package by.iba.bussiness.calendar.rrule;
 
 import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Rrule {
     private Frequency frequency;
     private Long interval;
-    private List<Date> exDates;
+    private List<Instant> exDates;
 
     public Rrule() {
         exDates = new ArrayList<>();
@@ -31,11 +31,11 @@ public class Rrule {
         this.interval = interval;
     }
 
-    public List<Date> getExDates() {
+    public List<Instant> getExDates() {
         return exDates;
     }
 
-    public void setExDates(List<Date> exDates) {
+    public void setExDates(List<Instant> exDates) {
         this.exDates = exDates;
     }
 }

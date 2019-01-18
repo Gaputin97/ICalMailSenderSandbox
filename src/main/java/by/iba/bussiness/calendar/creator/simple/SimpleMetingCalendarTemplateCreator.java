@@ -1,4 +1,4 @@
-package by.iba.bussiness.calendar.creator.recurrence;
+package by.iba.bussiness.calendar.creator.simple;
 
 import by.iba.bussiness.facade.SimpleCalendarSenderFacade;
 import net.fortuna.ical4j.model.Calendar;
@@ -15,23 +15,23 @@ import java.text.ParseException;
 import java.util.List;
 
 @org.springframework.stereotype.Component
-public class RecurrenceMeetingCalendarTemplateCreator {
+public class SimpleMetingCalendarTemplateCreator {
     private static final Logger logger = LoggerFactory.getLogger(SimpleCalendarSenderFacade.class);
     private Calendar requestCalendar;
     private Calendar cancelCalendar;
 
     @Autowired
-    public RecurrenceMeetingCalendarTemplateCreator(@Qualifier("requestCalendar") Calendar requestCalendar,
-                                                    @Qualifier("cancelCalendar") Calendar cancelCalendar) {
+    public SimpleMetingCalendarTemplateCreator(@Qualifier("requestCalendar") Calendar requestCalendar,
+                                               @Qualifier("cancelCalendar") Calendar cancelCalendar) {
         this.requestCalendar = requestCalendar;
         this.cancelCalendar = cancelCalendar;
     }
 
-    public Calendar createRecurrenceCalendarInvitationTemplate(Calendar calendar) {
+    public Calendar createSimpleCalendarTemplate(Calendar calendar) {
         return createCommonRecurrenceTemplate(calendar, requestCalendar);
     }
 
-    public Calendar createRecurrenceCalendarCancellationTemplate(Calendar calendar) {
+    public Calendar createSimpleCancellationCalendarTemplate(Calendar calendar) {
         return createCommonRecurrenceTemplate(calendar, cancelCalendar);
 
     }

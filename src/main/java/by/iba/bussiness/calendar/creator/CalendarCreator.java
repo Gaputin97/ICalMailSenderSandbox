@@ -3,7 +3,7 @@ package by.iba.bussiness.calendar.creator;
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.AppointmentHandler;
 import by.iba.bussiness.calendar.EnrollmentStatus;
-import by.iba.bussiness.calendar.creator.recurrence.RecurrenceMeetingCalendarTemplateCreator;
+import by.iba.bussiness.calendar.creator.simple.SimpleMetingCalendarTemplateCreator;
 import by.iba.bussiness.enrollment.Enrollment;
 import net.fortuna.ical4j.model.Calendar;
 import org.slf4j.Logger;
@@ -19,17 +19,18 @@ import java.text.ParseException;
 public class CalendarCreator {
     private static final Logger logger = LoggerFactory.getLogger(CalendarCreator.class);
     private AppointmentHandler appointmentHandler;
-    private RecurrenceMeetingCalendarTemplateCreator recurrenceMeetingCalendarTemplateCreator;
+    private SimpleMetingCalendarTemplateCreator simpleMetingCalendarTemplateCreator;
 
     @Autowired
     public CalendarCreator(AppointmentHandler appointmentHandler,
-                           RecurrenceMeetingCalendarTemplateCreator recurrenceMeetingCalendarTemplateCreator) {
+                           SimpleMetingCalendarTemplateCreator simpleMetingCalendarTemplateCreator) {
         this.appointmentHandler = appointmentHandler;
-        this.recurrenceMeetingCalendarTemplateCreator = recurrenceMeetingCalendarTemplateCreator;
+        this.simpleMetingCalendarTemplateCreator = simpleMetingCalendarTemplateCreator;
     }
 
-    public Calendar createCalendar(Calendar calendar, Enrollment enrollment, Appointment appointment) {
+    public Calendar createCalendar(Calendar installedCalendar, Enrollment enrollment, Appointment appointment) {
         String enrollmentStatus = enrollment.getStatus();
+        Calendar calendar = null;
         int maximumAppointmentIndex = appointmentHandler.getMaximumIndex(appointment);
         Calendar newCalendar = null;
         try {
@@ -38,15 +39,15 @@ public class CalendarCreator {
             logger.error("Error cause with parse calendar data:", e);
         }
         if ((enrollmentStatus.equals(EnrollmentStatus.CANCELLED))) {
-            recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarCancellationTemplate(newCalendar);
+            calendar = simpleMetingCalendarTemplateCreator.createSimpleCancellationCalendarTemplate(installedCalendar);
         } else {
             String enrollmentCalendarVersion = enrollment.getCalendarVersion();
             if (enrollmentCalendarVersion == null) {
-                recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarInvitationTemplate(newCalendar);
+                calendar = simpleMetingCalendarTemplateCreator.createSimpleCalendarTemplate(installedCalendar);
             } else {
                 int calendarVersion = Integer.parseInt(enrollment.getCalendarVersion());
                 if (maximumAppointmentIndex > calendarVersion) {
-                    recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarInvitationTemplate(newCalendar);
+                    calendar = simpleMetingCalendarTemplateCreator.createSimpleCalendarTemplate(installedCalendar);
                 }
             }
         }
