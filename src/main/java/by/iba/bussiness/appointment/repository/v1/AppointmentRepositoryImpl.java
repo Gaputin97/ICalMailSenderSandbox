@@ -23,8 +23,14 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
     public Appointment save(Appointment appointment) {
         try {
             mongoTemplate.save(appointment);
+<<<<<<< HEAD
         } catch (RuntimeException e) {
             logger.info("Can't save appointment into database: ", e);
+=======
+        } catch (Exception e) {
+            logger.info("Can't save appointment into database: ", e);
+            throw new RepositoryException("Can't save appointment");
+>>>>>>> 093547b095dd9035df6e032ab57eae0287b79228
         }
         return appointment;
     }

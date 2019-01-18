@@ -25,7 +25,7 @@ import java.util.List;
 
 @Component
 public class SimpleCalendarSenderFacade {
-    private static final Logger logger = LoggerFactory.getLogger(EnrollmentServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(SimpleCalendarSenderFacade.class);
     private CalendarAttendeesInstaller calendarAttendeesInstaller;
     private SenderMessage senderMessage;
     private EnrollmentsInstaller enrollmentsInstaller;
@@ -51,9 +51,8 @@ public class SimpleCalendarSenderFacade {
     public List<MailSendingResponseStatus> sendCalendar(Rrule rrule, Appointment appointment) {
         BigInteger meetingId = appointment.getMeetingId();
         List<MailSendingResponseStatus> mailSendingResponseStatusList = new ArrayList<>();
-        Calendar installedCalendar = new Calendar();
-        calendarInstaller.installCalendarCommonParts(rrule, appointment, installedCalendar);
-        List<Enrollment> enrollmentList = enrollmentService.getAllByParentId(meetingId);
+        Calendar installedCalendar = calendarInstaller.installCalendarCommonParts(rrule, appointment);
+        List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(meetingId);
         for (Enrollment enrollment : enrollmentList) {
             if (EnrollmentCalendarStatus.CANCELLED.equals(enrollment.getCalendarStatus())
                     && EnrollmentStatus.CANCELLED.equals(enrollment.getStatus())) {
@@ -61,16 +60,15 @@ public class SimpleCalendarSenderFacade {
                         new MailSendingResponseStatus(false, "User has cancelled status. ", enrollment.getUserEmail());
                 mailSendingResponseStatusList.add(badMailSendingResponseStatus);
             } else {
-                Calendar calendar = installedCalendar;
-                calendarCreator.createCalendar(calendar, enrollment, appointment);
-                if (calendar == null) {
+                Calendar calendarWithoutAttendee = calendarCreator.createCalendar(installedCalendar, enrollment, appointment);
+                if (calendarWithoutAttendee == null) {
                     MailSendingResponseStatus badMailSendingResponseStatus =
                             new MailSendingResponseStatus(false, "User has already updated version. ", enrollment.getUserEmail());
                     mailSendingResponseStatusList.add(badMailSendingResponseStatus);
                     logger.info("Not need to send message to " + enrollment.getUserEmail());
                 } else {
-                    calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, calendar);
-                    MailSendingResponseStatus mailSendingResponseStatus = senderMessage.sendCalendarToLearner(calendar);
+                    Calendar calendarWithAttendee = calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, calendarWithoutAttendee);
+                    MailSendingResponseStatus mailSendingResponseStatus = messageSender.sendCalendarToLearner(calendarWithAttendee);
                     mailSendingResponseStatusList.add(mailSendingResponseStatus);
                     if (mailSendingResponseStatus.isDelivered()) {
                         enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, appointment);

@@ -32,8 +32,13 @@ import java.util.List;
 @Component
 public class ComplexTemplateSenderFacade {
 
+<<<<<<< HEAD
     private static final Logger logger = LoggerFactory.getLogger(EnrollmentServiceImpl.class);
     private SenderMessage senderMessage;
+=======
+    private static final Logger logger = LoggerFactory.getLogger(ComplexTemplateSenderFacade.class);
+    private MessageSender messageSender;
+>>>>>>> 093547b095dd9035df6e032ab57eae0287b79228
     private EnrollmentsInstaller enrollmentsInstaller;
     private EnrollmentService enrollmentService;
     private TemplateStatusInstaller templateStatusInstaller;
@@ -65,24 +70,37 @@ public class ComplexTemplateSenderFacade {
         this.recurrenceMeetingCalendarTemplateCreator = recurrenceMeetingCalendarTemplateCreator;
     }
 
-    public List<MailSendingResponseStatus> sendTemplate(Appointment appointment, Appointment oldAppointment, MeetingType oldMeetingType) {
+    public List<MailSendingResponseStatus> sendTemplate(Appointment appointment, MeetingType oldMeetingType) {
         BigInteger meetingId = appointment.getMeetingId();
         List<MailSendingResponseStatus> mailSendingResponseStatusList = new ArrayList<>();
+<<<<<<< HEAD
         List<Enrollment> enrollmentList = enrollmentService.getAllByParentId(meetingId);
         Template installedTemplate = new Template();
         templateInstaller.installCommonPartsOfTemplate(appointment, oldAppointment, installedTemplate);
+=======
+        List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(meetingId);
+        Template installedTemplate = templateInstaller.installCommonPartsOfTemplate(appointment, appointment);
+        Calendar installedCalendar = null;
+>>>>>>> 093547b095dd9035df6e032ab57eae0287b79228
         if (oldMeetingType == MeetingType.SIMPLE) {
-            List<Session> sessions = null;
-            Calendar cancelCalendar = new Calendar();
+            List<Session> sessions = appointment.getSessionList();
             Rrule rrule = rruleDefiner.defineRrule(sessions);
-            calendarInstaller.installCalendarCommonParts(rrule, appointment, cancelCalendar);
+            installedCalendar = calendarInstaller.installCalendarCommonParts(rrule, appointment);
         }
         for (Enrollment enrollment : enrollmentList) {
             if (oldMeetingType == MeetingType.SIMPLE) {
+<<<<<<< HEAD
                 Calendar cancelCalendar = new Calendar();
                 recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarCancellationTemplate(cancelCalendar);
                 calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, cancelCalendar);
                 senderMessage.sendCalendarToLearner(cancelCalendar);
+=======
+                Calendar cancelCalendarWithoutAttendee =
+                        recurrenceMeetingCalendarTemplateCreator.createRecurrenceCalendarCancellationTemplate(installedCalendar);
+                Calendar cancelCalendarWithAttendee =
+                        calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, cancelCalendarWithoutAttendee);
+                messageSender.sendCalendarToLearner(cancelCalendarWithAttendee);
+>>>>>>> 093547b095dd9035df6e032ab57eae0287b79228
             }
             if (EnrollmentCalendarStatus.CANCELLED.equals(enrollment.getCalendarStatus())
                     && EnrollmentStatus.CANCELLED.equals(enrollment.getStatus())) {
@@ -90,8 +108,9 @@ public class ComplexTemplateSenderFacade {
                         new MailSendingResponseStatus(false, "User has cancelled status. ", enrollment.getUserEmail());
                 mailSendingResponseStatusList.add(badMailSendingResponseStatus);
             } else {
-                Template template = installedTemplate;
-                templateStatusInstaller.installTemplateType(enrollment, appointment, template);
+                String templateType = templateStatusInstaller.installTemplateType(enrollment, appointment);
+                Template template = new Template(installedTemplate);
+                template.setType(templateType);
                 if (template.getType() == null) {
                     MailSendingResponseStatus badMailSendingResponseStatus =
                             new MailSendingResponseStatus(false, "User has already updated version. ", enrollment.getUserEmail());

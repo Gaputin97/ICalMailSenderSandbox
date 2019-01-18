@@ -11,6 +11,16 @@ public class Template {
     private String timeSlots;
     private String type;
 
+    public Template() {
+    }
+
+    public Template(Template template) {
+        this.summary = template.getSummary();
+        this.owner = template.getOwner();
+        this.description = template.getDescription();
+        this.timeSlots = template.getTimeSlots();
+    }
+
     public String getType() {
         return type;
     }
