@@ -29,14 +29,14 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 @org.springframework.stereotype.Component
-public class SenderMessage {
-    private static final Logger logger = LoggerFactory.getLogger(SenderMessage.class);
+public class MessageSender {
+    private static final Logger logger = LoggerFactory.getLogger(MessageSender.class);
     private JavaMailSender javaMailSender;
     private CalendarTextEditor calendarTextEditor;
     private Configuration freeMarkerConfiguration;
 
     @Autowired
-    public SenderMessage(JavaMailSender javaMailSender,
+    public MessageSender(JavaMailSender javaMailSender,
                          CalendarTextEditor calendarTextEditor,
                          Configuration freeMarkerConfiguration) {
         this.javaMailSender = javaMailSender;
@@ -93,10 +93,9 @@ public class SenderMessage {
         try {
             message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message,
-                    MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
-                    StandardCharsets.UTF_8.name());
+                    true,
+                    "utf-8");
             URL url = new URL("https://preview.ibb.co/hXyhQL/Meeting.jpg");
-            helper.addAttachment("pic.png", new URLDataSource(url));
 
             helper.setTo(userEmail);
             helper.setFrom(template.getOwner().getEmail());

@@ -20,19 +20,19 @@ public class BasicCalendarTemplateInstaller {
         return calendar;
     }
 
-    @Bean("publishCalendar")
-    public Calendar setUpPublishMethod() {
-        Calendar calendar = new Calendar();
-        setUpCommonFields(calendar);
-        calendar.getProperties().add(Method.PUBLISH);
-        return calendar;
-    }
-
     @Bean("cancelCalendar")
     public Calendar setUpCancelMethod() {
         Calendar calendar = new Calendar();
         setUpCommonFields(calendar);
         calendar.getProperties().add(Method.CANCEL);
+        return calendar;
+    }
+
+    @Bean("publishCalendar")
+    public Calendar setUpPublishMethod() {
+        Calendar calendar = new Calendar();
+        setUpCommonFields(calendar);
+        calendar.getProperties().add(Method.PUBLISH);
         return calendar;
     }
 

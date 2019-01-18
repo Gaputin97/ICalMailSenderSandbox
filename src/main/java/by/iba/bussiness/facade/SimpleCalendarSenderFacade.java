@@ -10,9 +10,8 @@ import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
-import by.iba.bussiness.enrollment.service.v1.EnrollmentServiceImpl;
 import by.iba.bussiness.sender.MailSendingResponseStatus;
-import by.iba.bussiness.sender.SenderMessage;
+import by.iba.bussiness.sender.MessageSender;
 import net.fortuna.ical4j.model.Calendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +26,7 @@ import java.util.List;
 public class SimpleCalendarSenderFacade {
     private static final Logger logger = LoggerFactory.getLogger(SimpleCalendarSenderFacade.class);
     private CalendarAttendeesInstaller calendarAttendeesInstaller;
-    private SenderMessage senderMessage;
+    private MessageSender messageSender;
     private EnrollmentsInstaller enrollmentsInstaller;
     private EnrollmentService enrollmentService;
     private CalendarCreator calendarCreator;
@@ -35,13 +34,13 @@ public class SimpleCalendarSenderFacade {
 
     @Autowired
     public SimpleCalendarSenderFacade(CalendarAttendeesInstaller calendarAttendeesInstaller,
-                                      SenderMessage senderMessage,
+                                      MessageSender messageSender,
                                       EnrollmentsInstaller enrollmentsInstaller,
                                       EnrollmentService enrollmentService,
                                       CalendarCreator calendarCreator,
                                       CalendarInstaller calendarInstaller) {
         this.calendarAttendeesInstaller = calendarAttendeesInstaller;
-        this.senderMessage = senderMessage;
+        this.messageSender = messageSender;
         this.enrollmentsInstaller = enrollmentsInstaller;
         this.enrollmentService = enrollmentService;
         this.calendarCreator = calendarCreator;
@@ -49,10 +48,11 @@ public class SimpleCalendarSenderFacade {
     }
 
     public List<MailSendingResponseStatus> sendCalendar(Rrule rrule, Appointment appointment) {
-        BigInteger meetingId = appointment.getMeetingId();
         List<MailSendingResponseStatus> mailSendingResponseStatusList = new ArrayList<>();
+        BigInteger meetingId = appointment.getMeetingId();
+        List<Enrollment> enrollmentList = enrollmentService.getAllByParentId(meetingId);
+
         Calendar installedCalendar = calendarInstaller.installCalendarCommonParts(rrule, appointment);
-        List<Enrollment> enrollmentList = enrollmentRepository.getAllByParentId(meetingId);
         for (Enrollment enrollment : enrollmentList) {
             if (EnrollmentCalendarStatus.CANCELLED.equals(enrollment.getCalendarStatus())
                     && EnrollmentStatus.CANCELLED.equals(enrollment.getStatus())) {
@@ -68,6 +68,7 @@ public class SimpleCalendarSenderFacade {
                     logger.info("Not need to send message to " + enrollment.getUserEmail());
                 } else {
                     Calendar calendarWithAttendee = calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, calendarWithoutAttendee);
+                    String description = "<body>" + appointment.getDescription() + "</body>";
                     MailSendingResponseStatus mailSendingResponseStatus = messageSender.sendCalendarToLearner(calendarWithAttendee);
                     mailSendingResponseStatusList.add(mailSendingResponseStatus);
                     if (mailSendingResponseStatus.isDelivered()) {

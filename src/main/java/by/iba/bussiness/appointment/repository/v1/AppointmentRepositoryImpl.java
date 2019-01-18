@@ -2,6 +2,7 @@ package by.iba.bussiness.appointment.repository.v1;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.repository.AppointmentRepository;
+import by.iba.exception.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +24,9 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
     public Appointment save(Appointment appointment) {
         try {
             mongoTemplate.save(appointment);
-<<<<<<< HEAD
-        } catch (RuntimeException e) {
-            logger.info("Can't save appointment into database: ", e);
-=======
         } catch (Exception e) {
             logger.info("Can't save appointment into database: ", e);
             throw new RepositoryException("Can't save appointment");
->>>>>>> 093547b095dd9035df6e032ab57eae0287b79228
         }
         return appointment;
     }
@@ -44,5 +40,4 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
         }
         return appointment;
     }
-
 }

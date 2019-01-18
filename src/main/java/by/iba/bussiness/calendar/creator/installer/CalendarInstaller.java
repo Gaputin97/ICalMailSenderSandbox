@@ -14,6 +14,8 @@ import net.fortuna.ical4j.model.DateList;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Recur;
 import net.fortuna.ical4j.model.component.VEvent;
+import net.fortuna.ical4j.model.parameter.AltRep;
+import net.fortuna.ical4j.model.parameter.FmtType;
 import net.fortuna.ical4j.model.property.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +32,7 @@ import java.util.List;
 @Component
 public class CalendarInstaller {
     private static final Logger logger = LoggerFactory.getLogger(RecurrenceMeetingCalendarTemplateCreator.class);
+    private static final String RICH_TEXT_CID = "calendar_rich_text_description";
     private static final int NUMBER_OF_FIRST_TIME_SLOT = 0;
     private IcalDateParser iСalDateParser;
     private DateIncreaser dateIncreaser;
@@ -44,9 +47,7 @@ public class CalendarInstaller {
         this.sequenceDefiner = sequenceDefiner;
     }
 
-
-    public Calendar installCalendarCommonParts(Rrule rrule,
-                                               Appointment appointment) {
+    public Calendar installCalendarCommonParts(Rrule rrule, Appointment appointment) {
         DateList exDatesList = new DateList();
         rrule.getExDates().forEach(x -> exDatesList.add(new DateTime(x)));
         List<Session> sessions = appointment.getSessionList();
@@ -58,16 +59,15 @@ public class CalendarInstaller {
         Date startDateOfFirstSession = firstSession.getStartDateTime();
         Date endDateOfFirstSession = firstSession.getEndDateTime();
 
-
         long interval = rrule.getInterval();
         Frequency frequency = rrule.getFrequency();
         String increasedUntilDate = dateIncreaser.increaseAndParse(frequency, interval, startDateOfLastSession);
-        Calendar calendar = null;
+        String appDescription = appointment.getDescription();
+        Calendar calendar = new Calendar();
         try {
             Sequence sequence = sequenceDefiner.defineSequence(appointment);
             Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
             Location location = new Location((appointment.getLocation()));
-            Description description = new Description((appointment.getDescription()));
             String increasedUntilString = iСalDateParser.parseToICalDate(increasedUntilDate);
             exDatesList.add(new DateTime(increasedUntilString));
 
@@ -78,12 +78,20 @@ public class CalendarInstaller {
             DateTime startDateTime = new DateTime(startDateOfFirstSession);
             DateTime endDateTime = new DateTime(endDateOfFirstSession);
 
+            Description description = new Description("HAARDCOOOOODE!!!!!");
+            AltRep altRep = new AltRep("CID:" + RICH_TEXT_CID);
+//            description.getParameters().add(altRep);
+
+            XProperty xAltDesc = new XProperty("X-ALT-DESC");
+            xAltDesc.getParameters().add(new FmtType("text/html"));
+            xAltDesc.setValue(appDescription);
+
             VEvent event = new VEvent(startDateTime, endDateTime, appointment.getSummary());
             if (!exDatesList.isEmpty()) {
                 ExDate exDates = new ExDate(exDatesList);
                 event.getProperties().add(exDates);
             }
-            event.getProperties().addAll(Arrays.asList(sequence, organizer, location, description, UID, rRule));
+            event.getProperties().addAll(Arrays.asList(sequence, organizer, location, description, UID, rRule/*, xAltDesc*/));
             calendar.getComponents().add(event);
         } catch (ParseException | URISyntaxException e) {
             logger.error("Cant create recur calendar meeting" + e.getMessage());
