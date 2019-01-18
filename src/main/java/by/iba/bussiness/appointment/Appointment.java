@@ -1,7 +1,6 @@
 package by.iba.bussiness.appointment;
 
 import by.iba.bussiness.calendar.session.Session;
-import by.iba.bussiness.meeting.timeslot.TimeSlot;
 import by.iba.bussiness.owner.Owner;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

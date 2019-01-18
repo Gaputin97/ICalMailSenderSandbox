@@ -3,7 +3,7 @@ package by.iba.bussiness.enrollment;
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.AppointmentHandler;
 import by.iba.bussiness.calendar.learner.Learner;
-import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
+import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.enrollment.status.EnrollmentCalendarStatusDefiner;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,17 +14,17 @@ import java.util.UUID;
 
 @org.springframework.stereotype.Component
 public class EnrollmentsInstaller {
-    private EnrollmentRepository enrollmentRepository;
+    private EnrollmentService enrollmentService;
     private EnrollmentChecker enrollmentChecker;
     private EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner;
     private AppointmentHandler appointmentHandler;
 
     @Autowired
-    public EnrollmentsInstaller(EnrollmentRepository enrollmentRepository,
+    public EnrollmentsInstaller(EnrollmentService enrollmentService,
                                 EnrollmentChecker enrollmentChecker,
                                 EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner,
                                 AppointmentHandler appointmentHandler) {
-        this.enrollmentRepository = enrollmentRepository;
+        this.enrollmentService = enrollmentService;
         this.enrollmentChecker = enrollmentChecker;
         this.enrollmentCalendarStatusDefiner = enrollmentCalendarStatusDefiner;
         this.appointmentHandler = appointmentHandler;
@@ -36,12 +36,12 @@ public class EnrollmentsInstaller {
         for (Learner learner : learners) {
             String email = learner.getEmail();
             String enrollmentStatus = learner.getEnrollmentStatus();
-            Enrollment oldEnrollment = enrollmentRepository.getByEmailAndParentIdAndType(bigIntegerMeetingId, email, enrollmentStatus);
+            Enrollment oldEnrollment = enrollmentService.getByEmailAndParentIdAndType(bigIntegerMeetingId, email, enrollmentStatus);
             if (oldEnrollment == null) {
                 if (enrollmentChecker.wasChangedStatus(learner, bigIntegerMeetingId)) {
-                    oldEnrollment = enrollmentRepository.getByEmailAndParentId(bigIntegerMeetingId, email);
+                    oldEnrollment = enrollmentService.getByEmailAndParentId(bigIntegerMeetingId, email);
                     oldEnrollment.setStatus(enrollmentStatus);
-                    enrollmentRepository.save(oldEnrollment);
+                    enrollmentService.save(oldEnrollment);
                     EnrollmentLearnerStatus enrollmentLearnerStatus =
                             new EnrollmentLearnerStatus(true, "Enrollment was modified. ", learner.getEmail());
                     enrollmentLearnerStatuses.add(enrollmentLearnerStatus);
@@ -51,7 +51,7 @@ public class EnrollmentsInstaller {
                     newEnrollment.setParentId(bigIntegerMeetingId);
                     newEnrollment.setUserEmail(email);
                     newEnrollment.setCurrentCalendarUid(UUID.randomUUID().toString());
-                    enrollmentRepository.save(newEnrollment);
+                    enrollmentService.save(newEnrollment);
                     EnrollmentLearnerStatus enrollmentLearnerStatus =
                             new EnrollmentLearnerStatus(true, "Enrollment was created. ", learner.getEmail());
                     enrollmentLearnerStatuses.add(enrollmentLearnerStatus);
@@ -66,10 +66,10 @@ public class EnrollmentsInstaller {
     }
 
     public void installEnrollmentCalendarFields(Enrollment enrollment, Appointment appointment) {
-        Integer maximumIndex = appointmentHandler.getMaximumIndex(appointment);
+        int maximumIndex = appointmentHandler.getMaximumIndex(appointment);
         String calendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
         enrollment.setCalendarStatus(calendarStatus);
-        enrollment.setCalendarVersion(maximumIndex.toString());
-        enrollmentRepository.save(enrollment);
+        enrollment.setCalendarVersion(Integer.toString(maximumIndex));
+        enrollmentService.save(enrollment);
     }
 }

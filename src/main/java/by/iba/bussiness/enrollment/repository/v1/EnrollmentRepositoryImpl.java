@@ -1,10 +1,8 @@
 package by.iba.bussiness.enrollment.repository.v1;
 
-import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.bussiness.enrollment.Enrollment;
-
+import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
 import by.iba.exception.RepositoryException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +25,7 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
         try {
             mongoTemplate.save(enrollment);
         } catch (RuntimeException e) {
-            logger.info("Can't save enrollment in database" + e.getStackTrace());
+            logger.info("Can't save enrollment in database", e);
             throw new RepositoryException("Can't locally save enrollment to database " + enrollment.toString());
         }
         return enrollment;

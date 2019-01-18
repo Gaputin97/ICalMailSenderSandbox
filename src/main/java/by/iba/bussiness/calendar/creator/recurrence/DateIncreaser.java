@@ -16,6 +16,5 @@ public class DateIncreaser {
         milliseconds += frequency.getMillisecondsInFreq() * interval;
         Date helpDate = new Date(milliseconds);
         return dateFormat.format(helpDate);
-
     }
 }

@@ -1,8 +1,8 @@
 package by.iba.bussiness.token.service.v1;
 
-import by.iba.exception.ServiceException;
 import by.iba.bussiness.token.model.JavaWebToken;
 import by.iba.bussiness.token.service.TokenService;
+import by.iba.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
