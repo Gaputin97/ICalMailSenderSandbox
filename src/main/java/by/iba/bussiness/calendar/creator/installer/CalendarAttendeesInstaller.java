@@ -30,7 +30,7 @@ public class CalendarAttendeesInstaller {
             throw new CalendarException("Can't create calendar.");
         }
         CalendarComponent vEvent = calendarWithAttendee.getComponent(Component.VEVENT);
-        Attendee attendee = new Attendee(URI.create("mailto:" + email));
+        Attendee attendee = new Attendee(URI.create(email));
         attendee.getParameters().add(Rsvp.FALSE);
         attendee.getParameters().add(Role.REQ_PARTICIPANT);
         vEvent.getProperties().add(attendee);

@@ -40,5 +40,4 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
         }
         return appointment;
     }
-
 }

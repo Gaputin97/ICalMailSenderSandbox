@@ -1,6 +1,5 @@
 package by.iba.bussiness.calendar.rrule.frequence;
 
-
 import by.iba.bussiness.calendar.rrule.constants.DateConstants;
 import by.iba.bussiness.calendar.rrule.constants.EnumConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,10 @@ import java.util.Optional;
 
 @Component
 public class FrequencyDefiner {
+
     @Autowired
     private FrequencyHelper frequencyHelper;
+
 
     public Frequency defineFrequency(List<Instant> startDatesOfSessions) {
         final int amountOfDurationsBetweenDates = startDatesOfSessions.size() - 1;
@@ -59,13 +60,13 @@ public class FrequencyDefiner {
         candidates.add(new FrequencyWrapper(Frequency.DAILY, amountOfDurationsWhichMultipleToDay));
         candidates.add(new FrequencyWrapper(Frequency.HOURLY, amountOfDurationsWhichMultipleToHour));
         candidates.add(new FrequencyWrapper(Frequency.MINUTELY, amountOfDurationsWhichMultipleToMinute));
-        return chooseNeededFrequence(candidates, amountOfDurationsBetweenDates);
+        return chooseNeededFrequency(candidates, amountOfDurationsBetweenDates);
     }
 
-    public Frequency chooseNeededFrequence(List<FrequencyWrapper> frequencyWrappers, int realAmountOfDurations) {
-        Optional<FrequencyWrapper> neededFrequenceWrapper = frequencyWrappers.stream()
+    private Frequency chooseNeededFrequency(List<FrequencyWrapper> frequencyWrappers, int realAmountOfDurations) {
+        Optional<FrequencyWrapper> neededFrequencyWrapper = frequencyWrappers.stream()
                 .filter(x -> x.getAmountOfDurationMultipleToFreq() == realAmountOfDurations).findFirst();
-        FrequencyWrapper frequencyWrapper = neededFrequenceWrapper.get();
+        FrequencyWrapper frequencyWrapper = neededFrequencyWrapper.get();
         return frequencyWrapper.getFrequency();
     }
 }

@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 public class NotificationController {
     private NotificationService senderService;
+
     @Autowired
     public NotificationController(NotificationService senderService) {
         this.senderService = senderService;

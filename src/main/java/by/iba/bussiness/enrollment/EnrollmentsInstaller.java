@@ -5,6 +5,8 @@ import by.iba.bussiness.appointment.AppointmentHandler;
 import by.iba.bussiness.calendar.learner.Learner;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.enrollment.status.EnrollmentCalendarStatusDefiner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigInteger;
@@ -14,6 +16,7 @@ import java.util.UUID;
 
 @org.springframework.stereotype.Component
 public class EnrollmentsInstaller {
+    private static final Logger logger = LoggerFactory.getLogger(EnrollmentsInstaller.class);
     private EnrollmentService enrollmentService;
     private EnrollmentChecker enrollmentChecker;
     private EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner;
@@ -42,8 +45,9 @@ public class EnrollmentsInstaller {
                 if (enrollmentChecker.wasChangedStatus(oldEnrollment, learner)) {
                     oldEnrollment.setStatus(enrollmentStatus);
                     enrollmentService.save(oldEnrollment);
+                    logger.info("Enrollment " + oldEnrollment.getUserEmail() + " has been saved with new status " + oldEnrollment.getStatus());
                     EnrollmentLearnerStatus enrollmentLearnerStatus =
-                            new EnrollmentLearnerStatus(true, "Enrollment was modified. ", learner.getEmail());
+                            new EnrollmentLearnerStatus(true, "Enrollment was modified.", learner.getEmail());
                     enrollmentLearnerStatuses.add(enrollmentLearnerStatus);
                 } else {
                     Enrollment newEnrollment = new Enrollment();
@@ -51,13 +55,14 @@ public class EnrollmentsInstaller {
                     newEnrollment.setParentId(bigIntegerMeetingId);
                     newEnrollment.setUserEmail(email);
                     enrollmentService.save(newEnrollment);
+                    logger.info("Enrollment " + newEnrollment.getUserEmail() + " has been saved");
                     EnrollmentLearnerStatus enrollmentLearnerStatus =
-                            new EnrollmentLearnerStatus(true, "Enrollment was createD. ", learner.getEmail());
+                            new EnrollmentLearnerStatus(true, "Enrollment was create.", learner.getEmail());
                     enrollmentLearnerStatuses.add(enrollmentLearnerStatus);
                 }
             } else {
                 EnrollmentLearnerStatus enrollmentLearnerStatus =
-                        new EnrollmentLearnerStatus(false, "Enrollment already exists. ", learner.getEmail());
+                        new EnrollmentLearnerStatus(false, "Enrollment already exists.", learner.getEmail());
                 enrollmentLearnerStatuses.add(enrollmentLearnerStatus);
             }
         }
@@ -70,5 +75,6 @@ public class EnrollmentsInstaller {
         enrollment.setCalendarStatus(calendarStatus);
         enrollment.setCalendarVersion(Integer.toString(maximumIndex));
         enrollmentService.save(enrollment);
+        logger.info("Enrollment " + enrollment.getUserEmail() + " has been saved with new calendar version" + enrollment.getCalendarVersion());
     }
 }

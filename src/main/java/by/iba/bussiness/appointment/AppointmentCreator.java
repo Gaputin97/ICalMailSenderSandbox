@@ -4,7 +4,6 @@ import by.iba.bussiness.calendar.session.SessionParser;
 import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.timeslot.TimeSlot;
-import by.iba.bussiness.meeting.timeslot.TimeSlotUidDefiner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

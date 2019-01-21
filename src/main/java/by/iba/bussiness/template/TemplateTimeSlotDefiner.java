@@ -1,7 +1,6 @@
 package by.iba.bussiness.template;
 
 import by.iba.bussiness.calendar.session.Session;
-import by.iba.bussiness.meeting.timeslot.TimeSlot;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
