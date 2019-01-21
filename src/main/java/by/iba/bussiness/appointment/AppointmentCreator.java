@@ -12,13 +12,10 @@ import java.util.List;
 
 @Component
 public class AppointmentCreator {
-    private TimeSlotUidDefiner timeSlotUidDefiner;
     private SessionParser sessionParser;
 
     @Autowired
-    public AppointmentCreator(TimeSlotUidDefiner timeSlotUidDefiner,
-                              SessionParser sessionParser) {
-        this.timeSlotUidDefiner = timeSlotUidDefiner;
+    public AppointmentCreator(SessionParser sessionParser) {
         this.sessionParser = sessionParser;
     }
 

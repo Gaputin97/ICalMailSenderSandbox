@@ -24,7 +24,7 @@ public class Appointment {
     private String title;
     private String startDateTime;
     private String endDateTime;
-    private short duration;
+    private long duration;
     private Owner owner;
     private List<Session> sessionList;
     private String timeZone;
@@ -80,11 +80,11 @@ public class Appointment {
         this.description = description;
     }
 
-    public short getDuration() {
+    public long getDuration() {
         return duration;
     }
 
-    public void setDuration(short duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 

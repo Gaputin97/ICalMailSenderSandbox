@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class SessionParser {
@@ -18,22 +18,18 @@ public class SessionParser {
     private final SimpleDateFormat dateFormat = new SimpleDateFormat(SessionConstants.DATE_FORMAT);
 
     public List<Session> timeSlotListToSessionList(List<TimeSlot> timeSlots) {
-        List<Session> sessionList = new ArrayList<>();
-        for (TimeSlot timeSlot : timeSlots) {
+        return timeSlots.stream().map(timeSlot -> {
             String stringStartDate = timeSlot.getStartDateTime();
             String stringEndDate = timeSlot.getEndDateTime();
-            int id = timeSlot.getId();
             try {
                 Instant startDate = dateFormat.parse(stringStartDate).toInstant();
                 Instant endDate = dateFormat.parse(stringEndDate).toInstant();
-                Session session = new Session(id, startDate, endDate);
-                sessionList.add(session);
+                int id = timeSlot.getId();
+                return new Session(id, startDate, endDate);
             } catch (ParseException ex) {
                 logger.error("Can't parse time slot to date", ex);
                 throw new CalendarException("Wrong time slot in meeting");
             }
-
-        }
-        return sessionList;
+        }).collect(Collectors.toList());
     }
 }

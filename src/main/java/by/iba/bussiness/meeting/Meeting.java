@@ -13,7 +13,7 @@ public class Meeting {
     @Id
     private BigInteger id;
     private String description;
-    private short duration;
+    private long duration;
     private String startDateTime;
     private String endDateTime;
     private String invitationTemplate;
@@ -44,11 +44,11 @@ public class Meeting {
         this.description = description;
     }
 
-    public short getDuration() {
+    public long getDuration() {
         return duration;
     }
 
-    public void setDuration(short duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 

@@ -27,16 +27,15 @@ public class InvitationTemplateServiceImpl implements InvitationTemplateService 
     private static final Logger logger = LoggerFactory.getLogger(InvitationTemplateServiceImpl.class);
     private TokenService tokenService;
     private RestTemplate restTemplate;
-    @Value("${template_by_id_endpoint}")
-    private String ENDPOINT_GET_TEMPLATE_BY_ID;
-    @Value("${template_by_code_endpoint}")
-    private String ENDPOINT_GET_TEMPLATE_BY_CODE;
+    private String getTemplateByCodeEndpoint;
 
     @Autowired
     public InvitationTemplateServiceImpl(TokenService tokenService,
+                                         @Value("${template_by_code_endpoint}") String getTemplateByCodeEndpoint,
                                          RestTemplate restTemplate) {
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
+        this.getTemplateByCodeEndpoint = getTemplateByCodeEndpoint;
     }
 
     @Override
@@ -47,7 +46,7 @@ public class InvitationTemplateServiceImpl implements InvitationTemplateService 
         HttpEntity httpEntity = new HttpEntity<>(httpHeaders);
         InvitationTemplate invitationTemplate;
         try {
-            ResponseEntity<InvitationTemplate> invitationTemplateResponseEntity = restTemplate.exchange(ENDPOINT_GET_TEMPLATE_BY_CODE + code,
+            ResponseEntity<InvitationTemplate> invitationTemplateResponseEntity = restTemplate.exchange(getTemplateByCodeEndpoint + code,
                     HttpMethod.GET, httpEntity, InvitationTemplate.class);
             invitationTemplate = invitationTemplateResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {

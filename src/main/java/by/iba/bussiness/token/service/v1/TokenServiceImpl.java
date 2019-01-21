@@ -24,8 +24,13 @@ public class TokenServiceImpl implements TokenService {
 
     @Autowired
     private RestTemplate restTemplate;
-    @Value("${token_endpoint}")
-    private String ENDPOINT_TOKEN;
+    private String getTokenEndpoint;
+
+    public TokenServiceImpl(RestTemplate restTemplate,
+                            @Value("${token_endpoint}") String getTokenEndpoint) {
+        this.restTemplate = restTemplate;
+        this.getTokenEndpoint = getTokenEndpoint;
+    }
 
     @Override
     public JavaWebToken getJavaWebToken(HttpServletRequest request) {
@@ -34,7 +39,7 @@ public class TokenServiceImpl implements TokenService {
         HttpEntity httpEntity = new HttpEntity<>(httpHeaders);
         JavaWebToken javaWebToken;
         try {
-            ResponseEntity<JavaWebToken> javaWebTokenResponseEntity = restTemplate.exchange(ENDPOINT_TOKEN, HttpMethod.GET, httpEntity, JavaWebToken.class);
+            ResponseEntity<JavaWebToken> javaWebTokenResponseEntity = restTemplate.exchange(getTokenEndpoint, HttpMethod.GET, httpEntity, JavaWebToken.class);
             javaWebToken = javaWebTokenResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             logger.error("Error while try to get token: ", e);

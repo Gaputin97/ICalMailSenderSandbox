@@ -19,16 +19,13 @@ public class EnrollmentChecker {
         this.enrollmentService = enrollmentService;
     }
 
-    public boolean wasChangedStatus(Learner learner, BigInteger meetingId) {
+    public boolean wasChangedStatus(Enrollment enrollment, Learner learner) {
         boolean wasChanged;
-        String email = learner.getEmail();
-        Enrollment enrollment = enrollmentService.getByEmailAndParentId(meetingId, email);
         boolean isExistLocalEnrollment = enrollment != null;
         if (isExistLocalEnrollment) {
             String enrollmentStatus = enrollment.getStatus();
             String learnerStatus = learner.getEnrollmentStatus();
             wasChanged = !enrollmentStatus.equals(learnerStatus);
-            logger.info("Enrollment with meeting id " + meetingId + " and email " + email + " and enrollment type " + learnerStatus + " exists. ");
         } else {
             wasChanged = false;
         }

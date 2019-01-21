@@ -38,8 +38,8 @@ public class EnrollmentsInstaller {
             String enrollmentStatus = learner.getEnrollmentStatus();
             Enrollment oldEnrollment = enrollmentService.getByEmailAndParentIdAndType(bigIntegerMeetingId, email, enrollmentStatus);
             if (oldEnrollment == null) {
-                if (enrollmentChecker.wasChangedStatus(learner, bigIntegerMeetingId)) {
-                    oldEnrollment = enrollmentService.getByEmailAndParentId(bigIntegerMeetingId, email);
+                oldEnrollment = enrollmentService.getByEmailAndParentId(bigIntegerMeetingId, email);
+                if (enrollmentChecker.wasChangedStatus(oldEnrollment, learner)) {
                     oldEnrollment.setStatus(enrollmentStatus);
                     enrollmentService.save(oldEnrollment);
                     EnrollmentLearnerStatus enrollmentLearnerStatus =
