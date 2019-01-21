@@ -4,7 +4,6 @@ import by.iba.bussiness.calendar.session.SessionParser;
 import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.timeslot.TimeSlot;
-import by.iba.bussiness.meeting.timeslot.TimeSlotUidDefiner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,13 +11,10 @@ import java.util.List;
 
 @Component
 public class AppointmentCreator {
-    private TimeSlotUidDefiner timeSlotUidDefiner;
     private SessionParser sessionParser;
 
     @Autowired
-    public AppointmentCreator(TimeSlotUidDefiner timeSlotUidDefiner,
-                              SessionParser sessionParser) {
-        this.timeSlotUidDefiner = timeSlotUidDefiner;
+    public AppointmentCreator(SessionParser sessionParser) {
         this.sessionParser = sessionParser;
     }
 

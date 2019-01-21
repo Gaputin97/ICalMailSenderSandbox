@@ -4,7 +4,6 @@ import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
 import by.iba.bussiness.calendar.creator.simple.DateIncreaser;
 import by.iba.bussiness.calendar.creator.simple.IcalDateParser;
-import by.iba.bussiness.calendar.creator.simple.SimpleMetingCalendarTemplateCreator;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 import by.iba.bussiness.calendar.session.Session;
