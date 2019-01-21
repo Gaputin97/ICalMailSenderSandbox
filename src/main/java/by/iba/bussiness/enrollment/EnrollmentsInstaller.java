@@ -41,8 +41,8 @@ public class EnrollmentsInstaller {
             String enrollmentStatus = learner.getEnrollmentStatus();
             Enrollment oldEnrollment = enrollmentService.getByEmailAndParentIdAndType(bigIntegerMeetingId, email, enrollmentStatus);
             if (oldEnrollment == null) {
-                if (enrollmentChecker.wasChangedStatus(learner, bigIntegerMeetingId)) {
-                    oldEnrollment = enrollmentService.getByEmailAndParentId(bigIntegerMeetingId, email);
+                oldEnrollment = enrollmentService.getByEmailAndParentId(bigIntegerMeetingId, email);
+                if (enrollmentChecker.wasChangedStatus(oldEnrollment, learner)) {
                     oldEnrollment.setStatus(enrollmentStatus);
                     enrollmentService.save(oldEnrollment);
                     logger.info("Enrollment " + oldEnrollment.getUserEmail() + " has been saved with new status "+ oldEnrollment.getStatus());
@@ -58,7 +58,7 @@ public class EnrollmentsInstaller {
                     enrollmentService.save(newEnrollment);
                     logger.info("Enrollment " + newEnrollment.getUserEmail() + " has been saved");
                     EnrollmentLearnerStatus enrollmentLearnerStatus =
-                            new EnrollmentLearnerStatus(true, "Enrollment was created. ", learner.getEmail());
+                            new EnrollmentLearnerStatus(true, "Enrollment was createD. ", learner.getEmail());
                     enrollmentLearnerStatuses.add(enrollmentLearnerStatus);
                 }
             } else {

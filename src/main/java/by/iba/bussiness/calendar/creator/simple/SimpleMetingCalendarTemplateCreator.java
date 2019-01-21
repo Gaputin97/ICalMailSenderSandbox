@@ -39,9 +39,10 @@ public class SimpleMetingCalendarTemplateCreator {
     private Calendar createCommonRecurrenceTemplate(Calendar calendar,
                                                     Calendar concreteCalendar) {
         List<Property> concreteCalendarProperties = concreteCalendar.getProperties();
-        calendar.getProperties().addAll(concreteCalendarProperties);
         try {
-            return new Calendar(calendar);
+            Calendar newCalendar = new Calendar(calendar);
+            newCalendar.getProperties().addAll(concreteCalendarProperties);
+            return newCalendar;
         } catch (ParseException | IOException | URISyntaxException e) {
             logger.error("Can't create calendar based on another calendar", e);
             throw new CalendarException("Can't create calendar.");

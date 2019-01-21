@@ -24,16 +24,16 @@ import javax.servlet.http.HttpServletRequest;
 public class MeetingServiceImpl implements MeetingService {
     private static final Logger logger = LoggerFactory.getLogger(MeetingServiceImpl.class);
     private TokenService tokenService;
-    @Value("${meeting_by_id_endpoint}")
-    private String ENDPOINT_FIND_MEETING_BY_ID;
-
+    private String findMeetingByIdEndpoint;
     private RestTemplate restTemplate;
 
     @Autowired
     public MeetingServiceImpl(TokenService tokenService,
-                              RestTemplate restTemplate) {
+                              RestTemplate restTemplate,
+                              @Value("${meeting_by_id_endpoint}") String findMeetingByIdEndpoint) {
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
+        this.findMeetingByIdEndpoint = findMeetingByIdEndpoint;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class MeetingServiceImpl implements MeetingService {
         HttpEntity httpEntity = new HttpEntity<>(httpHeaders);
         Meeting meeting;
         try {
-            ResponseEntity<Meeting> meetingResponseEntity = restTemplate.exchange(ENDPOINT_FIND_MEETING_BY_ID + id,
+            ResponseEntity<Meeting> meetingResponseEntity = restTemplate.exchange(findMeetingByIdEndpoint + id,
                     HttpMethod.GET, httpEntity, Meeting.class);
             meeting = meetingResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {

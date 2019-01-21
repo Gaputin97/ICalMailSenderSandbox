@@ -18,6 +18,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import javax.activation.DataHandler;
+import javax.activation.URLDataSource;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
@@ -94,7 +95,7 @@ public class MessageSender {
                     true,
                     "utf-8");
             URL url = new URL("https://preview.ibb.co/hXyhQL/Meeting.jpg");
-
+            helper.addAttachment("pic.png", new URLDataSource(url));
             helper.setTo(userEmail);
             helper.setFrom(template.getOwner().getEmail());
             freemarker.template.Template messageTemplate = freeMarkerConfiguration.getTemplate("message.html");

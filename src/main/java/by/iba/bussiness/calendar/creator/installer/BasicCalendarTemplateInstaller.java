@@ -14,31 +14,30 @@ public class BasicCalendarTemplateInstaller {
 
     @Bean("requestCalendar")
     public Calendar setUpRequestMethod() {
-        Calendar calendar = new Calendar();
-        setUpCommonFields(calendar);
+        Calendar calendar = createCommonCalendar();
         calendar.getProperties().add(Method.REQUEST);
-        return calendar;
-    }
-
-    @Bean("cancelCalendar")
-    public Calendar setUpCancelMethod() {
-        Calendar calendar = new Calendar();
-        setUpCommonFields(calendar);
-        calendar.getProperties().add(Method.CANCEL);
         return calendar;
     }
 
     @Bean("publishCalendar")
     public Calendar setUpPublishMethod() {
-        Calendar calendar = new Calendar();
-        setUpCommonFields(calendar);
+        Calendar calendar = createCommonCalendar();
         calendar.getProperties().add(Method.PUBLISH);
         return calendar;
     }
 
-    private void setUpCommonFields(Calendar calendar) {
+    @Bean("cancelCalendar")
+    public Calendar setUpCancelMethod() {
+        Calendar calendar = createCommonCalendar();
+        calendar.getProperties().add(Method.CANCEL);
+        return calendar;
+    }
+
+    private Calendar createCommonCalendar() {
+        Calendar calendar = new Calendar();
         calendar.getProperties().add(Version.VERSION_2_0);
         calendar.getProperties().add(CalScale.GREGORIAN);
         calendar.getProperties().add(new ProdId(PRODUCT_IDENTIFIER));
+        return calendar;
     }
 }
