@@ -46,7 +46,7 @@ public class CalendarInstaller {
         this.sequenceDefiner = sequenceDefiner;
     }
 
-    public Calendar installCalendarCommonParts(Rrule rrule, Appointment appointment) {
+    public VEvent createEventTemplate(Rrule rrule, Appointment appointment) {
         DateList exDatesList = new DateList();
         rrule.getExDates().forEach(x -> exDatesList.add(new DateTime(x.toEpochMilli())));
         List<Session> sessions = appointment.getSessionList();
@@ -61,8 +61,8 @@ public class CalendarInstaller {
         long interval = rrule.getInterval();
         Frequency frequency = rrule.getFrequency();
         String increasedUntilDate = dateIncreaser.increaseAndParse(frequency, interval, startDateOfLastSession);
-        String appDescription = appointment.getDescription();
-        Calendar calendar = new Calendar();
+        String richDescription = appointment.getDescription();
+        VEvent event = null;
         try {
             Sequence sequence = sequenceDefiner.defineSequence(appointment);
             Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
@@ -79,23 +79,22 @@ public class CalendarInstaller {
 
             Description description = new Description("HAARDCOOOOODE!!!!!");
             AltRep altRep = new AltRep("CID:" + RICH_TEXT_CID);
-//            description.getParameters().add(altRep);
+            description.getParameters().add(altRep);
 
             XProperty xAltDesc = new XProperty("X-ALT-DESC");
             xAltDesc.getParameters().add(new FmtType("text/html"));
-            xAltDesc.setValue(appDescription);
+            xAltDesc.setValue(richDescription);
 
-            VEvent event = new VEvent(startDateTime, endDateTime, appointment.getSummary());
+            event = new VEvent(startDateTime, endDateTime, appointment.getSummary());
             if (!exDatesList.isEmpty()) {
                 ExDate exDates = new ExDate(exDatesList);
                 event.getProperties().add(exDates);
             }
-            event.getProperties().addAll(Arrays.asList(sequence, organizer, location, description, UID, rRule/*, xAltDesc*/));
-            calendar.getComponents().add(event);
+            event.getProperties().addAll(Arrays.asList(sequence, organizer, location, description, UID, rRule, xAltDesc));
         } catch (ParseException | URISyntaxException e) {
             logger.error("Cant create recur calendar meeting" + e.getMessage());
             throw new CalendarException("Can't create simple calendar meeting. Try again later");
         }
-        return calendar;
+        return event;
     }
 }
