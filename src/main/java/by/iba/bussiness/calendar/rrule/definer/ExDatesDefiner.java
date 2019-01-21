@@ -18,7 +18,7 @@ public class ExDatesDefiner {
         if (!linkedStartDatesOfSessions.isEmpty()) {
             while (startDateOfFirstSession.isBefore(startDateOfLastSession)) {
                 Instant firstStartDate = linkedStartDatesOfSessions.getFirst();
-                if (firstStartDate.equals(startDateOfFirstSession)) {
+                if (!firstStartDate.equals(startDateOfFirstSession)) {
                     exDates.add(startDateOfFirstSession);
                 } else {
                     linkedStartDatesOfSessions.removeFirst();

@@ -74,10 +74,10 @@ public class NotificationServiceImpl implements NotificationService {
         Appointment newAppointment = appointmentInstaller.installAppointment(meeting, invitationTemplate, oldAppointment);
         List<MailSendingResponseStatus> mailSendingResponseStatusList;
         List<Session> newAppSessions = newAppointment.getSessionList();
-        List<Session> oldAppSessions = oldAppointment.getSessionList();
         MeetingType newAppointmentMeetingType = meetingTypeDefiner.defineMeetingType(newAppSessions);
         MeetingType oldAppointmentMeetingType = null;
         if (oldAppointment != null) {
+            List<Session> oldAppSessions = oldAppointment.getSessionList();
             oldAppointmentMeetingType = meetingTypeDefiner.defineMeetingType(oldAppSessions);
         }
         if (newAppointmentMeetingType.equals(MeetingType.SIMPLE)) {
