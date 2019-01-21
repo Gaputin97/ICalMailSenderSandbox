@@ -53,7 +53,7 @@ public class EnrollmentsInstaller {
                     newEnrollment.setCurrentCalendarUid(UUID.randomUUID().toString());
                     enrollmentService.save(newEnrollment);
                     EnrollmentLearnerStatus enrollmentLearnerStatus =
-                            new EnrollmentLearnerStatus(true, "Enrollment was created. ", learner.getEmail());
+                            new EnrollmentLearnerStatus(true, "Enrollment was createD. ", learner.getEmail());
                     enrollmentLearnerStatuses.add(enrollmentLearnerStatus);
                 }
             } else {

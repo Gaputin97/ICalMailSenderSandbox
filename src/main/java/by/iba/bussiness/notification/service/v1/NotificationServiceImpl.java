@@ -71,20 +71,20 @@ public class NotificationServiceImpl implements NotificationService {
         }
         InvitationTemplate invitationTemplate = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
         Appointment oldAppointment = appointmentRepository.getByMeetingId(new BigInteger(meetingId));
-        Appointment appointment = appointmentInstaller.installAppointment(meeting, invitationTemplate, oldAppointment);
+        Appointment newAppointment = appointmentInstaller.installAppointment(meeting, invitationTemplate, oldAppointment);
         List<MailSendingResponseStatus> mailSendingResponseStatusList;
-
-        MeetingType newAppointmentMeetingType = meetingTypeDefiner.defineMeetingType(appointment.getSessionList());
-        List<Session> sessions = appointment.getSessionList();
+        List<Session> newAppSessions = newAppointment.getSessionList();
+        List<Session> oldAppSessions = oldAppointment.getSessionList();
+        MeetingType newAppointmentMeetingType = meetingTypeDefiner.defineMeetingType(newAppSessions);
         MeetingType oldAppointmentMeetingType = null;
         if (oldAppointment != null) {
-            oldAppointmentMeetingType = meetingTypeDefiner.defineMeetingType(oldAppointment.getSessionList());
+            oldAppointmentMeetingType = meetingTypeDefiner.defineMeetingType(oldAppSessions);
         }
         if (newAppointmentMeetingType.equals(MeetingType.SIMPLE)) {
-            Rrule rrule = rruleDefiner.defineRrule(sessions);
-            mailSendingResponseStatusList = simpleCalendarSenderFacade.sendCalendar(rrule, appointment);
+            Rrule rrule = rruleDefiner.defineRrule(newAppSessions);
+            mailSendingResponseStatusList = simpleCalendarSenderFacade.sendCalendar(rrule, newAppointment);
         } else {
-            mailSendingResponseStatusList = complexTemplateSenderFacade.sendTemplate(appointment, oldAppointmentMeetingType);
+            mailSendingResponseStatusList = complexTemplateSenderFacade.sendTemplate(newAppointment, oldAppointmentMeetingType);
         }
         return mailSendingResponseStatusList;
     }

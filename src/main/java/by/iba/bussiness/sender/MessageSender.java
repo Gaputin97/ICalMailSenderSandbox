@@ -96,7 +96,7 @@ public class MessageSender {
                     true,
                     "utf-8");
             URL url = new URL("https://preview.ibb.co/hXyhQL/Meeting.jpg");
-
+            helper.addAttachment("pic.png", new URLDataSource(url));
             helper.setTo(userEmail);
             helper.setFrom(template.getOwner().getEmail());
             freemarker.template.Template messageTemplate = freeMarkerConfiguration.getTemplate("message.html");
