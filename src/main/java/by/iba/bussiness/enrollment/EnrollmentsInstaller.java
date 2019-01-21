@@ -50,7 +50,6 @@ public class EnrollmentsInstaller {
                     newEnrollment.setStatus(enrollmentStatus);
                     newEnrollment.setParentId(bigIntegerMeetingId);
                     newEnrollment.setUserEmail(email);
-                    newEnrollment.setCurrentCalendarUid(UUID.randomUUID().toString());
                     enrollmentService.save(newEnrollment);
                     EnrollmentLearnerStatus enrollmentLearnerStatus =
                             new EnrollmentLearnerStatus(true, "Enrollment was createD. ", learner.getEmail());

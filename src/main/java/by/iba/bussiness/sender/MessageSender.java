@@ -79,10 +79,10 @@ public class MessageSender {
 
             javaMailSender.send(message);
             logger.info("Message was sent to " + editedUserEmail);
-            mailSendingResponseStatus = new MailSendingResponseStatus(true, "Message was sent successfully", editedUserEmail);
+            mailSendingResponseStatus = new MailSendingResponseStatus(true, "Calendar was sent successfully", editedUserEmail);
         } catch (MessagingException e) {
             logger.error("Error while trying to send message", e);
-            mailSendingResponseStatus = new MailSendingResponseStatus(false, "Message was not delivered", editedUserEmail);
+            mailSendingResponseStatus = new MailSendingResponseStatus(false, "Calendar was not delivered", editedUserEmail);
         }
         return mailSendingResponseStatus;
     }
@@ -96,7 +96,7 @@ public class MessageSender {
                     true,
                     "utf-8");
             URL url = new URL("https://preview.ibb.co/hXyhQL/Meeting.jpg");
-            helper.addAttachment("pic.png", new URLDataSource(url));
+            //helper.addAttachment("pic.png", new URLDataSource(url));
             helper.setTo(userEmail);
             helper.setFrom(template.getOwner().getEmail());
             freemarker.template.Template messageTemplate = freeMarkerConfiguration.getTemplate("message.html");

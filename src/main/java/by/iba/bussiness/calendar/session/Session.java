@@ -1,6 +1,9 @@
 package by.iba.bussiness.calendar.session;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Objects;
 
 public class Session implements Comparable<Session> {
@@ -72,6 +75,7 @@ public class Session implements Comparable<Session> {
 
     @Override
     public String toString() {
-        return startDateTime.toString() + " ---- " + endDateTime.toString();
+        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withZone(ZoneId.of("UTC"));
+        return formatter.format(startDateTime) + " - " + formatter.format(startDateTime);
     }
 }

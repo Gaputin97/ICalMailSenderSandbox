@@ -75,16 +75,11 @@ public class NotificationServiceImpl implements NotificationService {
         List<MailSendingResponseStatus> mailSendingResponseStatusList;
         List<Session> newAppSessions = newAppointment.getSessionList();
         MeetingType newAppointmentMeetingType = meetingTypeDefiner.defineMeetingType(newAppSessions);
-        MeetingType oldAppointmentMeetingType = null;
-        if (oldAppointment != null) {
-            List<Session> oldAppSessions = oldAppointment.getSessionList();
-            oldAppointmentMeetingType = meetingTypeDefiner.defineMeetingType(oldAppSessions);
-        }
         if (newAppointmentMeetingType.equals(MeetingType.SIMPLE)) {
             Rrule rrule = rruleDefiner.defineRrule(newAppSessions);
             mailSendingResponseStatusList = simpleCalendarSenderFacade.sendCalendar(rrule, newAppointment);
         } else {
-            mailSendingResponseStatusList = complexTemplateSenderFacade.sendTemplate(newAppointment, oldAppointmentMeetingType);
+            mailSendingResponseStatusList = complexTemplateSenderFacade.sendTemplate(newAppointment, oldAppointment);
         }
         return mailSendingResponseStatusList;
     }

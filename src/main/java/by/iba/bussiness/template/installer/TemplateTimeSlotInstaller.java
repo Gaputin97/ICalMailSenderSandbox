@@ -2,7 +2,6 @@ package by.iba.bussiness.template.installer;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.session.Session;
-import by.iba.bussiness.template.Template;
 import by.iba.bussiness.template.TemplateTimeSlotDefiner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,31 +35,29 @@ public class TemplateTimeSlotInstaller {
             Session newAppSession = templateTimeSlotDefiner.defineSessionById(sessionId, newAppSessions);
             Session oldAppSession = templateTimeSlotDefiner.defineSessionById(sessionId, oldAppSessions);
             if (newAppSession == null && oldAppSession != null) {
-                sessionsBuilder.append("<s>")
-                        .append(oldAppSession.toString())
-                        .append("</s>(was deleted)<br>");
+                sessionsBuilder.append("<s>" + oldAppSession.toString() + "</s>" + " (was deleted)");
+                sessionsBuilder.append("<br>");
             } else if (oldAppSession == null && newAppSession != null) {
-                sessionsBuilder.append(newAppSession.toString())
-                        .append(" (was added)");
-            } else if (newAppSession != null) {
+                sessionsBuilder.append(newAppSession.toString() + " (new date)");
+            } else if (oldAppointment != null && newAppSession != null) {
                 if (oldAppSession.equals(newAppSession)) {
-                    sessionsBuilder.append(newAppSession.toString())
-                            .append(" (was not changed)<br>");
+                    sessionsBuilder.append(newAppSession.toString() + " (was not changed)");
+                    sessionsBuilder.append("<br>");
                 } else {
-                    sessionsBuilder.append(newAppSession.toString())
-                            .append(" (rescheduled from ")
-                            .append(oldAppSession.toString())
-                            .append(" )<br>");
+                    sessionsBuilder.append(newAppSession.toString()
+                            + " (" + "rescheduled from " + oldAppSession.toString() + " )");
+                    sessionsBuilder.append("<br>");
                 }
             }
         }
         return sessionsBuilder.toString();
     }
 
+
     public String installSessionsIfInvitation(Appointment appointment) {
         List<Session> newAppSessions = appointment.getSessionList();
         StringBuilder sessionsBuilder = new StringBuilder();
-        newAppSessions.forEach(session -> sessionsBuilder.append(session.toString()).append(" (was added)<br>"));
+        newAppSessions.forEach(session -> sessionsBuilder.append(session.toString()).append(" (new date)<br>"));
         return sessionsBuilder.toString();
     }
 }

@@ -13,6 +13,7 @@ import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.meeting.type.MeetingType;
+import by.iba.bussiness.meeting.type.MeetingTypeDefiner;
 import by.iba.bussiness.sender.MailSendingResponseStatus;
 import by.iba.bussiness.sender.MessageSender;
 import by.iba.bussiness.template.Template;
@@ -41,6 +42,7 @@ public class ComplexTemplateSenderFacade {
     private CalendarInstaller calendarInstaller;
     private RruleDefiner rruleDefiner;
     private SimpleMetingCalendarTemplateCreator simpleMetingCalendarTemplateCreator;
+    private MeetingTypeDefiner meetingTypeDefiner;
 
 
     @Autowired
@@ -52,7 +54,8 @@ public class ComplexTemplateSenderFacade {
                                        CalendarAttendeesInstaller calendarAttendeesInstaller,
                                        CalendarInstaller calendarInstaller,
                                        RruleDefiner rruleDefiner,
-                                       SimpleMetingCalendarTemplateCreator simpleMetingCalendarTemplateCreator) {
+                                       SimpleMetingCalendarTemplateCreator simpleMetingCalendarTemplateCreator,
+                                       MeetingTypeDefiner meetingTypeDefiner) {
         this.messageSender = messageSender;
         this.enrollmentsInstaller = enrollmentsInstaller;
         this.enrollmentService = enrollmentService;
@@ -62,21 +65,28 @@ public class ComplexTemplateSenderFacade {
         this.calendarInstaller = calendarInstaller;
         this.rruleDefiner = rruleDefiner;
         this.simpleMetingCalendarTemplateCreator = simpleMetingCalendarTemplateCreator;
+        this.meetingTypeDefiner = meetingTypeDefiner;
     }
 
-    public List<MailSendingResponseStatus> sendTemplate(Appointment appointment, MeetingType oldMeetingType) {
+    public List<MailSendingResponseStatus> sendTemplate(Appointment appointment, Appointment oldAppointment) {
         BigInteger meetingId = appointment.getMeetingId();
         List<MailSendingResponseStatus> mailSendingResponseStatusList = new ArrayList<>();
         List<Enrollment> enrollmentList = enrollmentService.getAllByParentId(meetingId);
-        Template installedTemplate = templateInstaller.installCommonPartsOfTemplate(appointment, appointment);
+        Template installedTemplate = templateInstaller.installCommonPartsOfTemplate(appointment, oldAppointment);
         Calendar installedCalendar = null;
-        if (oldMeetingType == MeetingType.SIMPLE) {
+        MeetingType oldMeetingType = null;
+        if (oldAppointment != null) {
+            List<Session> oldAppSessions = oldAppointment.getSessionList();
+            oldMeetingType = meetingTypeDefiner.defineMeetingType(oldAppSessions);
+        }
+        boolean isOldMeetingSimple = oldMeetingType == MeetingType.SIMPLE;
+        if (isOldMeetingSimple) {
             List<Session> sessions = appointment.getSessionList();
             Rrule rrule = rruleDefiner.defineRrule(sessions);
             installedCalendar = calendarInstaller.installCalendarCommonParts(rrule, appointment);
         }
         for (Enrollment enrollment : enrollmentList) {
-            if (oldMeetingType == MeetingType.SIMPLE) {
+            if (isOldMeetingSimple) {
                 Calendar cancelCalendarWithoutAttendee =
                         simpleMetingCalendarTemplateCreator.createSimpleCancellationCalendarTemplate(installedCalendar);
                 Calendar cancelCalendarWithAttendee =
