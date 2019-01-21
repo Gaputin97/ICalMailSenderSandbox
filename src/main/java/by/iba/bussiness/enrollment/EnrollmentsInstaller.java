@@ -45,9 +45,9 @@ public class EnrollmentsInstaller {
                 if (enrollmentChecker.wasChangedStatus(oldEnrollment, learner)) {
                     oldEnrollment.setStatus(enrollmentStatus);
                     enrollmentService.save(oldEnrollment);
-                    logger.info("Enrollment " + oldEnrollment.getUserEmail() + " has been saved with new status "+ oldEnrollment.getStatus());
+                    logger.info("Enrollment " + oldEnrollment.getUserEmail() + " has been saved with new status " + oldEnrollment.getStatus());
                     EnrollmentLearnerStatus enrollmentLearnerStatus =
-                            new EnrollmentLearnerStatus(true, "Enrollment was modified. ", learner.getEmail());
+                            new EnrollmentLearnerStatus(true, "Enrollment was modified.", learner.getEmail());
                     enrollmentLearnerStatuses.add(enrollmentLearnerStatus);
                 } else {
                     Enrollment newEnrollment = new Enrollment();
@@ -58,12 +58,12 @@ public class EnrollmentsInstaller {
                     enrollmentService.save(newEnrollment);
                     logger.info("Enrollment " + newEnrollment.getUserEmail() + " has been saved");
                     EnrollmentLearnerStatus enrollmentLearnerStatus =
-                            new EnrollmentLearnerStatus(true, "Enrollment was createD. ", learner.getEmail());
+                            new EnrollmentLearnerStatus(true, "Enrollment was create.", learner.getEmail());
                     enrollmentLearnerStatuses.add(enrollmentLearnerStatus);
                 }
             } else {
                 EnrollmentLearnerStatus enrollmentLearnerStatus =
-                        new EnrollmentLearnerStatus(false, "Enrollment already exists. ", learner.getEmail());
+                        new EnrollmentLearnerStatus(false, "Enrollment already exists.", learner.getEmail());
                 enrollmentLearnerStatuses.add(enrollmentLearnerStatus);
             }
         }
@@ -76,6 +76,6 @@ public class EnrollmentsInstaller {
         enrollment.setCalendarStatus(calendarStatus);
         enrollment.setCalendarVersion(Integer.toString(maximumIndex));
         enrollmentService.save(enrollment);
-        logger.info("Enrollment " + enrollment.getUserEmail() +" has been saved with new calendar version" + enrollment.getCalendarVersion());
+        logger.info("Enrollment " + enrollment.getUserEmail() + " has been saved with new calendar version" + enrollment.getCalendarVersion());
     }
 }

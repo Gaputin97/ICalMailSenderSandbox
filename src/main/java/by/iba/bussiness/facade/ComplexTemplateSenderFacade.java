@@ -4,7 +4,7 @@ import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.EnrollmentCalendarStatus;
 import by.iba.bussiness.calendar.EnrollmentStatus;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
-import by.iba.bussiness.calendar.creator.installer.CalendarInstaller;
+import by.iba.bussiness.calendar.creator.installer.EventInstaller;
 import by.iba.bussiness.calendar.creator.simple.SimpleMetingCalendarTemplateCreator;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.definer.RruleDefiner;
@@ -19,6 +19,7 @@ import by.iba.bussiness.template.Template;
 import by.iba.bussiness.template.installer.TemplateInstaller;
 import by.iba.bussiness.template.installer.TemplateStatusInstaller;
 import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.component.VEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class ComplexTemplateSenderFacade {
     private TemplateStatusInstaller templateStatusInstaller;
     private TemplateInstaller templateInstaller;
     private CalendarAttendeesInstaller calendarAttendeesInstaller;
-    private CalendarInstaller calendarInstaller;
+    private EventInstaller eventInstaller;
     private RruleDefiner rruleDefiner;
     private SimpleMetingCalendarTemplateCreator simpleMetingCalendarTemplateCreator;
 
@@ -49,7 +50,7 @@ public class ComplexTemplateSenderFacade {
                                        TemplateStatusInstaller templateStatusInstaller,
                                        TemplateInstaller templateInstaller,
                                        CalendarAttendeesInstaller calendarAttendeesInstaller,
-                                       CalendarInstaller calendarInstaller,
+                                       EventInstaller eventInstaller,
                                        RruleDefiner rruleDefiner,
                                        SimpleMetingCalendarTemplateCreator simpleMetingCalendarTemplateCreator) {
         this.messageSender = messageSender;
@@ -58,30 +59,31 @@ public class ComplexTemplateSenderFacade {
         this.templateStatusInstaller = templateStatusInstaller;
         this.templateInstaller = templateInstaller;
         this.calendarAttendeesInstaller = calendarAttendeesInstaller;
-        this.calendarInstaller = calendarInstaller;
+        this.eventInstaller = eventInstaller;
         this.rruleDefiner = rruleDefiner;
         this.simpleMetingCalendarTemplateCreator = simpleMetingCalendarTemplateCreator;
     }
 
     public List<MailSendingResponseStatus> sendTemplate(Appointment appointment, MeetingType oldMeetingType) {
         BigInteger meetingId = appointment.getMeetingId();
+        String richDescription = appointment.getDescription();
         List<MailSendingResponseStatus> mailSendingResponseStatusList = new ArrayList<>();
         List<Enrollment> enrollmentList = enrollmentService.getAllByParentId(meetingId);
         Template installedTemplate = templateInstaller.installCommonPartsOfTemplate(appointment, appointment);
-        Calendar installedCalendar = null;
+        VEvent event = null;
         if (oldMeetingType == MeetingType.SIMPLE) {
             List<Session> sessions = appointment.getSessionList();
             Rrule rrule = rruleDefiner.defineRrule(sessions);
-            installedCalendar = calendarInstaller.installCalendarCommonParts(rrule, appointment);
+            event = eventInstaller.createEventTemplate(rrule, appointment);
         }
         for (Enrollment enrollment : enrollmentList) {
             if (oldMeetingType == MeetingType.SIMPLE) {
 
                 Calendar cancelCalendarWithoutAttendee =
-                        simpleMetingCalendarTemplateCreator.createSimpleCancellationCalendarTemplate(installedCalendar);
+                        simpleMetingCalendarTemplateCreator.createSimpleCancellationCalendarWithEvent(event);
                 Calendar cancelCalendarWithAttendee =
                         calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, cancelCalendarWithoutAttendee);
-                messageSender.sendCalendarToLearner(cancelCalendarWithAttendee);
+                messageSender.sendCalendarToLearner(cancelCalendarWithAttendee, richDescription);
             }
             if (EnrollmentCalendarStatus.CANCELLED.equals(enrollment.getCalendarStatus())
                     && EnrollmentStatus.CANCELLED.equals(enrollment.getStatus())) {

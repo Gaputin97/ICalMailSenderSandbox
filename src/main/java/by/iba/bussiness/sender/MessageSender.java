@@ -43,7 +43,7 @@ public class MessageSender {
         this.freeMarkerConfiguration = freeMarkerConfiguration;
     }
 
-    public MailSendingResponseStatus sendCalendarToLearner(Calendar calendar) {
+    public MailSendingResponseStatus sendCalendarToLearner(Calendar calendar, String richDescription) {
         MimeMessage message;
         VEvent event = (VEvent) calendar.getComponents().getComponent(Component.VEVENT);
         Attendee attendee = event.getProperties().getProperty(Property.ATTENDEE);
@@ -58,25 +58,25 @@ public class MessageSender {
 
             helper.setTo(editedUserEmail);
 
-            MimeMultipart multipart = new MimeMultipart();
             MimeBodyPart iCalInline = new MimeBodyPart();
             iCalInline.setHeader("Content-class", "urn:content-classes:calendarmessage");
             iCalInline.setHeader("Content-ID", "<calendar_part>");
             iCalInline.setHeader("Content-Disposition", "inline");
             iCalInline.setContent(calendar.toString(), "text/calendar;charset=utf-8;" + stringMethod);
-
             iCalInline.setFileName("inlineCalendar.ics");
+
+            MimeBodyPart htmlInline = new MimeBodyPart();
+            htmlInline.setHeader("Content-ID", "<rich_description>");
+            htmlInline.setHeader("Content-Disposition", "inline");
+            htmlInline.setContent(richDescription, "text/html;charset=utf-8");
+            htmlInline.setFileName("description.html");
+
+            MimeMultipart multipart = new MimeMultipart();
             multipart.addBodyPart(iCalInline);
-
-            MimeBodyPart iCalAttachment = new MimeBodyPart();
-            iCalAttachment.setHeader("Content-class", "urn:content-classes:calendarmessage");
-            iCalAttachment.setHeader("Content-Disposition", "attachment");
-            iCalAttachment.setContent(calendar.toString(), "text/calendar;charset=utf-8;" + stringMethod);
-            iCalAttachment.setFileName("attachedCalendar.ics");
-            multipart.addBodyPart(iCalAttachment);
+            multipart.addBodyPart(htmlInline);
             message.setContent(multipart);
-
             javaMailSender.send(message);
+
             logger.info("Message was sent to " + editedUserEmail);
             mailSendingResponseStatus = new MailSendingResponseStatus(true, "Message was sent successfully", editedUserEmail);
         } catch (MessagingException e) {

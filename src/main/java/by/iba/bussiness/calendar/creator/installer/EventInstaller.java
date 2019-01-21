@@ -8,7 +8,6 @@ import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.exception.CalendarException;
-import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateList;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Recur;
@@ -29,18 +28,20 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
-public class CalendarInstaller {
-    private static final Logger logger = LoggerFactory.getLogger(CalendarInstaller.class);
-    private static final String RICH_TEXT_CID = "calendar_rich_text_description";
+public class EventInstaller {
+    private static final Logger logger = LoggerFactory.getLogger(EventInstaller.class);
+    private static final String RICH_TEXT_CID = "rich_description";
+    private static final String BODY_OPEN_TAG = "<body>";
+    private static final String BODY_CLOSE_TAG = "</body>";
     private static final int NUMBER_OF_FIRST_TIME_SLOT = 0;
     private IcalDateParser iСalDateParser;
     private DateIncreaser dateIncreaser;
     private SequenceDefiner sequenceDefiner;
 
     @Autowired
-    public CalendarInstaller(IcalDateParser icalDateParser,
-                             DateIncreaser dateIncreaser,
-                             SequenceDefiner sequenceDefiner) {
+    public EventInstaller(IcalDateParser icalDateParser,
+                          DateIncreaser dateIncreaser,
+                          SequenceDefiner sequenceDefiner) {
         this.iСalDateParser = icalDateParser;
         this.dateIncreaser = dateIncreaser;
         this.sequenceDefiner = sequenceDefiner;
@@ -61,8 +62,8 @@ public class CalendarInstaller {
         long interval = rrule.getInterval();
         Frequency frequency = rrule.getFrequency();
         String increasedUntilDate = dateIncreaser.increaseAndParse(frequency, interval, startDateOfLastSession);
-        String richDescription = appointment.getDescription();
-        VEvent event = null;
+        String richDescription = BODY_OPEN_TAG + appointment.getDescription() + BODY_CLOSE_TAG ;
+        VEvent event;
         try {
             Sequence sequence = sequenceDefiner.defineSequence(appointment);
             Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());

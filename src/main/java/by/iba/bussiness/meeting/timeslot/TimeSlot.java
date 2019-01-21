@@ -2,7 +2,7 @@ package by.iba.bussiness.meeting.timeslot;
 
 import java.util.List;
 
-public class TimeSlot{
+public class TimeSlot {
     private int id;
     private long duration;
     private String endDateTime;

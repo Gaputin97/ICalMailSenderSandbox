@@ -3,7 +3,7 @@ package by.iba.bussiness.calendar.creator.simple;
 import by.iba.bussiness.facade.SimpleCalendarSenderFacade;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.CalendarException;
-import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.component.VEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
-import java.util.List;
 
 @org.springframework.stereotype.Component
 public class SimpleMetingCalendarTemplateCreator {
@@ -27,24 +26,22 @@ public class SimpleMetingCalendarTemplateCreator {
         this.cancelCalendar = cancelCalendar;
     }
 
-    public Calendar createSimpleCalendarTemplate(Calendar calendar) {
-        return createCommonRecurrenceTemplate(calendar, requestCalendar);
+    public Calendar createSimpleCalendarTemplate(VEvent event) {
+        return createCommonRecurrenceTemplate(event, requestCalendar);
     }
 
-    public Calendar createSimpleCancellationCalendarTemplate(Calendar calendar) {
-        return createCommonRecurrenceTemplate(calendar, cancelCalendar);
-
+    public Calendar createSimpleCancellationCalendarWithEvent(VEvent event) {
+        return createCommonRecurrenceTemplate(event, cancelCalendar);
     }
 
-    private Calendar createCommonRecurrenceTemplate(Calendar calendar,
+    private Calendar createCommonRecurrenceTemplate(VEvent event,
                                                     Calendar concreteCalendar) {
-        List<Property> concreteCalendarProperties = concreteCalendar.getProperties();
         try {
-            Calendar newCalendar = new Calendar(calendar);
-            newCalendar.getProperties().addAll(concreteCalendarProperties);
-            return newCalendar;
+            Calendar calendar = new Calendar(concreteCalendar);
+            calendar.getComponents().add(event);
+            return calendar;
         } catch (ParseException | IOException | URISyntaxException e) {
-            logger.error("Can't create calendar based on another calendar", e);
+            logger.error("Can't create calendar based on vEvent", e);
             throw new CalendarException("Can't create calendar.");
         }
     }

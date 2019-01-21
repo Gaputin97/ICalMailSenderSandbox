@@ -10,8 +10,8 @@ public class CalendarTextEditor {
 
     public String replaceColonToEqual(String method) {
         logger.debug("Replaced string: " + method);
-       return method.replace("METHOD", "method")
-               .replace(':', '=');
+        return method.replace("METHOD", "method")
+                .replace(':', '=');
     }
 
     public String editUserEmail(String email) {
