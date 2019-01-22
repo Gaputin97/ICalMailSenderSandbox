@@ -18,7 +18,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import javax.activation.DataHandler;
-import javax.activation.URLDataSource;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
@@ -59,21 +58,21 @@ public class MessageSender {
             helper.setTo(editedUserEmail);
 
             MimeBodyPart iCalInline = new MimeBodyPart();
-            iCalInline.setHeader("Content-class", "urn:content-classes:calendarmessage");
-            iCalInline.setHeader("Content-ID", "<calendar_part>");
+            iCalInline.setHeader("Content-ID", "calendar_part");
             iCalInline.setHeader("Content-Disposition", "inline");
+            iCalInline.setHeader("Content-Transfer-Encoding", "base64");
             iCalInline.setContent(calendar.toString(), "text/calendar;charset=utf-8;" + stringMethod);
             iCalInline.setFileName("inlineCalendar.ics");
 
             MimeBodyPart htmlInline = new MimeBodyPart();
-            htmlInline.setHeader("Content-ID", "<rich_description>");
+            htmlInline.setHeader("Content-ID", "rich_description");
             htmlInline.setHeader("Content-Disposition", "inline");
+            htmlInline.setHeader("Content-Transfer-Encoding", "base64");
             htmlInline.setContent(richDescription, "text/html;charset=utf-8");
-            htmlInline.setFileName("description.html");
 
             MimeMultipart multipart = new MimeMultipart();
-            multipart.addBodyPart(iCalInline);
             multipart.addBodyPart(htmlInline);
+            multipart.addBodyPart(iCalInline);
             message.setContent(multipart);
             javaMailSender.send(message);
 

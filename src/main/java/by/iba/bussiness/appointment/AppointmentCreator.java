@@ -19,7 +19,6 @@ public class AppointmentCreator {
     }
 
     public Appointment createAppointment(Meeting meeting, InvitationTemplate invitationTemplate) {
-
         Appointment appointment = new Appointment();
         appointment.setMeetingId(meeting.getId());
         appointment.setDescription(invitationTemplate.getFaceToFaceDescription());
