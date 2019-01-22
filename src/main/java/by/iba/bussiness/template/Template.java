@@ -5,20 +5,39 @@ import by.iba.bussiness.owner.Owner;
 public class Template {
 
     private String summary;
-    private Owner owner;
     private String description;
     private String location;
-    private String timeSlots;
+    private String sessions;
     private String type;
+    private String from;
+    private String fromName;
 
     public Template() {
     }
 
     public Template(Template template) {
         this.summary = template.getSummary();
-        this.owner = template.getOwner();
+        this.from = template.getFrom();
+        this.fromName = template.getFromName();
         this.description = template.getDescription();
-        this.timeSlots = template.getTimeSlots();
+        this.sessions = template.getSessions();
+    }
+
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getFromName() {
+        return fromName;
+    }
+
+    public void setFromName(String fromName) {
+        this.fromName = fromName;
     }
 
     public String getType() {
@@ -37,14 +56,6 @@ public class Template {
         this.summary = summary;
     }
 
-    public Owner getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Owner owner) {
-        this.owner = owner;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -61,11 +72,11 @@ public class Template {
         this.location = location;
     }
 
-    public String getTimeSlots() {
-        return timeSlots;
+    public String getSessions() {
+        return sessions;
     }
 
     public void setSessions(String timeSlots) {
-        this.timeSlots = timeSlots;
+        this.sessions = timeSlots;
     }
 }

@@ -1,5 +1,6 @@
 package by.iba.bussiness.sender;
 
+import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.creator.CalendarTextEditor;
 import by.iba.bussiness.template.Template;
 import freemarker.template.Configuration;
@@ -20,6 +21,7 @@ import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import javax.activation.DataHandler;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
@@ -42,21 +44,25 @@ public class MessageSender {
         this.freeMarkerConfiguration = freeMarkerConfiguration;
     }
 
-    public MailSendingResponseStatus sendCalendarToLearner(Calendar calendar, String richDescription) {
+    public MailSendingResponseStatus sendCalendarToLearner(Calendar calendar, String richDescription, String enrollmentCalendarStatus, Appointment appointment) {
         MimeMessage message;
         VEvent event = (VEvent) calendar.getComponents().getComponent(Component.VEVENT);
         Attendee attendee = event.getProperties().getProperty(Property.ATTENDEE);
         String userEmail = attendee.getCalAddress().toString();
         String editedUserEmail = calendarTextEditor.editUserEmail(userEmail);
+        String meetingTitle = appointment.getTitle();
+        String ownerMail = appointment.getFrom();
+        String ownerName = appointment.getFromName();
         MailSendingResponseStatus mailSendingResponseStatus;
         try {
             message = javaMailSender.createMimeMessage();
+            message.setSubject(meetingTitle + " : " + enrollmentCalendarStatus);
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             Method method = calendar.getMethod();
             String stringMethod = calendarTextEditor.replaceColonToEqual(method.toString());
-
+            InternetAddress address = new InternetAddress(ownerMail, ownerName);
+            helper.setFrom(address);
             helper.setTo(editedUserEmail);
-
             MimeBodyPart iCalInline = new MimeBodyPart();
             iCalInline.setHeader("Content-ID", "calendar_part");
             iCalInline.setHeader("Content-Disposition", "inline");
@@ -78,25 +84,28 @@ public class MessageSender {
 
             logger.info("Message was sent to " + editedUserEmail);
             mailSendingResponseStatus = new MailSendingResponseStatus(true, "Calendar was sent successfully", editedUserEmail);
-        } catch (MessagingException e) {
+        } catch (MessagingException | IOException e) {
             logger.error("Error while trying to send message", e);
             mailSendingResponseStatus = new MailSendingResponseStatus(false, "Calendar was not delivered", editedUserEmail);
         }
         return mailSendingResponseStatus;
     }
 
-    public MailSendingResponseStatus sendTemplate(Template template, String userEmail) {
+    public MailSendingResponseStatus sendTemplate(Template template, String userEmail, String meetingTitle) {
         MimeMessage message;
         MailSendingResponseStatus mailSendingResponseStatus;
+        String ownerMail = template.getFrom();
+        String ownerName = template.getFromName();
         try {
             message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message,
                     true,
                     "utf-8");
             URL url = new URL("https://preview.ibb.co/hXyhQL/Meeting.jpg");
-            //helper.addAttachment("pic.png", new URLDataSource(url));
             helper.setTo(userEmail);
-            helper.setFrom(template.getOwner().getEmail());
+            InternetAddress address = new InternetAddress(ownerMail, ownerName);
+            helper.setFrom(address);
+            helper.setSubject(meetingTitle + " : " + template.getType());
             freemarker.template.Template messageTemplate = freeMarkerConfiguration.getTemplate("message.html");
             String html = FreeMarkerTemplateUtils.processTemplateIntoString(messageTemplate, template);
             message = javaMailSender.createMimeMessage();

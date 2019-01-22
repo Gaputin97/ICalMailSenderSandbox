@@ -4,22 +4,17 @@ import by.iba.bussiness.calendar.session.Session;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import static org.mockito.Mockito.mock;
 
-@RunWith(MockitoJUnitRunner.class)
 public class TemplateTimeSlotDefinerTest {
 
 
-    @InjectMocks
-    private TemplateTimeSlotDefiner templateTimeSlotDefiner;
+    private static TemplateTimeSlotDefiner templateTimeSlotDefiner;
     private static Session sessionWithHighestId;
     private static Session sessionWithLowestId;
     private static Session sessionWithConcreteId;
@@ -30,11 +25,12 @@ public class TemplateTimeSlotDefinerTest {
 
     @BeforeClass
     public static void setUp() {
+        templateTimeSlotDefiner = new TemplateTimeSlotDefiner();
         highestId = 10;
         lowestId = 5;
         concreteId = 7;
-        Instant firstInstant = mock(Instant.class);
-        Instant secondInstant = mock(Instant.class);
+        Instant firstInstant = new Date().toInstant();
+        Instant secondInstant = new Date().toInstant();
         sessionWithHighestId = new Session(highestId, firstInstant, secondInstant);
         sessionWithLowestId = new Session(lowestId, firstInstant, secondInstant);
         sessionWithConcreteId = new Session(concreteId, firstInstant, secondInstant);
@@ -42,7 +38,6 @@ public class TemplateTimeSlotDefinerTest {
         sessionList.add(sessionWithConcreteId);
         sessionList.add(sessionWithHighestId);
         sessionList.add(sessionWithLowestId);
-
     }
 
     @Test

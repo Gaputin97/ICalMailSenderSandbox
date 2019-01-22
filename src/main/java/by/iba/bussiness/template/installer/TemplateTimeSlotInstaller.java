@@ -2,10 +2,13 @@ package by.iba.bussiness.template.installer;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.session.Session;
+import by.iba.bussiness.calendar.session.SessionType;
 import by.iba.bussiness.template.TemplateTimeSlotDefiner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -18,7 +21,8 @@ public class TemplateTimeSlotInstaller {
         this.templateTimeSlotDefiner = templateTimeSlotDefiner;
     }
 
-    public String installSessions(Appointment appointment, Appointment oldAppointment) {
+
+    public List<Session> installSessionsType(Appointment appointment, Appointment oldAppointment) {
         List<Session> newAppSessions = appointment.getSessionList();
         List<Session> oldAppSessions = oldAppointment.getSessionList();
 
@@ -30,34 +34,46 @@ public class TemplateTimeSlotInstaller {
         int commonMaxId = newAppSessionsMaxId > oldAppSessionsMaxId ? newAppSessionsMaxId : oldAppSessionsMaxId;
         int commonMinId = newAppSessionsMinId < oldAppSessionsMinId ? newAppSessionsMinId : oldAppSessionsMinId;
 
-        StringBuilder sessionsBuilder = new StringBuilder();
+        List<Session> sessionsWithType = new ArrayList<>();
         for (int sessionId = commonMinId; sessionId <= commonMaxId; sessionId++) {
             Session newAppSession = templateTimeSlotDefiner.defineSessionById(sessionId, newAppSessions);
             Session oldAppSession = templateTimeSlotDefiner.defineSessionById(sessionId, oldAppSessions);
             if (newAppSession == null && oldAppSession != null) {
-                sessionsBuilder.append("<s>" + oldAppSession.toString() + "</s>" + " (was deleted)");
-                sessionsBuilder.append("<br>");
+                oldAppSession.setSessionType(SessionType.DELETED);
+                sessionsWithType.add(oldAppSession);
             } else if (oldAppSession == null && newAppSession != null) {
-                sessionsBuilder.append(newAppSession.toString() + " (new date)");
-            } else if (oldAppointment != null && newAppSession != null) {
+                newAppSession.setSessionType(SessionType.NEW);
+                sessionsWithType.add(newAppSession);
+            } else if (oldAppSession != null && newAppSession != null) {
                 if (oldAppSession.equals(newAppSession)) {
-                    sessionsBuilder.append(newAppSession.toString() + " (was not changed)");
-                    sessionsBuilder.append("<br>");
+                    newAppSession.setSessionType(SessionType.NOT_CHANGED);
+                    sessionsWithType.add(newAppSession);
                 } else {
-                    sessionsBuilder.append(newAppSession.toString()
-                            + " (" + "rescheduled from " + oldAppSession.toString() + " )");
-                    sessionsBuilder.append("<br>");
+                    newAppSession.setSessionType(SessionType.RESCHEDULED);
+                    sessionsWithType.add(newAppSession);
                 }
             }
         }
-        return sessionsBuilder.toString();
+        return sessionsWithType;
     }
 
+    public String installSessionsByType(List<Session> sessionsWithTypes) {
+        Collections.sort(sessionsWithTypes);
+        StringBuilder dates = new StringBuilder();
+        for (Session session : sessionsWithTypes) {
+            SessionType sessionType = session.getSessionType();
+            dates.append(session.toString() + sessionType.getStringType());
+            dates.append("<br/>");
+        }
+        return dates.toString();
+
+    }
 
     public String installSessionsIfInvitation(Appointment appointment) {
-        List<Session> newAppSessions = appointment.getSessionList();
+        List<Session> newAppSessions = new ArrayList<>(appointment.getSessionList());
+        Collections.sort(newAppSessions);
         StringBuilder sessionsBuilder = new StringBuilder();
-        newAppSessions.forEach(session -> sessionsBuilder.append(session.toString()).append(" (new date)<br>"));
+        newAppSessions.forEach(session -> sessionsBuilder.append(session.toString()).append(" (new date)<br/>"));
         return sessionsBuilder.toString();
     }
 }

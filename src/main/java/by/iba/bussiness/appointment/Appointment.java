@@ -13,6 +13,9 @@ import java.util.Objects;
 public class Appointment {
     @Id
     private BigInteger id;
+    private String title;
+    private String from;
+    private String fromName;
     private BigInteger meetingId;
     private int updateIndex;
     private int rescheduleIndex;
@@ -21,15 +24,30 @@ public class Appointment {
     private String locationInfo;
     private String subject;
     private String summary;
-    private String title;
     private String startDateTime;
     private String endDateTime;
     private long duration;
-    private Owner owner;
     private List<Session> sessionList;
     private String timeZone;
 
     public Appointment() {
+    }
+
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getFromName() {
+        return fromName;
+    }
+
+    public void setFromName(String fromName) {
+        this.fromName = fromName;
     }
 
     public BigInteger getId() {
@@ -120,14 +138,6 @@ public class Appointment {
         this.locationInfo = locationInfo;
     }
 
-    public Owner getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Owner owner) {
-        this.owner = owner;
-    }
-
     public String getSummary() {
         return summary;
     }
@@ -161,28 +171,6 @@ public class Appointment {
     }
 
     @Override
-    public String toString() {
-        return "Appointment{" +
-                "id=" + id +
-                ", updateIndex=" + updateIndex +
-                ", rescheduleIndex=" + rescheduleIndex +
-                ", subject='" + subject + '\'' +
-                ", meetingId=" + meetingId +
-                ", description='" + description + '\'' +
-                ", duration=" + duration +
-                ", startDateTime='" + startDateTime + '\'' +
-                ", endDateTime='" + endDateTime + '\'' +
-                ", location='" + location + '\'' +
-                ", locationInfo='" + locationInfo + '\'' +
-                ", owner=" + owner +
-                ", summary='" + summary + '\'' +
-                ", sessionList=" + sessionList +
-                ", timeZone='" + timeZone + '\'' +
-                ", title='" + title + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
 
@@ -196,7 +184,8 @@ public class Appointment {
                 Objects.equals(summary, that.summary) &&
                 Objects.equals(startDateTime, that.startDateTime) &&
                 Objects.equals(endDateTime, that.endDateTime) &&
-                Objects.equals(owner, that.owner) &&
+                Objects.equals(from, that.from) &&
+                Objects.equals(fromName, that.fromName) &&
                 Objects.equals(sessionList, that.sessionList) &&
                 Objects.equals(timeZone, that.timeZone);
 
@@ -204,6 +193,6 @@ public class Appointment {
 
     @Override
     public int hashCode() {
-        return Objects.hash(meetingId, description, location, locationInfo, summary, startDateTime, endDateTime, duration, owner, sessionList, timeZone);
+        return Objects.hash(meetingId, description, location, locationInfo, summary, startDateTime, endDateTime, duration, from, fromName, sessionList, timeZone);
     }
 }

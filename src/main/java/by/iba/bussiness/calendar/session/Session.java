@@ -11,12 +11,21 @@ public class Session implements Comparable<Session> {
     private Instant startDateTime;
     private Instant endDateTime;
     private long duration;
+    private SessionType sessionType;
 
     public Session(int id, Instant startDateTime, Instant endDateTime) {
         this.id = id;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         duration = endDateTime.toEpochMilli() - startDateTime.toEpochMilli();
+    }
+
+    public SessionType getSessionType() {
+        return sessionType;
+    }
+
+    public void setSessionType(SessionType sessionType) {
+        this.sessionType = sessionType;
     }
 
     public int getId() {
@@ -53,8 +62,8 @@ public class Session implements Comparable<Session> {
 
     @Override
     public int compareTo(Session anotherSession) {
-        long thisSessionStart = this.getStartDateTime().getNano();
-        long anotherSessionStart = anotherSession.getStartDateTime().getNano();
+        long thisSessionStart = this.getStartDateTime().toEpochMilli();
+        long anotherSessionStart = anotherSession.getStartDateTime().toEpochMilli();
         return Long.compare(thisSessionStart, anotherSessionStart);
     }
 

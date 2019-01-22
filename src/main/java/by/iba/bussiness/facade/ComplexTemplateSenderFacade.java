@@ -12,6 +12,7 @@ import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
+import by.iba.bussiness.enrollment.status.EnrollmentCalendarStatusDefiner;
 import by.iba.bussiness.meeting.type.MeetingType;
 import by.iba.bussiness.meeting.type.MeetingTypeDefiner;
 import by.iba.bussiness.sender.MailSendingResponseStatus;
@@ -43,6 +44,7 @@ public class ComplexTemplateSenderFacade {
     private RruleDefiner rruleDefiner;
     private SimpleMetingCalendarTemplateCreator simpleMetingCalendarTemplateCreator;
     private MeetingTypeDefiner meetingTypeDefiner;
+    private EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner;
 
 
     @Autowired
@@ -55,7 +57,8 @@ public class ComplexTemplateSenderFacade {
                                        EventInstaller eventInstaller,
                                        RruleDefiner rruleDefiner,
                                        SimpleMetingCalendarTemplateCreator simpleMetingCalendarTemplateCreator,
-                                       MeetingTypeDefiner meetingTypeDefiner) {
+                                       MeetingTypeDefiner meetingTypeDefiner,
+                                       EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner) {
         this.messageSender = messageSender;
         this.enrollmentsInstaller = enrollmentsInstaller;
         this.enrollmentService = enrollmentService;
@@ -66,6 +69,7 @@ public class ComplexTemplateSenderFacade {
         this.rruleDefiner = rruleDefiner;
         this.simpleMetingCalendarTemplateCreator = simpleMetingCalendarTemplateCreator;
         this.meetingTypeDefiner = meetingTypeDefiner;
+        this.enrollmentCalendarStatusDefiner = enrollmentCalendarStatusDefiner;
     }
 
     public List<MailSendingResponseStatus> sendTemplate(Appointment appointment, Appointment oldAppointment) {
@@ -82,19 +86,20 @@ public class ComplexTemplateSenderFacade {
         boolean isOldMeetingSimple = (oldMeetingType == MeetingType.SIMPLE);
         VEvent event = null;
         if (isOldMeetingSimple) {
-            List<Session> sessions = appointment.getSessionList();
-            Rrule rrule = rruleDefiner.defineRrule(sessions);
+            List<Session> oldAppSessions = oldAppointment.getSessionList();
+            Rrule rrule = rruleDefiner.defineRrule(oldAppSessions);
             event = eventInstaller.createEventTemplate(rrule, appointment);
         }
         for (Enrollment enrollment : enrollmentList) {
             if (isOldMeetingSimple) {
+                String enrollmentCalendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
                 Calendar cancelCalendarWithoutAttendee =
                         simpleMetingCalendarTemplateCreator.createSimpleCancellationCalendarWithEvent(event);
                 Calendar cancelCalendarWithAttendee =
                         calendarAttendeesInstaller.addAttendeeToCalendar(enrollment, cancelCalendarWithoutAttendee);
-                messageSender.sendCalendarToLearner(cancelCalendarWithAttendee, richDescription);
+                messageSender.sendCalendarToLearner(cancelCalendarWithAttendee, richDescription, enrollmentCalendarStatus, oldAppointment);
             }
-            if (EnrollmentCalendarStatus.CANCELLED.equals(enrollment.getCalendarStatus())
+            if (EnrollmentCalendarStatus.CANCELLATION.equals(enrollment.getCalendarStatus())
                     && EnrollmentStatus.CANCELLED.equals(enrollment.getStatus())) {
                 MailSendingResponseStatus badMailSendingResponseStatus =
                         new MailSendingResponseStatus(false, "User has cancelled status. ", enrollment.getUserEmail());
@@ -110,7 +115,8 @@ public class ComplexTemplateSenderFacade {
                     logger.info("Not need to send message to " + enrollment.getUserEmail());
                 } else {
                     String userEmail = enrollment.getUserEmail();
-                    MailSendingResponseStatus mailSendingResponseStatus = messageSender.sendTemplate(template, userEmail);
+                    String meetingTitle = appointment.getTitle();
+                    MailSendingResponseStatus mailSendingResponseStatus = messageSender.sendTemplate(template, userEmail, meetingTitle);
                     mailSendingResponseStatusList.add(mailSendingResponseStatus);
                     if (mailSendingResponseStatus.isDelivered()) {
                         enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, appointment);
