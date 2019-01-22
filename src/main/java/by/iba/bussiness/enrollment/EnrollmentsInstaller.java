@@ -75,6 +75,6 @@ public class EnrollmentsInstaller {
         enrollment.setCalendarStatus(calendarStatus);
         enrollment.setCalendarVersion(Integer.toString(maximumIndex));
         enrollmentService.save(enrollment);
-        logger.info("Enrollment " + enrollment.getUserEmail() + " has been saved with new calendar version" + enrollment.getCalendarVersion());
+        logger.info("Enrollment " + enrollment.getUserEmail() + " has been saved with new calendar version " + enrollment.getCalendarVersion());
     }
 }
