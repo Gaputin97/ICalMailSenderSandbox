@@ -57,7 +57,7 @@ public class EnrollmentsInstaller {
                     enrollmentService.save(newEnrollment);
                     logger.info("Enrollment " + newEnrollment.getUserEmail() + " has been saved");
                     EnrollmentLearnerStatus enrollmentLearnerStatus =
-                            new EnrollmentLearnerStatus(true, "Enrollment was create.", learner.getEmail());
+                            new EnrollmentLearnerStatus(true, "Enrollment was created.", learner.getEmail());
                     enrollmentLearnerStatuses.add(enrollmentLearnerStatus);
                 }
             } else {

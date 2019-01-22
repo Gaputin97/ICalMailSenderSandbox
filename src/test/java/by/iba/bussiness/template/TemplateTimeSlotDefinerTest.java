@@ -4,7 +4,9 @@ import by.iba.bussiness.calendar.session.Session;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mockito.Mock;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -12,9 +14,11 @@ import java.util.List;
 
 import static org.mockito.Mockito.mock;
 
+@RunWith(MockitoJUnitRunner.class)
 public class TemplateTimeSlotDefinerTest {
 
-    @Mock
+
+    @InjectMocks
     private TemplateTimeSlotDefiner templateTimeSlotDefiner;
     private static Session sessionWithHighestId;
     private static Session sessionWithLowestId;

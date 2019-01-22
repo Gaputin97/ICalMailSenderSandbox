@@ -22,7 +22,7 @@ public class TemplateStatusInstaller {
         String enrollmentStatus = enrollment.getStatus();
         String templateType = null;
         int maximumAppointmentIndex = appointmentHandler.getMaximumIndex(appointment);
-        if ((enrollmentStatus.equals(EnrollmentStatus.CANCELLED))) {
+        if ((enrollmentStatus.equals(EnrollmentStatus.CANCELLED.toString()))) {
             templateType = TemplateType.CANCELLATION.toString();
         } else {
             String enrollmentCalendarVersion = enrollment.getCalendarVersion();

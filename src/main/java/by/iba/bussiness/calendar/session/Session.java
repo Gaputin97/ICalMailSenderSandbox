@@ -76,6 +76,6 @@ public class Session implements Comparable<Session> {
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withZone(ZoneId.of("UTC"));
-        return formatter.format(startDateTime) + " - " + formatter.format(startDateTime);
+        return formatter.format(startDateTime) + " - " + formatter.format(endDateTime);
     }
 }
