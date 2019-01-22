@@ -62,7 +62,7 @@ public class EventInstaller {
         long interval = rrule.getInterval();
         Frequency frequency = rrule.getFrequency();
         String increasedUntilDate = dateIncreaser.increaseAndParse(frequency, interval, startDateOfLastSession);
-        String richDescription = BODY_OPEN_TAG + appointment.getDescription() + BODY_CLOSE_TAG ;
+        String richDescription = BODY_OPEN_TAG + appointment.getDescription() + BODY_CLOSE_TAG;
         VEvent event;
         try {
             Sequence sequence = sequenceDefiner.defineSequence(appointment);

@@ -33,8 +33,8 @@ public class TemplateTimeSlotDefinerTest {
         highestId = 10;
         lowestId = 5;
         concreteId = 7;
-        Instant firstInstant = mock(Instant.class);
-        Instant secondInstant = mock(Instant.class);
+        Instant firstInstant = null;
+        Instant secondInstant = null;
         sessionWithHighestId = new Session(highestId, firstInstant, secondInstant);
         sessionWithLowestId = new Session(lowestId, firstInstant, secondInstant);
         sessionWithConcreteId = new Session(concreteId, firstInstant, secondInstant);
@@ -42,7 +42,6 @@ public class TemplateTimeSlotDefinerTest {
         sessionList.add(sessionWithConcreteId);
         sessionList.add(sessionWithHighestId);
         sessionList.add(sessionWithLowestId);
-
     }
 
     @Test

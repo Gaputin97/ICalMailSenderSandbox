@@ -82,8 +82,8 @@ public class ComplexTemplateSenderFacade {
         boolean isOldMeetingSimple = (oldMeetingType == MeetingType.SIMPLE);
         VEvent event = null;
         if (isOldMeetingSimple) {
-            List<Session> sessions = appointment.getSessionList();
-            Rrule rrule = rruleDefiner.defineRrule(sessions);
+            List<Session> oldAppSessions = oldAppointment.getSessionList();
+            Rrule rrule = rruleDefiner.defineRrule(oldAppSessions);
             event = eventInstaller.createEventTemplate(rrule, appointment);
         }
         for (Enrollment enrollment : enrollmentList) {
