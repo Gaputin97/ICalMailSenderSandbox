@@ -3,6 +3,7 @@ package by.iba.bussiness.calendar.creator.simple;
 import by.iba.bussiness.facade.SimpleCalendarSenderFacade;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.CalendarException;
+import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.component.VEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,15 +28,19 @@ public class SimpleMetingCalendarTemplateCreator {
     }
 
     public Calendar createSimpleCalendarTemplate(VEvent event) {
-        return createCommonRecurrenceTemplate(event, requestCalendar);
+        return createCommonSimpleTemplate(event, requestCalendar);
     }
 
     public Calendar createSimpleCancellationCalendarWithEvent(VEvent event) {
-        return createCommonRecurrenceTemplate(event, cancelCalendar);
+        Property rruleProperty = event.getProperties().getProperty(Property.RRULE);
+        Property exdateProperty = event.getProperties().getProperty(Property.EXDATE);
+        event.getProperties().remove(rruleProperty);
+        event.getProperties().remove(exdateProperty);
+        return createCommonSimpleTemplate(event, cancelCalendar);
     }
 
-    private Calendar createCommonRecurrenceTemplate(VEvent event,
-                                                    Calendar concreteCalendar) {
+    private Calendar createCommonSimpleTemplate(VEvent event,
+                                                Calendar concreteCalendar) {
         try {
             Calendar calendar = new Calendar(concreteCalendar);
             calendar.getComponents().add(event);

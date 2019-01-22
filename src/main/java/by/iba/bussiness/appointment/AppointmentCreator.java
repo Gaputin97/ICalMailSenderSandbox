@@ -35,7 +35,8 @@ public class AppointmentCreator {
         List<TimeSlot> timeSlots = meeting.getTimeSlots();
         appointment.setSessionList(sessionParser.timeSlotListToSessionList(timeSlots));
         appointment.setDuration(meeting.getDuration());
-        appointment.setOwner(meeting.getOwner());
+        appointment.setFrom(invitationTemplate.getFrom());
+        appointment.setFromName(invitationTemplate.getFromName());
         appointment.setTimeZone(meeting.getTimeZone());
         return appointment;
     }

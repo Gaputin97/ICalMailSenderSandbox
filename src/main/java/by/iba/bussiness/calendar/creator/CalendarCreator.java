@@ -5,7 +5,6 @@ import by.iba.bussiness.appointment.AppointmentHandler;
 import by.iba.bussiness.calendar.EnrollmentStatus;
 import by.iba.bussiness.calendar.creator.simple.SimpleMetingCalendarTemplateCreator;
 import by.iba.bussiness.enrollment.Enrollment;
-import by.iba.bussiness.enrollment.service.EnrollmentService;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.component.VEvent;
 import org.slf4j.Logger;

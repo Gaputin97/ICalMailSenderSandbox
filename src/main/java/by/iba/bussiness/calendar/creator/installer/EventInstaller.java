@@ -66,7 +66,7 @@ public class EventInstaller {
         VEvent event;
         try {
             Sequence sequence = sequenceDefiner.defineSequence(appointment);
-            Organizer organizer = new Organizer("mailto:" + appointment.getOwner().getEmail());
+            Organizer organizer = new Organizer("mailto:" + appointment.getFrom());
             Location location = new Location((appointment.getLocation()));
             String increasedUntilString = iСalDateParser.parseToICalDate(increasedUntilDate);
             exDatesList.add(new DateTime(increasedUntilString));

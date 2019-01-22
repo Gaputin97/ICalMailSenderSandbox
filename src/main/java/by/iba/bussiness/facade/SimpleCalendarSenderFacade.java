@@ -10,6 +10,7 @@ import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
+import by.iba.bussiness.enrollment.status.EnrollmentCalendarStatusDefiner;
 import by.iba.bussiness.sender.MailSendingResponseStatus;
 import by.iba.bussiness.sender.MessageSender;
 import net.fortuna.ical4j.model.Calendar;
@@ -34,6 +35,7 @@ public class SimpleCalendarSenderFacade {
     private EnrollmentService enrollmentService;
     private CalendarCreator calendarCreator;
     private EventInstaller eventInstaller;
+    private EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner;
 
     @Autowired
     public SimpleCalendarSenderFacade(CalendarAttendeesInstaller calendarAttendeeInstaller,
@@ -41,13 +43,15 @@ public class SimpleCalendarSenderFacade {
                                       EnrollmentsInstaller enrollmentsInstaller,
                                       EnrollmentService enrollmentService,
                                       CalendarCreator calendarCreator,
-                                      EventInstaller eventInstaller) {
+                                      EventInstaller eventInstaller,
+                                      EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner) {
         this.calendarAttendeeInstaller = calendarAttendeeInstaller;
         this.messageSender = messageSender;
         this.enrollmentsInstaller = enrollmentsInstaller;
         this.enrollmentService = enrollmentService;
         this.calendarCreator = calendarCreator;
         this.eventInstaller = eventInstaller;
+        this.enrollmentCalendarStatusDefiner = enrollmentCalendarStatusDefiner;
     }
 
     public List<MailSendingResponseStatus> sendCalendar(Rrule rrule, Appointment appointment) {
@@ -57,22 +61,24 @@ public class SimpleCalendarSenderFacade {
 
         VEvent event = eventInstaller.createEventTemplate(rrule, appointment);
         for (Enrollment enrollment : enrollmentList) {
-            if (EnrollmentCalendarStatus.CANCELLED.equals(enrollment.getCalendarStatus())
+            if (EnrollmentCalendarStatus.CANCELLATION.equals(enrollment.getCalendarStatus())
                     && EnrollmentStatus.CANCELLED.equals(enrollment.getStatus())) {
                 MailSendingResponseStatus badMailSendingResponseStatus =
-                        new MailSendingResponseStatus(false,"User has cancelled status.", enrollment.getUserEmail());
+                        new MailSendingResponseStatus(false, "User has cancelled status.", enrollment.getUserEmail());
                 mailSendingResponseStatusList.add(badMailSendingResponseStatus);
             } else {
                 Calendar calendarWithoutAttendee = calendarCreator.createCalendarTemplateWithEvent(event, enrollment, appointment);
                 if (calendarWithoutAttendee == null) {
                     MailSendingResponseStatus badMailSendingResponseStatus =
-                            new MailSendingResponseStatus(false ,"User has already updated version.", enrollment.getUserEmail());
+                            new MailSendingResponseStatus(false, "User has already updated version.", enrollment.getUserEmail());
                     mailSendingResponseStatusList.add(badMailSendingResponseStatus);
                     logger.info("Not need to send message to " + enrollment.getUserEmail());
                 } else {
                     Calendar calendarWithAttendee = calendarAttendeeInstaller.addAttendeeToCalendar(enrollment, calendarWithoutAttendee);
                     String richDescription = BODY_OPEN_TAG + appointment.getDescription() + BODY_CLOSE_TAG;
-                    MailSendingResponseStatus mailSendingResponseStatus = messageSender.sendCalendarToLearner(calendarWithAttendee, richDescription);
+                    String enrollmentCalendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
+                    MailSendingResponseStatus mailSendingResponseStatus =
+                            messageSender.sendCalendarToLearner(calendarWithAttendee, richDescription, enrollmentCalendarStatus, appointment);
                     mailSendingResponseStatusList.add(mailSendingResponseStatus);
                     if (mailSendingResponseStatus.isDelivered()) {
                         enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, appointment);
