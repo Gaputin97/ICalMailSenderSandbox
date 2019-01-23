@@ -1,4 +1,4 @@
-package by.iba.bussiness.calendar.creator;
+package by.iba.bussiness.calendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

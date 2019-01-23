@@ -1,7 +1,6 @@
-package by.iba.bussiness.enrollment.status;
+package by.iba.bussiness.calendar.status;
 
-import by.iba.bussiness.calendar.EnrollmentCalendarStatus;
-import by.iba.bussiness.calendar.EnrollmentStatus;
+import by.iba.bussiness.enrollment.status.EnrollmentStatus;
 import by.iba.bussiness.enrollment.Enrollment;
 import org.springframework.stereotype.Component;
 

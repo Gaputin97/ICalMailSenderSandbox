@@ -1,11 +1,11 @@
-package by.iba.bussiness.enrollment;
+package by.iba.bussiness.enroll;
 
-public class EnrollmentLearnerStatus {
+public class EnrollLearnerStatus {
     private boolean wasEnroll;
     private String message;
     private String learnerEmail;
 
-    public EnrollmentLearnerStatus(boolean wasEnroll, String message, String learnerEmail) {
+    public EnrollLearnerStatus(boolean wasEnroll, String message, String learnerEmail) {
         this.wasEnroll = wasEnroll;
         this.message = message;
         this.learnerEmail = learnerEmail;

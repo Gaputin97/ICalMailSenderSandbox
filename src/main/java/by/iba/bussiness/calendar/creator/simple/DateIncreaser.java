@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 public class DateIncreaser {
     private final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(SessionConstants.DATE_FORMAT).withZone(ZoneId.of("UTC"));
 
-    public String increaseAndParse(Frequency frequency, long interval, Instant date) {
+    public String increaseDate(Frequency frequency, long interval, Instant date) {
         long milliseconds = date.toEpochMilli();
         milliseconds += frequency.getMillisecondsInFreq() * interval;
         Instant instant = Instant.ofEpochMilli(milliseconds);

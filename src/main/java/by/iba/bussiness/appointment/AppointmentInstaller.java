@@ -27,7 +27,7 @@ public class AppointmentInstaller {
             newAppointment = appointmentCreator.createAppointment(meeting, invitationTemplate);
             appointmentRepository.save(newAppointment);
         } else {
-            Appointment updatedAppointment = appointmentHandler.getUpdatedAppointment(meeting, invitationTemplate);
+            Appointment updatedAppointment = appointmentHandler.updateAppointment(meeting, invitationTemplate);
             if ((updatedAppointment.getUpdateIndex() == 0 && updatedAppointment.getRescheduleIndex() == 0) ||
                     (updatedAppointment.getRescheduleIndex() > oldAppointment.getRescheduleIndex() ||
                             updatedAppointment.getUpdateIndex() > oldAppointment.getUpdateIndex())) {

@@ -1,7 +1,7 @@
 package by.iba.bussiness.sender;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.calendar.creator.CalendarTextEditor;
+import by.iba.bussiness.calendar.CalendarTextEditor;
 import by.iba.bussiness.template.Template;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;

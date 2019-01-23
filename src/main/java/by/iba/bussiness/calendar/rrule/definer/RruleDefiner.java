@@ -30,31 +30,38 @@ public class RruleDefiner {
     }
 
     public Rrule defineRrule(List<Session> sessions) {
-        Collections.sort(sessions);
-        Session lastSession = sessions.get(sessions.size() - 1);
-        Session firstSession = sessions.get(0);
-
-        Instant startDateOfFirstSession = firstSession.getStartDateTime();
-        Instant startDateOfLastSession = lastSession.getEndDateTime();
-
-        List<Instant> startDatesOfSessions = new LinkedList();
-        sessions.forEach(x -> startDatesOfSessions.add(x.getStartDateTime()));
-
-        Frequency frequency = frequencyDefiner.defineFrequency(startDatesOfSessions);
-        long interval;
-        if (startDatesOfSessions.size() == 1) {
-            interval = 1;
-        } else {
-            interval = intervalDefiner.defineInterval(startDatesOfSessions, frequency);
-        }
         Rrule rrule = new Rrule();
-        rrule.setInterval(interval);
-        rrule.setFrequency(frequency);
-        logger.info("Interval of rrule is " + interval + " and freq type is " + frequency.toString());
+        if (sessions.size() == 1) {
+            Frequency daily = Frequency.DAILY;
+            long count = 1;
+            rrule.setCount(count);
+            rrule.setFrequency(daily);
+        } else {
+            Collections.sort(sessions);
+            Session lastSession = sessions.get(sessions.size() - 1);
+            Session firstSession = sessions.get(0);
 
-        List<Instant> exDates = exDatesDefiner.defineExDates(rrule, startDateOfFirstSession, startDateOfLastSession, startDatesOfSessions);
-        rrule.setExDates(exDates);
-        logger.info("Amount of exdates is " + rrule.getExDates().size());
+            Instant startDateOfFirstSession = firstSession.getStartDateTime();
+            Instant startDateOfLastSession = lastSession.getEndDateTime();
+
+            List<Instant> startDatesOfSessions = new LinkedList();
+            sessions.forEach(x -> startDatesOfSessions.add(x.getStartDateTime()));
+
+            Frequency frequency = frequencyDefiner.defineFrequency(startDatesOfSessions);
+            long interval;
+            if (startDatesOfSessions.size() == 1) {
+                interval = 1;
+            } else {
+                interval = intervalDefiner.defineInterval(startDatesOfSessions, frequency);
+            }
+            rrule.setInterval(interval);
+            rrule.setFrequency(frequency);
+            logger.info("Interval of rrule is " + interval + " and freq type is " + frequency.toString());
+
+            List<Instant> exDates = exDatesDefiner.defineExDates(rrule, startDateOfFirstSession, startDateOfLastSession, startDatesOfSessions);
+            rrule.setExDates(exDates);
+            logger.info("Amount of exdates is " + rrule.getExDates().size());
+        }
         return rrule;
     }
 }

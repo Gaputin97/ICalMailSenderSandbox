@@ -20,11 +20,11 @@ import java.text.ParseException;
 public class CalendarAttendeesInstaller {
     private static final Logger logger = LoggerFactory.getLogger(CalendarAttendeesInstaller.class);
 
-    public Calendar addAttendeeToCalendar(Enrollment enrollment, Calendar calendar) {
+    public Calendar installAttendeeToCalendar(Enrollment enrollment, Calendar preInstalledCalendar) {
         String email = enrollment.getUserEmail();
         Calendar calendarWithAttendee;
         try {
-            calendarWithAttendee = new Calendar(calendar);
+            calendarWithAttendee = new Calendar(preInstalledCalendar);
         } catch (ParseException | URISyntaxException | IOException e) {
             logger.error("Can't create calendar based on another calendar", e);
             throw new CalendarException("Can't create calendar.");

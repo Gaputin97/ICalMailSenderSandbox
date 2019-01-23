@@ -8,8 +8,10 @@ import java.util.List;
 
 public class Rrule {
     private Frequency frequency;
-    private Long interval;
+    private long interval;
     private List<Instant> exDates;
+    private long count;
+
 
     public Rrule() {
         exDates = new ArrayList<>();
@@ -37,5 +39,17 @@ public class Rrule {
 
     public void setExDates(List<Instant> exDates) {
         this.exDates = exDates;
+    }
+
+    public void setInterval(long interval) {
+        this.interval = interval;
+    }
+
+    public long getCount() {
+        return count;
+    }
+
+    public void setCount(long count) {
+        this.count = count;
     }
 }

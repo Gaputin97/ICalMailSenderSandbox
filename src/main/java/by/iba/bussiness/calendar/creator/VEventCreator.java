@@ -1,6 +1,7 @@
-package by.iba.bussiness.calendar.creator.installer;
+package by.iba.bussiness.calendar.creator;
 
 import by.iba.bussiness.appointment.Appointment;
+import by.iba.bussiness.calendar.CalendarRruleParser;
 import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
 import by.iba.bussiness.calendar.creator.simple.DateIncreaser;
 import by.iba.bussiness.calendar.creator.simple.IcalDateParser;
@@ -23,13 +24,14 @@ import org.springframework.stereotype.Component;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 @Component
-public class EventInstaller {
-    private static final Logger logger = LoggerFactory.getLogger(EventInstaller.class);
+public class VEventCreator {
+    private static final Logger logger = LoggerFactory.getLogger(VEventCreator.class);
     private static final String RICH_TEXT_CID = "rich_description";
     private static final String BODY_OPEN_TAG = "<body>";
     private static final String BODY_CLOSE_TAG = "</body>";
@@ -37,20 +39,23 @@ public class EventInstaller {
     private IcalDateParser iСalDateParser;
     private DateIncreaser dateIncreaser;
     private SequenceDefiner sequenceDefiner;
+    private CalendarRruleParser calendarRruleParser;
 
     @Autowired
-    public EventInstaller(IcalDateParser icalDateParser,
-                          DateIncreaser dateIncreaser,
-                          SequenceDefiner sequenceDefiner) {
+    public VEventCreator(IcalDateParser icalDateParser,
+                         DateIncreaser dateIncreaser,
+                         SequenceDefiner sequenceDefiner,
+                         CalendarRruleParser calendarRruleParser) {
         this.iСalDateParser = icalDateParser;
         this.dateIncreaser = dateIncreaser;
         this.sequenceDefiner = sequenceDefiner;
+        this.calendarRruleParser = calendarRruleParser;
     }
 
-    public VEvent createEventTemplate(Rrule rrule, Appointment appointment) {
+    public VEvent createCommonVEventTemplate(Rrule rrule, Appointment appointment) {
         DateList exDatesList = new DateList();
-        rrule.getExDates().forEach(x -> exDatesList.add(new DateTime(x.toEpochMilli())));
-        List<Session> sessions = appointment.getSessionList();
+        rrule.getExDates().forEach(exDate -> exDatesList.add(new DateTime(exDate.toEpochMilli())));
+        List<Session> sessions = new ArrayList<>(appointment.getSessionList());
         Collections.sort(sessions);
 
         Session firstSession = sessions.get(NUMBER_OF_FIRST_TIME_SLOT);
@@ -61,24 +66,24 @@ public class EventInstaller {
 
         long interval = rrule.getInterval();
         Frequency frequency = rrule.getFrequency();
-        String increasedUntilDate = dateIncreaser.increaseAndParse(frequency, interval, startDateOfLastSession);
+        String increasedUntilDate = dateIncreaser.increaseDate(frequency, interval, startDateOfLastSession);
         String richDescription = BODY_OPEN_TAG + appointment.getDescription() + BODY_CLOSE_TAG;
+        String parsedIncreasedUntilDate = iСalDateParser.parseToICalDate(increasedUntilDate);
+        Recur recurrence = calendarRruleParser.parseToCalendarRrule(rrule, parsedIncreasedUntilDate);
         VEvent event;
         try {
             Sequence sequence = sequenceDefiner.defineSequence(appointment);
             Organizer organizer = new Organizer("mailto:" + appointment.getFrom());
             Location location = new Location((appointment.getLocation()));
-            String increasedUntilString = iСalDateParser.parseToICalDate(increasedUntilDate);
-            exDatesList.add(new DateTime(increasedUntilString));
-
-            Recur recurrence = new Recur("FREQ=" + frequency.toString() + ";" + "INTERVAL="
-                    + interval + ";" + "UNTIL=" + increasedUntilString + ";");
+            if (rrule.getCount() != 1) {
+                exDatesList.add(new DateTime(parsedIncreasedUntilDate));
+            }
             RRule rRule = new RRule(recurrence);
             Uid UID = new Uid(appointment.getId().toString());
             DateTime startDateTime = new DateTime(startDateOfFirstSession.toEpochMilli());
             DateTime endDateTime = new DateTime(endDateOfFirstSession.toEpochMilli());
 
-            Description description = new Description("HAARDCOOOOODE!!!!!");
+            Description description = new Description("Plain description");
             AltRep altRep = new AltRep("CID:" + RICH_TEXT_CID);
             description.getParameters().add(altRep);
 

@@ -24,29 +24,29 @@ public class AppointmentHandler {
         this.appointmentCreator = appointmentCreator;
     }
 
-    public Appointment getUpdatedAppointment(Meeting updatedMeeting, InvitationTemplate updatedTemplate) {
+    public Appointment updateAppointment(Meeting updatedMeeting, InvitationTemplate updatedTemplate) {
         Appointment newAppointment = appointmentCreator.createAppointment(updatedMeeting, updatedTemplate);
-        Appointment sourceAppointment = appointmentRepository.getByMeetingId(updatedMeeting.getId());
+        Appointment updatedAppointment = appointmentRepository.getByMeetingId(updatedMeeting.getId());
 
-        BigInteger sourceId = sourceAppointment.getId();
-        int sourceUpdatedIndex = sourceAppointment.getUpdateIndex();
-        int sourceRescheduledIndex = sourceAppointment.getRescheduleIndex();
+        BigInteger updatedAppId = updatedAppointment.getId();
+        int updatedAppUpdatedIndex = updatedAppointment.getUpdateIndex();
+        int updatedAppRescheduleIndex = updatedAppointment.getRescheduleIndex();
 
-        if (sourceAppointment.equals(newAppointment)) {
-            newAppointment = sourceAppointment;
+        if (updatedAppointment.equals(newAppointment)) {
+            newAppointment = updatedAppointment;
         } else {
-            int maximumIndex = getMaximumIndex(sourceAppointment);
-            List<Session> sourceTimeSlots = sourceAppointment.getSessionList();
-            List<Session> newTimeSlots = newAppointment.getSessionList();
-            if (!sourceTimeSlots.equals(newTimeSlots)) {
-                newAppointment.setUpdateIndex(sourceUpdatedIndex);
+            int maximumIndex = getMaximumIndex(updatedAppointment);
+            List<Session> updatedAppSessions = updatedAppointment.getSessionList();
+            List<Session> newAppSessions = newAppointment.getSessionList();
+            if (!updatedAppSessions.equals(newAppSessions)) {
+                newAppointment.setUpdateIndex(updatedAppUpdatedIndex);
                 newAppointment.setRescheduleIndex(++maximumIndex);
             } else {
-                newAppointment.setRescheduleIndex(sourceRescheduledIndex);
+                newAppointment.setRescheduleIndex(updatedAppRescheduleIndex);
                 newAppointment.setUpdateIndex(++maximumIndex);
             }
         }
-        newAppointment.setId(sourceId);
+        newAppointment.setId(updatedAppId);
         return newAppointment;
     }
 
