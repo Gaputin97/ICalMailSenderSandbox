@@ -26,8 +26,8 @@ public class CalendarCreator {
         String enrollmentStatus = enrollment.getStatus();
         Calendar calendar = null;
         int maximumAppointmentIndex = appointmentHandler.getMaximumIndex(appointment);
-        if ((enrollmentStatus == (EnrollmentStatus.CANCELLED.name()))) {
-            calendar = simpleMetingCalendarTemplateCreator.createSimpleCancellationCalendarWithEvent(vEvent);
+        if ((enrollmentStatus.equals(EnrollmentStatus.CANCELLED.name()))) {
+            calendar = simpleMetingCalendarTemplateCreator.createSimpleCancellationCalendar(vEvent);
         } else {
             String enrollmentCalendarVersion = enrollment.getCalendarVersion();
             if (enrollmentCalendarVersion == null) {

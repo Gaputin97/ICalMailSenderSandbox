@@ -5,6 +5,7 @@ import by.iba.bussiness.calendar.CalendarRruleParser;
 import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
 import by.iba.bussiness.calendar.creator.simple.DateIncreaser;
 import by.iba.bussiness.calendar.creator.simple.IcalDateParser;
+import by.iba.bussiness.calendar.rrule.Count;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 import by.iba.bussiness.calendar.session.Session;
@@ -75,7 +76,7 @@ public class VEventCreator {
             Sequence sequence = sequenceDefiner.defineSequence(appointment);
             Organizer organizer = new Organizer("mailto:" + appointment.getFrom());
             Location location = new Location((appointment.getLocation()));
-            if (rrule.getCount() != 1) {
+            if (!rrule.getCount().equals(Count.DEFAULT)) {
                 exDatesList.add(new DateTime(parsedIncreasedUntilDate));
             }
             RRule rRule = new RRule(recurrence);

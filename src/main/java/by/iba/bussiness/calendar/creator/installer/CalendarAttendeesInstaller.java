@@ -31,7 +31,7 @@ public class CalendarAttendeesInstaller {
         }
         CalendarComponent vEvent = calendarWithAttendee.getComponent(Component.VEVENT);
         Attendee attendee = new Attendee(URI.create(email));
-        attendee.getParameters().add(Rsvp.FALSE);
+        attendee.getParameters().add(Rsvp.TRUE);
         attendee.getParameters().add(Role.REQ_PARTICIPANT);
         vEvent.getProperties().add(attendee);
         return calendarWithAttendee;

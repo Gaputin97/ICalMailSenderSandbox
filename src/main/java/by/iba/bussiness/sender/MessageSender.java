@@ -94,24 +94,21 @@ public class MessageSender {
     public MailSendingResponseStatus sendTemplate(Template template, String userEmail, String meetingTitle) {
         MimeMessage message;
         MailSendingResponseStatus mailSendingResponseStatus;
-        String ownerMail = template.getFrom();
-        String ownerName = template.getFromName();
+        String from = template.getFrom();
+        String fromName = template.getFromName();
         try {
             message = javaMailSender.createMimeMessage();
+            message.setSubject(meetingTitle + " : " + template.getType());
             MimeMessageHelper helper = new MimeMessageHelper(message,
                     true,
                     "utf-8");
             URL url = new URL("https://preview.ibb.co/hXyhQL/Meeting.jpg");
             helper.setTo(userEmail);
-            InternetAddress address = new InternetAddress(ownerMail, ownerName);
+            InternetAddress address = new InternetAddress(from, fromName);
             helper.setFrom(address);
-            helper.setSubject(meetingTitle + " : " + template.getType());
             freemarker.template.Template messageTemplate = freeMarkerConfiguration.getTemplate("message.html");
             String html = FreeMarkerTemplateUtils.processTemplateIntoString(messageTemplate, template);
-            message = javaMailSender.createMimeMessage();
             Multipart multipart = new MimeMultipart();
-            MimeMessageHelper messageHelper = new MimeMessageHelper(message, true);
-            messageHelper.setTo(userEmail);
             MimeBodyPart htmlPart = new MimeBodyPart();
             htmlPart.setContent(html, "text/html; charset=UTF-8");
 

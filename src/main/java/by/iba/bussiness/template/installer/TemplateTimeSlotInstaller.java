@@ -60,11 +60,9 @@ public class TemplateTimeSlotInstaller {
     public String installSessionsByType(List<Session> sessionsWithTypes) {
         Collections.sort(sessionsWithTypes);
         StringBuilder dates = new StringBuilder();
-        for (Session session : sessionsWithTypes) {
-            SessionType sessionType = session.getSessionType();
-            dates.append(session.toString() + sessionType.getStringType());
-            dates.append("<br/>");
-        }
+        sessionsWithTypes.forEach(session -> {
+            dates.append(session.toString() + session.getSessionType()).append("<br/>");
+        });
         return dates.toString();
 
     }

@@ -1,5 +1,6 @@
 package by.iba.bussiness.meeting;
 
+import by.iba.bussiness.contact.Contact;
 import by.iba.bussiness.meeting.timeslot.TimeSlot;
 import by.iba.bussiness.owner.Owner;
 import org.springframework.data.annotation.Id;
@@ -24,6 +25,7 @@ public class Meeting {
     private List<TimeSlot> timeSlots;
     private String timeZone;
     private String title;
+    private Contact contact;
 
     public Meeting() {
     }
@@ -130,6 +132,14 @@ public class Meeting {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
     }
 
     @Override

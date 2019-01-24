@@ -28,19 +28,19 @@ public class SimpleMetingCalendarTemplateCreator {
     }
 
     public Calendar createSimpleCalendarTemplate(VEvent event) {
-        return createCommonSimpleTemplate(event, requestCalendar);
+        return createCommonSimpleCalendarTemplate(event, requestCalendar);
     }
 
-    public Calendar createSimpleCancellationCalendarWithEvent(VEvent event) {
+    public Calendar createSimpleCancellationCalendar(VEvent event) {
         Property rruleProperty = event.getProperties().getProperty(Property.RRULE);
         Property exdateProperty = event.getProperties().getProperty(Property.EXDATE);
         event.getProperties().remove(rruleProperty);
         event.getProperties().remove(exdateProperty);
-        return createCommonSimpleTemplate(event, cancelCalendar);
+        return createCommonSimpleCalendarTemplate(event, cancelCalendar);
     }
 
-    private Calendar createCommonSimpleTemplate(VEvent event,
-                                                Calendar concreteCalendar) {
+    private Calendar createCommonSimpleCalendarTemplate(VEvent event,
+                                                        Calendar concreteCalendar) {
         try {
             Calendar calendar = new Calendar(concreteCalendar);
             calendar.getComponents().add(event);

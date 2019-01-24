@@ -15,6 +15,8 @@ import by.iba.bussiness.meeting.service.MeetingService;
 import by.iba.bussiness.meeting.type.MeetingType;
 import by.iba.bussiness.meeting.type.MeetingTypeDefiner;
 import by.iba.bussiness.notification.service.NotificationService;
+import by.iba.bussiness.placeholder.PlaceHolderReplacer;
+import by.iba.bussiness.placeholder.PlaceHoldersInstaller;
 import by.iba.bussiness.sender.MailSendingResponseStatus;
 import by.iba.exception.ServiceException;
 import org.slf4j.Logger;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
@@ -37,6 +40,8 @@ public class NotificationServiceImpl implements NotificationService {
     private SimpleCalendarSenderFacade simpleCalendarSenderFacade;
     private AppointmentRepository appointmentRepository;
     private RruleDefiner rruleDefiner;
+    private PlaceHoldersInstaller placeHoldersInstaller;
+    private PlaceHolderReplacer placeHolderReplacer;
 
     @Autowired
     public NotificationServiceImpl(MeetingService meetingService,
@@ -46,7 +51,9 @@ public class NotificationServiceImpl implements NotificationService {
                                    ComplexTemplateSenderFacade complexTemplateSenderFacade,
                                    SimpleCalendarSenderFacade simpleCalendarSenderFacade,
                                    AppointmentRepository appointmentRepository,
-                                   RruleDefiner rruleDefiner) {
+                                   RruleDefiner rruleDefiner,
+                                   PlaceHoldersInstaller placeHoldersInstaller,
+                                   PlaceHolderReplacer placeHolderReplacer) {
         this.meetingService = meetingService;
         this.invitationTemplateService = invitationTemplateService;
         this.appointmentInstaller = appointmentInstaller;
@@ -55,6 +62,8 @@ public class NotificationServiceImpl implements NotificationService {
         this.simpleCalendarSenderFacade = simpleCalendarSenderFacade;
         this.appointmentRepository = appointmentRepository;
         this.rruleDefiner = rruleDefiner;
+        this.placeHoldersInstaller = placeHoldersInstaller;
+        this.placeHolderReplacer = placeHolderReplacer;
     }
 
     @Override
@@ -70,8 +79,10 @@ public class NotificationServiceImpl implements NotificationService {
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
         }
         InvitationTemplate invitationTemplate = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
+        Map<String, String> placeHolders = placeHoldersInstaller.installPlaceHoldersMap(meeting);
+        InvitationTemplate modifiedInvTemplate = placeHolderReplacer.replacePlaceHolders(placeHolders, invitationTemplate);
         Appointment oldAppointment = appointmentRepository.getByMeetingId(new BigInteger(meetingId));
-        Appointment newAppointment = appointmentInstaller.installAppointment(meeting, invitationTemplate, oldAppointment);
+        Appointment newAppointment = appointmentInstaller.installAppointment(meeting, modifiedInvTemplate, oldAppointment);
         List<MailSendingResponseStatus> mailSendingResponseStatusList;
         List<Session> newAppSessions = newAppointment.getSessionList();
         MeetingType newAppointmentMeetingType = meetingTypeDefiner.defineMeetingType(newAppSessions);

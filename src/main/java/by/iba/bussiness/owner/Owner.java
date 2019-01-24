@@ -11,7 +11,7 @@ public class Owner {
     private String email;
     private String name;
     @Id
-    private ObjectId id;
+    private long id;
 
     public String getEmail() {
         return email;
@@ -32,11 +32,11 @@ public class Owner {
     public Owner() {
     }
 
-    public ObjectId getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(long id) {
         this.id = id;
     }
 

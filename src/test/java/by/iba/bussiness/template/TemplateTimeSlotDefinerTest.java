@@ -4,6 +4,7 @@ import by.iba.bussiness.calendar.session.Session;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.InjectMocks;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 public class TemplateTimeSlotDefinerTest {
 
 
+    @InjectMocks
     private static TemplateTimeSlotDefiner templateTimeSlotDefiner;
     private static Session sessionWithHighestId;
     private static Session sessionWithLowestId;

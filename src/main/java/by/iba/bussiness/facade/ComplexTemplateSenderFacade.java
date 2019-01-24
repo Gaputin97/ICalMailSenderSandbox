@@ -94,7 +94,7 @@ public class ComplexTemplateSenderFacade {
             if (isOldMeetingSimple) {
                 String enrollmentCalendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
                 Calendar cancelCalendarWithoutAttendee =
-                        simpleMetingCalendarTemplateCreator.createSimpleCancellationCalendarWithEvent(event);
+                        simpleMetingCalendarTemplateCreator.createSimpleCancellationCalendar(event);
                 Calendar cancelCalendarWithAttendee =
                         calendarAttendeesInstaller.installAttendeeToCalendar(enrollment, cancelCalendarWithoutAttendee);
                 messageSender.sendCalendarToLearner(cancelCalendarWithAttendee, richDescription, enrollmentCalendarStatus, oldAppointment);
