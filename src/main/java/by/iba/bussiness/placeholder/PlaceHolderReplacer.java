@@ -16,11 +16,12 @@ public class PlaceHolderReplacer {
         String notModifiedLocation = invTemplateWithoutPlaceHolders.getLocationILT();
         String notModifiedDescription = invTemplateWithoutPlaceHolders.getFaceToFaceDescription();
 
+        String modifiedDescription = replaceFieldPlaceholders(placeHolders, notModifiedDescription);
         String modifiedSubject = replaceFieldPlaceholders(placeHolders, notModifiedSubject);
         String modifiedFrom = replaceFieldPlaceholders(placeHolders, notModifiedFrom);
         String modifiedFromName = replaceFieldPlaceholders(placeHolders, notModifiedFromName);
         String modifiedLocation = replaceFieldPlaceholders(placeHolders, notModifiedLocation);
-        String modifiedDescription = replaceFieldPlaceholders(placeHolders, notModifiedDescription);
+
 
         InvitationTemplate modifiedInvitationTemplate = new InvitationTemplate();
         modifiedInvitationTemplate.setSubject(modifiedSubject);
@@ -34,13 +35,14 @@ public class PlaceHolderReplacer {
 
 
     public String replaceFieldPlaceholders(Map<String, String> placeHolders, String field) {
-        AtomicReference<String> atomicReference = new AtomicReference<>();
-        placeHolders.entrySet().forEach(map -> {
+        String modifiedField = field;
+        for (Map.Entry<String, String> map : placeHolders.entrySet()) {
             String placeHolder = map.getKey();
             String placeHolderValue = map.getValue();
-            atomicReference.set(field.replaceAll(placeHolder, placeHolderValue));
-        });
-        return atomicReference.get();
+            if (field.contains(placeHolder))
+                modifiedField = modifiedField.replace(placeHolder, placeHolderValue);
+        }
+        return modifiedField;
 
     }
 }
