@@ -27,8 +27,6 @@ import java.util.List;
 @Component
 public class SimpleCalendarSenderFacade {
     private static final Logger logger = LoggerFactory.getLogger(SimpleCalendarSenderFacade.class);
-    private static final String BODY_OPEN_TAG = "<body>";
-    private static final String BODY_CLOSE_TAG = "</body>";
     private CalendarAttendeesInstaller calendarAttendeeInstaller;
     private MessageSender messageSender;
     private EnrollmentsInstaller enrollmentsInstaller;
@@ -75,10 +73,9 @@ public class SimpleCalendarSenderFacade {
                     logger.info("Not need to send message to " + enrollment.getUserEmail());
                 } else {
                     Calendar calendarWithAttendee = calendarAttendeeInstaller.installAttendeeToCalendar(enrollment, calendarWithoutAttendee);
-                    String richDescription = BODY_OPEN_TAG + appointment.getDescription() + BODY_CLOSE_TAG;
                     String enrollmentCalendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
                     MailSendingResponseStatus mailSendingResponseStatus =
-                            messageSender.sendCalendarToLearner(calendarWithAttendee, richDescription, enrollmentCalendarStatus, appointment);
+                            messageSender.sendCalendarToLearner(calendarWithAttendee, enrollmentCalendarStatus, appointment);
                     mailSendingResponseStatusList.add(mailSendingResponseStatus);
                     if (mailSendingResponseStatus.isDelivered()) {
                         enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, appointment);

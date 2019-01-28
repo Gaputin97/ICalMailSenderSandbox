@@ -19,6 +19,25 @@ public class InvitationTemplate {
     private String locationLVC;
     private String subject;
 
+    public InvitationTemplate(InvitationTemplate another) {
+        this.id = another.id;
+        this.index = another.index;
+        this.key = another.key;
+        this.from = another.from;
+        this.fromName = another.fromName;
+        this.blendedDescription = another.blendedDescription;
+        this.faceToFaceDescription = another.faceToFaceDescription;
+        this.onlineDescription = another.onlineDescription;
+        this.locationBLD = another.locationBLD;
+        this.locationILT = another.locationILT;
+        this.locationLVC = another.locationLVC;
+        this.subject = another.subject;
+    }
+
+    public InvitationTemplate() {
+
+    }
+
     public String getId() {
         return id;
     }

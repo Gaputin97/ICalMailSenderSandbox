@@ -1,6 +1,6 @@
 package by.iba.bussiness.notification;
 
-import by.iba.bussiness.notification.service.NotificationService;
+import by.iba.bussiness.notification.service.SenderService;
 import by.iba.bussiness.sender.MailSendingResponseStatus;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-public class NotificationController {
-    private NotificationService senderService;
+public class SenderController {
+    private SenderService senderService;
 
     @Autowired
-    public NotificationController(NotificationService senderService) {
+    public SenderController(SenderService senderService) {
         this.senderService = senderService;
     }
 

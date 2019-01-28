@@ -74,7 +74,6 @@ public class ComplexTemplateSenderFacade {
 
     public List<MailSendingResponseStatus> sendTemplate(Appointment appointment, Appointment oldAppointment) {
         BigInteger meetingId = appointment.getMeetingId();
-        String richDescription = appointment.getDescription();
         List<MailSendingResponseStatus> mailSendingResponseStatusList = new ArrayList<>();
         List<Enrollment> enrollmentList = enrollmentService.getAllByParentId(meetingId);
         Template installedTemplate = templateInstaller.installCommonPartsOfTemplate(appointment, oldAppointment);
@@ -97,7 +96,7 @@ public class ComplexTemplateSenderFacade {
                         simpleMetingCalendarTemplateCreator.createSimpleCancellationCalendar(event);
                 Calendar cancelCalendarWithAttendee =
                         calendarAttendeesInstaller.installAttendeeToCalendar(enrollment, cancelCalendarWithoutAttendee);
-                messageSender.sendCalendarToLearner(cancelCalendarWithAttendee, richDescription, enrollmentCalendarStatus, oldAppointment);
+                messageSender.sendCalendarToLearner(cancelCalendarWithAttendee, enrollmentCalendarStatus, oldAppointment);
             }
             if (EnrollmentCalendarStatus.CANCELLATION.equals(enrollment.getCalendarStatus())
                     && EnrollmentStatus.CANCELLED.equals(enrollment.getStatus())) {

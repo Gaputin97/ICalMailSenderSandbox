@@ -83,8 +83,7 @@ public class VEventCreator {
             Uid UID = new Uid(appointment.getId().toString());
             DateTime startDateTime = new DateTime(startDateOfFirstSession.toEpochMilli());
             DateTime endDateTime = new DateTime(endDateOfFirstSession.toEpochMilli());
-
-            Description description = new Description("Plain description");
+            Description description = new Description(appointment.getPlainDescription());
             AltRep altRep = new AltRep("CID:" + RICH_TEXT_CID);
             description.getParameters().add(altRep);
 

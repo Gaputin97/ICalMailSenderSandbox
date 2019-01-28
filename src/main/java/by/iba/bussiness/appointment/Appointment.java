@@ -20,6 +20,7 @@ public class Appointment {
     private int updateIndex;
     private int rescheduleIndex;
     private String description;
+    private String plainDescription;
     private String location;
     private String locationInfo;
     private String subject;
@@ -33,6 +34,14 @@ public class Appointment {
     public Appointment() {
     }
 
+
+    public String getPlainDescription() {
+        return plainDescription;
+    }
+
+    public void setPlainDescription(String plainDescription) {
+        this.plainDescription = plainDescription;
+    }
 
     public String getFrom() {
         return from;

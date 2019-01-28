@@ -21,11 +21,11 @@ public class AppointmentCreator {
     public Appointment createAppointment(Meeting meeting, InvitationTemplate invitationTemplate) {
         Appointment appointment = new Appointment();
         appointment.setMeetingId(meeting.getId());
-        appointment.setDescription(invitationTemplate.getFaceToFaceDescription());
+        appointment.setDescription(meeting.getDescription());
         appointment.setLocation(invitationTemplate.getLocationILT());
         appointment.setLocationInfo(meeting.getLocationInfo());
         appointment.setSummary(meeting.getSummary());
-
+        appointment.setPlainDescription(meeting.getPlainDescription());
         appointment.setSubject(invitationTemplate.getSubject());
         appointment.setTitle(meeting.getTitle());
         appointment.setStartDateTime(meeting.getStartDateTime());

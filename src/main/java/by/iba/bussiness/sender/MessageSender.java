@@ -34,6 +34,8 @@ public class MessageSender {
     private JavaMailSender javaMailSender;
     private CalendarTextEditor calendarTextEditor;
     private Configuration freeMarkerConfiguration;
+    private static final String BODY_OPEN_TAG = "<body>";
+    private static final String BODY_CLOSE_TAG = "</body>";
 
     @Autowired
     public MessageSender(JavaMailSender javaMailSender,
@@ -44,15 +46,18 @@ public class MessageSender {
         this.freeMarkerConfiguration = freeMarkerConfiguration;
     }
 
-    public MailSendingResponseStatus sendCalendarToLearner(Calendar calendar, String richDescription, String enrollmentCalendarStatus, Appointment appointment) {
+    public MailSendingResponseStatus sendCalendarToLearner(Calendar calendar,
+                                                           String enrollmentCalendarStatus,
+                                                           Appointment appointment) {
         MimeMessage message;
         VEvent event = (VEvent) calendar.getComponents().getComponent(Component.VEVENT);
         Attendee attendee = event.getProperties().getProperty(Property.ATTENDEE);
         String userEmail = attendee.getCalAddress().toString();
-        String editedUserEmail = calendarTextEditor.editUserEmail(userEmail);
         String meetingTitle = appointment.getTitle();
         String ownerMail = appointment.getFrom();
         String ownerName = appointment.getFromName();
+
+        String richDescription = BODY_OPEN_TAG + appointment.getDescription() + BODY_CLOSE_TAG;
         MailSendingResponseStatus mailSendingResponseStatus;
         try {
             message = javaMailSender.createMimeMessage();
@@ -62,7 +67,7 @@ public class MessageSender {
             String stringMethod = calendarTextEditor.replaceColonToEqual(method.toString());
             InternetAddress address = new InternetAddress(ownerMail, ownerName);
             helper.setFrom(address);
-            helper.setTo(editedUserEmail);
+            helper.setTo(userEmail);
             MimeBodyPart iCalInline = new MimeBodyPart();
             iCalInline.setHeader("Content-ID", "calendar_part");
             iCalInline.setHeader("Content-Disposition", "inline");
@@ -82,11 +87,11 @@ public class MessageSender {
             message.setContent(multipart);
             javaMailSender.send(message);
 
-            logger.info("Message was sent to " + editedUserEmail);
-            mailSendingResponseStatus = new MailSendingResponseStatus(true, "Calendar was sent successfully", editedUserEmail);
+            logger.info("Message was sent to " + userEmail);
+            mailSendingResponseStatus = new MailSendingResponseStatus(true, "Calendar was sent successfully", userEmail);
         } catch (MessagingException | IOException e) {
             logger.error("Error while trying to send message", e);
-            mailSendingResponseStatus = new MailSendingResponseStatus(false, "Calendar was not delivered", editedUserEmail);
+            mailSendingResponseStatus = new MailSendingResponseStatus(false, "Calendar was not delivered", userEmail);
         }
         return mailSendingResponseStatus;
     }

@@ -14,7 +14,7 @@ import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.MeetingService;
 import by.iba.bussiness.meeting.type.MeetingType;
 import by.iba.bussiness.meeting.type.MeetingTypeDefiner;
-import by.iba.bussiness.notification.service.NotificationService;
+import by.iba.bussiness.notification.service.SenderService;
 import by.iba.bussiness.placeholder.PlaceHolderReplacer;
 import by.iba.bussiness.placeholder.PlaceHoldersInstaller;
 import by.iba.bussiness.sender.MailSendingResponseStatus;
@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class NotificationServiceImpl implements NotificationService {
-    private static final Logger logger = LoggerFactory.getLogger(NotificationServiceImpl.class);
+public class SenderServiceImpl implements SenderService {
+    private static final Logger logger = LoggerFactory.getLogger(SenderServiceImpl.class);
     private MeetingService meetingService;
     private InvitationTemplateService invitationTemplateService;
     private AppointmentInstaller appointmentInstaller;
@@ -44,16 +44,16 @@ public class NotificationServiceImpl implements NotificationService {
     private PlaceHolderReplacer placeHolderReplacer;
 
     @Autowired
-    public NotificationServiceImpl(MeetingService meetingService,
-                                   InvitationTemplateService invitationTemplateService,
-                                   AppointmentInstaller appointmentInstaller,
-                                   MeetingTypeDefiner meetingTypeDefiner,
-                                   ComplexTemplateSenderFacade complexTemplateSenderFacade,
-                                   SimpleCalendarSenderFacade simpleCalendarSenderFacade,
-                                   AppointmentRepository appointmentRepository,
-                                   RruleDefiner rruleDefiner,
-                                   PlaceHoldersInstaller placeHoldersInstaller,
-                                   PlaceHolderReplacer placeHolderReplacer) {
+    public SenderServiceImpl(MeetingService meetingService,
+                             InvitationTemplateService invitationTemplateService,
+                             AppointmentInstaller appointmentInstaller,
+                             MeetingTypeDefiner meetingTypeDefiner,
+                             ComplexTemplateSenderFacade complexTemplateSenderFacade,
+                             SimpleCalendarSenderFacade simpleCalendarSenderFacade,
+                             AppointmentRepository appointmentRepository,
+                             RruleDefiner rruleDefiner,
+                             PlaceHoldersInstaller placeHoldersInstaller,
+                             PlaceHolderReplacer placeHolderReplacer) {
         this.meetingService = meetingService;
         this.invitationTemplateService = invitationTemplateService;
         this.appointmentInstaller = appointmentInstaller;
@@ -82,6 +82,7 @@ public class NotificationServiceImpl implements NotificationService {
         Map<String, String> placeHolders = placeHoldersInstaller.installPlaceHoldersMap(meeting);
         InvitationTemplate modifiedInvTemplate = placeHolderReplacer.replacePlaceHolders(placeHolders, invitationTemplate);
         Appointment oldAppointment = appointmentRepository.getByMeetingId(new BigInteger(meetingId));
+        meeting.setPlainDescription("Plain description"); // mock
         Appointment newAppointment = appointmentInstaller.installAppointment(meeting, modifiedInvTemplate, oldAppointment);
         List<MailSendingResponseStatus> mailSendingResponseStatusList;
         List<Session> newAppSessions = newAppointment.getSessionList();

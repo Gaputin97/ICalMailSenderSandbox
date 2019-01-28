@@ -22,8 +22,8 @@ public class SessionParser {
             String stringStartDate = timeSlot.getStartDateTime();
             String stringEndDate = timeSlot.getEndDateTime();
             try {
-                Instant startDate = dateFormat.parse(stringStartDate).toInstant();
-                Instant endDate = dateFormat.parse(stringEndDate).toInstant();
+                Instant startDate = dateFormat.parse(stringStartDate+"Z").toInstant();
+                Instant endDate = dateFormat.parse(stringEndDate+"Z").toInstant();
                 int id = timeSlot.getId();
                 return new Session(id, startDate, endDate);
             } catch (ParseException ex) {
