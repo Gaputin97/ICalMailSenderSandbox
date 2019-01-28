@@ -195,4 +195,27 @@ public class Appointment {
     public int hashCode() {
         return Objects.hash(meetingId, description, location, locationInfo, summary, startDateTime, endDateTime, duration, from, fromName, sessionList, timeZone);
     }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", from='" + from + '\'' +
+                ", fromName='" + fromName + '\'' +
+                ", meetingId=" + meetingId +
+                ", updateIndex=" + updateIndex +
+                ", rescheduleIndex=" + rescheduleIndex +
+                ", description='" + description + '\'' +
+                ", location='" + location + '\'' +
+                ", locationInfo='" + locationInfo + '\'' +
+                ", subject='" + subject + '\'' +
+                ", summary='" + summary + '\'' +
+                ", startDateTime='" + startDateTime + '\'' +
+                ", endDateTime='" + endDateTime + '\'' +
+                ", duration=" + duration +
+                ", sessionList=" + sessionList +
+                ", timeZone='" + timeZone + '\'' +
+                '}';
+    }
 }
