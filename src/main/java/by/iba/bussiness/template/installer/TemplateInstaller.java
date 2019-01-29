@@ -12,10 +12,13 @@ import java.util.List;
 public class TemplateInstaller {
 
     private TemplateTimeSlotInstaller templateTimeSlotInstaller;
+    private TemplateTimeSlotTypeInstaller templateTimeSlotTypeInstaller;
 
     @Autowired
-    public TemplateInstaller(TemplateTimeSlotInstaller templateTimeSlotInstaller) {
+    public TemplateInstaller(TemplateTimeSlotInstaller templateTimeSlotInstaller,
+                             TemplateTimeSlotTypeInstaller templateTimeSlotTypeInstaller) {
         this.templateTimeSlotInstaller = templateTimeSlotInstaller;
+        this.templateTimeSlotTypeInstaller = templateTimeSlotTypeInstaller;
     }
 
     public Template installCommonPartsOfTemplate(Appointment appointment, Appointment oldAppointment) {
@@ -30,8 +33,8 @@ public class TemplateInstaller {
             sessions = templateTimeSlotInstaller.installSessionsIfInvitation(appointment);
             template.setSessions(sessions);
         } else {
-            List<Session> sessionsWithType = templateTimeSlotInstaller.installSessionsType(appointment, oldAppointment);
-            sessions = templateTimeSlotInstaller.installSessionsByType(sessionsWithType);
+            List<Session> sessionsWithType = templateTimeSlotTypeInstaller.installSessionsType(appointment, oldAppointment);
+            sessions = templateTimeSlotInstaller.installSessionsIfUpdate(sessionsWithType);
             template.setSessions(sessions);
         }
         return template;

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,10 +57,11 @@ public class FrequencyDefiner {
             }
         }
         List<FrequencyWrapper> candidates = new ArrayList<>();
-        candidates.add(new FrequencyWrapper(Frequency.WEEKLY, amountOfDurationsWhichMultipleToWeek));
-        candidates.add(new FrequencyWrapper(Frequency.DAILY, amountOfDurationsWhichMultipleToDay));
-        candidates.add(new FrequencyWrapper(Frequency.HOURLY, amountOfDurationsWhichMultipleToHour));
-        candidates.add(new FrequencyWrapper(Frequency.MINUTELY, amountOfDurationsWhichMultipleToMinute));
+        Collections.addAll(candidates,
+                new FrequencyWrapper(Frequency.WEEKLY, amountOfDurationsWhichMultipleToWeek),
+                new FrequencyWrapper(Frequency.DAILY, amountOfDurationsWhichMultipleToDay),
+                new FrequencyWrapper(Frequency.HOURLY, amountOfDurationsWhichMultipleToHour),
+                new FrequencyWrapper(Frequency.MINUTELY, amountOfDurationsWhichMultipleToMinute));
         return chooseNeededFrequency(candidates, amountOfDurationsBetweenDates);
     }
 
