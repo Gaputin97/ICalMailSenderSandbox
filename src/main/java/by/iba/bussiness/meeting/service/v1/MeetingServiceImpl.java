@@ -49,7 +49,7 @@ public class MeetingServiceImpl implements MeetingService {
             meeting = meetingResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             logger.error("Cant find meeting by id", e);
-            throw new ServiceException("Can't get meeting from third-party service with id " + id + ". " + e.getMessage());
+            throw new ServiceException("Can't get meeting from third-party service with id " + id + ". " + e);
         }
         return meeting;
     }

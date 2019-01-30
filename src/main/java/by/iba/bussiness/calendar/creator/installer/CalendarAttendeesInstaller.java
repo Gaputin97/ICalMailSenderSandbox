@@ -25,15 +25,15 @@ public class CalendarAttendeesInstaller {
         Calendar calendarWithAttendee;
         try {
             calendarWithAttendee = new Calendar(preInstalledCalendar);
+            CalendarComponent vEvent = calendarWithAttendee.getComponent(Component.VEVENT);
+            Attendee attendee = new Attendee(URI.create(email));
+            attendee.getParameters().add(Rsvp.TRUE);
+            attendee.getParameters().add(Role.REQ_PARTICIPANT);
+            vEvent.getProperties().add(attendee);
         } catch (ParseException | URISyntaxException | IOException e) {
             logger.error("Can't create calendar based on another calendar", e);
             throw new CalendarException("Can't create calendar.");
         }
-        CalendarComponent vEvent = calendarWithAttendee.getComponent(Component.VEVENT);
-        Attendee attendee = new Attendee(URI.create(email));
-        attendee.getParameters().add(Rsvp.TRUE);
-        attendee.getParameters().add(Role.REQ_PARTICIPANT);
-        vEvent.getProperties().add(attendee);
         return calendarWithAttendee;
     }
 }

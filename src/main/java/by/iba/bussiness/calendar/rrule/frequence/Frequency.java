@@ -11,12 +11,12 @@ public enum Frequency {
     WEEKLY(Calendar.WEEK_OF_MONTH, DateConstants.MILLISECONDS_IN_WEEK, DateConstants.WEEKS_IN_ONE_HUNDRED_YEARS);
 
     private int calendarFrequency;
-    private long millisecondsInFreq;
+    private long millisecondsInFrequency;
     private long millisecondsInOneHundredYear;
 
-    Frequency(int calendarFrequency, long millisecondsInFreq, long millisecondsInOneHundredYear) {
+    Frequency(int calendarFrequency, long millisecondsInFrequency, long millisecondsInOneHundredYear) {
         this.calendarFrequency = calendarFrequency;
-        this.millisecondsInFreq = millisecondsInFreq;
+        this.millisecondsInFrequency = millisecondsInFrequency;
         this.millisecondsInOneHundredYear = millisecondsInOneHundredYear;
     }
 
@@ -24,8 +24,8 @@ public enum Frequency {
         return calendarFrequency;
     }
 
-    public long getMillisecondsInFreq() {
-        return millisecondsInFreq;
+    public long getMillisecondsInFrequency() {
+        return millisecondsInFrequency;
     }
 
     public long getMillisecondsInOneHundredYear() {

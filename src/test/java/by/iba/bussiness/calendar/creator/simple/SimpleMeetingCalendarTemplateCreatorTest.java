@@ -16,7 +16,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SimpleMetingCalendarTemplateCreatorTest {
+public class SimpleMeetingCalendarTemplateCreatorTest {
     private static final String PRODUCT_IDENTIFIER = "-//Your Learning//EN";
     @Mock
     private Calendar requestCalendar;
@@ -24,7 +24,7 @@ public class SimpleMetingCalendarTemplateCreatorTest {
     private Calendar cancelCalendar;
 
     @InjectMocks
-    private SimpleMetingCalendarTemplateCreator creator;
+    private SimpleMeetingCalendarTemplateCreator creator;
 
     @Before
     public void setUp() {

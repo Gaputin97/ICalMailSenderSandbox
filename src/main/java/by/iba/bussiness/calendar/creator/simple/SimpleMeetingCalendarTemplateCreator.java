@@ -15,14 +15,14 @@ import java.net.URISyntaxException;
 import java.text.ParseException;
 
 @org.springframework.stereotype.Component
-public class SimpleMetingCalendarTemplateCreator {
+public class SimpleMeetingCalendarTemplateCreator {
     private static final Logger logger = LoggerFactory.getLogger(SimpleCalendarSenderFacade.class);
     private Calendar requestCalendar;
     private Calendar cancelCalendar;
 
     @Autowired
-    public SimpleMetingCalendarTemplateCreator(@Qualifier("requestCalendar") Calendar requestCalendar,
-                                               @Qualifier("cancelCalendar") Calendar cancelCalendar) {
+    public SimpleMeetingCalendarTemplateCreator(@Qualifier("requestCalendar") Calendar requestCalendar,
+                                                @Qualifier("cancelCalendar") Calendar cancelCalendar) {
         this.requestCalendar = requestCalendar;
         this.cancelCalendar = cancelCalendar;
     }
@@ -48,7 +48,7 @@ public class SimpleMetingCalendarTemplateCreator {
             return calendar;
         } catch (ParseException | IOException | URISyntaxException e) {
             logger.error("Can't create calendar based on vEvent", e);
-            throw new CalendarException("Can't create calendar: " + e.getMessage());
+            throw new CalendarException("Can't create calendar: " + e);
         }
 
     }

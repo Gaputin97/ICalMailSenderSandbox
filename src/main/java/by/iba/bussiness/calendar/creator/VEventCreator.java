@@ -5,7 +5,7 @@ import by.iba.bussiness.calendar.CalendarRruleParser;
 import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
 import by.iba.bussiness.calendar.creator.simple.DateIncreaser;
 import by.iba.bussiness.calendar.creator.simple.ICalDateParser;
-import by.iba.bussiness.calendar.rrule.Count;
+import by.iba.bussiness.calendar.rrule.RruleCount;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 import by.iba.bussiness.calendar.session.Session;
@@ -76,7 +76,7 @@ public class VEventCreator {
             Sequence sequence = sequenceDefiner.defineSequence(newAppointment);
             Organizer organizer = new Organizer("mailto:" + newAppointment.getFrom());
             Location location = new Location((newAppointment.getLocation()));
-            if (!rrule.getCount().equals(Count.DEFAULT)) {
+            if (!rrule.getRruleCount().equals(RruleCount.ZERO)) {
                 exDatesList.add(new DateTime(parsedIncreasedUntilDate));
             }
             RRule rRule = new RRule(recurrence);
@@ -98,7 +98,7 @@ public class VEventCreator {
             }
             event.getProperties().addAll(Arrays.asList(sequence, organizer, location, description, UID, rRule, xAltDesc));
         } catch (ParseException | URISyntaxException e) {
-            logger.error("Cant create recur calendar meeting" + e.getMessage());
+            logger.error("Cant create recur calendar meeting" + e);
             throw new CalendarException("Can't create simple calendar meeting. Try again later");
         }
         return event;
