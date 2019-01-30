@@ -24,41 +24,41 @@ public class AppointmentHandler {
         this.appointmentCreator = appointmentCreator;
     }
 
-    public Appointment updateAppointment(Meeting updatedMeeting, InvitationTemplate updatedTemplate) {
-        Appointment newAppointment = appointmentCreator.createAppointment(updatedMeeting, updatedTemplate);
-        Appointment updatedAppointment = appointmentRepository.getByMeetingId(updatedMeeting.getId());
+    public Appointment updateAppointment(Meeting newMeeting, InvitationTemplate newTemplate) {
+        Appointment newAppointment = appointmentCreator.createAppointment(newMeeting, newTemplate);
+        Appointment currentAppointment = appointmentRepository.getByMeetingId(newMeeting.getId());
 
-        BigInteger updatedAppId = updatedAppointment.getId();
-        int updatedAppUpdatedIndex = updatedAppointment.getUpdateIndex();
-        int updatedAppRescheduleIndex = updatedAppointment.getRescheduleIndex();
+        int currentUpdatedIndex = currentAppointment.getUpdateIndex();
+        int currentRescheduleIndex = currentAppointment.getRescheduleIndex();
 
-        if (updatedAppointment.equals(newAppointment)) {
-            newAppointment = updatedAppointment;
+        if (currentAppointment.equals(newAppointment)) {
+            newAppointment = currentAppointment;
         } else {
-            int maximumIndex = getMaximumIndex(updatedAppointment);
-            List<Session> updatedAppSessions = updatedAppointment.getSessionList();
-            List<Session> newAppSessions = newAppointment.getSessionList();
-            if (!updatedAppSessions.equals(newAppSessions)) {
-                newAppointment.setUpdateIndex(updatedAppUpdatedIndex);
+            int maximumIndex = getMaxIndex(currentAppointment);
+            List<Session> currentSessions = currentAppointment.getSessionList();
+            List<Session> newSessions = newAppointment.getSessionList();
+            if (!currentSessions.equals(newSessions)) {
+                newAppointment.setUpdateIndex(currentUpdatedIndex);
                 newAppointment.setRescheduleIndex(++maximumIndex);
             } else {
-                newAppointment.setRescheduleIndex(updatedAppRescheduleIndex);
+                newAppointment.setRescheduleIndex(currentRescheduleIndex);
                 newAppointment.setUpdateIndex(++maximumIndex);
             }
         }
+        BigInteger updatedAppId = currentAppointment.getId();
         newAppointment.setId(updatedAppId);
         return newAppointment;
     }
 
-    public int getMaximumIndex(Appointment sourceAppointment) {
-        int updateIndex = sourceAppointment.getUpdateIndex();
-        int rescheduleIndex = sourceAppointment.getRescheduleIndex();
+    public int getMaxIndex(Appointment currentAppointment) {
+        int updateIndex = currentAppointment.getUpdateIndex();
+        int rescheduleIndex = currentAppointment.getRescheduleIndex();
         return updateIndex > rescheduleIndex ? updateIndex : rescheduleIndex;
     }
 
-    public int getMinimumIndex(Appointment sourceAppointment) {
-        int updateIndex = sourceAppointment.getUpdateIndex();
-        int rescheduleIndex = sourceAppointment.getRescheduleIndex();
+    public int getMinIndex(Appointment currentAppointment) {
+        int updateIndex = currentAppointment.getUpdateIndex();
+        int rescheduleIndex = currentAppointment.getRescheduleIndex();
         return updateIndex < rescheduleIndex ? updateIndex : rescheduleIndex;
     }
 }

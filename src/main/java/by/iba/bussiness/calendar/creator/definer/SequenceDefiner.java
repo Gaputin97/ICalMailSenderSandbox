@@ -8,23 +8,21 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SequenceDefiner {
-
     private AppointmentHandler appointmentHandler;
-
     @Autowired
     public SequenceDefiner(AppointmentHandler appointmentHandler) {
         this.appointmentHandler = appointmentHandler;
     }
 
-    public Sequence defineSequence(Appointment appointment) {
+    public Sequence defineSequence(Appointment newAppointment) {
         Sequence sequence;
-        int maximumIndex = appointmentHandler.getMaximumIndex(appointment);
-        int updatedIndex = appointment.getUpdateIndex();
-        int minimumIndex = appointmentHandler.getMinimumIndex(appointment);
-        if (maximumIndex == updatedIndex) {
-            sequence = new Sequence(minimumIndex);
+        int maxIndex = appointmentHandler.getMaxIndex(newAppointment);
+        int updatedIndex = newAppointment.getUpdateIndex();
+        int minIndex = appointmentHandler.getMinIndex(newAppointment);
+        if (maxIndex == updatedIndex) {
+            sequence = new Sequence(minIndex);
         } else {
-            sequence = new Sequence(maximumIndex);
+            sequence = new Sequence(maxIndex);
         }
         return sequence;
     }

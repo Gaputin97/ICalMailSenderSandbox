@@ -4,7 +4,7 @@ import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.CalendarRruleParser;
 import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
 import by.iba.bussiness.calendar.creator.simple.DateIncreaser;
-import by.iba.bussiness.calendar.creator.simple.IcalDateParser;
+import by.iba.bussiness.calendar.creator.simple.ICalDateParser;
 import by.iba.bussiness.calendar.rrule.Count;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.frequence.Frequency;
@@ -37,13 +37,13 @@ public class VEventCreator {
     private static final String BODY_OPEN_TAG = "<body>";
     private static final String BODY_CLOSE_TAG = "</body>";
     private static final int NUMBER_OF_FIRST_TIME_SLOT = 0;
-    private IcalDateParser iСalDateParser;
+    private ICalDateParser iСalDateParser;
     private DateIncreaser dateIncreaser;
     private SequenceDefiner sequenceDefiner;
     private CalendarRruleParser calendarRruleParser;
 
     @Autowired
-    public VEventCreator(IcalDateParser icalDateParser,
+    public VEventCreator(ICalDateParser icalDateParser,
                          DateIncreaser dateIncreaser,
                          SequenceDefiner sequenceDefiner,
                          CalendarRruleParser calendarRruleParser) {
@@ -53,10 +53,10 @@ public class VEventCreator {
         this.calendarRruleParser = calendarRruleParser;
     }
 
-    public VEvent createCommonVEventTemplate(Rrule rrule, Appointment appointment) {
+    public VEvent createCommonVEventTemplate(Rrule rrule, Appointment newAppointment) {
         DateList exDatesList = new DateList();
         rrule.getExDates().forEach(exDate -> exDatesList.add(new DateTime(exDate.toEpochMilli())));
-        List<Session> sessions = new ArrayList<>(appointment.getSessionList());
+        List<Session> sessions = new ArrayList<>(newAppointment.getSessionList());
         Collections.sort(sessions);
 
         Session firstSession = sessions.get(NUMBER_OF_FIRST_TIME_SLOT);
@@ -68,22 +68,22 @@ public class VEventCreator {
         long interval = rrule.getInterval();
         Frequency frequency = rrule.getFrequency();
         String increasedUntilDate = dateIncreaser.increaseDate(frequency, interval, startDateOfLastSession);
-        String richDescription = BODY_OPEN_TAG + appointment.getDescription() + BODY_CLOSE_TAG;
+        String richDescription = BODY_OPEN_TAG + newAppointment.getDescription() + BODY_CLOSE_TAG;
         String parsedIncreasedUntilDate = iСalDateParser.parseToICalDate(increasedUntilDate);
         Recur recurrence = calendarRruleParser.parseToCalendarRrule(rrule, parsedIncreasedUntilDate);
         VEvent event;
         try {
-            Sequence sequence = sequenceDefiner.defineSequence(appointment);
-            Organizer organizer = new Organizer("mailto:" + appointment.getFrom());
-            Location location = new Location((appointment.getLocation()));
+            Sequence sequence = sequenceDefiner.defineSequence(newAppointment);
+            Organizer organizer = new Organizer("mailto:" + newAppointment.getFrom());
+            Location location = new Location((newAppointment.getLocation()));
             if (!rrule.getCount().equals(Count.DEFAULT)) {
                 exDatesList.add(new DateTime(parsedIncreasedUntilDate));
             }
             RRule rRule = new RRule(recurrence);
-            Uid UID = new Uid(appointment.getId().toString());
+            Uid UID = new Uid(newAppointment.getId().toString());
             DateTime startDateTime = new DateTime(startDateOfFirstSession.toEpochMilli());
             DateTime endDateTime = new DateTime(endDateOfFirstSession.toEpochMilli());
-            Description description = new Description(appointment.getPlainDescription());
+            Description description = new Description(newAppointment.getPlainDescription());
             AltRep altRep = new AltRep("CID:" + RICH_TEXT_CID);
             description.getParameters().add(altRep);
 
@@ -91,7 +91,7 @@ public class VEventCreator {
             xAltDesc.getParameters().add(new FmtType("text/html"));
             xAltDesc.setValue(richDescription);
 
-            event = new VEvent(startDateTime, endDateTime, appointment.getSummary());
+            event = new VEvent(startDateTime, endDateTime, newAppointment.getSummary());
             if (!exDatesList.isEmpty()) {
                 ExDate exDates = new ExDate(exDatesList);
                 event.getProperties().add(exDates);

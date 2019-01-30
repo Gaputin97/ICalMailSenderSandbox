@@ -1,18 +1,18 @@
 package by.iba.bussiness.facade;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.calendar.status.EnrollmentCalendarStatus;
-import by.iba.bussiness.enrollment.status.EnrollmentStatus;
-import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
 import by.iba.bussiness.calendar.creator.VEventCreator;
+import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
 import by.iba.bussiness.calendar.creator.simple.SimpleMetingCalendarTemplateCreator;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.definer.RruleDefiner;
 import by.iba.bussiness.calendar.session.Session;
+import by.iba.bussiness.calendar.status.EnrollmentCalendarStatus;
+import by.iba.bussiness.calendar.status.EnrollmentCalendarStatusDefiner;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
-import by.iba.bussiness.calendar.status.EnrollmentCalendarStatusDefiner;
+import by.iba.bussiness.enrollment.status.EnrollmentStatus;
 import by.iba.bussiness.meeting.type.MeetingType;
 import by.iba.bussiness.meeting.type.MeetingTypeDefiner;
 import by.iba.bussiness.sender.MailSendingResponseStatus;

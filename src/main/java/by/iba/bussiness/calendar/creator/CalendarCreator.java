@@ -2,9 +2,9 @@ package by.iba.bussiness.calendar.creator;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.AppointmentHandler;
-import by.iba.bussiness.enrollment.status.EnrollmentStatus;
 import by.iba.bussiness.calendar.creator.simple.SimpleMetingCalendarTemplateCreator;
 import by.iba.bussiness.enrollment.Enrollment;
+import by.iba.bussiness.enrollment.status.EnrollmentStatus;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.component.VEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class CalendarCreator {
     public Calendar createConcreteCalendarTemplate(VEvent vEvent, Enrollment enrollment, Appointment appointment) {
         String enrollmentStatus = enrollment.getStatus();
         Calendar calendar = null;
-        int maximumAppointmentIndex = appointmentHandler.getMaximumIndex(appointment);
+        int maximumAppointmentIndex = appointmentHandler.getMaxIndex(appointment);
         if ((enrollmentStatus.equals(EnrollmentStatus.CANCELLED.name()))) {
             calendar = simpleMetingCalendarTemplateCreator.createSimpleCancellationCalendar(vEvent);
         } else {

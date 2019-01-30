@@ -3,9 +3,9 @@ package by.iba.bussiness.enrollment;
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.AppointmentHandler;
 import by.iba.bussiness.calendar.learner.Learner;
+import by.iba.bussiness.calendar.status.EnrollmentCalendarStatusDefiner;
 import by.iba.bussiness.enroll.EnrollLearnerStatus;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
-import by.iba.bussiness.calendar.status.EnrollmentCalendarStatusDefiner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +70,7 @@ public class EnrollmentsInstaller {
     }
 
     public void installEnrollmentCalendarFields(Enrollment enrollment, Appointment appointment) {
-        int maximumIndex = appointmentHandler.getMaximumIndex(appointment);
+        int maximumIndex = appointmentHandler.getMaxIndex(appointment);
         String calendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
         enrollment.setCalendarStatus(calendarStatus);
         enrollment.setCalendarVersion(Integer.toString(maximumIndex));

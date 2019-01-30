@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CalendarTextEditor {
+public class  CalendarTextEditor {
     private static final Logger logger = LoggerFactory.getLogger(CalendarTextEditor.class);
 
     public String replaceColonToEqual(String method) {

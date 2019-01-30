@@ -1,8 +1,8 @@
 package by.iba.bussiness.enroll.service.v1;
 
 import by.iba.bussiness.calendar.learner.Learner;
-import by.iba.bussiness.enroll.service.EnrollService;
 import by.iba.bussiness.enroll.EnrollLearnerStatus;
+import by.iba.bussiness.enroll.service.EnrollService;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.MeetingService;

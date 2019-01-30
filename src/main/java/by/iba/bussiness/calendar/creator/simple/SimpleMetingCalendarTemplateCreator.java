@@ -36,18 +36,20 @@ public class SimpleMetingCalendarTemplateCreator {
         Property exdateProperty = event.getProperties().getProperty(Property.EXDATE);
         event.getProperties().remove(rruleProperty);
         event.getProperties().remove(exdateProperty);
+
         return createCommonSimpleCalendarTemplate(event, cancelCalendar);
     }
 
-    private Calendar createCommonSimpleCalendarTemplate(VEvent event,
-                                                        Calendar concreteCalendar) {
+    private Calendar createCommonSimpleCalendarTemplate(VEvent event, Calendar concreteCalendar) {
+
         try {
             Calendar calendar = new Calendar(concreteCalendar);
             calendar.getComponents().add(event);
             return calendar;
         } catch (ParseException | IOException | URISyntaxException e) {
             logger.error("Can't create calendar based on vEvent", e);
-            throw new CalendarException("Can't create calendar.");
+            throw new CalendarException("Can't create calendar: " + e.getMessage());
         }
+
     }
 }
