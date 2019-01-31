@@ -33,7 +33,7 @@ public class EnrollmentStatusChecker {
         return wasChanged;
     }
 
-    public boolean doAllEnrollmentHaveCancelledStatus(List<Enrollment> enrollments) {
+    public boolean areAllEnrollmentHaveCancelledStatus(List<Enrollment> enrollments) {
         return enrollments.stream().map(Enrollment::getStatus).allMatch(EnrollmentStatus.CANCELLED::equals);
     }
 

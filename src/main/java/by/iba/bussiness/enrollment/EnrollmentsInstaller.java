@@ -1,10 +1,8 @@
 package by.iba.bussiness.enrollment;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.appointment.handler.AppointmentHandler;
-import by.iba.bussiness.appointment.handler.AppointmentIndexHandler;
+import by.iba.bussiness.appointment.handler.IndexDeterminer;
 import by.iba.bussiness.calendar.learner.Learner;
-import by.iba.bussiness.calendar.status.EnrollmentCalendarStatusDefiner;
 import by.iba.bussiness.enroll.EnrollLearnerStatus;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.enrollment.status.EnrollmentStatusChecker;
@@ -21,21 +19,15 @@ public class EnrollmentsInstaller {
     private static final Logger logger = LoggerFactory.getLogger(EnrollmentsInstaller.class);
     private EnrollmentService enrollmentService;
     private EnrollmentStatusChecker enrollmentStatusChecker;
-    private EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner;
-    private AppointmentHandler appointmentHandler;
-    private AppointmentIndexHandler appointmentIndexHandler;
+    private IndexDeterminer indexDeterminer;
 
     @Autowired
     public EnrollmentsInstaller(EnrollmentService enrollmentService,
                                 EnrollmentStatusChecker enrollmentStatusChecker,
-                                EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner,
-                                AppointmentHandler appointmentHandler,
-                                AppointmentIndexHandler appointmentIndexHandler) {
+                                IndexDeterminer IndexDeterminer) {
         this.enrollmentService = enrollmentService;
         this.enrollmentStatusChecker = enrollmentStatusChecker;
-        this.enrollmentCalendarStatusDefiner = enrollmentCalendarStatusDefiner;
-        this.appointmentHandler = appointmentHandler;
-        this.appointmentIndexHandler = appointmentIndexHandler;
+        this.indexDeterminer = IndexDeterminer;
     }
 
     public List<EnrollLearnerStatus> installEnrollments(List<Learner> learners, String meetingId) {
@@ -74,10 +66,9 @@ public class EnrollmentsInstaller {
         return enrollLearnerStatuses;
     }
 
-    public void installEnrollmentCalendarFields(Enrollment enrollment, Appointment appointment) {
-        int maximumIndex = appointmentIndexHandler.getMaxIndex(appointment);
-        String calendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
-        enrollment.setCalendarStatus(calendarStatus);
+    public void installEnrollmentCalendarFields(Enrollment enrollment, Appointment appointment, String definedEnrollmentCalendarStatus) {
+        int maximumIndex = indexDeterminer.getMaxIndex(appointment);
+        enrollment.setCalendarStatus(definedEnrollmentCalendarStatus);
         enrollment.setCalendarVersion(Integer.toString(maximumIndex));
         enrollmentService.save(enrollment);
         logger.info("Enrollment " + enrollment.getUserEmail() + " has been saved with new calendar version " + enrollment.getCalendarVersion());

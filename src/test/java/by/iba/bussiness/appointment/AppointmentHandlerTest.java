@@ -1,7 +1,7 @@
 package by.iba.bussiness.appointment;
 
 import by.iba.bussiness.appointment.handler.AppointmentHandler;
-import by.iba.bussiness.appointment.handler.AppointmentIndexHandler;
+import by.iba.bussiness.appointment.handler.IndexDeterminer;
 import by.iba.bussiness.appointment.repository.AppointmentRepository;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.invitation_template.InvitationTemplate;
@@ -32,7 +32,7 @@ public class AppointmentHandlerTest {
     private AppointmentHandler appointmentHandler;
 
     @Mock
-    private AppointmentIndexHandler appointmentIndexHandler;
+    private IndexDeterminer indexDeterminer;
 
     @Test
     public void testUpdateAppointmentWhenAppointmentsEquals() {
@@ -44,7 +44,7 @@ public class AppointmentHandlerTest {
         when(appointmentCreator.createAppointment(meeting, invitationTemplate)).thenReturn(expectedAppointment);
         when(appointmentRepository.getByMeetingId(new BigInteger("3"))).thenReturn(expectedAppointment);
 
-        Appointment actualAppointment = appointmentHandler.updateAppointment(meeting, invitationTemplate);
+        Appointment actualAppointment = appointmentHandler.updateAppointmentIndex(meeting, invitationTemplate);
 
         assertEquals(expectedAppointment, actualAppointment);
     }
@@ -71,9 +71,9 @@ public class AppointmentHandlerTest {
 
         when(appointmentCreator.createAppointment(meeting, invitationTemplate)).thenReturn(newAppointment);
         when(appointmentRepository.getByMeetingId(new BigInteger("3"))).thenReturn(currentAppointment);
-        when(appointmentIndexHandler.getMaxIndex(currentAppointment)).thenReturn(2);
+        when(indexDeterminer.getMaxIndex(currentAppointment)).thenReturn(2);
 
-        Appointment actualAppointment = appointmentHandler.updateAppointment(meeting, invitationTemplate);
+        Appointment actualAppointment = appointmentHandler.updateAppointmentIndex(meeting, invitationTemplate);
         int actualUpdateIndex = actualAppointment.getUpdateIndex();
         int actualRescheduleIndex = actualAppointment.getRescheduleIndex();
 
@@ -102,9 +102,9 @@ public class AppointmentHandlerTest {
 
         when(appointmentCreator.createAppointment(meeting, invitationTemplate)).thenReturn(newAppointment);
         when(appointmentRepository.getByMeetingId(new BigInteger("3"))).thenReturn(currentAppointment);
-        when(appointmentIndexHandler.getMaxIndex(currentAppointment)).thenReturn(2);
+        when(indexDeterminer.getMaxIndex(currentAppointment)).thenReturn(2);
 
-        Appointment actualAppointment = appointmentHandler.updateAppointment(meeting, invitationTemplate);
+        Appointment actualAppointment = appointmentHandler.updateAppointmentIndex(meeting, invitationTemplate);
         int actualUpdateIndex = actualAppointment.getUpdateIndex();
         int actualRescheduleIndex = actualAppointment.getRescheduleIndex();
 

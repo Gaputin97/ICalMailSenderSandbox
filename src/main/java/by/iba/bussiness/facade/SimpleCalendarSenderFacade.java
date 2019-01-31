@@ -65,7 +65,7 @@ public class SimpleCalendarSenderFacade {
         List<Enrollment> enrollmentList = enrollmentService.getAllByParentId(meetingId);
         Calendar invitationCalendar;
         Calendar cancellationCalendar;
-        if (enrollmentStatusChecker.doAllEnrollmentHaveCancelledStatus(enrollmentList)) {
+        if (enrollmentStatusChecker.areAllEnrollmentHaveCancelledStatus(enrollmentList)) {
             cancellationCalendar = calendarCreator.createCalendarCancellationTemplate(oldAppointment);
             invitationCalendar = null;
         } else {
@@ -74,8 +74,10 @@ public class SimpleCalendarSenderFacade {
             cancellationCalendar = null;
         }
         for (Enrollment enrollment : enrollmentList) {
-            if (EnrollmentCalendarStatus.CANCELLATION.equals(enrollment.getCalendarStatus())
-                    && EnrollmentStatus.CANCELLED.equals(enrollment.getStatus())) {
+            String enrollmentStatus = enrollment.getStatus();
+            String enrollmentCalendarStatus = enrollment.getCalendarStatus();
+
+            if (EnrollmentCalendarStatus.CANCELLATION.equals(enrollmentCalendarStatus) && EnrollmentStatus.CANCELLED.equals(enrollmentStatus)) {
                 MailSendingResponseStatus badMailSendingResponseStatus =
                         new MailSendingResponseStatus(false, "User has cancelled status.", enrollment.getUserEmail());
                 mailSendingResponseStatusList.add(badMailSendingResponseStatus);
@@ -88,18 +90,24 @@ public class SimpleCalendarSenderFacade {
                     logger.info("Don't need to send message to " + enrollment.getUserEmail());
                 } else {
                     Calendar calendarWithoutAttendee;
-                    if (EnrollmentStatus.CANCELLED.equals(enrollment.getStatus())) {
+                    if (EnrollmentStatus.CANCELLED.equals(enrollmentStatus)) {
                         calendarWithoutAttendee = cancellationCalendar;
                     } else {
                         calendarWithoutAttendee = invitationCalendar;
                     }
-                    Calendar calendarWithAttendee = calendarAttendeeInstaller.installAttendeeToCalendar(enrollment.getUserEmail(), calendarWithoutAttendee);
-                    String enrollmentCalendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
+
+                    Calendar calendarWithAttendee =
+                            calendarAttendeeInstaller.installAttendeeToCalendar(enrollment.getUserEmail(), calendarWithoutAttendee);
+
+                    String definedEnrollmentCalendarStatus =
+                            enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
+
                     MailSendingResponseStatus mailSendingResponseStatus =
-                            messageSender.sendCalendarToLearner(calendarWithAttendee, enrollmentCalendarStatus, newAppointment);
+                            messageSender.sendCalendarToLearner(calendarWithAttendee, definedEnrollmentCalendarStatus, newAppointment);
+
                     mailSendingResponseStatusList.add(mailSendingResponseStatus);
                     if (mailSendingResponseStatus.isDelivered()) {
-                        enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, newAppointment);
+                        enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, newAppointment, definedEnrollmentCalendarStatus);
                     }
                 }
             }
