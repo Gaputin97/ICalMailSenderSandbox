@@ -51,7 +51,7 @@ public class TemplateInstallerTest {
     public void installCommonPartsWhenOldAppIsNotNull() {
         //given
         Appointment appointment = new Appointment();
-        Appointment oldAppointment = new Appointment();
+        Appointment currentAppointment = new Appointment();
         TypedSession firstSession = new TypedSession(0, new Date().toInstant(), new Date().toInstant());
         TypedSession secondSession = new TypedSession(1, new Date().toInstant(), new Date().toInstant());
         List<TypedSession> sessions = new ArrayList<>();
@@ -59,9 +59,9 @@ public class TemplateInstallerTest {
         sessions.add(secondSession);
         String stringSessions = "Sessions";
         //when
-        when(templateTimeSlotTypeInstaller.installTypedSessions(appointment, oldAppointment)).thenReturn(sessions);
+        when(templateTimeSlotTypeInstaller.installTypedSessions(appointment, currentAppointment)).thenReturn(sessions);
         when(templateTimeSlotInstaller.installSessionsIfUpdate(sessions)).thenReturn(stringSessions);
-        Template template = templateInstaller.installTemplate(appointment, oldAppointment);
+        Template template = templateInstaller.installTemplate(appointment, currentAppointment);
         //then
         Assert.assertEquals(template.getSessions(), stringSessions);
 
@@ -69,12 +69,12 @@ public class TemplateInstallerTest {
     }
 }
 
-//    public Template installTemplate(Appointment appointment, Appointment oldAppointment) {
-//        if (oldAppointment == null) {
+//    public Template installTemplate(Appointment appointment, Appointment currentAppointment) {
+//        if (currentAppointment == null) {
 //            sessions = templateTimeSlotInstaller.installSessionsIfInvitation(appointment);
 //            template.setSessions(sessions);
 //        } else {
-//            List<Session> sessionsWithType = templateTimeSlotInstaller.installTypedSessions(appointment, oldAppointment);
+//            List<Session> sessionsWithType = templateTimeSlotInstaller.installTypedSessions(appointment, currentAppointment);
 //            sessions = templateTimeSlotInstaller.installSessionsIfUpdate(sessionsWithType);
 //            template.setSessions(sessions);
 //        }

@@ -50,8 +50,8 @@ public class TemplateTimeSlotTypeInstallerTest {
         Session fourthRescheduledSession = new Session(4, firstSessionStart, firstSessionEnd);
         List<Session> newAppSessions = new ArrayList<>();
         Collections.addAll(newAppSessions, secondNewSession, thirdNotChangedSession, fourthRescheduledSession);
-        Appointment oldAppointment = new Appointment();
-        oldAppointment.setSessionList(oldAppSessions);
+        Appointment currentAppointment = new Appointment();
+        currentAppointment.setSessionList(oldAppSessions);
         Appointment newAppointment = new Appointment();
         newAppointment.setSessionList(newAppSessions);
         int newAppSessionsMaxId = 5;
@@ -73,7 +73,7 @@ public class TemplateTimeSlotTypeInstallerTest {
         when(templateTimeSlotDefiner.defineSessionById(4, oldAppSessions)).thenReturn(fourthSession);
         when(templateTimeSlotDefiner.defineSessionById(5, newAppSessions)).thenReturn(secondNewSession);
         when(templateTimeSlotDefiner.defineSessionById(5, oldAppSessions)).thenReturn(null);
-        List<TypedSession> typedSessions = templateTimeSlotTypeInstaller.installTypedSessions(newAppointment, oldAppointment);
+        List<TypedSession> typedSessions = templateTimeSlotTypeInstaller.installTypedSessions(newAppointment, currentAppointment);
         //then
         Assert.assertEquals(typedSessions.get(0).getSessionType(), SessionType.DELETED);
         Assert.assertEquals(typedSessions.get(1).getSessionType(), SessionType.DELETED);

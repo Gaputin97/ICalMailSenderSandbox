@@ -1,6 +1,7 @@
 package by.iba.bussiness.notification.service.v1;
 
 import by.iba.bussiness.appointment.Appointment;
+import by.iba.bussiness.appointment.AppointmentCreator;
 import by.iba.bussiness.appointment.AppointmentInstaller;
 import by.iba.bussiness.appointment.repository.AppointmentRepository;
 import by.iba.bussiness.calendar.session.Session;
@@ -39,6 +40,7 @@ public class NotificationServiceImpl implements NotificationService {
     private AppointmentRepository appointmentRepository;
     private PlaceHoldersInstaller placeHoldersInstaller;
     private TemplatePlaceHolderReplacer templatePlaceHolderReplacer;
+    private AppointmentCreator appointmentCreator;
 
     @Autowired
     public NotificationServiceImpl(MeetingService meetingService,
@@ -59,6 +61,7 @@ public class NotificationServiceImpl implements NotificationService {
         this.appointmentRepository = appointmentRepository;
         this.placeHoldersInstaller = placeHoldersInstaller;
         this.templatePlaceHolderReplacer = templatePlaceHolderReplacer;
+        this.appointmentCreator = appointmentCreator;
     }
 
     @Override
@@ -76,16 +79,21 @@ public class NotificationServiceImpl implements NotificationService {
         InvitationTemplate invitationTemplate = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
         Map<String, String> placeHolders = placeHoldersInstaller.installPlaceHoldersMap(meeting);
         InvitationTemplate modifiedInvTemplate = templatePlaceHolderReplacer.replaceTemplatePlaceHolders(placeHolders, invitationTemplate);
-        Appointment oldAppointment = appointmentRepository.getByMeetingId(new BigInteger(meetingId));
-        meeting.setPlainDescription("Plain description"); // mock
-        Appointment newAppointment = appointmentInstaller.installAppointment(meeting, modifiedInvTemplate, oldAppointment);
-        List<NotificationResponseStatus> notificationResponseStatusList;
+        meeting.setPlainDescription("Plain description"); //Hardcode instead plain description
+        Appointment currentAppointment = appointmentRepository.getByMeetingId(new BigInteger(meetingId));
+        Appointment newAppointment = appointmentCreator.createAppointment(meeting, modifiedInvTemplate);
+        if (currentAppointment == null) {
+            newAppointment = appointmentRepository.save(newAppointment);
+        } else {
+            newAppointment = appointmentInstaller.installAppointment(newAppointment, currentAppointment);
+        }
         List<Session> newAppSessions = newAppointment.getSessionList();
         MeetingType newAppointmentMeetingType = meetingTypeDefiner.defineMeetingType(newAppSessions);
+        List<NotificationResponseStatus> notificationResponseStatusList;
         if (newAppointmentMeetingType.equals(MeetingType.SIMPLE)) {
-            notificationResponseStatusList = simpleCalendarSenderFacade.sendCalendar(newAppointment, oldAppointment);
+            notificationResponseStatusList = simpleCalendarSenderFacade.sendCalendar(newAppointment, currentAppointment);
         } else {
-            notificationResponseStatusList = complexTemplateSenderFacade.sendTemplate(newAppointment, oldAppointment);
+            notificationResponseStatusList = complexTemplateSenderFacade.sendTemplate(newAppointment, currentAppointment);
         }
         return notificationResponseStatusList;
     }

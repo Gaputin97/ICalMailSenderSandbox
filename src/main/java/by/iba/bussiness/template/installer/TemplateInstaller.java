@@ -21,7 +21,7 @@ public class TemplateInstaller {
         this.templateTimeSlotTypeInstaller = templateTimeSlotTypeInstaller;
     }
 
-    public Template installTemplate(Appointment appointment, Appointment oldAppointment) {
+    public Template installTemplate(Appointment appointment, Appointment currentAppointment) {
         Template template = new Template();
         template.setDescription(appointment.getDescription());
         template.setLocation(appointment.getLocation());
@@ -29,11 +29,11 @@ public class TemplateInstaller {
         template.setFrom(appointment.getFrom());
         template.setFromName(appointment.getFromName());
         String sessions;
-        if (oldAppointment == null) {
+        if (currentAppointment == null) {
             sessions = templateTimeSlotInstaller.installSessionsIfInvitation(appointment);
             template.setSessions(sessions);
         } else {
-            List<TypedSession> typedSessions = templateTimeSlotTypeInstaller.installTypedSessions(appointment, oldAppointment);
+            List<TypedSession> typedSessions = templateTimeSlotTypeInstaller.installTypedSessions(appointment, currentAppointment);
             sessions = templateTimeSlotInstaller.installSessionsIfUpdate(typedSessions);
             template.setSessions(sessions);
         }

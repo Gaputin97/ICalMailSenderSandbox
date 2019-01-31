@@ -59,14 +59,14 @@ public class SimpleCalendarSenderFacade {
         this.rruleDefiner = rruleDefiner;
     }
 
-    public List<NotificationResponseStatus> sendCalendar(Appointment newAppointment, Appointment oldAppointment) {
+    public List<NotificationResponseStatus> sendCalendar(Appointment newAppointment, Appointment currentAppointment) {
         List<NotificationResponseStatus> notificationResponseStatusList = new ArrayList<>();
         BigInteger meetingId = newAppointment.getMeetingId();
         List<Enrollment> enrollmentList = enrollmentService.getAllByParentId(meetingId);
         Calendar invitationCalendar;
         Calendar cancellationCalendar;
         if (enrollmentStatusChecker.doAllEnrollmentHaveCancelledStatus(enrollmentList)) {
-            cancellationCalendar = calendarCreator.createCalendarCancellationTemplate(oldAppointment);
+            cancellationCalendar = calendarCreator.createCalendarCancellationTemplate(currentAppointment);
             invitationCalendar = null;
         } else {
             Rrule rrule = rruleDefiner.defineRrule(newAppointment.getSessionList());
