@@ -2,6 +2,8 @@ package by.iba.bussiness.calendar.creator.simple;
 
 import org.junit.Test;
 
+import java.time.Instant;
+
 import static org.junit.Assert.assertEquals;
 
 public class ICalDateParserTest {
@@ -9,11 +11,11 @@ public class ICalDateParserTest {
 
     @Test
     public void testICalDateParser() {
-        String sourceString = "2019-01-29T12:20:26Z";
-        String expectedString = "20190129T122026Z";
+        String sourceStringDate = Instant.now().toString();
+        String expectedStringDate = sourceStringDate.replace("-", "").replace(":", "");
 
-        String actualString = iCalDateParser.parseToICalDate(sourceString);
+        String actualString = iCalDateParser.parseToICalDate(sourceStringDate);
 
-        assertEquals(expectedString, actualString);
+        assertEquals(expectedStringDate, actualString);
     }
 }

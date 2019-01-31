@@ -52,10 +52,10 @@ public class DateIncreaserTest {
     @Test
     public void testIncreaseDateWhenFrequencyIsWeekly() {
         Instant nowDate = Instant.now();
-        Instant expectedInstantDate = nowDate.plus(3, ChronoUnit.DAYS);
+        Instant expectedInstantDate = nowDate.plus(14, ChronoUnit.DAYS);
         String expectedDate = dateFormat.format(expectedInstantDate);
 
-        String actualDate = dateIncreaser.increaseDate(Frequency.DAILY, 14, nowDate);
+        String actualDate = dateIncreaser.increaseDate(Frequency.WEEKLY, 2, nowDate);
 
         assertEquals("Increased dates doesn't matches",expectedDate, actualDate);
     }
