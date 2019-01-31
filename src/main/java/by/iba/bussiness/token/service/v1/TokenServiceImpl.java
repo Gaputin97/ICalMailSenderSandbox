@@ -43,7 +43,7 @@ public class TokenServiceImpl implements TokenService {
             javaWebToken = javaWebTokenResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             logger.error("Error while try to get token: ", e);
-            throw new ServiceException("Error while trying to get token from third-party service" + e.getMessage());
+            throw new ServiceException("Error while trying to get token from third-party service" + e);
         }
         return javaWebToken;
     }

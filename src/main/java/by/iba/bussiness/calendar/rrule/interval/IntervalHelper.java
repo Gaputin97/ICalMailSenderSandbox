@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class IntervalHelper {
 
     public long defineInterval(Frequency frequency, long timeBetweenSessions, long minimumInterval) {
-        long millisecondsInFreq = frequency.getMillisecondsInFreq();
+        long millisecondsInFreq = frequency.getMillisecondsInFrequency();
         long freqInOneHundredYears = frequency.getMillisecondsInOneHundredYear();
         if (!(minimumInterval == DateConstants.VALUE_FOR_DEFAULT_INTERVAL)) {
             long possibleInterval = timeBetweenSessions / millisecondsInFreq;

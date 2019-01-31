@@ -1,7 +1,7 @@
 package by.iba.bussiness.calendar.status;
 
-import by.iba.bussiness.enrollment.status.EnrollmentStatus;
 import by.iba.bussiness.enrollment.Enrollment;
+import by.iba.bussiness.enrollment.status.EnrollmentStatus;
 import org.springframework.stereotype.Component;
 
 @Component

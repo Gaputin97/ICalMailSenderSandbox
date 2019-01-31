@@ -1,11 +1,12 @@
 package by.iba.bussiness.enrollment;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.appointment.AppointmentHandler;
+import by.iba.bussiness.appointment.handler.AppointmentHandler;
+import by.iba.bussiness.appointment.handler.AppointmentIndexHandler;
 import by.iba.bussiness.calendar.learner.Learner;
+import by.iba.bussiness.calendar.status.EnrollmentCalendarStatusDefiner;
 import by.iba.bussiness.enroll.EnrollLearnerStatus;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
-import by.iba.bussiness.calendar.status.EnrollmentCalendarStatusDefiner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +22,22 @@ public class EnrollmentsInstaller {
     private EnrollmentChecker enrollmentChecker;
     private EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner;
     private AppointmentHandler appointmentHandler;
+    private AppointmentIndexHandler appointmentIndexHandler;
 
     @Autowired
     public EnrollmentsInstaller(EnrollmentService enrollmentService,
                                 EnrollmentChecker enrollmentChecker,
                                 EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner,
-                                AppointmentHandler appointmentHandler) {
+                                AppointmentHandler appointmentHandler,
+                                AppointmentIndexHandler appointmentIndexHandler) {
         this.enrollmentService = enrollmentService;
         this.enrollmentChecker = enrollmentChecker;
         this.enrollmentCalendarStatusDefiner = enrollmentCalendarStatusDefiner;
         this.appointmentHandler = appointmentHandler;
+        this.appointmentIndexHandler = appointmentIndexHandler;
     }
 
-    public List<EnrollLearnerStatus> installEnrollmentsByLearners(List<Learner> learners, String meetingId) {
+    public List<EnrollLearnerStatus> installEnrollments(List<Learner> learners, String meetingId) {
         List<EnrollLearnerStatus> enrollLearnerStatuses = new ArrayList<>(learners.size());
         BigInteger bigIntegerMeetingId = new BigInteger(meetingId);
         for (Learner learner : learners) {
@@ -70,7 +74,7 @@ public class EnrollmentsInstaller {
     }
 
     public void installEnrollmentCalendarFields(Enrollment enrollment, Appointment appointment) {
-        int maximumIndex = appointmentHandler.getMaximumIndex(appointment);
+        int maximumIndex = appointmentIndexHandler.getMaxIndex(appointment);
         String calendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
         enrollment.setCalendarStatus(calendarStatus);
         enrollment.setCalendarVersion(Integer.toString(maximumIndex));

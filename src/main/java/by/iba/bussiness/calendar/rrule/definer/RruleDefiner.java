@@ -1,6 +1,6 @@
 package by.iba.bussiness.calendar.rrule.definer;
 
-import by.iba.bussiness.calendar.rrule.Count;
+import by.iba.bussiness.calendar.rrule.RruleCount;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 import by.iba.bussiness.calendar.rrule.frequence.FrequencyDefiner;
@@ -35,7 +35,7 @@ public class RruleDefiner {
         Rrule rrule = new Rrule();
         if (sessions.size() == 1) {
             Frequency daily = Frequency.DAILY;
-            rrule.setCount(Count.ONE_SESSION_COUNT);
+            rrule.setRruleCount(RruleCount.ONE_SESSION);
             rrule.setFrequency(daily);
         } else {
             List<Session> sortedSessions = new ArrayList<>(sessions);
@@ -62,7 +62,7 @@ public class RruleDefiner {
 
             List<Instant> exDates = exDatesDefiner.defineExDates(rrule, startDateOfFirstSession, startDateOfLastSession, startDatesOfSessions);
             rrule.setExDates(exDates);
-            rrule.setCount(Count.DEFAULT);
+            rrule.setRruleCount(RruleCount.ZERO);
             logger.info("Amount of exdates is " + rrule.getExDates().size());
         }
         return rrule;

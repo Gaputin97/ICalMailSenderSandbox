@@ -13,7 +13,7 @@ public class ExDatesDefiner {
     public List<Instant> defineExDates(Rrule rrule, Instant startDateOfFirstSession, Instant startDateOfLastSession, List<Instant> startDatesOfSessions) {
         LinkedList<Instant> linkedStartDatesOfSessions = new LinkedList<>(startDatesOfSessions);
         List<Instant> exDates = new ArrayList<>();
-        long milisOfFrequency = rrule.getFrequency().getMillisecondsInFreq();
+        long millisecondsInFreq = rrule.getFrequency().getMillisecondsInFrequency();
         int interval = rrule.getInterval().intValue();
         if (!linkedStartDatesOfSessions.isEmpty()) {
             while (startDateOfFirstSession.isBefore(startDateOfLastSession)) {
@@ -23,7 +23,7 @@ public class ExDatesDefiner {
                 } else {
                     linkedStartDatesOfSessions.removeFirst();
                 }
-                startDateOfFirstSession = startDateOfFirstSession.plusMillis(milisOfFrequency * interval);
+                startDateOfFirstSession = startDateOfFirstSession.plusMillis(millisecondsInFreq * interval);
             }
         }
         return exDates;

@@ -1,9 +1,9 @@
 package by.iba.bussiness.template.installer;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.appointment.AppointmentHandler;
-import by.iba.bussiness.enrollment.status.EnrollmentStatus;
+import by.iba.bussiness.appointment.handler.AppointmentIndexHandler;
 import by.iba.bussiness.enrollment.Enrollment;
+import by.iba.bussiness.enrollment.status.EnrollmentStatus;
 import by.iba.bussiness.template.TemplateType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,17 +11,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class TemplateStatusInstaller {
 
-    private AppointmentHandler appointmentHandler;
+    private AppointmentIndexHandler appointmentIndexHandler;
 
     @Autowired
-    public TemplateStatusInstaller(AppointmentHandler appointmentHandler) {
-        this.appointmentHandler = appointmentHandler;
+    public TemplateStatusInstaller(AppointmentIndexHandler appointmentIndexHandler) {
+        this.appointmentIndexHandler = appointmentIndexHandler;
     }
 
     public String installTemplateType(Enrollment enrollment, Appointment appointment) {
         String enrollmentStatus = enrollment.getStatus();
         String templateType = null;
-        int maximumAppointmentIndex = appointmentHandler.getMaximumIndex(appointment);
+        int maximumAppointmentIndex = appointmentIndexHandler.getMaxIndex(appointment);
         if ((enrollmentStatus.equals(EnrollmentStatus.CANCELLED.toString()))) {
             templateType = TemplateType.CANCELLATION.toString();
         } else {
@@ -37,6 +37,4 @@ public class TemplateStatusInstaller {
         }
         return templateType;
     }
-
-
 }

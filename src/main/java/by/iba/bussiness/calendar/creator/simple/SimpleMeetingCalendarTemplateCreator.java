@@ -15,14 +15,14 @@ import java.net.URISyntaxException;
 import java.text.ParseException;
 
 @org.springframework.stereotype.Component
-public class SimpleMetingCalendarTemplateCreator {
+public class SimpleMeetingCalendarTemplateCreator {
     private static final Logger logger = LoggerFactory.getLogger(SimpleCalendarSenderFacade.class);
     private Calendar requestCalendar;
     private Calendar cancelCalendar;
 
     @Autowired
-    public SimpleMetingCalendarTemplateCreator(@Qualifier("requestCalendar") Calendar requestCalendar,
-                                               @Qualifier("cancelCalendar") Calendar cancelCalendar) {
+    public SimpleMeetingCalendarTemplateCreator(@Qualifier("requestCalendar") Calendar requestCalendar,
+                                                @Qualifier("cancelCalendar") Calendar cancelCalendar) {
         this.requestCalendar = requestCalendar;
         this.cancelCalendar = cancelCalendar;
     }
@@ -31,23 +31,21 @@ public class SimpleMetingCalendarTemplateCreator {
         return createCommonSimpleCalendarTemplate(event, requestCalendar);
     }
 
-    public Calendar createSimpleCancellationCalendar(VEvent event) {
-        Property rruleProperty = event.getProperties().getProperty(Property.RRULE);
-        Property exdateProperty = event.getProperties().getProperty(Property.EXDATE);
-        event.getProperties().remove(rruleProperty);
-        event.getProperties().remove(exdateProperty);
-        return createCommonSimpleCalendarTemplate(event, cancelCalendar);
+    public Calendar createSimpleCancellationCalendar(VEvent cancellationEvent) {
+        return createCommonSimpleCalendarTemplate(cancellationEvent, cancelCalendar);
+
     }
 
-    private Calendar createCommonSimpleCalendarTemplate(VEvent event,
-                                                        Calendar concreteCalendar) {
+    private Calendar createCommonSimpleCalendarTemplate(VEvent event, Calendar concreteCalendar) {
+
         try {
             Calendar calendar = new Calendar(concreteCalendar);
             calendar.getComponents().add(event);
             return calendar;
         } catch (ParseException | IOException | URISyntaxException e) {
             logger.error("Can't create calendar based on vEvent", e);
-            throw new CalendarException("Can't create calendar.");
+            throw new CalendarException("Can't create calendar: " + e);
         }
+
     }
 }

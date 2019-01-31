@@ -89,7 +89,7 @@ public class SenderServiceImpl implements SenderService {
         MeetingType newAppointmentMeetingType = meetingTypeDefiner.defineMeetingType(newAppSessions);
         if (newAppointmentMeetingType.equals(MeetingType.SIMPLE)) {
             Rrule rrule = rruleDefiner.defineRrule(newAppSessions);
-            mailSendingResponseStatusList = simpleCalendarSenderFacade.sendCalendar(rrule, newAppointment);
+            mailSendingResponseStatusList = simpleCalendarSenderFacade.sendCalendar(rrule, newAppointment, oldAppointment);
         } else {
             mailSendingResponseStatusList = complexTemplateSenderFacade.sendTemplate(newAppointment, oldAppointment);
         }

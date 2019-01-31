@@ -14,9 +14,12 @@ import java.util.Optional;
 @Component
 public class FrequencyDefiner {
 
-    @Autowired
-    private FrequencyHelper frequencyHelper;
+    private final FrequencyHelper frequencyHelper;
 
+    @Autowired
+    public FrequencyDefiner(FrequencyHelper frequencyHelper) {
+        this.frequencyHelper = frequencyHelper;
+    }
 
     public Frequency defineFrequency(List<Instant> startDatesOfSessions) {
         final int amountOfDurationsBetweenDates = startDatesOfSessions.size() - 1;
@@ -35,6 +38,7 @@ public class FrequencyDefiner {
                     freqsToExclude += EnumConstants.ORDINAL_OF_WEEKLY;
                 }
             }
+
             if (freqsToExclude < DateConstants.VALUE_FOR_EXCLUDE_DAILY_FREQ) {
                 boolean isTimeBetweenSessionsMultipleToDay = frequencyHelper.isDurationMultipleToFreq(Frequency.DAILY, timeBetweenSessions);
                 if (isTimeBetweenSessionsMultipleToDay) {
@@ -43,6 +47,7 @@ public class FrequencyDefiner {
                     freqsToExclude += EnumConstants.ORDINAL_OF_DAILY;
                 }
             }
+
             if (freqsToExclude < DateConstants.VALUE_FOR_EXCLUDE_HOURLY_FREQ) {
                 boolean isTimeBetweenSessionsMultipleToHour = frequencyHelper.isDurationMultipleToFreq(Frequency.HOURLY, timeBetweenSessions);
                 if (isTimeBetweenSessionsMultipleToHour) {
@@ -51,6 +56,7 @@ public class FrequencyDefiner {
                     freqsToExclude += EnumConstants.ORDINAL_OF_HOURLY;
                 }
             }
+
             boolean isTimeBetweenSessionsMultipleToMinute = frequencyHelper.isDurationMultipleToFreq(Frequency.MINUTELY, timeBetweenSessions);
             if (isTimeBetweenSessionsMultipleToMinute) {
                 amountOfDurationsWhichMultipleToMinute++;

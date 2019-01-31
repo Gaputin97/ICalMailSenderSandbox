@@ -1,12 +1,11 @@
 package by.iba.bussiness.template.installer;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.appointment.AppointmentHandler;
+import by.iba.bussiness.appointment.handler.AppointmentIndexHandler;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.status.EnrollmentStatus;
 import by.iba.bussiness.template.TemplateType;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -19,14 +18,10 @@ import static org.mockito.Mockito.when;
 public class TemplateStatusInstallerTest {
 
     @Mock
-    private AppointmentHandler appointmentHandler;
+    private AppointmentIndexHandler appointmentIndexHandler;
     @InjectMocks
     private TemplateStatusInstaller templateStatusInstaller;
 
-    @Before
-    public void setUp() {
-        templateStatusInstaller = new TemplateStatusInstaller(appointmentHandler);
-    }
 
     @Test
     public void testInstallTypeWhenEnrollmentStatusIsCancelled() {
@@ -64,7 +59,7 @@ public class TemplateStatusInstallerTest {
         appointment.setRescheduleIndex(rescheduleIndex);
         appointment.setUpdateIndex(updateIndex);
         //when
-        when(appointmentHandler.getMaximumIndex(appointment)).thenReturn(rescheduleIndex);
+        when(appointmentIndexHandler.getMaxIndex(appointment)).thenReturn(rescheduleIndex);
         String expected = templateStatusInstaller.installTemplateType(enrollment, appointment);
         //then
         Assert.assertEquals(expected, TemplateType.UPDATE.toString());
@@ -83,7 +78,7 @@ public class TemplateStatusInstallerTest {
         appointment.setRescheduleIndex(rescheduleIndex);
         appointment.setUpdateIndex(updateIndex);
         //when
-        when(appointmentHandler.getMaximumIndex(appointment)).thenReturn(rescheduleIndex);
+        when(appointmentIndexHandler.getMaxIndex(appointment)).thenReturn(rescheduleIndex);
         String expected = templateStatusInstaller.installTemplateType(enrollment, appointment);
         //then
         Assert.assertEquals(expected, null);

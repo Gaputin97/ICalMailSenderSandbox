@@ -1,11 +1,11 @@
 package by.iba.bussiness.calendar.rrule;
 
-public enum Count {
-    DEFAULT(0), ONE_SESSION_COUNT(1);
+public enum RruleCount {
+    ZERO(0), ONE_SESSION(1);
 
     private int intCount;
 
-    Count(int intCount) {
+    RruleCount(int intCount) {
         this.intCount = intCount;
     }
 

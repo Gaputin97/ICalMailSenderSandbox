@@ -9,8 +9,12 @@ import java.util.List;
 
 @Component
 public class IntervalDefiner {
+    private final IntervalHelper intervalHelper;
+
     @Autowired
-    private IntervalHelper intervalHelper;
+    public IntervalDefiner(IntervalHelper intervalHelper) {
+        this.intervalHelper = intervalHelper;
+    }
 
     public long defineInterval(List<Instant> startDatesOfSessions, Frequency frequency) {
         int amountOfDurationsBetweenDates = startDatesOfSessions.size() - 1;

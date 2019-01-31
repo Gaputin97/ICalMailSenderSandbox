@@ -10,7 +10,7 @@ public class Rrule {
     private Frequency frequency;
     private long interval;
     private List<Instant> exDates;
-    private Count count;
+    private RruleCount rruleCount;
 
 
     public Rrule() {
@@ -45,11 +45,11 @@ public class Rrule {
         this.interval = interval;
     }
 
-    public Count getCount() {
-        return count;
+    public RruleCount getRruleCount() {
+        return rruleCount;
     }
 
-    public void setCount(Count count) {
-        this.count = count;
+    public void setRruleCount(RruleCount rruleCount) {
+        this.rruleCount = rruleCount;
     }
 }

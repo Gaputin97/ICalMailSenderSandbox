@@ -1,6 +1,6 @@
 package by.iba.bussiness.calendar;
 
-import by.iba.bussiness.calendar.rrule.Count;
+import by.iba.bussiness.calendar.rrule.RruleCount;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 import by.iba.exception.CalendarException;
@@ -16,16 +16,16 @@ public class CalendarRruleParser {
     private static final Logger logger = LoggerFactory.getLogger(CalendarRruleParser.class);
 
     public Recur parseToCalendarRrule(Rrule rrule, String increasedUntilString) {
-        Count count = rrule.getCount();
+        RruleCount rruleCount = rrule.getRruleCount();
         long interval = rrule.getInterval();
         Frequency frequency = rrule.getFrequency();
         Recur recurrence;
         try {
-            if (count.equals(Count.DEFAULT)) {
+            if (rruleCount.equals(RruleCount.ZERO)) {
                 recurrence = new Recur("FREQ=" + frequency.toString() + ";" + "INTERVAL="
                         + interval + ";" + "UNTIL=" + increasedUntilString + ";");
             } else {
-                int intCount = count.getIntCount();
+                int intCount = rruleCount.getIntCount();
                 recurrence = new Recur("FREQ=" + frequency.toString() + ";" + "COUNT="
                         + intCount + ";");
             }

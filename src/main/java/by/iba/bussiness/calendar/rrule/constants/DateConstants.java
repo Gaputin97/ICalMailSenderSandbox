@@ -1,6 +1,5 @@
 package by.iba.bussiness.calendar.rrule.constants;
 
-
 public class DateConstants {
     public static final long MILLISECONDS_IN_HOUR = 3600000;
     public static final long MILLISECONDS_IN_DAY = 86400000;

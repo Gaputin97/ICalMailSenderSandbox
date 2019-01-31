@@ -5,11 +5,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class FrequencyHelper {
     public boolean isDurationMultipleToFreq(Frequency frequency, long timeBetweenSessions) {
-        boolean isDurationMultipleToFreq = false;
-        long millisecondsInFreq = frequency.getMillisecondsInFreq();
-        if (timeBetweenSessions % millisecondsInFreq == 0) {
-            isDurationMultipleToFreq = true;
+        boolean isDurationMultipleToFrequency = false;
+        long millisecondsInFrequency = frequency.getMillisecondsInFrequency();
+        if (timeBetweenSessions % millisecondsInFrequency == 0) {
+            isDurationMultipleToFrequency = true;
         }
-        return isDurationMultipleToFreq;
+        return isDurationMultipleToFrequency;
     }
 }

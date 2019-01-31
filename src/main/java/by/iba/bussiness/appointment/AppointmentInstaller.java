@@ -1,5 +1,6 @@
 package by.iba.bussiness.appointment;
 
+import by.iba.bussiness.appointment.handler.AppointmentHandler;
 import by.iba.bussiness.appointment.repository.AppointmentRepository;
 import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.meeting.Meeting;
@@ -41,3 +42,4 @@ public class AppointmentInstaller {
         return newAppointment;
     }
 }
+
