@@ -88,8 +88,7 @@ public class CalendarCreatorTest {
         enrollment.setStatus(EnrollmentStatus.CONFIRMED.name());
         enrollment.setCalendarVersion("2");
 
-        Calendar expectedRequestCalendar = new Calendar();
-        expectedRequestCalendar.getProperties().add(Method.REQUEST);
+        Calendar expectedRequestCalendar = null;
 
         when(simpleMeetingCalendarTemplateCreator.createSimpleCalendarTemplate(vEvent)).thenReturn(expectedRequestCalendar);
         when(appointmentIndexHandler.getMaxIndex(appointment)).thenReturn(2);
