@@ -1,19 +1,22 @@
-package by.iba.bussiness.enrollment;
+package by.iba.bussiness.enrollment.status;
 
 import by.iba.bussiness.calendar.learner.Learner;
+import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
-public class EnrollmentChecker {
-    private static final Logger logger = LoggerFactory.getLogger(EnrollmentChecker.class);
+public class EnrollmentStatusChecker {
+    private static final Logger logger = LoggerFactory.getLogger(EnrollmentStatusChecker.class);
     private EnrollmentService enrollmentService;
 
     @Autowired
-    public EnrollmentChecker(EnrollmentService enrollmentService) {
+    public EnrollmentStatusChecker(EnrollmentService enrollmentService) {
         this.enrollmentService = enrollmentService;
     }
 
@@ -28,6 +31,14 @@ public class EnrollmentChecker {
             wasChanged = false;
         }
         return wasChanged;
+    }
+
+    public boolean doAllEnrollmentHaveCancelledStatus(List<Enrollment> enrollments) {
+        return enrollments.stream().map(Enrollment::getStatus).allMatch(EnrollmentStatus.CANCELLED::equals);
+    }
+
+    public boolean doAllEnrollmentHaveConfirmedStatus(List<Enrollment> enrollments) {
+        return enrollments.stream().map(Enrollment::getStatus).allMatch(EnrollmentStatus.CONFIRMED::equals);
     }
 }
 

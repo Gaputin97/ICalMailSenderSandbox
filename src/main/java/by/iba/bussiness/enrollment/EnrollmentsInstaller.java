@@ -7,6 +7,7 @@ import by.iba.bussiness.calendar.learner.Learner;
 import by.iba.bussiness.calendar.status.EnrollmentCalendarStatusDefiner;
 import by.iba.bussiness.enroll.EnrollLearnerStatus;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
+import by.iba.bussiness.enrollment.status.EnrollmentStatusChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,19 +20,19 @@ import java.util.List;
 public class EnrollmentsInstaller {
     private static final Logger logger = LoggerFactory.getLogger(EnrollmentsInstaller.class);
     private EnrollmentService enrollmentService;
-    private EnrollmentChecker enrollmentChecker;
+    private EnrollmentStatusChecker enrollmentStatusChecker;
     private EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner;
     private AppointmentHandler appointmentHandler;
     private AppointmentIndexHandler appointmentIndexHandler;
 
     @Autowired
     public EnrollmentsInstaller(EnrollmentService enrollmentService,
-                                EnrollmentChecker enrollmentChecker,
+                                EnrollmentStatusChecker enrollmentStatusChecker,
                                 EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner,
                                 AppointmentHandler appointmentHandler,
                                 AppointmentIndexHandler appointmentIndexHandler) {
         this.enrollmentService = enrollmentService;
-        this.enrollmentChecker = enrollmentChecker;
+        this.enrollmentStatusChecker = enrollmentStatusChecker;
         this.enrollmentCalendarStatusDefiner = enrollmentCalendarStatusDefiner;
         this.appointmentHandler = appointmentHandler;
         this.appointmentIndexHandler = appointmentIndexHandler;
@@ -46,7 +47,7 @@ public class EnrollmentsInstaller {
             Enrollment oldEnrollment = enrollmentService.getByEmailAndParentIdAndType(bigIntegerMeetingId, email, enrollmentStatus);
             if (oldEnrollment == null) {
                 oldEnrollment = enrollmentService.getByEmailAndParentId(bigIntegerMeetingId, email);
-                if (enrollmentChecker.wasChangedStatus(oldEnrollment, learner)) {
+                if (enrollmentStatusChecker.wasChangedStatus(oldEnrollment, learner)) {
                     oldEnrollment.setStatus(enrollmentStatus);
                     enrollmentService.save(oldEnrollment);
                     logger.info("Enrollment " + oldEnrollment.getUserEmail() + " has been saved with new status " + oldEnrollment.getStatus());
