@@ -1,9 +1,10 @@
 package by.iba.bussiness.notification.service.v1;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.appointment.AppointmentCreator;
 import by.iba.bussiness.appointment.AppointmentInstaller;
 import by.iba.bussiness.appointment.repository.AppointmentRepository;
+import by.iba.bussiness.calendar.rrule.Rrule;
+import by.iba.bussiness.calendar.rrule.definer.RruleDefiner;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.facade.ComplexTemplateSenderFacade;
 import by.iba.bussiness.facade.SimpleCalendarSenderFacade;
@@ -38,9 +39,9 @@ public class SenderServiceImpl implements SenderService {
     private ComplexTemplateSenderFacade complexTemplateSenderFacade;
     private SimpleCalendarSenderFacade simpleCalendarSenderFacade;
     private AppointmentRepository appointmentRepository;
+    private RruleDefiner rruleDefiner;
     private PlaceHoldersInstaller placeHoldersInstaller;
     private TemplatePlaceHolderReplacer templatePlaceHolderReplacer;
-    private AppointmentCreator appointmentCreator;
 
     @Autowired
     public SenderServiceImpl(MeetingService meetingService,
@@ -50,9 +51,9 @@ public class SenderServiceImpl implements SenderService {
                              ComplexTemplateSenderFacade complexTemplateSenderFacade,
                              SimpleCalendarSenderFacade simpleCalendarSenderFacade,
                              AppointmentRepository appointmentRepository,
+                             RruleDefiner rruleDefiner,
                              PlaceHoldersInstaller placeHoldersInstaller,
-                             TemplatePlaceHolderReplacer templatePlaceHolderReplacer,
-                             AppointmentCreator appointmentCreator) {
+                             TemplatePlaceHolderReplacer templatePlaceHolderReplacer) {
         this.meetingService = meetingService;
         this.invitationTemplateService = invitationTemplateService;
         this.appointmentInstaller = appointmentInstaller;
@@ -60,9 +61,9 @@ public class SenderServiceImpl implements SenderService {
         this.complexTemplateSenderFacade = complexTemplateSenderFacade;
         this.simpleCalendarSenderFacade = simpleCalendarSenderFacade;
         this.appointmentRepository = appointmentRepository;
+        this.rruleDefiner = rruleDefiner;
         this.placeHoldersInstaller = placeHoldersInstaller;
         this.templatePlaceHolderReplacer = templatePlaceHolderReplacer;
-        this.appointmentCreator = appointmentCreator;
     }
 
     @Override
@@ -80,24 +81,16 @@ public class SenderServiceImpl implements SenderService {
         InvitationTemplate invitationTemplate = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
         Map<String, String> placeHolders = placeHoldersInstaller.installPlaceHoldersMap(meeting);
         InvitationTemplate modifiedInvTemplate = templatePlaceHolderReplacer.replaceTemplatePlaceHolders(placeHolders, invitationTemplate);
-        meeting.setPlainDescription("Plain description"); //Hardcode instead plain description
-
-        Appointment currentAppointment = appointmentRepository.getByMeetingId(new BigInteger(meetingId));
-        Appointment newAppointment = appointmentCreator.createAppointment(meeting, modifiedInvTemplate);
-        if (currentAppointment == null) {
-            newAppointment = appointmentRepository.save(newAppointment);
-        } else {
-            newAppointment = appointmentInstaller.installAppointment(newAppointment, currentAppointment);
-        }
-
+        Appointment oldAppointment = appointmentRepository.getByMeetingId(new BigInteger(meetingId));
+        meeting.setPlainDescription("Plain description"); // mock
+        Appointment newAppointment = appointmentInstaller.installAppointment(meeting, modifiedInvTemplate, oldAppointment);
+        List<MailSendingResponseStatus> mailSendingResponseStatusList;
         List<Session> newAppSessions = newAppointment.getSessionList();
         MeetingType newAppointmentMeetingType = meetingTypeDefiner.defineMeetingType(newAppSessions);
-
-        List<MailSendingResponseStatus> mailSendingResponseStatusList;
         if (newAppointmentMeetingType.equals(MeetingType.SIMPLE)) {
-            mailSendingResponseStatusList = simpleCalendarSenderFacade.sendCalendar(newAppointment, currentAppointment);
+            mailSendingResponseStatusList = simpleCalendarSenderFacade.sendCalendar(newAppointment, oldAppointment);
         } else {
-            mailSendingResponseStatusList = complexTemplateSenderFacade.sendTemplate(newAppointment, currentAppointment);
+            mailSendingResponseStatusList = complexTemplateSenderFacade.sendTemplate(newAppointment, oldAppointment);
         }
         return mailSendingResponseStatusList;
     }

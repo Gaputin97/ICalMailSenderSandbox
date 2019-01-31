@@ -1,17 +1,17 @@
 package by.iba.bussiness.enrollment;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.appointment.handler.IndexDeterminer;
+import by.iba.bussiness.appointment.handler.AppointmentIndexHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EnrollmentUpdateChecker {
-    private IndexDeterminer indexDeterminer;
+    private AppointmentIndexHandler appointmentIndexHandler;
 
     @Autowired
-    public EnrollmentUpdateChecker(IndexDeterminer indexDeterminer) {
-        this.indexDeterminer = indexDeterminer;
+    public EnrollmentUpdateChecker(AppointmentIndexHandler appointmentIndexHandler) {
+        this.appointmentIndexHandler = appointmentIndexHandler;
     }
 
     public boolean isEnrollmentMustBeUpdated(Enrollment enrollment, Appointment newAppointment) {
@@ -21,7 +21,7 @@ public class EnrollmentUpdateChecker {
             needUpdate = true;
         } else {
             int enrollmentCalendarVersionInt = Integer.parseInt(enrollment.getCalendarVersion());
-            int maximumAppointmentIndex = indexDeterminer.getMaxIndex(newAppointment);
+            int maximumAppointmentIndex = appointmentIndexHandler.getMaxIndex(newAppointment);
             if (maximumAppointmentIndex > enrollmentCalendarVersionInt) {
                 needUpdate = true;
             }

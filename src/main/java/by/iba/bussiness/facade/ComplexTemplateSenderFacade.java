@@ -111,10 +111,8 @@ public class ComplexTemplateSenderFacade {
                     String meetingTitle = appointment.getTitle();
                     MailSendingResponseStatus mailSendingResponseStatus = messageSender.sendTemplate(template, userEmail, meetingTitle);
                     mailSendingResponseStatusList.add(mailSendingResponseStatus);
-                    String definedEnrollmentCalendarStatus =
-                            enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
                     if (mailSendingResponseStatus.isDelivered()) {
-                        enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, appointment, definedEnrollmentCalendarStatus);
+                        enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, appointment);
                     }
                 }
             }

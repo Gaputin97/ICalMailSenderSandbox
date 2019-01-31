@@ -1,6 +1,6 @@
 package by.iba.bussiness.appointment;
 
-import by.iba.bussiness.appointment.handler.IndexDeterminer;
+import by.iba.bussiness.appointment.handler.MaxOrMinIndexDeterminer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -9,10 +9,10 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class IndexDeterminerTest {
+public class MaxOrMinIndexDeterminerTest {
 
     @InjectMocks
-    private IndexDeterminer indexDeterminer;
+    private MaxOrMinIndexDeterminer maxOrMinIndexDeterminer;
 
     @Test
     public void testGetMaximumIndexWhenRescheduleIndexGreater() {
@@ -20,7 +20,7 @@ public class IndexDeterminerTest {
         currentAppointment.setUpdateIndex(1);
         currentAppointment.setRescheduleIndex(2);
 
-        int actualIndex = indexDeterminer.getMaxIndex(currentAppointment);
+        int actualIndex = maxOrMinIndexDeterminer.getMaxIndex(currentAppointment);
         assertEquals(2, actualIndex);
     }
 
@@ -30,7 +30,7 @@ public class IndexDeterminerTest {
         currentAppointment.setUpdateIndex(2);
         currentAppointment.setRescheduleIndex(1);
 
-        int actualIndex = indexDeterminer.getMaxIndex(currentAppointment);
+        int actualIndex = maxOrMinIndexDeterminer.getMaxIndex(currentAppointment);
         assertEquals(2, actualIndex);
     }
 
@@ -40,7 +40,7 @@ public class IndexDeterminerTest {
         currentAppointment.setUpdateIndex(2);
         currentAppointment.setRescheduleIndex(1);
 
-        int actualIndex = indexDeterminer.getMinIndex(currentAppointment);
+        int actualIndex = maxOrMinIndexDeterminer.getMinIndex(currentAppointment);
         assertEquals(1, actualIndex);
     }
 
@@ -50,7 +50,7 @@ public class IndexDeterminerTest {
         currentAppointment.setUpdateIndex(1);
         currentAppointment.setRescheduleIndex(2);
 
-        int actualIndex = indexDeterminer.getMinIndex(currentAppointment);
+        int actualIndex = maxOrMinIndexDeterminer.getMinIndex(currentAppointment);
         assertEquals(1, actualIndex);
     }
 }

@@ -1,7 +1,7 @@
 package by.iba.bussiness.calendar.creator.definer;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.appointment.handler.IndexDeterminer;
+import by.iba.bussiness.appointment.handler.AppointmentIndexHandler;
 import net.fortuna.ical4j.model.property.Sequence;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class SequenceDefinerTest {
     @Mock
-    private IndexDeterminer indexDeterminer;
+    private AppointmentIndexHandler appointmentIndexHandler;
 
     @InjectMocks
     private SequenceDefiner sequenceDefiner;
@@ -29,8 +29,8 @@ public class SequenceDefinerTest {
         int minIndex = 3;
         Sequence expectedSequence = new Sequence(minIndex);
 
-        when(indexDeterminer.getMaxIndex(newAppointment)).thenReturn(maxIndex);
-        when(indexDeterminer.getMinIndex(newAppointment)).thenReturn(minIndex);
+        when(appointmentIndexHandler.getMaxIndex(newAppointment)).thenReturn(maxIndex);
+        when(appointmentIndexHandler.getMinIndex(newAppointment)).thenReturn(minIndex);
         when(newAppointment.getUpdateIndex()).thenReturn(updatedIndex);
 
         Sequence actualSequence = sequenceDefiner.defineSequence(newAppointment);
@@ -46,8 +46,8 @@ public class SequenceDefinerTest {
         int minIndex = 2;
         Sequence expectedSequence = new Sequence(maxIndex);
 
-        when(indexDeterminer.getMaxIndex(newAppointment)).thenReturn(maxIndex);
-        when(indexDeterminer.getMinIndex(newAppointment)).thenReturn(minIndex);
+        when(appointmentIndexHandler.getMaxIndex(newAppointment)).thenReturn(maxIndex);
+        when(appointmentIndexHandler.getMinIndex(newAppointment)).thenReturn(minIndex);
         when(newAppointment.getUpdateIndex()).thenReturn(updatedIndex);
 
         Sequence actualSequence = sequenceDefiner.defineSequence(newAppointment);

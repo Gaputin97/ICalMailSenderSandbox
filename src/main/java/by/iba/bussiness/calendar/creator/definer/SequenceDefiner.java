@@ -1,25 +1,25 @@
 package by.iba.bussiness.calendar.creator.definer;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.appointment.handler.IndexDeterminer;
+import by.iba.bussiness.appointment.handler.AppointmentIndexHandler;
 import net.fortuna.ical4j.model.property.Sequence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SequenceDefiner {
-    private IndexDeterminer indexDeterminer;
+    private AppointmentIndexHandler appointmentIndexHandler;
 
     @Autowired
-    public SequenceDefiner(IndexDeterminer indexDeterminer) {
-        this.indexDeterminer = indexDeterminer;
+    public SequenceDefiner(AppointmentIndexHandler appointmentIndexHandler) {
+        this.appointmentIndexHandler = appointmentIndexHandler;
     }
 
     public Sequence defineSequence(Appointment newAppointment) {
         Sequence sequence;
-        int maxIndex = indexDeterminer.getMaxIndex(newAppointment);
+        int maxIndex = appointmentIndexHandler.getMaxIndex(newAppointment);
         int updatedIndex = newAppointment.getUpdateIndex();
-        int minIndex = indexDeterminer.getMinIndex(newAppointment);
+        int minIndex = appointmentIndexHandler.getMinIndex(newAppointment);
         if (maxIndex == updatedIndex) {
             sequence = new Sequence(minIndex);
         } else {

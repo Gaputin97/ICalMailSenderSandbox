@@ -4,7 +4,7 @@ import by.iba.bussiness.appointment.Appointment;
 import org.springframework.stereotype.Component;
 
 @Component
-public class IndexDeterminer {
+public class MaxOrMinIndexDeterminer {
     public int getMaxIndex(Appointment currentAppointment) {
         int updateIndex = currentAppointment.getUpdateIndex();
         int rescheduleIndex = currentAppointment.getRescheduleIndex();

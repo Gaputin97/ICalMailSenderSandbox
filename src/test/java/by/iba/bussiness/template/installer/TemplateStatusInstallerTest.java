@@ -1,7 +1,7 @@
 package by.iba.bussiness.template.installer;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.appointment.handler.IndexDeterminer;
+import by.iba.bussiness.appointment.handler.AppointmentIndexHandler;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.status.EnrollmentStatus;
 import by.iba.bussiness.template.TemplateType;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 public class TemplateStatusInstallerTest {
 
     @Mock
-    private IndexDeterminer indexDeterminer;
+    private AppointmentIndexHandler appointmentIndexHandler;
     @InjectMocks
     private TemplateStatusInstaller templateStatusInstaller;
 
@@ -59,7 +59,7 @@ public class TemplateStatusInstallerTest {
         appointment.setRescheduleIndex(rescheduleIndex);
         appointment.setUpdateIndex(updateIndex);
         //when
-        when(indexDeterminer.getMaxIndex(appointment)).thenReturn(rescheduleIndex);
+        when(appointmentIndexHandler.getMaxIndex(appointment)).thenReturn(rescheduleIndex);
         String expected = templateStatusInstaller.installTemplateType(enrollment, appointment);
         //then
         Assert.assertEquals(expected, TemplateType.UPDATE.toString());
@@ -78,7 +78,7 @@ public class TemplateStatusInstallerTest {
         appointment.setRescheduleIndex(rescheduleIndex);
         appointment.setUpdateIndex(updateIndex);
         //when
-        when(indexDeterminer.getMaxIndex(appointment)).thenReturn(rescheduleIndex);
+        when(appointmentIndexHandler.getMaxIndex(appointment)).thenReturn(rescheduleIndex);
         String expected = templateStatusInstaller.installTemplateType(enrollment, appointment);
         //then
         Assert.assertEquals(expected, null);
