@@ -18,9 +18,9 @@ public class TemplateTimeSlotTypeInstaller {
     private TemplateTimeSlotDefiner templateTimeSlotDefiner;
 
 
-    public List<TypedSession> installTypedSessions(Appointment appointment, Appointment oldAppointment) {
+    public List<TypedSession> installTypedSessions(Appointment appointment, Appointment currentAppointment) {
         List<Session> newAppSessions = appointment.getSessionList();
-        List<Session> oldAppSessions = oldAppointment.getSessionList();
+        List<Session> oldAppSessions = currentAppointment.getSessionList();
 
         int newAppSessionsMaxId = templateTimeSlotDefiner.defineHighestIdOfSessions(newAppSessions);
         int oldAppSessionsMaxId = templateTimeSlotDefiner.defineHighestIdOfSessions(oldAppSessions);

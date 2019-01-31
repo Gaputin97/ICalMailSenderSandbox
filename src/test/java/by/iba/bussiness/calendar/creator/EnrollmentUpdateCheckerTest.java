@@ -1,7 +1,7 @@
 package by.iba.bussiness.calendar.creator;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.appointment.handler.AppointmentIndexHandler;
+import by.iba.bussiness.appointment.handler.IndexDeterminer;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentUpdateChecker;
 import by.iba.bussiness.enrollment.status.EnrollmentStatus;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 public class EnrollmentUpdateCheckerTest {
 
     @Mock
-    private AppointmentIndexHandler appointmentIndexHandler;
+    private IndexDeterminer indexDeterminer;
     @InjectMocks
     private EnrollmentUpdateChecker calendarCreator;
 

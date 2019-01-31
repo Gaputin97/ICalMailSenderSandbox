@@ -67,20 +67,20 @@ public class ComplexTemplateSenderFacade {
         this.enrollmentCalendarStatusDefiner = enrollmentCalendarStatusDefiner;
     }
 
-    public List<MailSendingResponseStatus> sendTemplate(Appointment appointment, Appointment oldAppointment) {
+    public List<MailSendingResponseStatus> sendTemplate(Appointment appointment, Appointment currentAppointment) {
         BigInteger meetingId = appointment.getMeetingId();
         List<MailSendingResponseStatus> mailSendingResponseStatusList = new ArrayList<>();
         List<Enrollment> enrollmentList = enrollmentService.getAllByParentId(meetingId);
-        Template installedTemplate = templateInstaller.installTemplate(appointment, oldAppointment);
+        Template installedTemplate = templateInstaller.installTemplate(appointment, currentAppointment);
         MeetingType oldMeetingType = null;
-        if (oldAppointment != null) {
-            List<Session> oldAppSessions = oldAppointment.getSessionList();
+        if (currentAppointment != null) {
+            List<Session> oldAppSessions = currentAppointment.getSessionList();
             oldMeetingType = meetingTypeDefiner.defineMeetingType(oldAppSessions);
         }
         boolean isOldMeetingSimple = (oldMeetingType == MeetingType.SIMPLE);
         Calendar calendar = null;
         if (isOldMeetingSimple) {
-            List<Session> oldAppSessions = oldAppointment.getSessionList();
+            List<Session> oldAppSessions = currentAppointment.getSessionList();
             Rrule rrule = rruleDefiner.defineRrule(oldAppSessions);
             calendar = CalendarCreator.createCalendarTemplate(rrule, appointment);
         }
@@ -90,7 +90,7 @@ public class ComplexTemplateSenderFacade {
                 Calendar cancelCalendarWithoutAttendee = calendar;
                 Calendar cancelCalendarWithAttendee =
                         calendarAttendeesInstaller.installAttendeeToCalendar(enrollment.getUserEmail(), cancelCalendarWithoutAttendee);
-                messageSender.sendCalendarToLearner(cancelCalendarWithAttendee, enrollmentCalendarStatus, oldAppointment);
+                messageSender.sendCalendarToLearner(cancelCalendarWithAttendee, enrollmentCalendarStatus, currentAppointment);
             }
             if (EnrollmentCalendarStatus.CANCELLATION.equals(enrollment.getCalendarStatus())
                     && EnrollmentStatus.CANCELLED.equals(enrollment.getStatus())) {

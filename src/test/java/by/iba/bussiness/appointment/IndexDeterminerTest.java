@@ -1,6 +1,6 @@
 package by.iba.bussiness.appointment;
 
-import by.iba.bussiness.appointment.handler.MaxOrMinIndexDeterminer;
+import by.iba.bussiness.appointment.handler.IndexDeterminer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -9,10 +9,10 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class MaxOrMinIndexDeterminerTest {
+public class IndexDeterminerTest {
 
     @InjectMocks
-    private MaxOrMinIndexDeterminer maxOrMinIndexDeterminer;
+    private IndexDeterminer maxOrMinIndexDeterminer;
 
     @Test
     public void testGetMaximumIndexWhenRescheduleIndexGreater() {

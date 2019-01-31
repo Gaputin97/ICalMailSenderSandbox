@@ -2,7 +2,7 @@ package by.iba.bussiness.enrollment;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.handler.AppointmentHandler;
-import by.iba.bussiness.appointment.handler.AppointmentIndexHandler;
+import by.iba.bussiness.appointment.handler.IndexDeterminer;
 import by.iba.bussiness.calendar.learner.Learner;
 import by.iba.bussiness.calendar.status.EnrollmentCalendarStatusDefiner;
 import by.iba.bussiness.enroll.EnrollLearnerStatus;
@@ -22,20 +22,17 @@ public class EnrollmentsInstaller {
     private EnrollmentService enrollmentService;
     private EnrollmentStatusChecker enrollmentStatusChecker;
     private EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner;
-    private AppointmentHandler appointmentHandler;
-    private AppointmentIndexHandler appointmentIndexHandler;
+    private IndexDeterminer indexDeterminer;
 
     @Autowired
     public EnrollmentsInstaller(EnrollmentService enrollmentService,
                                 EnrollmentStatusChecker enrollmentStatusChecker,
                                 EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner,
-                                AppointmentHandler appointmentHandler,
-                                AppointmentIndexHandler appointmentIndexHandler) {
+                                IndexDeterminer indexDeterminer) {
         this.enrollmentService = enrollmentService;
         this.enrollmentStatusChecker = enrollmentStatusChecker;
         this.enrollmentCalendarStatusDefiner = enrollmentCalendarStatusDefiner;
-        this.appointmentHandler = appointmentHandler;
-        this.appointmentIndexHandler = appointmentIndexHandler;
+        this.indexDeterminer = indexDeterminer;
     }
 
     public List<EnrollLearnerStatus> installEnrollments(List<Learner> learners, String meetingId) {
@@ -75,7 +72,7 @@ public class EnrollmentsInstaller {
     }
 
     public void installEnrollmentCalendarFields(Enrollment enrollment, Appointment appointment) {
-        int maximumIndex = appointmentIndexHandler.getMaxIndex(appointment);
+        int maximumIndex = indexDeterminer.getMaxIndex(appointment);
         String calendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
         enrollment.setCalendarStatus(calendarStatus);
         enrollment.setCalendarVersion(Integer.toString(maximumIndex));
