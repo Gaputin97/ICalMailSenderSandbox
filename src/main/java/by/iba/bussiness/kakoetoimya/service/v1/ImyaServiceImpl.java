@@ -32,10 +32,12 @@ public class ImyaServiceImpl implements ImyaService {
         ImyaResponseStatus imyaResponseStatus = new ImyaResponseStatus();
         List<EnrollLearnerResponseStatus> enrollLearnerResponseStatuses = enrollService.enrollLearners(request, meetingId, learners);
         List<NotificationResponseStatus> notificationResponseStatuses = notificationService.sendCalendarToAllEnrollmentsOfMeeting(request, meetingId);
+
         List<NotificationResponseStatus> filtredNotificationResponseStatus = notificationResponseStatuses.stream().filter(notification -> {
             boolean doNotificationContainLearner = learners.stream().map(Learner::getEmail).anyMatch(notification.getRecipientEmail()::equals);
             return (notification.isDelivered() || doNotificationContainLearner);
         }).collect(Collectors.toList());
+
         imyaResponseStatus.setEnrollLearnerResponseStatuses(enrollLearnerResponseStatuses);
         imyaResponseStatus.setNotificationResponseStatuses(filtredNotificationResponseStatus);
         return imyaResponseStatus;

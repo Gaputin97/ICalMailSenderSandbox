@@ -1,7 +1,6 @@
 package by.iba.bussiness.enrollment;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.appointment.handler.AppointmentHandler;
 import by.iba.bussiness.appointment.handler.IndexDeterminer;
 import by.iba.bussiness.calendar.learner.Learner;
 import by.iba.bussiness.calendar.status.EnrollmentCalendarStatusDefiner;

@@ -11,16 +11,16 @@ import java.math.BigInteger;
 import java.util.List;
 
 @Component
-public class AppointmentHandler {
-    private static final Logger logger = LoggerFactory.getLogger(AppointmentHandler.class);
+public class AppointmentIndexesUpdater {
+    private static final Logger logger = LoggerFactory.getLogger(AppointmentIndexesUpdater.class);
     private IndexDeterminer indexDeterminer;
 
     @Autowired
-    public AppointmentHandler(IndexDeterminer indexDeterminer) {
+    public AppointmentIndexesUpdater(IndexDeterminer indexDeterminer) {
         this.indexDeterminer = indexDeterminer;
     }
 
-    public Appointment updateAppointmentIndex(Appointment newAppointment, Appointment currentAppointment) {
+    public Appointment updateIndexesBasedOnSessionsDifferences(Appointment newAppointment, Appointment currentAppointment) {
         if (currentAppointment.equals(newAppointment)) {
             newAppointment = currentAppointment;
         } else {
