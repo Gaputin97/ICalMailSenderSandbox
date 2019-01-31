@@ -18,8 +18,8 @@ public class SequenceDefiner {
     public Sequence defineSequence(Appointment newAppointment) {
         Sequence sequence;
         int maxIndex = indexDeterminer.getMaxIndex(newAppointment);
-        int updatedIndex = newAppointment.getUpdateIndex();
         int minIndex = indexDeterminer.getMinIndex(newAppointment);
+        int updatedIndex = newAppointment.getUpdateIndex();
         if (maxIndex == updatedIndex) {
             sequence = new Sequence(minIndex);
         } else {

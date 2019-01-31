@@ -28,10 +28,11 @@ public class CalendarAttendeesInstaller {
             attendee.getParameters().add(Rsvp.TRUE);
             attendee.getParameters().add(Role.REQ_PARTICIPANT);
             vEvent.getProperties().add(attendee);
-            return calendarWithAttendee;
         } catch (ParseException | URISyntaxException | IOException e) {
             logger.error("Can't create calendar based on another calendar", e);
             throw new CalendarException("Can't create calendar.");
         }
+        return calendarWithAttendee;
+
     }
 }

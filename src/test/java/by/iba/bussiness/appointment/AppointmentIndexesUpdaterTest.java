@@ -1,6 +1,6 @@
 package by.iba.bussiness.appointment;
 
-import by.iba.bussiness.appointment.handler.AppointmentHandler;
+import by.iba.bussiness.appointment.handler.AppointmentIndexesUpdater;
 import by.iba.bussiness.appointment.handler.IndexDeterminer;
 import by.iba.bussiness.calendar.session.Session;
 import org.junit.Test;
@@ -17,17 +17,17 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AppointmentHandlerTest {
+public class AppointmentIndexesUpdaterTest {
     @Mock
     private IndexDeterminer indexDeterminer;
     @InjectMocks
-    private AppointmentHandler appointmentHandler;
+    private AppointmentIndexesUpdater appointmentHandler;
 
     @Test
     public void testUpdateAppointmentWhenAppointmentsEquals() {
         Appointment expectedAppointment = new Appointment();
 
-        Appointment actualAppointment = appointmentHandler.updateAppointmentIndex(expectedAppointment, expectedAppointment);
+        Appointment actualAppointment = appointmentHandler.updateIndexesBasedOnSessionsDifferences(expectedAppointment, expectedAppointment);
 
         assertEquals(expectedAppointment, actualAppointment);
     }
@@ -50,7 +50,7 @@ public class AppointmentHandlerTest {
 
         when(indexDeterminer.getMaxIndex(currentAppointment)).thenReturn(2);
 
-        Appointment actualAppointment = appointmentHandler.updateAppointmentIndex(newAppointment, currentAppointment);
+        Appointment actualAppointment = appointmentHandler.updateIndexesBasedOnSessionsDifferences(newAppointment, currentAppointment);
         int actualUpdateIndex = actualAppointment.getUpdateIndex();
         int actualRescheduleIndex = actualAppointment.getRescheduleIndex();
 
@@ -75,7 +75,7 @@ public class AppointmentHandlerTest {
 
         when(indexDeterminer.getMaxIndex(currentAppointment)).thenReturn(2);
 
-        Appointment actualAppointment = appointmentHandler.updateAppointmentIndex(newAppointment, currentAppointment);
+        Appointment actualAppointment = appointmentHandler.updateIndexesBasedOnSessionsDifferences(newAppointment, currentAppointment);
         int actualUpdateIndex = actualAppointment.getUpdateIndex();
         int actualRescheduleIndex = actualAppointment.getRescheduleIndex();
 

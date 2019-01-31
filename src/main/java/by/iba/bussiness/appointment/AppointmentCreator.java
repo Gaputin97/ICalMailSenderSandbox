@@ -18,25 +18,30 @@ public class AppointmentCreator {
         this.sessionParser = sessionParser;
     }
 
-    public Appointment createAppointment(Meeting meeting, InvitationTemplate invitationTemplate) {
-        Appointment appointment = new Appointment();
-        appointment.setMeetingId(meeting.getId());
-        appointment.setDescription(meeting.getDescription());
-        appointment.setLocation(invitationTemplate.getLocationILT());
-        appointment.setLocationInfo(meeting.getLocationInfo());
-        appointment.setSummary(meeting.getSummary());
-        appointment.setPlainDescription(meeting.getPlainDescription());
-        appointment.setSubject(invitationTemplate.getSubject());
-        appointment.setTitle(meeting.getTitle());
-        appointment.setStartDateTime(meeting.getStartDateTime());
-        appointment.setEndDateTime(meeting.getEndDateTime());
+    public Appointment createAppointmentWithMainFields(Meeting newMeeting, InvitationTemplate newInvitationTemplate) {
+        Appointment newAppointment = new Appointment();
+        newAppointment.setMeetingId(newMeeting.getId());
 
-        List<TimeSlot> timeSlots = meeting.getTimeSlots();
-        appointment.setSessionList(sessionParser.timeSlotListToSessionList(timeSlots));
-        appointment.setDuration(meeting.getDuration());
-        appointment.setFrom(invitationTemplate.getFrom());
-        appointment.setFromName(invitationTemplate.getFromName());
-        appointment.setTimeZone(meeting.getTimeZone());
-        return appointment;
+        newAppointment.setLocation(newInvitationTemplate.getLocationILT());
+        newAppointment.setLocationInfo(newMeeting.getLocationInfo());
+        newAppointment.setTimeZone(newMeeting.getTimeZone());
+
+        newAppointment.setSummary(newMeeting.getSummary());
+        newAppointment.setSubject(newInvitationTemplate.getSubject());
+        newAppointment.setTitle(newMeeting.getTitle());
+
+        newAppointment.setDescription(newMeeting.getDescription());
+        newAppointment.setPlainDescription(newMeeting.getPlainDescription());
+
+        newAppointment.setStartDateTime(newMeeting.getStartDateTime());
+        newAppointment.setEndDateTime(newMeeting.getEndDateTime());
+        newAppointment.setDuration(newMeeting.getDuration());
+
+        List<TimeSlot> timeSlots = newMeeting.getTimeSlots();
+        newAppointment.setSessionList(sessionParser.timeSlotListToSessionList(timeSlots));
+
+        newAppointment.setFrom(newInvitationTemplate.getFrom());
+        newAppointment.setFromName(newInvitationTemplate.getFromName());
+        return newAppointment;
     }
 }

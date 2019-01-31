@@ -2,7 +2,8 @@ package by.iba.bussiness.notification.service.v1;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.AppointmentCreator;
-import by.iba.bussiness.appointment.AppointmentInstaller;
+import by.iba.bussiness.appointment.AppointmentDeterminer;
+import by.iba.bussiness.appointment.handler.AppointmentIndexesUpdater;
 import by.iba.bussiness.appointment.repository.AppointmentRepository;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.facade.ComplexTemplateSenderFacade;
@@ -33,7 +34,7 @@ public class SenderServiceImpl implements SenderService {
     private static final Logger logger = LoggerFactory.getLogger(SenderServiceImpl.class);
     private MeetingService meetingService;
     private InvitationTemplateService invitationTemplateService;
-    private AppointmentInstaller appointmentInstaller;
+    private AppointmentDeterminer appointmentDeterminer;
     private MeetingTypeDefiner meetingTypeDefiner;
     private ComplexTemplateSenderFacade complexTemplateSenderFacade;
     private SimpleCalendarSenderFacade simpleCalendarSenderFacade;
@@ -41,21 +42,23 @@ public class SenderServiceImpl implements SenderService {
     private PlaceHoldersInstaller placeHoldersInstaller;
     private TemplatePlaceHolderReplacer templatePlaceHolderReplacer;
     private AppointmentCreator appointmentCreator;
+    private AppointmentIndexesUpdater indexesUpdater;
 
     @Autowired
     public SenderServiceImpl(MeetingService meetingService,
                              InvitationTemplateService invitationTemplateService,
-                             AppointmentInstaller appointmentInstaller,
+                             AppointmentDeterminer appointmentDeterminer,
                              MeetingTypeDefiner meetingTypeDefiner,
                              ComplexTemplateSenderFacade complexTemplateSenderFacade,
                              SimpleCalendarSenderFacade simpleCalendarSenderFacade,
                              AppointmentRepository appointmentRepository,
                              PlaceHoldersInstaller placeHoldersInstaller,
                              TemplatePlaceHolderReplacer templatePlaceHolderReplacer,
-                             AppointmentCreator appointmentCreator) {
+                             AppointmentCreator appointmentCreator,
+                             AppointmentIndexesUpdater indexesUpdater) {
         this.meetingService = meetingService;
         this.invitationTemplateService = invitationTemplateService;
-        this.appointmentInstaller = appointmentInstaller;
+        this.appointmentDeterminer = appointmentDeterminer;
         this.meetingTypeDefiner = meetingTypeDefiner;
         this.complexTemplateSenderFacade = complexTemplateSenderFacade;
         this.simpleCalendarSenderFacade = simpleCalendarSenderFacade;
@@ -63,35 +66,41 @@ public class SenderServiceImpl implements SenderService {
         this.placeHoldersInstaller = placeHoldersInstaller;
         this.templatePlaceHolderReplacer = templatePlaceHolderReplacer;
         this.appointmentCreator = appointmentCreator;
+        this.indexesUpdater = indexesUpdater;
     }
 
     @Override
     public List<MailSendingResponseStatus> sendCalendarToAllEnrollmentsOfMeeting(HttpServletRequest request, String meetingId) {
-        Meeting meeting = meetingService.getMeetingById(request, meetingId);
-        if (meeting == null) {
+        Meeting newMeeting = meetingService.getMeetingById(request, meetingId);
+        if (newMeeting == null) {
             logger.info("Can't find meeting in ec3 with meetingId: " + meetingId);
             throw new ServiceException("Can't find meeting with id " + meetingId);
         }
-        String invitationTemplateKey = meeting.getInvitationTemplate();
+
+        String invitationTemplateKey = newMeeting.getInvitationTemplate();
         if (invitationTemplateKey.isEmpty()) {
             logger.error("Can't enroll learners to this event, cause can't find some invitation template by meeting id: " + meetingId);
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
         }
-        InvitationTemplate invitationTemplate = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
-        Map<String, String> placeHolders = placeHoldersInstaller.installPlaceHoldersMap(meeting);
-        InvitationTemplate modifiedInvTemplate = templatePlaceHolderReplacer.replaceTemplatePlaceHolders(placeHolders, invitationTemplate);
-        meeting.setPlainDescription("Plain description"); //Hardcode instead plain description
+
+        InvitationTemplate newInvitationTemplateWithoutPlaceHolders = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
+        Map<String, String> placeHoldersMap = placeHoldersInstaller.installPlaceHoldersMap(newMeeting);
+        InvitationTemplate newInvitationTemplateWithPlaceHolders = templatePlaceHolderReplacer.replaceTemplatePlaceHolders(placeHoldersMap, newInvitationTemplateWithoutPlaceHolders);
+        newMeeting.setPlainDescription("Plain description"); //Hardcode instead plain plaint description
 
         Appointment currentAppointment = appointmentRepository.getByMeetingId(new BigInteger(meetingId));
-        Appointment newAppointment = appointmentCreator.createAppointment(meeting, modifiedInvTemplate);
+        Appointment newAppointmentWithZeroIndexes = appointmentCreator.createAppointmentWithMainFields(newMeeting, newInvitationTemplateWithPlaceHolders);
+        Appointment newAppointment;
         if (currentAppointment == null) {
-            newAppointment = appointmentRepository.save(newAppointment);
+            newAppointment = appointmentRepository.save(newAppointmentWithZeroIndexes);
         } else {
-            newAppointment = appointmentInstaller.installAppointment(newAppointment, currentAppointment);
+            Appointment newAppointmentWithIndexes = indexesUpdater.updateIndexesBasedOnSessionsDifferences(newAppointmentWithZeroIndexes, currentAppointment);
+            Appointment determinedAppointment = appointmentDeterminer.determineNewAppointmentByIndexes(newAppointmentWithIndexes, currentAppointment);
+            newAppointment = appointmentRepository.save(determinedAppointment);
         }
 
-        List<Session> newAppSessions = newAppointment.getSessionList();
-        MeetingType newAppointmentMeetingType = meetingTypeDefiner.defineMeetingType(newAppSessions);
+        List<Session> newAppointmentSessions = newAppointment.getSessionList();
+        MeetingType newAppointmentMeetingType = meetingTypeDefiner.defineMeetingType(newAppointmentSessions);
 
         List<MailSendingResponseStatus> mailSendingResponseStatusList;
         if (newAppointmentMeetingType.equals(MeetingType.SIMPLE)) {
