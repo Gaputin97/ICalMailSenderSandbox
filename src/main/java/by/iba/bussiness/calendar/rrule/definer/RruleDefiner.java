@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,15 +38,16 @@ public class RruleDefiner {
             rrule.setCount(Count.ONE_SESSION_COUNT);
             rrule.setFrequency(daily);
         } else {
-            Collections.sort(sessions);
-            Session lastSession = sessions.get(sessions.size() - 1);
-            Session firstSession = sessions.get(0);
+            List<Session> sortedSessions = new ArrayList<>(sessions);
+            Collections.sort(sortedSessions);
+            Session lastSession = sortedSessions.get(sessions.size() - 1);
+            Session firstSession = sortedSessions.get(0);
 
             Instant startDateOfFirstSession = firstSession.getStartDateTime();
             Instant startDateOfLastSession = lastSession.getEndDateTime();
 
             List<Instant> startDatesOfSessions = new LinkedList();
-            sessions.forEach(x -> startDatesOfSessions.add(x.getStartDateTime()));
+            sortedSessions.forEach(x -> startDatesOfSessions.add(x.getStartDateTime()));
 
             Frequency frequency = frequencyDefiner.defineFrequency(startDatesOfSessions);
             long interval;

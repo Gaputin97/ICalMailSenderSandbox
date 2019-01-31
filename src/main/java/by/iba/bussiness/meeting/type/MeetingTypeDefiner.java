@@ -29,7 +29,7 @@ public class MeetingTypeDefiner {
     public MeetingType defineMeetingType(List<Session> sessionList) {
         MeetingType meetingType;
         List<Instant> startDatesOfSessions = sessionList.stream().map(Session::getStartDateTime).collect(Collectors.toList());
-        if (sessionChecker.isAllSessionsTheSame(sessionList)) {
+        if (sessionChecker.areAllSessionsTheSame(sessionList)) {
             Frequency frequency = frequencyDefiner.defineFrequency(startDatesOfSessions);
             if (frequency.equals(Frequency.MINUTELY) || frequency.equals(Frequency.HOURLY)) {
                 meetingType = MeetingType.COMPLEX;

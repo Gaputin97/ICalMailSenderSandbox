@@ -56,11 +56,11 @@ public class VEventCreator {
     public VEvent createCommonVEventTemplate(Rrule rrule, Appointment appointment) {
         DateList exDatesList = new DateList();
         rrule.getExDates().forEach(exDate -> exDatesList.add(new DateTime(exDate.toEpochMilli())));
-        List<Session> sessions = new ArrayList<>(appointment.getSessionList());
-        Collections.sort(sessions);
+        List<Session> sortedSessions = new ArrayList<>(appointment.getSessionList());
+        Collections.sort(sortedSessions);
 
-        Session firstSession = sessions.get(NUMBER_OF_FIRST_TIME_SLOT);
-        Session lastSession = sessions.get(sessions.size() - 1);
+        Session firstSession = sortedSessions.get(NUMBER_OF_FIRST_TIME_SLOT);
+        Session lastSession = sortedSessions.get(sortedSessions.size() - 1);
         Instant startDateOfLastSession = lastSession.getStartDateTime();
         Instant startDateOfFirstSession = firstSession.getStartDateTime();
         Instant endDateOfFirstSession = firstSession.getEndDateTime();

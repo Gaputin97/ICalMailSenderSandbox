@@ -1,7 +1,7 @@
 package by.iba.bussiness.template.installer;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.calendar.session.Session;
+import by.iba.bussiness.calendar.session.TypedSession;
 import by.iba.bussiness.template.Template;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,7 @@ public class TemplateInstaller {
         this.templateTimeSlotTypeInstaller = templateTimeSlotTypeInstaller;
     }
 
-    public Template installCommonPartsOfTemplate(Appointment appointment, Appointment oldAppointment) {
+    public Template installTemplate(Appointment appointment, Appointment oldAppointment) {
         Template template = new Template();
         template.setDescription(appointment.getDescription());
         template.setLocation(appointment.getLocation());
@@ -33,8 +33,8 @@ public class TemplateInstaller {
             sessions = templateTimeSlotInstaller.installSessionsIfInvitation(appointment);
             template.setSessions(sessions);
         } else {
-            List<Session> sessionsWithType = templateTimeSlotTypeInstaller.installSessionsType(appointment, oldAppointment);
-            sessions = templateTimeSlotInstaller.installSessionsIfUpdate(sessionsWithType);
+            List<TypedSession> typedSessions = templateTimeSlotTypeInstaller.installTypedSessions(appointment, oldAppointment);
+            sessions = templateTimeSlotInstaller.installSessionsIfUpdate(typedSessions);
             template.setSessions(sessions);
         }
         return template;

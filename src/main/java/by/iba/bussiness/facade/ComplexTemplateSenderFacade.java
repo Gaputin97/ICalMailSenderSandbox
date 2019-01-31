@@ -76,7 +76,7 @@ public class ComplexTemplateSenderFacade {
         BigInteger meetingId = appointment.getMeetingId();
         List<MailSendingResponseStatus> mailSendingResponseStatusList = new ArrayList<>();
         List<Enrollment> enrollmentList = enrollmentService.getAllByParentId(meetingId);
-        Template installedTemplate = templateInstaller.installCommonPartsOfTemplate(appointment, oldAppointment);
+        Template installedTemplate = templateInstaller.installTemplate(appointment, oldAppointment);
         MeetingType oldMeetingType = null;
         if (oldAppointment != null) {
             List<Session> oldAppSessions = oldAppointment.getSessionList();

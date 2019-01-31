@@ -23,6 +23,7 @@ public class AppointmentInstaller {
 
     public Appointment installAppointment(Meeting meeting, InvitationTemplate invitationTemplate, Appointment oldAppointment) {
         Appointment newAppointment;
+        // FIX ME (vynesti creator naverx i 1 raz vyzyvat')
         if (oldAppointment == null) {
             newAppointment = appointmentCreator.createAppointment(meeting, invitationTemplate);
             appointmentRepository.save(newAppointment);

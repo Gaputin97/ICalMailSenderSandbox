@@ -2,6 +2,7 @@ package by.iba.bussiness.template.installer;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.session.Session;
+import by.iba.bussiness.calendar.session.TypedSession;
 import by.iba.bussiness.template.Template;
 import org.junit.Assert;
 import org.junit.Test;
@@ -39,9 +40,10 @@ public class TemplateInstallerTest {
         String stringSessions = "Sessions";
         //when
         when(templateTimeSlotInstaller.installSessionsIfInvitation(appointment)).thenReturn(stringSessions);
-        Template template = templateInstaller.installCommonPartsOfTemplate(appointment, null);
+        Template template = templateInstaller.installTemplate(appointment, null);
+        String expected = template.getSessions();
         //then
-        Assert.assertEquals(template.getSessions(), stringSessions);
+        Assert.assertEquals(expected, stringSessions);
     }
 
 
@@ -50,18 +52,16 @@ public class TemplateInstallerTest {
         //given
         Appointment appointment = new Appointment();
         Appointment oldAppointment = new Appointment();
-        Session firstSession = new Session(0, new Date().toInstant(), new Date().toInstant());
-        Session secondSession = new Session(1, new Date().toInstant(), new Date().toInstant());
-        List<Session> sessions = new ArrayList<>();
+        TypedSession firstSession = new TypedSession(0, new Date().toInstant(), new Date().toInstant());
+        TypedSession secondSession = new TypedSession(1, new Date().toInstant(), new Date().toInstant());
+        List<TypedSession> sessions = new ArrayList<>();
         sessions.add(firstSession);
         sessions.add(secondSession);
-        appointment.setSessionList(sessions);
-        oldAppointment.setSessionList(sessions);
         String stringSessions = "Sessions";
         //when
-        when(templateTimeSlotTypeInstaller.installSessionsType(appointment, oldAppointment)).thenReturn(sessions);
+        when(templateTimeSlotTypeInstaller.installTypedSessions(appointment, oldAppointment)).thenReturn(sessions);
         when(templateTimeSlotInstaller.installSessionsIfUpdate(sessions)).thenReturn(stringSessions);
-        Template template = templateInstaller.installCommonPartsOfTemplate(appointment, oldAppointment);
+        Template template = templateInstaller.installTemplate(appointment, oldAppointment);
         //then
         Assert.assertEquals(template.getSessions(), stringSessions);
 
@@ -69,12 +69,12 @@ public class TemplateInstallerTest {
     }
 }
 
-//    public Template installCommonPartsOfTemplate(Appointment appointment, Appointment oldAppointment) {
+//    public Template installTemplate(Appointment appointment, Appointment oldAppointment) {
 //        if (oldAppointment == null) {
 //            sessions = templateTimeSlotInstaller.installSessionsIfInvitation(appointment);
 //            template.setSessions(sessions);
 //        } else {
-//            List<Session> sessionsWithType = templateTimeSlotInstaller.installSessionsType(appointment, oldAppointment);
+//            List<Session> sessionsWithType = templateTimeSlotInstaller.installTypedSessions(appointment, oldAppointment);
 //            sessions = templateTimeSlotInstaller.installSessionsIfUpdate(sessionsWithType);
 //            template.setSessions(sessions);
 //        }

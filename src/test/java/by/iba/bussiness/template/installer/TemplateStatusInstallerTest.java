@@ -34,9 +34,9 @@ public class TemplateStatusInstallerTest {
         Enrollment enrollment = new Enrollment();
         enrollment.setStatus(EnrollmentStatus.CANCELLED.toString());
         //when
-        String templateType = templateStatusInstaller.installTemplateType(enrollment, null);
+        String expected = templateStatusInstaller.installTemplateType(enrollment, null);
         //then
-        Assert.assertEquals(templateType, TemplateType.CANCELLATION.toString());
+        Assert.assertEquals(expected, TemplateType.CANCELLATION.toString());
     }
 
     @Test
@@ -46,9 +46,9 @@ public class TemplateStatusInstallerTest {
         enrollment.setStatus(EnrollmentStatus.CONFIRMED.toString());
         enrollment.setCalendarVersion(null);
         //when
-        String templateType = templateStatusInstaller.installTemplateType(enrollment, null);
+        String expected = templateStatusInstaller.installTemplateType(enrollment, null);
         //then
-        Assert.assertEquals(templateType, TemplateType.INVITATION.toString());
+        Assert.assertEquals(expected, TemplateType.INVITATION.toString());
     }
 
     @Test
@@ -65,9 +65,9 @@ public class TemplateStatusInstallerTest {
         appointment.setUpdateIndex(updateIndex);
         //when
         when(appointmentHandler.getMaximumIndex(appointment)).thenReturn(rescheduleIndex);
-        String templateType = templateStatusInstaller.installTemplateType(enrollment, appointment);
+        String expected = templateStatusInstaller.installTemplateType(enrollment, appointment);
         //then
-        Assert.assertEquals(templateType, TemplateType.UPDATE.toString());
+        Assert.assertEquals(expected, TemplateType.UPDATE.toString());
     }
 
     @Test
@@ -84,29 +84,9 @@ public class TemplateStatusInstallerTest {
         appointment.setUpdateIndex(updateIndex);
         //when
         when(appointmentHandler.getMaximumIndex(appointment)).thenReturn(rescheduleIndex);
-        String templateType = templateStatusInstaller.installTemplateType(enrollment, appointment);
+        String expected = templateStatusInstaller.installTemplateType(enrollment, appointment);
         //then
-        Assert.assertEquals(templateType, null);
+        Assert.assertEquals(expected, null);
     }
-
-
-//    public String installTemplateType(Enrollment enrollment, Appointment appointment) {
-//        String enrollmentStatus = enrollment.getStatus();
-//        String templateType = null;
-//        int maximumAppointmentIndex = appointmentHandler.getMaximumIndex(appointment);
-//        if ((enrollmentStatus.equals(EnrollmentStatus.CANCELLED.toString()))) {
-//            templateType = TemplateType.CANCELLATION.toString();
-//        } else {
-//            String enrollmentCalendarVersion = enrollment.getCalendarVersion();
-//            if (enrollmentCalendarVersion == null) {
-//                templateType = TemplateType.INVITATION.toString();
-//            } else {
-//                int calendarVersion = Integer.parseInt(enrollment.getCalendarVersion());
-//                if (maximumAppointmentIndex > calendarVersion) {
-//                    templateType = TemplateType.UPDATE.toString();
-//                }
-//            }
-//        }
-//        return templateType;
-//    }
 }
+

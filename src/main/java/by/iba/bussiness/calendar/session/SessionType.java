@@ -1,7 +1,7 @@
 package by.iba.bussiness.calendar.session;
 
 public enum SessionType {
-    NEW(" (new date)"), NOT_CHANGED(" (was not changed)"), RESCHEDULED(" (rescheduled)"), DELETED(" (deleted)");
+    NEW(""), NOT_CHANGED(""), RESCHEDULED(" (rescheduled)"), DELETED(" (deleted)");
 
     private String stringType;
 

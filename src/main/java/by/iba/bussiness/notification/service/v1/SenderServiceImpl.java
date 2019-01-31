@@ -15,7 +15,7 @@ import by.iba.bussiness.meeting.service.MeetingService;
 import by.iba.bussiness.meeting.type.MeetingType;
 import by.iba.bussiness.meeting.type.MeetingTypeDefiner;
 import by.iba.bussiness.notification.service.SenderService;
-import by.iba.bussiness.placeholder.PlaceHolderReplacer;
+import by.iba.bussiness.placeholder.replacer.TemplatePlaceHolderReplacer;
 import by.iba.bussiness.placeholder.PlaceHoldersInstaller;
 import by.iba.bussiness.sender.MailSendingResponseStatus;
 import by.iba.exception.ServiceException;
@@ -41,7 +41,7 @@ public class SenderServiceImpl implements SenderService {
     private AppointmentRepository appointmentRepository;
     private RruleDefiner rruleDefiner;
     private PlaceHoldersInstaller placeHoldersInstaller;
-    private PlaceHolderReplacer placeHolderReplacer;
+    private TemplatePlaceHolderReplacer templatePlaceHolderReplacer;
 
     @Autowired
     public SenderServiceImpl(MeetingService meetingService,
@@ -53,7 +53,7 @@ public class SenderServiceImpl implements SenderService {
                              AppointmentRepository appointmentRepository,
                              RruleDefiner rruleDefiner,
                              PlaceHoldersInstaller placeHoldersInstaller,
-                             PlaceHolderReplacer placeHolderReplacer) {
+                             TemplatePlaceHolderReplacer templatePlaceHolderReplacer) {
         this.meetingService = meetingService;
         this.invitationTemplateService = invitationTemplateService;
         this.appointmentInstaller = appointmentInstaller;
@@ -63,7 +63,7 @@ public class SenderServiceImpl implements SenderService {
         this.appointmentRepository = appointmentRepository;
         this.rruleDefiner = rruleDefiner;
         this.placeHoldersInstaller = placeHoldersInstaller;
-        this.placeHolderReplacer = placeHolderReplacer;
+        this.templatePlaceHolderReplacer = templatePlaceHolderReplacer;
     }
 
     @Override
@@ -80,7 +80,7 @@ public class SenderServiceImpl implements SenderService {
         }
         InvitationTemplate invitationTemplate = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
         Map<String, String> placeHolders = placeHoldersInstaller.installPlaceHoldersMap(meeting);
-        InvitationTemplate modifiedInvTemplate = placeHolderReplacer.replacePlaceHolders(placeHolders, invitationTemplate);
+        InvitationTemplate modifiedInvTemplate = templatePlaceHolderReplacer.replaceTemplatePlaceHolders(placeHolders, invitationTemplate);
         Appointment oldAppointment = appointmentRepository.getByMeetingId(new BigInteger(meetingId));
         meeting.setPlainDescription("Plain description"); // mock
         Appointment newAppointment = appointmentInstaller.installAppointment(meeting, modifiedInvTemplate, oldAppointment);

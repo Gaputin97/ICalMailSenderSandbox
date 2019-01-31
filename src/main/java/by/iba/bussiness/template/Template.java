@@ -1,7 +1,5 @@
 package by.iba.bussiness.template;
 
-import by.iba.bussiness.owner.Owner;
-
 public class Template {
 
     private String summary;
