@@ -13,7 +13,7 @@ import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.enrollment.status.EnrollmentStatus;
 import by.iba.bussiness.enrollment.status.EnrollmentStatusChecker;
-import by.iba.bussiness.sender.MailSendingResponseStatus;
+import by.iba.bussiness.notification.NotificationResponseStatus;
 import by.iba.bussiness.sender.MessageSender;
 import net.fortuna.ical4j.model.Calendar;
 import org.slf4j.Logger;
@@ -59,8 +59,8 @@ public class SimpleCalendarSenderFacade {
         this.rruleDefiner = rruleDefiner;
     }
 
-    public List<MailSendingResponseStatus> sendCalendar(Appointment newAppointment, Appointment oldAppointment) {
-        List<MailSendingResponseStatus> mailSendingResponseStatusList = new ArrayList<>();
+    public List<NotificationResponseStatus> sendCalendar(Appointment newAppointment, Appointment oldAppointment) {
+        List<NotificationResponseStatus> notificationResponseStatusList = new ArrayList<>();
         BigInteger meetingId = newAppointment.getMeetingId();
         List<Enrollment> enrollmentList = enrollmentService.getAllByParentId(meetingId);
         Calendar invitationCalendar;
@@ -76,15 +76,15 @@ public class SimpleCalendarSenderFacade {
         for (Enrollment enrollment : enrollmentList) {
             if (EnrollmentCalendarStatus.CANCELLATION.equals(enrollment.getCalendarStatus())
                     && EnrollmentStatus.CANCELLED.equals(enrollment.getStatus())) {
-                MailSendingResponseStatus badMailSendingResponseStatus =
-                        new MailSendingResponseStatus(false, "User has cancelled status.", enrollment.getUserEmail());
-                mailSendingResponseStatusList.add(badMailSendingResponseStatus);
+                NotificationResponseStatus badNotificationResponseStatus =
+                        new NotificationResponseStatus(false, "User has cancelled status.", enrollment.getUserEmail());
+                notificationResponseStatusList.add(badNotificationResponseStatus);
             } else {
                 boolean isEnrollmentMustBeUpdated = enrollmentUpdateChecker.isEnrollmentMustBeUpdated(enrollment, newAppointment);
                 if (isEnrollmentMustBeUpdated == false) {
-                    MailSendingResponseStatus badMailSendingResponseStatus =
-                            new MailSendingResponseStatus(false, "User has already updated version.", enrollment.getUserEmail());
-                    mailSendingResponseStatusList.add(badMailSendingResponseStatus);
+                    NotificationResponseStatus badNotificationResponseStatus =
+                            new NotificationResponseStatus(false, "User has already updated version.", enrollment.getUserEmail());
+                    notificationResponseStatusList.add(badNotificationResponseStatus);
                     logger.info("Don't need to send message to " + enrollment.getUserEmail());
                 } else {
                     Calendar calendarWithoutAttendee;
@@ -95,15 +95,15 @@ public class SimpleCalendarSenderFacade {
                     }
                     Calendar calendarWithAttendee = calendarAttendeeInstaller.installAttendeeToCalendar(enrollment.getUserEmail(), calendarWithoutAttendee);
                     String enrollmentCalendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
-                    MailSendingResponseStatus mailSendingResponseStatus =
+                    NotificationResponseStatus notificationResponseStatus =
                             messageSender.sendCalendarToLearner(calendarWithAttendee, enrollmentCalendarStatus, newAppointment);
-                    mailSendingResponseStatusList.add(mailSendingResponseStatus);
-                    if (mailSendingResponseStatus.isDelivered()) {
+                    notificationResponseStatusList.add(notificationResponseStatus);
+                    if (notificationResponseStatus.isDelivered()) {
                         enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, newAppointment);
                     }
                 }
             }
         }
-        return mailSendingResponseStatusList;
+        return notificationResponseStatusList;
     }
 }

@@ -1,8 +1,8 @@
-package by.iba.bussiness.enroll;
+package by.iba.bussiness.kakoetoimya;
 
 import by.iba.bussiness.calendar.learner.Learner;
-import by.iba.bussiness.enroll.service.EnrollService;
 import by.iba.bussiness.enrollment.EnrollRequestWrapper;
+import by.iba.bussiness.kakoetoimya.service.ImyaService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,20 +14,21 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-public class EnrollController {
-    private EnrollService enrollService;
+public class ImyaController {
+
+    private ImyaService imyaService;
 
     @Autowired
-    public EnrollController(EnrollService enrollmentService) {
-        this.enrollService = enrollmentService;
+    public ImyaController(ImyaService imyaService) {
+        this.imyaService = imyaService;
     }
 
-    @ApiOperation(value = "Enroll learners to meeting.")
-    @RequestMapping(value = "/enroll/", method = RequestMethod.POST)
-    public List<EnrollLearnerResponseStatus> enrollLearners(@RequestBody EnrollRequestWrapper enrollRequestWrapper,
-                                                            HttpServletRequest request) {
+    @ApiOperation(value = "Enroll users and send notifications. ")
+    @RequestMapping(value = "/imya/imya", method = RequestMethod.GET)
+    public ImyaResponseStatus sendCalendar(@RequestBody EnrollRequestWrapper enrollRequestWrapper,
+                                           HttpServletRequest request) {
         String meetingId = enrollRequestWrapper.getMeetingId();
         List<Learner> learners = enrollRequestWrapper.getLearners();
-        return enrollService.enrollLearners(request, meetingId, learners);
+        return imyaService.imyaMethoda(request, meetingId, learners);
     }
 }

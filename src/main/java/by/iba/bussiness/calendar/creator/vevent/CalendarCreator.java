@@ -9,6 +9,7 @@ import by.iba.bussiness.calendar.creator.simple.ICalDateParser;
 import by.iba.bussiness.calendar.rrule.RruleCount;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.frequence.Frequency;
+import by.iba.bussiness.calendar.session.Session;
 import by.iba.exception.CalendarException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateList;
@@ -28,7 +29,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.time.Instant;
-import java.util.Arrays;
+import java.util.*;
 
 @Component
 public class CalendarCreator {
@@ -61,32 +62,34 @@ public class CalendarCreator {
         this.cancelCalendar = cancelCalendar;
     }
 
-    public Calendar createCalendarTemplate(Rrule rrule, Appointment newAppointment) {
+    public Calendar createCalendarTemplate(Rrule rrule, Appointment appointment) {
         DateList exDatesList = new DateList();
         rrule.getExDates().forEach(exDate -> exDatesList.add(new DateTime(exDate.toEpochMilli())));
 
-        Instant startAppDate = dateParser.parseDate(newAppointment.getStartDateTime());
-        Instant endAppdate = dateParser.parseDate(newAppointment.getEndDateTime());
+        Instant startAppDate = dateParser.parseDate(appointment.getStartDateTime());
+        List<Session> sortedSessions = new ArrayList<>(appointment.getSessionList());
+        Collections.sort(sortedSessions);
+        Instant endAppdate = sortedSessions.get(0).getStartDateTime();
 
         long interval = rrule.getInterval();
         Frequency frequency = rrule.getFrequency();
         String increasedUntilDate = dateIncreaser.increaseDate(frequency, interval, endAppdate);
-        String richDescription = BODY_OPEN_TAG + newAppointment.getDescription() + BODY_CLOSE_TAG;
+        String richDescription = BODY_OPEN_TAG + appointment.getDescription() + BODY_CLOSE_TAG;
         String parsedIncreasedUntilDate = iСalDateParser.parseToICalDate(increasedUntilDate);
         Recur recurrence = calendarRruleParser.parseToCalendarRrule(rrule, parsedIncreasedUntilDate);
         Calendar calendar;
         try {
-            Sequence sequence = sequenceDefiner.defineSequence(newAppointment);
-            Organizer organizer = new Organizer("mailto:" + newAppointment.getFrom());
-            Location location = new Location((newAppointment.getLocation()));
+            Sequence sequence = sequenceDefiner.defineSequence(appointment);
+            Organizer organizer = new Organizer("mailto:" + appointment.getFrom());
+            Location location = new Location((appointment.getLocation()));
             if (!rrule.getRruleCount().equals(RruleCount.ZERO)) {
                 exDatesList.add(new DateTime(parsedIncreasedUntilDate));
             }
             RRule rRule = new RRule(recurrence);
-            Uid UID = new Uid(newAppointment.getId().toString());
+            Uid UID = new Uid(appointment.getId().toString());
             DateTime startDateTime = new DateTime(startAppDate.toEpochMilli());
             DateTime endDateTime = new DateTime(endAppdate.toEpochMilli());
-            Description description = new Description(newAppointment.getPlainDescription());
+            Description description = new Description(appointment.getPlainDescription());
             AltRep altRep = new AltRep("CID:" + RICH_TEXT_CID);
             description.getParameters().add(altRep);
 
@@ -94,7 +97,7 @@ public class CalendarCreator {
             xAltDesc.getParameters().add(new FmtType("text/html"));
             xAltDesc.setValue(richDescription);
             calendar = new Calendar(requestCalendar);
-            VEvent event = new VEvent(startDateTime, endDateTime, newAppointment.getSummary());
+            VEvent event = new VEvent(startDateTime, endDateTime, appointment.getSummary());
             calendar.getComponents().add(event);
             if (!exDatesList.isEmpty()) {
                 ExDate exDates = new ExDate(exDatesList);
@@ -111,7 +114,9 @@ public class CalendarCreator {
     public Calendar createCalendarCancellationTemplate(Appointment appointment) {
 
         Instant startAppDate = dateParser.parseDate(appointment.getStartDateTime());
-        Instant endAppDate = dateParser.parseDate(appointment.getEndDateTime());
+        List<Session> sortedSessions = new ArrayList<>(appointment.getSessionList());
+        Collections.sort(sortedSessions);
+        Instant endAppDate = sortedSessions.get(0).getStartDateTime();
 
         String richDescription = BODY_OPEN_TAG + appointment.getDescription() + BODY_CLOSE_TAG;
         Calendar calendar;

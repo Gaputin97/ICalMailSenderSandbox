@@ -1,11 +1,11 @@
 package by.iba.bussiness.enroll;
 
-public class EnrollLearnerStatus {
+public class EnrollLearnerResponseStatus {
     private boolean wasEnroll;
     private String message;
     private String learnerEmail;
 
-    public EnrollLearnerStatus(boolean wasEnroll, String message, String learnerEmail) {
+    public EnrollLearnerResponseStatus(boolean wasEnroll, String message, String learnerEmail) {
         this.wasEnroll = wasEnroll;
         this.message = message;
         this.learnerEmail = learnerEmail;

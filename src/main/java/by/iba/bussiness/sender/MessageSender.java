@@ -2,6 +2,7 @@ package by.iba.bussiness.sender;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.CalendarTextEditor;
+import by.iba.bussiness.notification.NotificationResponseStatus;
 import by.iba.bussiness.template.Template;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
@@ -46,9 +47,9 @@ public class MessageSender {
         this.freeMarkerConfiguration = freeMarkerConfiguration;
     }
 
-    public MailSendingResponseStatus sendCalendarToLearner(Calendar calendar,
-                                                           String enrollmentCalendarStatus,
-                                                           Appointment appointment) {
+    public NotificationResponseStatus sendCalendarToLearner(Calendar calendar,
+                                                            String enrollmentCalendarStatus,
+                                                            Appointment appointment) {
         MimeMessage message;
         VEvent event = (VEvent) calendar.getComponents().getComponent(Component.VEVENT);
         Attendee attendee = event.getProperties().getProperty(Property.ATTENDEE);
@@ -58,7 +59,7 @@ public class MessageSender {
         String ownerName = appointment.getFromName();
 
         String richDescription = BODY_OPEN_TAG + appointment.getDescription() + BODY_CLOSE_TAG;
-        MailSendingResponseStatus mailSendingResponseStatus;
+        NotificationResponseStatus notificationResponseStatus;
         try {
             message = javaMailSender.createMimeMessage();
             message.setSubject(meetingTitle + " : " + enrollmentCalendarStatus);
@@ -88,17 +89,17 @@ public class MessageSender {
             javaMailSender.send(message);
 
             logger.info("Message was sent to " + userEmail);
-            mailSendingResponseStatus = new MailSendingResponseStatus(true, "Calendar was sent successfully", userEmail);
+            notificationResponseStatus = new NotificationResponseStatus(true, "Calendar was sent successfully", userEmail);
         } catch (MessagingException | IOException e) {
             logger.error("Error while trying to send message", e);
-            mailSendingResponseStatus = new MailSendingResponseStatus(false, "Calendar was not delivered", userEmail);
+            notificationResponseStatus = new NotificationResponseStatus(false, "Calendar was not delivered", userEmail);
         }
-        return mailSendingResponseStatus;
+        return notificationResponseStatus;
     }
 
-    public MailSendingResponseStatus sendTemplate(Template template, String userEmail, String meetingTitle) {
+    public NotificationResponseStatus sendTemplate(Template template, String userEmail, String meetingTitle) {
         MimeMessage message;
-        MailSendingResponseStatus mailSendingResponseStatus;
+        NotificationResponseStatus notificationResponseStatus;
         String from = template.getFrom();
         String fromName = template.getFromName();
         try {
@@ -128,11 +129,11 @@ public class MessageSender {
 
             javaMailSender.send(message);
             logger.info("Message was sent to " + userEmail);
-            mailSendingResponseStatus = new MailSendingResponseStatus(true, "Message was sent successfully", userEmail);
+            notificationResponseStatus = new NotificationResponseStatus(true, "Message was sent successfully", userEmail);
         } catch (MessagingException | TemplateException | IOException e) {
             logger.error("Error while trying to send message", e);
-            mailSendingResponseStatus = new MailSendingResponseStatus(false, "Message was not delivered", userEmail);
+            notificationResponseStatus = new NotificationResponseStatus(false, "Message was not delivered", userEmail);
         }
-        return mailSendingResponseStatus;
+        return notificationResponseStatus;
     }
 }

@@ -5,7 +5,7 @@ import by.iba.bussiness.appointment.handler.AppointmentHandler;
 import by.iba.bussiness.appointment.handler.AppointmentIndexHandler;
 import by.iba.bussiness.calendar.learner.Learner;
 import by.iba.bussiness.calendar.status.EnrollmentCalendarStatusDefiner;
-import by.iba.bussiness.enroll.EnrollLearnerStatus;
+import by.iba.bussiness.enroll.EnrollLearnerResponseStatus;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.enrollment.status.EnrollmentStatusChecker;
 import org.slf4j.Logger;
@@ -38,8 +38,8 @@ public class EnrollmentsInstaller {
         this.appointmentIndexHandler = appointmentIndexHandler;
     }
 
-    public List<EnrollLearnerStatus> installEnrollments(List<Learner> learners, String meetingId) {
-        List<EnrollLearnerStatus> enrollLearnerStatuses = new ArrayList<>(learners.size());
+    public List<EnrollLearnerResponseStatus> installEnrollments(List<Learner> learners, String meetingId) {
+        List<EnrollLearnerResponseStatus> enrollLearnerResponseStatuses = new ArrayList<>(learners.size());
         BigInteger bigIntegerMeetingId = new BigInteger(meetingId);
         for (Learner learner : learners) {
             String email = learner.getEmail();
@@ -51,9 +51,9 @@ public class EnrollmentsInstaller {
                     oldEnrollment.setStatus(enrollmentStatus);
                     enrollmentService.save(oldEnrollment);
                     logger.info("Enrollment " + oldEnrollment.getUserEmail() + " has been saved with new status " + oldEnrollment.getStatus());
-                    EnrollLearnerStatus enrollLearnerStatus =
-                            new EnrollLearnerStatus(true, "Enrollment was modified.", learner.getEmail());
-                    enrollLearnerStatuses.add(enrollLearnerStatus);
+                    EnrollLearnerResponseStatus enrollLearnerResponseStatus =
+                            new EnrollLearnerResponseStatus(true, "Enrollment was modified.", learner.getEmail());
+                    enrollLearnerResponseStatuses.add(enrollLearnerResponseStatus);
                 } else {
                     Enrollment newEnrollment = new Enrollment();
                     newEnrollment.setStatus(enrollmentStatus);
@@ -61,17 +61,17 @@ public class EnrollmentsInstaller {
                     newEnrollment.setUserEmail(email);
                     enrollmentService.save(newEnrollment);
                     logger.info("Enrollment " + newEnrollment.getUserEmail() + " has been saved");
-                    EnrollLearnerStatus enrollLearnerStatus =
-                            new EnrollLearnerStatus(true, "Enrollment was created.", learner.getEmail());
-                    enrollLearnerStatuses.add(enrollLearnerStatus);
+                    EnrollLearnerResponseStatus enrollLearnerResponseStatus =
+                            new EnrollLearnerResponseStatus(true, "Enrollment was created.", learner.getEmail());
+                    enrollLearnerResponseStatuses.add(enrollLearnerResponseStatus);
                 }
             } else {
-                EnrollLearnerStatus enrollLearnerStatus =
-                        new EnrollLearnerStatus(false, "Enrollment already exists.", learner.getEmail());
-                enrollLearnerStatuses.add(enrollLearnerStatus);
+                EnrollLearnerResponseStatus enrollLearnerResponseStatus =
+                        new EnrollLearnerResponseStatus(false, "Enrollment already exists.", learner.getEmail());
+                enrollLearnerResponseStatuses.add(enrollLearnerResponseStatus);
             }
         }
-        return enrollLearnerStatuses;
+        return enrollLearnerResponseStatuses;
     }
 
     public void installEnrollmentCalendarFields(Enrollment enrollment, Appointment appointment) {

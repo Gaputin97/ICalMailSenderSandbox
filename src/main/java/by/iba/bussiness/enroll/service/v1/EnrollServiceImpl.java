@@ -1,7 +1,7 @@
 package by.iba.bussiness.enroll.service.v1;
 
 import by.iba.bussiness.calendar.learner.Learner;
-import by.iba.bussiness.enroll.EnrollLearnerStatus;
+import by.iba.bussiness.enroll.EnrollLearnerResponseStatus;
 import by.iba.bussiness.enroll.service.EnrollService;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.meeting.Meeting;
@@ -28,9 +28,9 @@ public class EnrollServiceImpl implements EnrollService {
     }
 
     @Override
-    public List<EnrollLearnerStatus> enrollLearners(HttpServletRequest request,
-                                                    String meetingId,
-                                                    List<Learner> learners) {
+    public List<EnrollLearnerResponseStatus> enrollLearners(HttpServletRequest request,
+                                                            String meetingId,
+                                                            List<Learner> learners) {
         Meeting meeting = meetingService.getMeetingById(request, meetingId);
         String invitationTemplateKey = meeting.getInvitationTemplate();
         if (invitationTemplateKey.isEmpty()) {

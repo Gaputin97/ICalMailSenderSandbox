@@ -3,8 +3,6 @@ package by.iba.bussiness.notification.service.v1;
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.AppointmentInstaller;
 import by.iba.bussiness.appointment.repository.AppointmentRepository;
-import by.iba.bussiness.calendar.rrule.Rrule;
-import by.iba.bussiness.calendar.rrule.definer.RruleDefiner;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.facade.ComplexTemplateSenderFacade;
 import by.iba.bussiness.facade.SimpleCalendarSenderFacade;
@@ -14,10 +12,10 @@ import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.MeetingService;
 import by.iba.bussiness.meeting.type.MeetingType;
 import by.iba.bussiness.meeting.type.MeetingTypeDefiner;
-import by.iba.bussiness.notification.service.SenderService;
+import by.iba.bussiness.notification.service.NotificationService;
 import by.iba.bussiness.placeholder.replacer.TemplatePlaceHolderReplacer;
 import by.iba.bussiness.placeholder.PlaceHoldersInstaller;
-import by.iba.bussiness.sender.MailSendingResponseStatus;
+import by.iba.bussiness.notification.NotificationResponseStatus;
 import by.iba.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,8 +28,8 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class SenderServiceImpl implements SenderService {
-    private static final Logger logger = LoggerFactory.getLogger(SenderServiceImpl.class);
+public class NotificationServiceImpl implements NotificationService {
+    private static final Logger logger = LoggerFactory.getLogger(NotificationServiceImpl.class);
     private MeetingService meetingService;
     private InvitationTemplateService invitationTemplateService;
     private AppointmentInstaller appointmentInstaller;
@@ -39,21 +37,19 @@ public class SenderServiceImpl implements SenderService {
     private ComplexTemplateSenderFacade complexTemplateSenderFacade;
     private SimpleCalendarSenderFacade simpleCalendarSenderFacade;
     private AppointmentRepository appointmentRepository;
-    private RruleDefiner rruleDefiner;
     private PlaceHoldersInstaller placeHoldersInstaller;
     private TemplatePlaceHolderReplacer templatePlaceHolderReplacer;
 
     @Autowired
-    public SenderServiceImpl(MeetingService meetingService,
-                             InvitationTemplateService invitationTemplateService,
-                             AppointmentInstaller appointmentInstaller,
-                             MeetingTypeDefiner meetingTypeDefiner,
-                             ComplexTemplateSenderFacade complexTemplateSenderFacade,
-                             SimpleCalendarSenderFacade simpleCalendarSenderFacade,
-                             AppointmentRepository appointmentRepository,
-                             RruleDefiner rruleDefiner,
-                             PlaceHoldersInstaller placeHoldersInstaller,
-                             TemplatePlaceHolderReplacer templatePlaceHolderReplacer) {
+    public NotificationServiceImpl(MeetingService meetingService,
+                                   InvitationTemplateService invitationTemplateService,
+                                   AppointmentInstaller appointmentInstaller,
+                                   MeetingTypeDefiner meetingTypeDefiner,
+                                   ComplexTemplateSenderFacade complexTemplateSenderFacade,
+                                   SimpleCalendarSenderFacade simpleCalendarSenderFacade,
+                                   AppointmentRepository appointmentRepository,
+                                   PlaceHoldersInstaller placeHoldersInstaller,
+                                   TemplatePlaceHolderReplacer templatePlaceHolderReplacer) {
         this.meetingService = meetingService;
         this.invitationTemplateService = invitationTemplateService;
         this.appointmentInstaller = appointmentInstaller;
@@ -61,13 +57,12 @@ public class SenderServiceImpl implements SenderService {
         this.complexTemplateSenderFacade = complexTemplateSenderFacade;
         this.simpleCalendarSenderFacade = simpleCalendarSenderFacade;
         this.appointmentRepository = appointmentRepository;
-        this.rruleDefiner = rruleDefiner;
         this.placeHoldersInstaller = placeHoldersInstaller;
         this.templatePlaceHolderReplacer = templatePlaceHolderReplacer;
     }
 
     @Override
-    public List<MailSendingResponseStatus> sendCalendarToAllEnrollmentsOfMeeting(HttpServletRequest request, String meetingId) {
+    public List<NotificationResponseStatus> sendCalendarToAllEnrollmentsOfMeeting(HttpServletRequest request, String meetingId) {
         Meeting meeting = meetingService.getMeetingById(request, meetingId);
         if (meeting == null) {
             logger.info("Can't find meeting in ec3 with meetingId: " + meetingId);
@@ -84,14 +79,14 @@ public class SenderServiceImpl implements SenderService {
         Appointment oldAppointment = appointmentRepository.getByMeetingId(new BigInteger(meetingId));
         meeting.setPlainDescription("Plain description"); // mock
         Appointment newAppointment = appointmentInstaller.installAppointment(meeting, modifiedInvTemplate, oldAppointment);
-        List<MailSendingResponseStatus> mailSendingResponseStatusList;
+        List<NotificationResponseStatus> notificationResponseStatusList;
         List<Session> newAppSessions = newAppointment.getSessionList();
         MeetingType newAppointmentMeetingType = meetingTypeDefiner.defineMeetingType(newAppSessions);
         if (newAppointmentMeetingType.equals(MeetingType.SIMPLE)) {
-            mailSendingResponseStatusList = simpleCalendarSenderFacade.sendCalendar(newAppointment, oldAppointment);
+            notificationResponseStatusList = simpleCalendarSenderFacade.sendCalendar(newAppointment, oldAppointment);
         } else {
-            mailSendingResponseStatusList = complexTemplateSenderFacade.sendTemplate(newAppointment, oldAppointment);
+            notificationResponseStatusList = complexTemplateSenderFacade.sendTemplate(newAppointment, oldAppointment);
         }
-        return mailSendingResponseStatusList;
+        return notificationResponseStatusList;
     }
 }
