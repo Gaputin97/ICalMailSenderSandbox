@@ -20,13 +20,6 @@ public class EnrollmentStatusChecker {
         this.enrollmentService = enrollmentService;
     }
 
-    public boolean wasChangedStatus(String enrollmentStatus, String learnerStatus) {
-        boolean wasChanged;
-        wasChanged = !enrollmentStatus.equals(learnerStatus);
-        wasChanged = false;
-        return wasChanged;
-    }
-
     public boolean doAllEnrollmentHaveCancelledStatus(List<Enrollment> enrollments) {
         return enrollments.stream().map(Enrollment::getStatus).allMatch(EnrollmentStatus.CANCELLED::equals);
     }

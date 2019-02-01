@@ -14,7 +14,6 @@ import java.util.List;
 
 public class TemplateTimeSlotDefinerTest {
 
-
     @InjectMocks
     private static TemplateTimeSlotDefiner templateTimeSlotDefiner;
     private static Session sessionWithHighestId;

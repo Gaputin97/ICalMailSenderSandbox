@@ -73,7 +73,6 @@ public class SimpleCalendarSenderFacade {
             invitationCalendar = calendarCreator.createCalendarTemplate(rrule, newAppointment);
             cancellationCalendar = null;
         }
-
         for (Enrollment enrollment : enrollmentList) {
             if (EnrollmentCalendarStatus.CANCELLATION.equals(enrollment.getCalendarStatus())
                     && EnrollmentStatus.CANCELLED.equals(enrollment.getStatus())) {
