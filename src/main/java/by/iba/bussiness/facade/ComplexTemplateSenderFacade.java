@@ -1,12 +1,13 @@
 package by.iba.bussiness.facade;
 
 import by.iba.bussiness.appointment.Appointment;
+import by.iba.bussiness.appointment.handler.IndexDeterminer;
 import by.iba.bussiness.calendar.creator.vevent.CalendarCreator;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.definer.RruleDefiner;
 import by.iba.bussiness.calendar.session.Session;
-import by.iba.bussiness.calendar.status.EnrollmentCalendarStatus;
+import by.iba.bussiness.calendar.status.CalendarStatus;
 import by.iba.bussiness.calendar.status.EnrollmentCalendarStatusDefiner;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
@@ -42,6 +43,7 @@ public class ComplexTemplateSenderFacade {
     private RruleDefiner rruleDefiner;
     private MeetingTypeDefiner meetingTypeDefiner;
     private EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner;
+    private IndexDeterminer indexDeterminer;
 
 
     @Autowired
@@ -54,7 +56,8 @@ public class ComplexTemplateSenderFacade {
                                        CalendarCreator CalendarCreator,
                                        RruleDefiner rruleDefiner,
                                        MeetingTypeDefiner meetingTypeDefiner,
-                                       EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner) {
+                                       EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner,
+                                       IndexDeterminer indexDeterminer) {
         this.messageSender = messageSender;
         this.enrollmentsInstaller = enrollmentsInstaller;
         this.enrollmentService = enrollmentService;
@@ -65,13 +68,14 @@ public class ComplexTemplateSenderFacade {
         this.rruleDefiner = rruleDefiner;
         this.meetingTypeDefiner = meetingTypeDefiner;
         this.enrollmentCalendarStatusDefiner = enrollmentCalendarStatusDefiner;
+        this.indexDeterminer = indexDeterminer;
     }
 
-    public List<NotificationResponseStatus> sendTemplate(Appointment appointment, Appointment currentAppointment) {
-        BigInteger meetingId = appointment.getMeetingId();
+    public List<NotificationResponseStatus> sendTemplate(Appointment newAppointment, Appointment currentAppointment) {
+        BigInteger meetingId = newAppointment.getMeetingId();
         List<NotificationResponseStatus> notificationResponseStatusList = new ArrayList<>();
         List<Enrollment> enrollmentList = enrollmentService.getAllByParentId(meetingId);
-        Template installedTemplate = templateInstaller.installTemplate(appointment, currentAppointment);
+        Template installedTemplate = templateInstaller.installTemplate(newAppointment, currentAppointment);
         MeetingType oldMeetingType = null;
         if (currentAppointment != null) {
             List<Session> oldAppSessions = currentAppointment.getSessionList();
@@ -82,37 +86,44 @@ public class ComplexTemplateSenderFacade {
         if (isOldMeetingSimple) {
             List<Session> oldAppSessions = currentAppointment.getSessionList();
             Rrule rrule = rruleDefiner.defineRrule(oldAppSessions);
-            calendar = CalendarCreator.createCalendarTemplate(rrule, appointment);
+            calendar = CalendarCreator.createCalendarTemplate(rrule, newAppointment);
         }
+
         for (Enrollment enrollment : enrollmentList) {
+            String enrollmentEmail = enrollment.getUserEmail();
             if (isOldMeetingSimple) {
                 String enrollmentCalendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
-                Calendar cancelCalendarWithoutAttendee = calendar;
                 Calendar cancelCalendarWithAttendee =
-                        calendarAttendeesInstaller.installAttendeeToCalendar(enrollment.getUserEmail(), cancelCalendarWithoutAttendee);
-                messageSender.sendCalendarToLearner(cancelCalendarWithAttendee, enrollmentCalendarStatus, currentAppointment);
+                        calendarAttendeesInstaller.installAttendeeToTheCalendar(enrollmentEmail, calendar);
+                messageSender.sendCalendar(cancelCalendarWithAttendee, enrollmentCalendarStatus, currentAppointment);
             }
-            if (EnrollmentCalendarStatus.CANCELLATION.equals(enrollment.getCalendarStatus())
+
+            if (CalendarStatus.CANCELLATION.equals(enrollment.getCalendarStatus())
                     && EnrollmentStatus.CANCELLED.equals(enrollment.getStatus())) {
                 NotificationResponseStatus badNotificationResponseStatus =
-                        new NotificationResponseStatus(false, "User has cancelled status. ", enrollment.getUserEmail());
+                        new NotificationResponseStatus(false, "User has cancelled status. ", enrollmentEmail);
                 notificationResponseStatusList.add(badNotificationResponseStatus);
             } else {
-                String templateType = templateStatusInstaller.installTemplateType(enrollment, appointment);
+                String templateType = templateStatusInstaller.installTemplateType(enrollment, newAppointment);
                 Template template = new Template(installedTemplate);
                 template.setType(templateType);
+
                 if (template.getType() == null) {
                     NotificationResponseStatus badNotificationResponseStatus =
-                            new NotificationResponseStatus(false, "User has already updated version. ", enrollment.getUserEmail());
+                            new NotificationResponseStatus(false, "User has already updated version. ", enrollmentEmail);
                     notificationResponseStatusList.add(badNotificationResponseStatus);
-                    logger.info("Not need to send message to " + enrollment.getUserEmail());
+                    logger.info("Not need to send message to " + enrollmentEmail);
                 } else {
-                    String userEmail = enrollment.getUserEmail();
-                    String meetingTitle = appointment.getTitle();
+                    String userEmail = enrollmentEmail;
+                    String meetingTitle = newAppointment.getTitle();
                     NotificationResponseStatus notificationResponseStatus = messageSender.sendTemplate(template, userEmail, meetingTitle);
                     notificationResponseStatusList.add(notificationResponseStatus);
+
                     if (notificationResponseStatus.isDelivered()) {
-                        enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, appointment);
+                        int maxIndex = indexDeterminer.getMaxIndex(newAppointment);
+                        String enrollmentCalendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
+                        Enrollment updatedEnrollment = enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, maxIndex, enrollmentCalendarStatus);
+                        enrollmentService.save(updatedEnrollment);
                     }
                 }
             }

@@ -72,12 +72,9 @@ public class EnrollmentsInstaller {
         return enrollLearnerResponseStatuses;
     }
 
-    public Enrollment installEnrollmentCalendarFields(Enrollment enrollment, Appointment appointment) {
-        int maximumIndex = indexDeterminer.getMaxIndex(appointment);
-        String calendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
+    public Enrollment installEnrollmentCalendarFields(Enrollment enrollment, int maxIndex, String calendarStatus) {
         enrollment.setCalendarStatus(calendarStatus);
-        enrollment.setCalendarVersion(Integer.toString(maximumIndex));
-        enrollment = enrollmentService.save(enrollment);
+        enrollment.setCalendarVersion(Integer.toString(maxIndex));
         logger.info("Enrollment " + enrollment.getUserEmail() + " has been saved with new calendar version " + enrollment.getCalendarVersion());
         return enrollment;
     }

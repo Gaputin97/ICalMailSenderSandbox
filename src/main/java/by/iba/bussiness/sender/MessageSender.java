@@ -47,9 +47,9 @@ public class MessageSender {
         this.freeMarkerConfiguration = freeMarkerConfiguration;
     }
 
-    public NotificationResponseStatus sendCalendarToLearner(Calendar calendar,
-                                                            String enrollmentCalendarStatus,
-                                                            Appointment appointment) {
+    public NotificationResponseStatus sendCalendar(Calendar calendar,
+                                                   String enrollmentCalendarStatus,
+                                                   Appointment appointment) {
         MimeMessage message;
         VEvent event = (VEvent) calendar.getComponents().getComponent(Component.VEVENT);
         Attendee attendee = event.getProperties().getProperty(Property.ATTENDEE);

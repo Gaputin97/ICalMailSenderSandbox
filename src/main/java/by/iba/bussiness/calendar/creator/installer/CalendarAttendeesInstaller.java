@@ -19,10 +19,10 @@ import java.text.ParseException;
 public class CalendarAttendeesInstaller {
     private static final Logger logger = LoggerFactory.getLogger(CalendarAttendeesInstaller.class);
 
-    public Calendar installAttendeeToCalendar(String userEmail, Calendar preInstalledCalendar) {
+    public Calendar installAttendeeToTheCalendar(String userEmail, Calendar calendarWithoutAttendee) {
         Calendar calendarWithAttendee;
         try {
-            calendarWithAttendee = new Calendar(preInstalledCalendar);
+            calendarWithAttendee = new Calendar(calendarWithoutAttendee);
             CalendarComponent vEvent = calendarWithAttendee.getComponent(Component.VEVENT);
             Attendee attendee = new Attendee(URI.create(userEmail));
             attendee.getParameters().add(Rsvp.FALSE);
@@ -33,6 +33,5 @@ public class CalendarAttendeesInstaller {
             throw new CalendarException("Can't create calendar.");
         }
         return calendarWithAttendee;
-
     }
 }

@@ -2,6 +2,10 @@ package by.iba.bussiness.calendar.rrule.frequence;
 
 import org.junit.Test;
 
+import java.util.Comparator;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
 import static org.junit.Assert.*;
 
 public class FrequencyHelperTest {

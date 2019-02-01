@@ -7,22 +7,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EnrollmentUpdateChecker {
-    private IndexDeterminer indexDeterminer;
-
-    @Autowired
-    public EnrollmentUpdateChecker(IndexDeterminer indexDeterminer) {
-        this.indexDeterminer = indexDeterminer;
-    }
-
-    public boolean isEnrollmentMustBeUpdated(Enrollment enrollment, Appointment newAppointment) {
+    public boolean isMustBeUpdated(String enrollmentCalendarVersion, int maxNewAppointmentIndex) {
         boolean needUpdate = false;
-        String enrollmentCalendarVersion = enrollment.getCalendarVersion();
         if (enrollmentCalendarVersion == null) {
             needUpdate = true;
         } else {
-            int enrollmentCalendarVersionInt = Integer.parseInt(enrollment.getCalendarVersion());
-            int maximumAppointmentIndex = indexDeterminer.getMaxIndex(newAppointment);
-            if (maximumAppointmentIndex > enrollmentCalendarVersionInt) {
+            int enrollmentCalendarVersionInt = Integer.parseInt(enrollmentCalendarVersion);
+            if (maxNewAppointmentIndex > enrollmentCalendarVersionInt) {
                 needUpdate = true;
             }
         }

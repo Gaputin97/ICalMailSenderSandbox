@@ -69,26 +69,18 @@ public class CalendarCreator {
         Instant startAppDate = dateParser.parseDate(appointment.getStartDateTime());
         List<Session> sortedSessions = new ArrayList<>(appointment.getSessionList());
         Collections.sort(sortedSessions);
-        Instant endAppdate = sortedSessions.get(0).getStartDateTime();
+        Instant endAppointmentDate = sortedSessions.get(0).getEndDateTime();
 
         long interval = rrule.getInterval();
         Frequency frequency = rrule.getFrequency();
-        String increasedUntilDate = dateIncreaser.increaseDate(frequency, interval, endAppdate);
+        String increasedUntilDate = dateIncreaser.increaseDate(frequency, interval, endAppointmentDate);
         String richDescription = BODY_OPEN_TAG + appointment.getDescription() + BODY_CLOSE_TAG;
         String parsedIncreasedUntilDate = iСalDateParser.parseToICalDate(increasedUntilDate);
         Recur recurrence = calendarRruleParser.parseToCalendarRrule(rrule, parsedIncreasedUntilDate);
-        Calendar calendar;
         try {
-            Sequence sequence = sequenceDefiner.defineSequence(appointment);
             Organizer organizer = new Organizer("mailto:" + appointment.getFrom());
             Location location = new Location((appointment.getLocation()));
-            if (!rrule.getRruleCount().equals(RruleCount.ZERO)) {
-                exDatesList.add(new DateTime(parsedIncreasedUntilDate));
-            }
-            RRule rRule = new RRule(recurrence);
-            Uid UID = new Uid(appointment.getId().toString());
-            DateTime startDateTime = new DateTime(startAppDate.toEpochMilli());
-            DateTime endDateTime = new DateTime(endAppdate.toEpochMilli());
+
             Description description = new Description(appointment.getPlainDescription());
             AltRep altRep = new AltRep("CID:" + RICH_TEXT_CID);
             description.getParameters().add(altRep);
@@ -96,22 +88,37 @@ public class CalendarCreator {
             XProperty xAltDesc = new XProperty("X-ALT-DESC");
             xAltDesc.getParameters().add(new FmtType("text/html"));
             xAltDesc.setValue(richDescription);
-            calendar = new Calendar(requestCalendar);
+
+            if (!rrule.getRruleCount().equals(RruleCount.ZERO)) {
+                exDatesList.add(new DateTime(parsedIncreasedUntilDate));
+            }
+
+            RRule rRule = new RRule(recurrence);
+            DateTime startDateTime = new DateTime(startAppDate.toEpochMilli());
+            DateTime endDateTime = new DateTime(endAppointmentDate.toEpochMilli());
+
+            Sequence sequence = sequenceDefiner.defineSequence(appointment);
+            Uid UID = new Uid(appointment.getId().toString());
+
+            Calendar calendar = new Calendar(requestCalendar);
             VEvent event = new VEvent(startDateTime, endDateTime, appointment.getSummary());
-            calendar.getComponents().add(event);
+
             if (!exDatesList.isEmpty()) {
                 ExDate exDates = new ExDate(exDatesList);
                 event.getProperties().add(exDates);
             }
-            event.getProperties().addAll(Arrays.asList(sequence, organizer, location, description, UID, rRule, xAltDesc));
+
+            calendar.getComponents().add(event);
+            event.getProperties().addAll(Arrays.asList( organizer, location, description, xAltDesc, rRule, sequence, UID));
+
+            return calendar;
         } catch (ParseException | IOException | URISyntaxException e) {
             logger.error("Cant create recur calendar meeting" + e);
             throw new CalendarException("Can't create simple calendar meeting. Try again later");
         }
-        return calendar;
     }
 
-    public Calendar createCalendarCancellationTemplate(Appointment appointment) {
+    public Calendar createCancellationTemplate(Appointment appointment) {
 
         Instant startAppDate = dateParser.parseDate(appointment.getStartDateTime());
         List<Session> sortedSessions = new ArrayList<>(appointment.getSessionList());

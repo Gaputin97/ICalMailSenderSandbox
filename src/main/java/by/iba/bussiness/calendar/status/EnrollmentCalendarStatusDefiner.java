@@ -9,12 +9,12 @@ public class EnrollmentCalendarStatusDefiner {
     public String defineEnrollmentCalendarStatus(Enrollment enrollment) {
         String calendarStatus;
         if (enrollment.getCalendarStatus() == null) {
-            calendarStatus = EnrollmentCalendarStatus.INVITATION.toString();
+            calendarStatus = CalendarStatus.INVITATION.toString();
         } else {
             if (enrollment.getStatus().equals(EnrollmentStatus.CANCELLED.toString())) {
-                calendarStatus = EnrollmentCalendarStatus.CANCELLATION.toString();
+                calendarStatus = CalendarStatus.CANCELLATION.toString();
             } else {
-                calendarStatus = EnrollmentCalendarStatus.UPDATE.toString();
+                calendarStatus = CalendarStatus.UPDATE.toString();
             }
         }
         return calendarStatus;

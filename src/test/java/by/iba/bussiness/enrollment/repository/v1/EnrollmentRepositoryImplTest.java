@@ -29,7 +29,6 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class EnrollmentRepositoryImplTest {
 
-
     @Autowired
     private EnrollmentRepositoryImpl enrollmentRepository;
     @Autowired
