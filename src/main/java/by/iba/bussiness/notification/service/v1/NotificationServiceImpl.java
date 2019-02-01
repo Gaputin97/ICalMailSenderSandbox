@@ -51,7 +51,8 @@ public class NotificationServiceImpl implements NotificationService {
                                    SimpleCalendarSenderFacade simpleCalendarSenderFacade,
                                    AppointmentRepository appointmentRepository,
                                    PlaceHoldersInstaller placeHoldersInstaller,
-                                   TemplatePlaceHolderReplacer templatePlaceHolderReplacer) {
+                                   TemplatePlaceHolderReplacer templatePlaceHolderReplacer,
+                                   AppointmentCreator appointmentCreator) {
         this.meetingService = meetingService;
         this.invitationTemplateService = invitationTemplateService;
         this.appointmentInstaller = appointmentInstaller;
