@@ -60,22 +60,21 @@ public class SimpleCalendarSenderFacade {
     }
 
     public List<NotificationResponseStatus> sendCalendar(Appointment newAppointment, Appointment currentAppointment) {
-        List<NotificationResponseStatus> notificationResponseStatusList = new ArrayList<>();
         BigInteger meetingId = newAppointment.getMeetingId();
         List<Enrollment> enrollmentList = enrollmentService.getAllByParentId(meetingId);
-        Calendar invitationCalendar;
-        Calendar cancellationCalendar;
-        if (enrollmentStatusChecker.doAllEnrollmentHaveCancelledStatus(enrollmentList)) {
+
+        Calendar invitationCalendar = null;
+        Calendar cancellationCalendar = null;
+        if (enrollmentStatusChecker.areAllEnrollmentsHasCancelledStatus(enrollmentList)) {
             cancellationCalendar = calendarCreator.createCalendarCancellationTemplate(currentAppointment);
-            invitationCalendar = null;
         } else {
             Rrule rrule = rruleDefiner.defineRrule(newAppointment.getSessionList());
             invitationCalendar = calendarCreator.createCalendarTemplate(rrule, newAppointment);
-            cancellationCalendar = null;
         }
+        List<NotificationResponseStatus> notificationResponseStatusList = new ArrayList<>();
         for (Enrollment enrollment : enrollmentList) {
-            if (EnrollmentCalendarStatus.CANCELLATION.equals(enrollment.getCalendarStatus())
-                    && EnrollmentStatus.CANCELLED.equals(enrollment.getStatus())) {
+            if (EnrollmentCalendarStatus.CANCELLATION.name().equals(enrollment.getCalendarStatus())
+                    && EnrollmentStatus.CANCELLED.name().equals(enrollment.getStatus())) {
                 NotificationResponseStatus badNotificationResponseStatus =
                         new NotificationResponseStatus(false, "User has cancelled status.", enrollment.getUserEmail());
                 notificationResponseStatusList.add(badNotificationResponseStatus);
@@ -88,11 +87,12 @@ public class SimpleCalendarSenderFacade {
                     logger.info("Don't need to send message to " + enrollment.getUserEmail());
                 } else {
                     Calendar calendarWithoutAttendee;
-                    if (EnrollmentStatus.CANCELLED.equals(enrollment.getStatus())) {
+                    if (EnrollmentStatus.CANCELLED.name().equals(enrollment.getStatus())) {
                         calendarWithoutAttendee = cancellationCalendar;
                     } else {
                         calendarWithoutAttendee = invitationCalendar;
                     }
+
                     Calendar calendarWithAttendee = calendarAttendeeInstaller.installAttendeeToCalendar(enrollment.getUserEmail(), calendarWithoutAttendee);
                     String enrollmentCalendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
                     NotificationResponseStatus notificationResponseStatus =

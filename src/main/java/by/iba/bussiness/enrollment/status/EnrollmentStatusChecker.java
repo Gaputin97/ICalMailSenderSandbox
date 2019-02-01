@@ -13,19 +13,13 @@ import java.util.List;
 @Component
 public class EnrollmentStatusChecker {
     private static final Logger logger = LoggerFactory.getLogger(EnrollmentStatusChecker.class);
-    private EnrollmentService enrollmentService;
 
-    @Autowired
-    public EnrollmentStatusChecker(EnrollmentService enrollmentService) {
-        this.enrollmentService = enrollmentService;
+    public boolean areAllEnrollmentsHasCancelledStatus(List<Enrollment> enrollments) {
+        return enrollments.stream().map(Enrollment::getStatus).allMatch(EnrollmentStatus.CANCELLED.name()::equals);
     }
 
-    public boolean doAllEnrollmentHaveCancelledStatus(List<Enrollment> enrollments) {
-        return enrollments.stream().map(Enrollment::getStatus).allMatch(EnrollmentStatus.CANCELLED::equals);
-    }
-
-    public boolean doAllEnrollmentHaveConfirmedStatus(List<Enrollment> enrollments) {
-        return enrollments.stream().map(Enrollment::getStatus).allMatch(EnrollmentStatus.CONFIRMED::equals);
+    public boolean areAllEnrollmentsHasConfirmedStatus(List<Enrollment> enrollments) {
+        return enrollments.stream().map(Enrollment::getStatus).allMatch(EnrollmentStatus.CONFIRMED.name()::equals);
     }
 }
 

@@ -36,6 +36,7 @@ public class ImyaServiceImpl implements ImyaService {
             boolean doNotificationContainLearner = learners.stream().map(Learner::getEmail).anyMatch(notification.getRecipientEmail()::equals);
             return (notification.isDelivered() || doNotificationContainLearner);
         }).collect(Collectors.toList());
+
         imyaResponseStatus.setEnrollLearnerResponseStatuses(enrollLearnerResponseStatuses);
         imyaResponseStatus.setNotificationResponseStatuses(filteredNotificationResponseStatus);
         return imyaResponseStatus;
