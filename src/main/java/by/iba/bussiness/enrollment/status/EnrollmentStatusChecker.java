@@ -14,16 +14,10 @@ import java.util.List;
 public class EnrollmentStatusChecker {
     private static final Logger logger = LoggerFactory.getLogger(EnrollmentStatusChecker.class);
 
-    public boolean wasChangedStatus(Enrollment enrollment, Learner learner) {
+    public boolean wasChangedStatus(String enrollmentStatus, String learnerStatus) {
         boolean wasChanged;
-        boolean isExistLocalEnrollment = enrollment != null;
-        if (isExistLocalEnrollment) {
-            String enrollmentStatus = enrollment.getStatus();
-            String learnerStatus = learner.getEnrollmentStatus();
-            wasChanged = !enrollmentStatus.equals(learnerStatus);
-        } else {
-            wasChanged = false;
-        }
+        wasChanged = !enrollmentStatus.equals(learnerStatus);
+        wasChanged = false;
         return wasChanged;
     }
 

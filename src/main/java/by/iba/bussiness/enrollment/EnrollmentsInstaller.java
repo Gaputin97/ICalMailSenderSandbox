@@ -39,43 +39,46 @@ public class EnrollmentsInstaller {
         BigInteger bigIntegerMeetingId = new BigInteger(meetingId);
         for (Learner learner : learners) {
             String email = learner.getEmail();
-            String enrollmentStatus = learner.getEnrollmentStatus();
-            Enrollment oldEnrollment = enrollmentService.getByEmailAndParentIdAndType(bigIntegerMeetingId, email, enrollmentStatus);
-            if (oldEnrollment == null) {
-                oldEnrollment = enrollmentService.getByEmailAndParentId(bigIntegerMeetingId, email);
-                if (enrollmentStatusChecker.wasChangedStatus(oldEnrollment, learner)) {
-                    oldEnrollment.setStatus(enrollmentStatus);
-                    enrollmentService.save(oldEnrollment);
-                    logger.info("Enrollment " + oldEnrollment.getUserEmail() + " has been saved with new status " + oldEnrollment.getStatus());
+            String learnerEnrollmentStatus = learner.getEnrollmentStatus();
+            Enrollment currentEnrollment = enrollmentService.getByEmailAndParentId(bigIntegerMeetingId, email);
+
+            if (currentEnrollment != null) {
+                String enrollmentStatus = currentEnrollment.getStatus();
+                if (!enrollmentStatus.equals(learnerEnrollmentStatus)) {
+                    currentEnrollment.setStatus(learnerEnrollmentStatus);
+                    currentEnrollment = enrollmentService.save(currentEnrollment);
+                    logger.info("Enrollment " + currentEnrollment.getUserEmail() + " has been saved with new status " + currentEnrollment.getStatus());
                     EnrollLearnerResponseStatus enrollLearnerResponseStatus =
-                            new EnrollLearnerResponseStatus(true, "Enrollment was modified.", learner.getEmail());
+                            new EnrollLearnerResponseStatus(true, "Enrollment status was modified.", learner.getEmail());
                     enrollLearnerResponseStatuses.add(enrollLearnerResponseStatus);
                 } else {
-                    Enrollment newEnrollment = new Enrollment();
-                    newEnrollment.setStatus(enrollmentStatus);
-                    newEnrollment.setParentId(bigIntegerMeetingId);
-                    newEnrollment.setUserEmail(email);
-                    enrollmentService.save(newEnrollment);
-                    logger.info("Enrollment " + newEnrollment.getUserEmail() + " has been saved");
                     EnrollLearnerResponseStatus enrollLearnerResponseStatus =
-                            new EnrollLearnerResponseStatus(true, "Enrollment was created.", learner.getEmail());
+                            new EnrollLearnerResponseStatus(false, "Enrollment already exists.", learner.getEmail());
                     enrollLearnerResponseStatuses.add(enrollLearnerResponseStatus);
                 }
             } else {
+                Enrollment newEnrollment = new Enrollment();
+                newEnrollment.setStatus(learnerEnrollmentStatus);
+                newEnrollment.setParentId(bigIntegerMeetingId);
+                newEnrollment.setUserEmail(email);
+                enrollmentService.save(newEnrollment);
+                logger.info("Enrollment " + newEnrollment.getUserEmail() + " has been saved");
                 EnrollLearnerResponseStatus enrollLearnerResponseStatus =
-                        new EnrollLearnerResponseStatus(false, "Enrollment already exists.", learner.getEmail());
+                        new EnrollLearnerResponseStatus(true, "Enrollment was created.", learner.getEmail());
                 enrollLearnerResponseStatuses.add(enrollLearnerResponseStatus);
             }
+
         }
         return enrollLearnerResponseStatuses;
     }
 
-    public void installEnrollmentCalendarFields(Enrollment enrollment, Appointment appointment) {
+    public Enrollment installEnrollmentCalendarFields(Enrollment enrollment, Appointment appointment) {
         int maximumIndex = indexDeterminer.getMaxIndex(appointment);
         String calendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
         enrollment.setCalendarStatus(calendarStatus);
         enrollment.setCalendarVersion(Integer.toString(maximumIndex));
-        enrollmentService.save(enrollment);
+        enrollment = enrollmentService.save(enrollment);
         logger.info("Enrollment " + enrollment.getUserEmail() + " has been saved with new calendar version " + enrollment.getCalendarVersion());
+        return enrollment;
     }
 }
