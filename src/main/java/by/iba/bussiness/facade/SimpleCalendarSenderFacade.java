@@ -99,6 +99,7 @@ public class SimpleCalendarSenderFacade {
                     NotificationResponseStatus notificationResponseStatus =
                             messageSender.sendCalendarToLearner(calendarWithAttendee, enrollmentCalendarStatus, newAppointment);
                     notificationResponseStatusList.add(notificationResponseStatus);
+
                     if (notificationResponseStatus.isDelivered()) {
                         enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, newAppointment);
                     }
