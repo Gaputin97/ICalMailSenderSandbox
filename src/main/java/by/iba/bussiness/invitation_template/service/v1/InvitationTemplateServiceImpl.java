@@ -27,15 +27,15 @@ public class InvitationTemplateServiceImpl implements InvitationTemplateService 
     private static final Logger logger = LoggerFactory.getLogger(InvitationTemplateServiceImpl.class);
     private TokenService tokenService;
     private RestTemplate restTemplate;
-    private String getTemplateByCodeEndpoint;
+    private String templateByCodeEndpoint;
 
     @Autowired
     public InvitationTemplateServiceImpl(TokenService tokenService,
-                                         @Value("${template_by_code_endpoint}") String getTemplateByCodeEndpoint,
+                                         @Value("${template_by_code_endpoint}") String templateByCodeEndpoint,
                                          RestTemplate restTemplate) {
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
-        this.getTemplateByCodeEndpoint = getTemplateByCodeEndpoint;
+        this.templateByCodeEndpoint = templateByCodeEndpoint;
     }
 
     @Override
@@ -46,11 +46,11 @@ public class InvitationTemplateServiceImpl implements InvitationTemplateService 
         HttpEntity httpEntity = new HttpEntity<>(httpHeaders);
         InvitationTemplate invitationTemplate;
         try {
-            ResponseEntity<InvitationTemplate> invitationTemplateResponseEntity = restTemplate.exchange(getTemplateByCodeEndpoint + code,
-                    HttpMethod.GET, httpEntity, InvitationTemplate.class);
+            ResponseEntity<InvitationTemplate> invitationTemplateResponseEntity = restTemplate.exchange(
+                    templateByCodeEndpoint + code, HttpMethod.GET, httpEntity, InvitationTemplate.class);
             invitationTemplate = invitationTemplateResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            logger.error("Can't exchange invitation template by code: ", e);
+            logger.error("Can't exchange invitation template by code: " + code, e);
             throw new ServiceException("Can't exchange invitation template by code");
         }
         return invitationTemplate;

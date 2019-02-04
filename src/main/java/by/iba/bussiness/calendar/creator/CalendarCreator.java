@@ -113,7 +113,7 @@ public class CalendarCreator {
 
             return calendar;
         } catch (ParseException | IOException | URISyntaxException e) {
-            logger.error("Cant create recur calendar meeting" + e);
+            logger.error("Cant create recurrence calendar meeting" + e);
             throw new CalendarException("Can't create simple calendar meeting. Try again later");
         }
     }
