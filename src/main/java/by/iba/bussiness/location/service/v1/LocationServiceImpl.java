@@ -1,7 +1,7 @@
-package by.iba.bussiness.invitation_template.service.v1;
+package by.iba.bussiness.location.service.v1;
 
-import by.iba.bussiness.invitation_template.InvitationTemplate;
-import by.iba.bussiness.invitation_template.service.InvitationTemplateService;
+import by.iba.bussiness.location.Location;
+import by.iba.bussiness.location.service.LocationService;
 import by.iba.bussiness.token.model.JavaWebToken;
 import by.iba.bussiness.token.service.TokenService;
 import by.iba.exception.ServiceException;
@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -22,37 +21,36 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 
 @Service
-@PropertySource("endpoint.properties")
-public class InvitationTemplateServiceImpl implements InvitationTemplateService {
-    private static final Logger logger = LoggerFactory.getLogger(InvitationTemplateServiceImpl.class);
+public class LocationServiceImpl implements LocationService {
+    private static final Logger logger = LoggerFactory.getLogger(LocationServiceImpl.class);
     private TokenService tokenService;
     private RestTemplate restTemplate;
-    private String templateByCodeEndpoint;
+    private String locationByCodeEndpoint;
 
     @Autowired
-    public InvitationTemplateServiceImpl(TokenService tokenService,
-                                         @Value("${template_by_code_endpoint}") String templateByCodeEndpoint,
-                                         RestTemplate restTemplate) {
+    public LocationServiceImpl(TokenService tokenService,
+                               RestTemplate restTemplate,
+                               @Value("${location_by_code_endpoint}") String locationByCodeEndpoint) {
         this.tokenService = tokenService;
         this.restTemplate = restTemplate;
-        this.templateByCodeEndpoint = templateByCodeEndpoint;
+        this.locationByCodeEndpoint = locationByCodeEndpoint;
     }
 
     @Override
-    public InvitationTemplate getInvitationTemplateByCode(HttpServletRequest request, String code) {
+    public Location getLocationByCode(HttpServletRequest request, String code) {
         JavaWebToken javaWebToken = tokenService.getJavaWebToken(request);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set(HttpHeaders.AUTHORIZATION, "Bearer " + javaWebToken.getJwt());
         HttpEntity httpEntity = new HttpEntity<>(httpHeaders);
-        InvitationTemplate invitationTemplate;
+        Location location;
         try {
-            ResponseEntity<InvitationTemplate> invitationTemplateResponseEntity = restTemplate.exchange(
-                    templateByCodeEndpoint + code, HttpMethod.GET, httpEntity, InvitationTemplate.class);
-            invitationTemplate = invitationTemplateResponseEntity.getBody();
+            ResponseEntity<Location> locationResponseEntity = restTemplate.exchange(
+                    locationByCodeEndpoint + code, HttpMethod.GET, httpEntity, Location.class);
+            location = locationResponseEntity.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            logger.error("Can't exchange invitation template by code: " + code, e);
+            logger.error("Can't exchange location by code: " + code, e);
             throw new ServiceException("Can't exchange invitation template by code");
         }
-        return invitationTemplate;
+        return location;
     }
 }

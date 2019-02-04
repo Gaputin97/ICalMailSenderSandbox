@@ -29,7 +29,7 @@ public class MeetingRepositoryImpl implements MeetingRepository {
         try {
             mongoTemplate.save(meeting);
         } catch (Exception e) {
-            logger.info("Can't save meeting.", e);
+            logger.info("Can't save meeting with id: " + meeting.getId(), e);
             throw new RepositoryException("Can't save meeting. Try again later");
         }
         return meeting;

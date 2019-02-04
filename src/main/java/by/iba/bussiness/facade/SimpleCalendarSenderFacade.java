@@ -102,6 +102,7 @@ public class SimpleCalendarSenderFacade {
                     } else {
                         calendarWithoutAttendee = invitationCalendar;
                     }
+
                     Calendar calendarWithAttendee = calendarAttendeeInstaller.installAttendeeToTheCalendar(enrollmentEmail, calendarWithoutAttendee);
                     String enrollmentCalendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
                     NotificationResponseStatus notificationResponseStatus = messageSender.sendCalendar(calendarWithAttendee, enrollmentCalendarStatus, newAppointment);

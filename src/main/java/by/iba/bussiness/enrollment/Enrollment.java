@@ -19,6 +19,9 @@ public class Enrollment {
     private String status;
     private String currentCalendarUid;
 
+    public Enrollment() {
+    }
+
     public BigInteger getId() {
         return id;
     }

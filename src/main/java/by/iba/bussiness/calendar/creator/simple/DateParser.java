@@ -21,7 +21,7 @@ public class DateParser {
             return dateFormat.parse(date).toInstant();
         } catch (ParseException e) {
             logger.error("Can't parse string date to instant", e);
-            throw new CalendarException("Error with dates");
+            throw new CalendarException("Error caused with dates");
         }
     }
 }

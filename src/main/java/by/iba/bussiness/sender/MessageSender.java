@@ -91,7 +91,7 @@ public class MessageSender {
             logger.info("Message was sent to " + userEmail);
             notificationResponseStatus = new NotificationResponseStatus(true, "Calendar was sent successfully", userEmail);
         } catch (MessagingException | IOException e) {
-            logger.error("Error while trying to send message", e);
+            logger.error("Error while trying to send a message", e);
             notificationResponseStatus = new NotificationResponseStatus(false, "Calendar was not delivered", userEmail);
         }
         return notificationResponseStatus;
