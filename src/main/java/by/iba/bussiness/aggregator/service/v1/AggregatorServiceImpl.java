@@ -1,10 +1,10 @@
-package by.iba.bussiness.kakoetoimya.service.v1;
+package by.iba.bussiness.aggregator.service.v1;
 
 import by.iba.bussiness.calendar.learner.Learner;
 import by.iba.bussiness.enroll.EnrollLearnerResponseStatus;
 import by.iba.bussiness.enroll.service.EnrollService;
-import by.iba.bussiness.kakoetoimya.AggregatorResponseStatus;
-import by.iba.bussiness.kakoetoimya.service.AggregatorService;
+import by.iba.bussiness.aggregator.AggregatorResponseStatus;
+import by.iba.bussiness.aggregator.service.AggregatorService;
 import by.iba.bussiness.notification.NotificationResponseStatus;
 import by.iba.bussiness.notification.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -9,8 +9,12 @@ import java.util.Map;
 @Component
 public class TemplatePlaceHolderReplacer {
 
+    private final FieldPlaceHolderReplacer fieldPlaceHolderReplacer;
+
     @Autowired
-    private FieldPlaceHolderReplacer fieldPlaceHolderReplacer;
+    public TemplatePlaceHolderReplacer(FieldPlaceHolderReplacer fieldPlaceHolderReplacer) {
+        this.fieldPlaceHolderReplacer = fieldPlaceHolderReplacer;
+    }
 
     public InvitationTemplate replaceTemplatePlaceHolders(Map<String, String> placeHolders, InvitationTemplate invTemplateWithPlaceHolders) {
         String notModifiedSubject = invTemplateWithPlaceHolders.getSubject();
@@ -32,8 +36,5 @@ public class TemplatePlaceHolderReplacer {
         modifiedInvitationTemplate.setLocationILT(modifiedLocation);
         modifiedInvitationTemplate.setFaceToFaceDescription(modifiedDescription);
         return modifiedInvitationTemplate;
-
     }
-
-
 }

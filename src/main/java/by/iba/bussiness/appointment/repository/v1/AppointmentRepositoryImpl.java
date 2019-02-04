@@ -16,9 +16,12 @@ import java.math.BigInteger;
 @Repository
 public class AppointmentRepositoryImpl implements AppointmentRepository {
     private static final Logger logger = LoggerFactory.getLogger(AppointmentRepositoryImpl.class);
+    private final MongoTemplate mongoTemplate;
 
     @Autowired
-    private MongoTemplate mongoTemplate;
+    public AppointmentRepositoryImpl(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
 
     @Override
     public Appointment save(Appointment appointment) {

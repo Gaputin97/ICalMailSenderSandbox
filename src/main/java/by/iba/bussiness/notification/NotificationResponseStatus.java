@@ -1,6 +1,7 @@
 package by.iba.bussiness.notification;
 
 public class NotificationResponseStatus {
+
     private boolean isDelivered;
     private String message;
     private String recipientEmail;
