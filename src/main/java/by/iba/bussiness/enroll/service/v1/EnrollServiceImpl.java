@@ -1,6 +1,9 @@
 package by.iba.bussiness.enroll.service.v1;
 
+import by.iba.bussiness.appointment.Appointment;
+import by.iba.bussiness.appointment.repository.AppointmentRepository;
 import by.iba.bussiness.calendar.learner.Learner;
+import by.iba.bussiness.calendar.learner.LearnerStatusChecker;
 import by.iba.bussiness.enroll.EnrollLearnerResponseStatus;
 import by.iba.bussiness.enroll.service.EnrollService;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
@@ -13,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigInteger;
 import java.util.List;
 
 @Service
@@ -20,11 +24,18 @@ public class EnrollServiceImpl implements EnrollService {
     private static final Logger logger = LoggerFactory.getLogger(EnrollServiceImpl.class);
     private MeetingService meetingService;
     private EnrollmentsInstaller enrollmentsInstaller;
+    private LearnerStatusChecker learnerStatusChecker;
+    private AppointmentRepository appointmentRepository;
 
     @Autowired
-    public EnrollServiceImpl(MeetingService meetingService, EnrollmentsInstaller enrollmentsInstaller) {
+    public EnrollServiceImpl(MeetingService meetingService,
+                             EnrollmentsInstaller enrollmentsInstaller,
+                             LearnerStatusChecker learnerStatusChecker,
+                             AppointmentRepository appointmentRepository) {
         this.meetingService = meetingService;
         this.enrollmentsInstaller = enrollmentsInstaller;
+        this.learnerStatusChecker = learnerStatusChecker;
+        this.appointmentRepository = appointmentRepository;
     }
 
     @Override
@@ -36,6 +47,10 @@ public class EnrollServiceImpl implements EnrollService {
         if (invitationTemplateKey.isEmpty()) {
             logger.error("Can't enroll learners to this event, cause can't find some invitation template by meeting id: " + meetingId);
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
+        }
+        Appointment currentAppointment = appointmentRepository.getByMeetingId(new BigInteger(meetingId));
+        if (learnerStatusChecker.isAnyLearnerHasCancelledStatus(learners) && currentAppointment == null) {
+            throw new RuntimeException("You try to cancel learner without confirming his before");
         }
         return enrollmentsInstaller.installEnrollments(learners, meetingId);
     }

@@ -10,7 +10,7 @@ public interface EnrollmentRepository {
 
     Enrollment getByEmailAndParentId(String userEmail, BigInteger parentId);
 
-    Enrollment getByEmailAndParentIdAndType(BigInteger parentId, String userEmail, String enrollmentStatus);
+    Enrollment getByEmailAndParentIdAndStatus(BigInteger parentId, String userEmail, String enrollmentStatus);
 
     List<Enrollment> getAllByParentId(BigInteger parentId);
 }

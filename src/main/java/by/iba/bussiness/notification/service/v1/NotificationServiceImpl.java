@@ -97,7 +97,6 @@ public class NotificationServiceImpl implements NotificationService {
         if (currentAppointment == null) {
             newAppointment = appointmentRepository.save(newAppointmentWithoutIndexes);
         } else {
-
             Appointment newAppointmentWithIndexes = indexesUpdater.updateIndexesBasedOnSessionsDifferences(newAppointmentWithoutIndexes, currentAppointment);
             Appointment determinedAppointment = appointmentDeterminer.determineNewAppointmentByIndexes(newAppointmentWithIndexes, currentAppointment);
             newAppointment = appointmentRepository.save(determinedAppointment);

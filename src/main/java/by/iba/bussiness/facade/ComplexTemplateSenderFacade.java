@@ -2,7 +2,7 @@ package by.iba.bussiness.facade;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.handler.IndexDeterminer;
-import by.iba.bussiness.calendar.creator.vevent.CalendarCreator;
+import by.iba.bussiness.calendar.creator.CalendarCreator;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.definer.RruleDefiner;
