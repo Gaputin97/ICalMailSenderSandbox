@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @Component
 public class FrequencyDefiner {
-
     private final FrequencyHelper frequencyHelper;
 
     @Autowired

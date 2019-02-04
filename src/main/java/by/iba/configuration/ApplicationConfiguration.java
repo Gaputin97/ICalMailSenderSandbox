@@ -6,6 +6,7 @@ import by.iba.configuration.mail.MailConfiguration;
 import by.iba.configuration.rest.template.RestTemplateConfiguration;
 import by.iba.configuration.swagger.SwaggerConfiguration;
 import org.springframework.context.annotation.Import;
+import org.springframework.retry.annotation.EnableRetry;
 
 @Import({
         MongoConfiguration.class,
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Import;
         SwaggerConfiguration.class,
         MailConfiguration.class,
         FreeMarkerConfiguration.class})
+@EnableRetry
 public class ApplicationConfiguration {
 
 }

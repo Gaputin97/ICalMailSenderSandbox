@@ -6,7 +6,6 @@ import java.util.Map;
 
 @Component
 public class FieldPlaceHolderReplacer {
-
     public String replaceFieldPlaceHolders(Map<String, String> placeHolders, String field) {
         String modifiedField = field;
         for (Map.Entry<String, String> map : placeHolders.entrySet()) {

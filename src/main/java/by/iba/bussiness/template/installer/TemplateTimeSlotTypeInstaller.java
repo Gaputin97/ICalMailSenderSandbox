@@ -13,9 +13,12 @@ import java.util.List;
 
 @Component
 public class TemplateTimeSlotTypeInstaller {
+    private final TemplateTimeSlotDefiner templateTimeSlotDefiner;
 
     @Autowired
-    private TemplateTimeSlotDefiner templateTimeSlotDefiner;
+    public TemplateTimeSlotTypeInstaller(TemplateTimeSlotDefiner templateTimeSlotDefiner) {
+        this.templateTimeSlotDefiner = templateTimeSlotDefiner;
+    }
 
 
     public List<TypedSession> installTypedSessions(Appointment appointment, Appointment currentAppointment) {

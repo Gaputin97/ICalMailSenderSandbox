@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TemplateStatusInstaller {
-
     private IndexDeterminer indexDeterminer;
 
     @Autowired
@@ -29,7 +28,7 @@ public class TemplateStatusInstaller {
             if (enrollmentCalendarVersion == null) {
                 templateType = TemplateType.INVITATION.toString();
             } else {
-                int calendarVersion = Integer.parseInt(enrollment.getCalendarVersion());
+                int calendarVersion = Integer.parseInt(enrollmentCalendarVersion);
                 if (maximumAppointmentIndex > calendarVersion) {
                     templateType = TemplateType.UPDATE.toString();
                 }

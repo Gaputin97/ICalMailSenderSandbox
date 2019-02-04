@@ -16,8 +16,12 @@ import java.math.BigInteger;
 @Repository
 public class MeetingRepositoryImpl implements MeetingRepository {
     private static final Logger logger = LoggerFactory.getLogger(MeetingRepositoryImpl.class);
+    private final MongoTemplate mongoTemplate;
+
     @Autowired
-    private MongoTemplate mongoTemplate;
+    public MeetingRepositoryImpl(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
 
     @Override
     public Meeting save(Meeting meeting) {

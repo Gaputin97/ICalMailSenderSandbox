@@ -10,7 +10,6 @@ import java.util.List;
 
 @Component
 public class TemplateInstaller {
-
     private TemplateTimeSlotInstaller templateTimeSlotInstaller;
     private TemplateTimeSlotTypeInstaller templateTimeSlotTypeInstaller;
 

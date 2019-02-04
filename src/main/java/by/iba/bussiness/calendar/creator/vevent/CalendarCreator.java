@@ -129,7 +129,7 @@ public class CalendarCreator {
         try {
             Sequence sequence = sequenceDefiner.defineSequence(currentAppointment);
             Organizer organizer = new Organizer("mailto:" + currentAppointment.getFrom());
-            Location location = new Location((currentAppointment.getLocation()));
+            Location location = new Location(currentAppointment.getLocationInfo());
             Uid UID = new Uid(currentAppointment.getId().toString());
             DateTime startDateTime = new DateTime(startAppDate.toEpochMilli());
             DateTime endDateTime = new DateTime(endAppDate.toEpochMilli());

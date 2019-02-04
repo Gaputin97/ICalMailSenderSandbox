@@ -4,6 +4,7 @@ import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.CalendarException;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.component.CalendarComponent;
+import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.parameter.Role;
 import net.fortuna.ical4j.model.parameter.Rsvp;
 import net.fortuna.ical4j.model.property.Attendee;
@@ -23,7 +24,7 @@ public class CalendarAttendeesInstaller {
         Calendar calendarWithAttendee;
         try {
             calendarWithAttendee = new Calendar(calendarWithoutAttendee);
-            CalendarComponent vEvent = calendarWithAttendee.getComponent(Component.VEVENT);
+            VEvent vEvent = (VEvent) calendarWithAttendee.getComponent(Component.VEVENT);
             Attendee attendee = new Attendee(URI.create(userEmail));
             attendee.getParameters().add(Rsvp.FALSE);
             attendee.getParameters().add(Role.REQ_PARTICIPANT);

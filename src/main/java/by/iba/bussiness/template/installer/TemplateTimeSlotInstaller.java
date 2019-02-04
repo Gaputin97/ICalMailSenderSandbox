@@ -12,14 +12,6 @@ import java.util.List;
 
 @Component
 public class TemplateTimeSlotInstaller {
-
-    private TemplateTimeSlotDefiner templateTimeSlotDefiner;
-
-    @Autowired
-    public TemplateTimeSlotInstaller(TemplateTimeSlotDefiner templateTimeSlotDefiner) {
-        this.templateTimeSlotDefiner = templateTimeSlotDefiner;
-    }
-
     public String installSessionsIfUpdate(List<TypedSession> typedSessions) {
         StringBuilder dates = new StringBuilder();
         typedSessions.stream().sorted().forEach(session -> {

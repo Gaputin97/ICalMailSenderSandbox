@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
@@ -17,10 +19,19 @@ import java.util.List;
 @Repository
 public class EnrollmentRepositoryImpl implements EnrollmentRepository {
     private static final Logger logger = LoggerFactory.getLogger(EnrollmentRepositoryImpl.class);
+    private final MongoTemplate mongoTemplate;
+
     @Autowired
-    private MongoTemplate mongoTemplate;
+    public EnrollmentRepositoryImpl(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
 
     @Override
+    @Retryable(
+            value = { RepositoryException.class },
+            maxAttempts = 10,
+            backoff = @Backoff(delay = 1000)
+    )
     public Enrollment save(Enrollment enrollment) {
         try {
             mongoTemplate.save(enrollment);

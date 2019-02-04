@@ -14,6 +14,7 @@ repositories {
 
 ext {
     springVersion = '2.0.4.RELEASE'
+    springRetryVersion = '1.2.2.RELEASE'
 }
 
 dependencies {
@@ -26,6 +27,7 @@ dependencies {
     testCompile group: 'org.mockito', name: 'mockito-core', version: '2.21.0'
     testCompile group: 'org.mockito', name: 'mockito-inline', version: '2.21.0'
 
+    compile("org.springframework.retry:spring-retry:$springRetryVersion")
     compile("org.springframework.boot:spring-boot-starter-web:$springVersion")
     compile("org.springframework.boot:spring-boot-devtools:$springVersion")
     compile("org.springframework.boot:spring-boot-starter-mail:$springVersion")
