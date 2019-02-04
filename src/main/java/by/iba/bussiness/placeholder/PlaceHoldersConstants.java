@@ -16,6 +16,11 @@ public class PlaceHoldersConstants {
     public static final String AGENDA = "${agenda}";
     public static final String LINK = "${link}";
     public static final String TITLE = "${title}";
+    public static final String ACTIVITY_PASSCODE = "${activityPasscode}";
+    public static final String ACTIVITY_URL = "${activityUrl}";
+    public static final String JOIN = "${join}";
+    public static final String CALLIN_INFO = "${callinInfo}";
+
 }
 
 

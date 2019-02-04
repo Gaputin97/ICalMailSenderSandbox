@@ -21,12 +21,15 @@ public class Meeting {
     private String location;
     private String locationInfo;
     private Owner owner;
+    private String activityPasscode;
     private String plainDescription;
     private String summary;
     private List<TimeSlot> timeSlots;
     private String timeZone;
     private String title;
     private Contact contact;
+    private String activityUrl;
+    private String type;
 
     public Meeting() {
     }
@@ -149,6 +152,30 @@ public class Meeting {
 
     public void setContact(Contact contact) {
         this.contact = contact;
+    }
+
+    public String getActivityPasscode() {
+        return activityPasscode;
+    }
+
+    public void setActivityPasscode(String activityPasscode) {
+        this.activityPasscode = activityPasscode;
+    }
+
+    public String getActivityUrl() {
+        return activityUrl;
+    }
+
+    public void setActivityUrl(String activityUrl) {
+        this.activityUrl = activityUrl;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override

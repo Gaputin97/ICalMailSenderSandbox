@@ -85,9 +85,8 @@ public class NotificationServiceImpl implements NotificationService {
             logger.error("Can't enroll learners to this event, cause can't find some invitation template by meeting id: " + meetingId);
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
         }
-
         InvitationTemplate invitationTemplateWithoutPlaceHolders = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
-        Map<String, String> placeHoldersMap = placeHoldersInstaller.installPlaceHoldersMap(meeting);
+        Map<String, String> placeHoldersMap = placeHoldersInstaller.installILTPlaceHoldersMap(meeting);
         InvitationTemplate invitationTemplateWithPlaceHolders = templatePlaceHolderReplacer.replaceTemplatePlaceHolders(placeHoldersMap, invitationTemplateWithoutPlaceHolders);
         meeting.setPlainDescription("Plain description");
 
