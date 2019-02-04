@@ -4,6 +4,7 @@ import by.iba.bussiness.calendar.session.SessionParser;
 import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.timeslot.TimeSlot;
+import by.iba.bussiness.meeting.type.MeetingLocationType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,30 +19,39 @@ public class AppointmentCreator {
         this.sessionParser = sessionParser;
     }
 
-    public Appointment createAppointmentWithMainFields(Meeting newMeeting, InvitationTemplate newInvitationTemplate) {
+    public Appointment createAppointmentWithMainFields(Meeting meeting, InvitationTemplate invitationTemplate) {
         Appointment newAppointment = new Appointment();
-        newAppointment.setMeetingId(newMeeting.getId());
+        newAppointment.setMeetingId(meeting.getId());
+        String location = null;
+        String description = null;
+        MeetingLocationType meetingLocationType = MeetingLocationType.valueOf(meeting.getType());
+        switch (meetingLocationType) {
+            case ILT:
+                location = invitationTemplate.getLocationILT();
+                description = invitationTemplate.getFaceToFaceDescription();
+                break;
+            case CON:
+                location = invitationTemplate.getLocationBLD();
+                description = invitationTemplate.getBlendedDescription();
+                break;
+            case LVC:
+                location = invitationTemplate.getLocationLVC();
+                description = invitationTemplate.getOnlineDescription();
+        }
+        newAppointment.setDescription(description);
+        newAppointment.setLocation(location);
+        newAppointment.setSummary(meeting.getSummary());
+        newAppointment.setSubject(invitationTemplate.getSubject());
+        newAppointment.setTitle(meeting.getTitle());
+        newAppointment.setPlainDescription(meeting.getPlainDescription());
 
-        newAppointment.setLocation(newInvitationTemplate.getLocationILT());
-        newAppointment.setLocationInfo(newMeeting.getLocationInfo());
-        newAppointment.setTimeZone(newMeeting.getTimeZone());
+        newAppointment.setStartDateTime(meeting.getStartDateTime());
+        newAppointment.setEndDateTime(meeting.getEndDateTime());
+        newAppointment.setDuration(meeting.getDuration());
 
-        newAppointment.setSummary(newMeeting.getSummary());
-        newAppointment.setSubject(newInvitationTemplate.getSubject());
-        newAppointment.setTitle(newMeeting.getTitle());
-
-        newAppointment.setDescription(newMeeting.getDescription());
-        newAppointment.setPlainDescription(newMeeting.getPlainDescription());
-
-        newAppointment.setStartDateTime(newMeeting.getStartDateTime());
-        newAppointment.setEndDateTime(newMeeting.getEndDateTime());
-        newAppointment.setDuration(newMeeting.getDuration());
-
-        List<TimeSlot> timeSlots = newMeeting.getTimeSlots();
+        List<TimeSlot> timeSlots = meeting.getTimeSlots();
         newAppointment.setSessionList(sessionParser.timeSlotListToSessionList(timeSlots));
 
-        newAppointment.setFrom(newInvitationTemplate.getFrom());
-        newAppointment.setFromName(newInvitationTemplate.getFromName());
         return newAppointment;
     }
 }

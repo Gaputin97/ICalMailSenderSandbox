@@ -10,8 +10,11 @@ import by.iba.bussiness.facade.ComplexTemplateSenderFacade;
 import by.iba.bussiness.facade.SimpleCalendarSenderFacade;
 import by.iba.bussiness.invitation_template.InvitationTemplate;
 import by.iba.bussiness.invitation_template.service.InvitationTemplateService;
+import by.iba.bussiness.location.Location;
+import by.iba.bussiness.location.service.LocationService;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.service.MeetingService;
+import by.iba.bussiness.meeting.type.MeetingLocationType;
 import by.iba.bussiness.meeting.type.MeetingType;
 import by.iba.bussiness.meeting.type.MeetingTypeDefiner;
 import by.iba.bussiness.notification.service.NotificationService;
@@ -44,19 +47,21 @@ public class NotificationServiceImpl implements NotificationService {
     private TemplatePlaceHolderReplacer templatePlaceHolderReplacer;
     private AppointmentCreator appointmentCreator;
     private AppointmentIndexesUpdater indexesUpdater;
+    private LocationService locationService;
 
     @Autowired
     public NotificationServiceImpl(MeetingService meetingService,
-                             InvitationTemplateService invitationTemplateService,
-                             AppointmentDeterminer appointmentDeterminer,
-                             MeetingTypeDefiner meetingTypeDefiner,
-                             ComplexTemplateSenderFacade complexTemplateSenderFacade,
-                             SimpleCalendarSenderFacade simpleCalendarSenderFacade,
-                             AppointmentRepository appointmentRepository,
-                             PlaceHoldersInstaller placeHoldersInstaller,
-                             TemplatePlaceHolderReplacer templatePlaceHolderReplacer,
-                             AppointmentCreator appointmentCreator,
-                             AppointmentIndexesUpdater indexesUpdater) {
+                                   InvitationTemplateService invitationTemplateService,
+                                   AppointmentDeterminer appointmentDeterminer,
+                                   MeetingTypeDefiner meetingTypeDefiner,
+                                   ComplexTemplateSenderFacade complexTemplateSenderFacade,
+                                   SimpleCalendarSenderFacade simpleCalendarSenderFacade,
+                                   AppointmentRepository appointmentRepository,
+                                   PlaceHoldersInstaller placeHoldersInstaller,
+                                   TemplatePlaceHolderReplacer templatePlaceHolderReplacer,
+                                   AppointmentCreator appointmentCreator,
+                                   AppointmentIndexesUpdater indexesUpdater,
+                                   LocationService locationService) {
         this.meetingService = meetingService;
         this.invitationTemplateService = invitationTemplateService;
         this.appointmentDeterminer = appointmentDeterminer;
@@ -68,6 +73,7 @@ public class NotificationServiceImpl implements NotificationService {
         this.templatePlaceHolderReplacer = templatePlaceHolderReplacer;
         this.appointmentCreator = appointmentCreator;
         this.indexesUpdater = indexesUpdater;
+        this.locationService = locationService;
     }
 
     @Override
@@ -85,10 +91,14 @@ public class NotificationServiceImpl implements NotificationService {
             logger.error("Can't enroll learners to this event, cause can't find some invitation template by meeting id: " + meetingId);
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
         }
-
         InvitationTemplate invitationTemplateWithoutPlaceHolders = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
-        Map<String, String> placeHoldersMap = placeHoldersInstaller.installPlaceHoldersMap(meeting);
-        InvitationTemplate invitationTemplateWithPlaceHolders = templatePlaceHolderReplacer.replaceTemplatePlaceHolders(placeHoldersMap, invitationTemplateWithoutPlaceHolders);
+        Location location = locationService.getLocationByCode(request, meetingId);
+        Map<String, String> placeHoldersMap = placeHoldersInstaller.installPlaceHoldersMap(meeting, location);
+        MeetingLocationType meetingLocationType = MeetingLocationType.valueOf(meeting.getType());
+        InvitationTemplate invitationTemplateWithPlaceHolders = templatePlaceHolderReplacer.replaceTemplatePlaceHolders(
+                placeHoldersMap,
+                invitationTemplateWithoutPlaceHolders,
+                meetingLocationType);
         meeting.setPlainDescription("Plain description");
 
         Appointment currentAppointment = appointmentRepository.getByMeetingId(new BigInteger(meetingId));
