@@ -32,7 +32,7 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
     }
 
     @Override
-    public Enrollment getByParentIdAndEmail(BigInteger parentId, String userEmail) {
+    public Enrollment getByEmailAndParentId(String userEmail, BigInteger parentId) {
         Query query = new Query(Criteria.where("parentId").is(parentId).and("userEmail").is(userEmail));
         Enrollment enrollment = mongoTemplate.findOne(query, Enrollment.class);
         if (enrollment == null) {

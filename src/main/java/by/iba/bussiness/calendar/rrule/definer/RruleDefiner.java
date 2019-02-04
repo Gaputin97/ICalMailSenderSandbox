@@ -32,6 +32,7 @@ public class RruleDefiner {
     }
 
     public Rrule defineRrule(List<Session> sessions) {
+        long startTime = System.nanoTime();
         Rrule rrule = new Rrule();
         if (sessions.size() == 1) {
             Frequency daily = Frequency.DAILY;
@@ -40,8 +41,8 @@ public class RruleDefiner {
         } else {
             List<Session> sortedSessions = new ArrayList<>(sessions);
             Collections.sort(sortedSessions);
-            Session lastSession = sortedSessions.get(sessions.size() - 1);
             Session firstSession = sortedSessions.get(0);
+            Session lastSession = sortedSessions.get(sessions.size() - 1);
 
             Instant startDateOfFirstSession = firstSession.getStartDateTime();
             Instant startDateOfLastSession = lastSession.getEndDateTime();
@@ -58,12 +59,15 @@ public class RruleDefiner {
             }
             rrule.setInterval(interval);
             rrule.setFrequency(frequency);
-            logger.info("Interval of rrule is " + interval + " and freq type is " + frequency.toString());
+            logger.info("RRULE interval is " + interval + " and FREQUENCY type is " + frequency.toString());
 
             List<Instant> exDates = exDatesDefiner.defineExDates(rrule, startDateOfFirstSession, startDateOfLastSession, startDatesOfSessions);
             rrule.setExDates(exDates);
             rrule.setRruleCount(RruleCount.ZERO);
-            logger.info("Amount of exdates is " + rrule.getExDates().size());
+            logger.info("Amount of EXDATES is " + rrule.getExDates().size());
+            long endTime = System.nanoTime();
+            long time = endTime - startTime;
+            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: \n " + time);
         }
         return rrule;
     }

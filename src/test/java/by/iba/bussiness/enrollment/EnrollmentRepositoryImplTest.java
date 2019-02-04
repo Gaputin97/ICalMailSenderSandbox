@@ -1,9 +1,12 @@
-package by.iba.bussiness.enrollment.repository.v1;
+package by.iba.bussiness.enrollment;
 
 import by.iba.Runner;
-import by.iba.bussiness.enrollment.Enrollment;
+import by.iba.bussiness.enrollment.repository.v1.EnrollmentRepositoryImpl;
 import by.iba.bussiness.enrollment.status.EnrollmentStatus;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;

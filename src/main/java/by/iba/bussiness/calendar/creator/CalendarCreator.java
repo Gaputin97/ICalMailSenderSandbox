@@ -1,4 +1,4 @@
-package by.iba.bussiness.calendar.creator.vevent;
+package by.iba.bussiness.calendar.creator;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.CalendarRruleParser;
@@ -62,26 +62,26 @@ public class CalendarCreator {
         this.cancelCalendar = cancelCalendar;
     }
 
-    public Calendar createCalendarTemplate(Rrule rrule, Appointment appointment) {
+    public Calendar createCalendarTemplate(Rrule rrule, Appointment newAppointment) {
         DateList exDatesList = new DateList();
         rrule.getExDates().forEach(exDate -> exDatesList.add(new DateTime(exDate.toEpochMilli())));
 
-        Instant startAppDate = dateParser.parseDate(appointment.getStartDateTime());
-        List<Session> sortedSessions = new ArrayList<>(appointment.getSessionList());
+        Instant startAppDate = dateParser.parseDate(newAppointment.getStartDateTime());
+        List<Session> sortedSessions = new ArrayList<>(newAppointment.getSessionList());
         Collections.sort(sortedSessions);
         Instant endAppointmentDate = sortedSessions.get(0).getEndDateTime();
 
         long interval = rrule.getInterval();
         Frequency frequency = rrule.getFrequency();
         String increasedUntilDate = dateIncreaser.increaseDate(frequency, interval, endAppointmentDate);
-        String richDescription = BODY_OPEN_TAG + appointment.getDescription() + BODY_CLOSE_TAG;
+        String richDescription = BODY_OPEN_TAG + newAppointment.getDescription() + BODY_CLOSE_TAG;
         String parsedIncreasedUntilDate = iСalDateParser.parseToICalDate(increasedUntilDate);
         Recur recurrence = calendarRruleParser.parseToCalendarRrule(rrule, parsedIncreasedUntilDate);
         try {
-            Organizer organizer = new Organizer("mailto:" + appointment.getFrom());
-            Location location = new Location((appointment.getLocation()));
+            Organizer organizer = new Organizer("mailto:" + newAppointment.getFrom());
+            Location location = new Location((newAppointment.getLocation()));
 
-            Description description = new Description(appointment.getPlainDescription());
+            Description description = new Description(newAppointment.getPlainDescription());
             AltRep altRep = new AltRep("CID:" + RICH_TEXT_CID);
             description.getParameters().add(altRep);
 
@@ -97,11 +97,11 @@ public class CalendarCreator {
             DateTime startDateTime = new DateTime(startAppDate.toEpochMilli());
             DateTime endDateTime = new DateTime(endAppointmentDate.toEpochMilli());
 
-            Sequence sequence = sequenceDefiner.defineSequence(appointment);
-            Uid UID = new Uid(appointment.getId().toString());
+            Sequence sequence = sequenceDefiner.defineSequence(newAppointment);
+            Uid UID = new Uid(newAppointment.getId().toString());
 
             Calendar calendar = new Calendar(requestCalendar);
-            VEvent event = new VEvent(startDateTime, endDateTime, appointment.getSummary());
+            VEvent event = new VEvent(startDateTime, endDateTime, newAppointment.getSummary());
 
             if (!exDatesList.isEmpty()) {
                 ExDate exDates = new ExDate(exDatesList);
@@ -109,7 +109,7 @@ public class CalendarCreator {
             }
 
             calendar.getComponents().add(event);
-            event.getProperties().addAll(Arrays.asList( organizer, location, description, xAltDesc, rRule, sequence, UID));
+            event.getProperties().addAll(Arrays.asList(organizer, location, description, xAltDesc, rRule, sequence, UID));
 
             return calendar;
         } catch (ParseException | IOException | URISyntaxException e) {
@@ -118,23 +118,22 @@ public class CalendarCreator {
         }
     }
 
-    public Calendar createCancellationTemplate(Appointment appointment) {
-
-        Instant startAppDate = dateParser.parseDate(appointment.getStartDateTime());
-        List<Session> sortedSessions = new ArrayList<>(appointment.getSessionList());
+    public Calendar createCancellationTemplate(Appointment currentAppointment) {
+        Instant startAppDate = dateParser.parseDate(currentAppointment.getStartDateTime());
+        List<Session> sortedSessions = new ArrayList<>(currentAppointment.getSessionList());
         Collections.sort(sortedSessions);
         Instant endAppDate = sortedSessions.get(0).getStartDateTime();
 
-        String richDescription = BODY_OPEN_TAG + appointment.getDescription() + BODY_CLOSE_TAG;
+        String richDescription = BODY_OPEN_TAG + currentAppointment.getDescription() + BODY_CLOSE_TAG;
         Calendar calendar;
         try {
-            Sequence sequence = sequenceDefiner.defineSequence(appointment);
-            Organizer organizer = new Organizer("mailto:" + appointment.getFrom());
-            Location location = new Location((appointment.getLocation()));
-            Uid UID = new Uid(appointment.getId().toString());
+            Sequence sequence = sequenceDefiner.defineSequence(currentAppointment);
+            Organizer organizer = new Organizer("mailto:" + currentAppointment.getFrom());
+            Location location = new Location((currentAppointment.getLocation()));
+            Uid UID = new Uid(currentAppointment.getId().toString());
             DateTime startDateTime = new DateTime(startAppDate.toEpochMilli());
             DateTime endDateTime = new DateTime(endAppDate.toEpochMilli());
-            Description description = new Description(appointment.getPlainDescription());
+            Description description = new Description(currentAppointment.getPlainDescription());
             AltRep altRep = new AltRep("CID:" + RICH_TEXT_CID);
             description.getParameters().add(altRep);
 
@@ -142,7 +141,7 @@ public class CalendarCreator {
             xAltDesc.getParameters().add(new FmtType("text/html"));
             xAltDesc.setValue(richDescription);
             calendar = new Calendar(cancelCalendar);
-            VEvent event = new VEvent(startDateTime, endDateTime, appointment.getSummary());
+            VEvent event = new VEvent(startDateTime, endDateTime, currentAppointment.getSummary());
             calendar.getComponents().add(event);
             event.getProperties().addAll(Arrays.asList(sequence, organizer, location, description, UID, xAltDesc));
         } catch (ParseException | IOException | URISyntaxException e) {
