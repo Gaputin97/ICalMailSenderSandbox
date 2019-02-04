@@ -4,7 +4,7 @@ import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.handler.IndexDeterminer;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.enrollment.EnrollmentUpdateChecker;
-import by.iba.bussiness.calendar.creator.vevent.CalendarCreator;
+import by.iba.bussiness.calendar.creator.CalendarCreator;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.definer.RruleDefiner;
@@ -84,7 +84,7 @@ public class SimpleCalendarSenderFacade {
             if (CalendarStatus.CANCELLATION.name().equals(enrollment.getCalendarStatus())
                     && EnrollmentStatus.CANCELLED.name().equals(enrollmentStatus)) {
                 NotificationResponseStatus badResponseStatus =
-                        new NotificationResponseStatus(false,"User already has sanded cancelled calendar notification.", enrollmentEmail);
+                        new NotificationResponseStatus(false, "User already has sanded cancelled calendar notification.", enrollmentEmail);
                 notificationResponseStatusList.add(badResponseStatus);
             } else {
                 String enrollmentCalendarVersion = enrollment.getCalendarVersion();
@@ -102,7 +102,6 @@ public class SimpleCalendarSenderFacade {
                     } else {
                         calendarWithoutAttendee = invitationCalendar;
                     }
-
                     Calendar calendarWithAttendee = calendarAttendeeInstaller.installAttendeeToTheCalendar(enrollmentEmail, calendarWithoutAttendee);
                     String enrollmentCalendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
                     NotificationResponseStatus notificationResponseStatus = messageSender.sendCalendar(calendarWithAttendee, enrollmentCalendarStatus, newAppointment);

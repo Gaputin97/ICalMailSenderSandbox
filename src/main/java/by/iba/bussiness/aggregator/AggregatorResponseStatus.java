@@ -1,4 +1,4 @@
-package by.iba.bussiness.kakoetoimya;
+package by.iba.bussiness.aggregator;
 
 import by.iba.bussiness.enroll.EnrollLearnerResponseStatus;
 import by.iba.bussiness.notification.NotificationResponseStatus;
@@ -6,12 +6,11 @@ import by.iba.bussiness.notification.NotificationResponseStatus;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImyaResponseStatus {
-
+public class AggregatorResponseStatus {
     private List<EnrollLearnerResponseStatus> enrollLearnerResponseStatuses;
     private List<NotificationResponseStatus> notificationResponseStatuses;
 
-    public ImyaResponseStatus() {
+    public AggregatorResponseStatus() {
         enrollLearnerResponseStatuses = new ArrayList<>();
         notificationResponseStatuses = new ArrayList<>();
     }

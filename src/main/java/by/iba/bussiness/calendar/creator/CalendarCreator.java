@@ -1,4 +1,4 @@
-package by.iba.bussiness.calendar.creator.vevent;
+package by.iba.bussiness.calendar.creator;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.CalendarRruleParser;
@@ -109,7 +109,7 @@ public class CalendarCreator {
             }
 
             calendar.getComponents().add(event);
-            event.getProperties().addAll(Arrays.asList( organizer, location, description, xAltDesc, rRule, sequence, UID));
+            event.getProperties().addAll(Arrays.asList(organizer, location, description, xAltDesc, rRule, sequence, UID));
 
             return calendar;
         } catch (ParseException | IOException | URISyntaxException e) {

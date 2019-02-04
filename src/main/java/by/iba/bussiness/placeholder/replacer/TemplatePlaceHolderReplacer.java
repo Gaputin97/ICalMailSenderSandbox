@@ -10,6 +10,8 @@ import java.util.Map;
 public class TemplatePlaceHolderReplacer {
     private final FieldPlaceHolderReplacer fieldPlaceHolderReplacer;
 
+    private final FieldPlaceHolderReplacer fieldPlaceHolderReplacer;
+
     @Autowired
     public TemplatePlaceHolderReplacer(FieldPlaceHolderReplacer fieldPlaceHolderReplacer) {
         this.fieldPlaceHolderReplacer = fieldPlaceHolderReplacer;

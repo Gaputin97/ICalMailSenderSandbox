@@ -3,6 +3,7 @@ package by.iba.bussiness.enrollment;
 import by.iba.bussiness.calendar.learner.Learner;
 import by.iba.bussiness.enroll.EnrollLearnerResponseStatus;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
+import by.iba.bussiness.enrollment.status.EnrollmentStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,12 @@ public class EnrollmentsInstaller {
                     enrollLearnerResponseStatuses.add(enrollLearnerResponseStatus);
                 }
             } else {
+                if (learner.getEnrollmentStatus().equals(EnrollmentStatus.CANCELLED.name())) {
+                    EnrollLearnerResponseStatus enrollLearnerResponseStatus =
+                            new EnrollLearnerResponseStatus(false, "Learner wasn't confirmed to this meeting before.", learnerEmail);
+                    enrollLearnerResponseStatuses.add(enrollLearnerResponseStatus);
+                } else {
+                }
                 Enrollment newEnrollment = new Enrollment();
                 newEnrollment.setStatus(learnerEnrollmentStatus);
                 newEnrollment.setParentId(bigIntegerMeetingId);

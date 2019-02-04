@@ -31,6 +31,7 @@ import java.util.Map;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
+
     private static final Logger logger = LoggerFactory.getLogger(NotificationServiceImpl.class);
     private MeetingService meetingService;
     private InvitationTemplateService invitationTemplateService;
@@ -71,6 +72,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public List<NotificationResponseStatus> sendCalendarToAllEnrollmentsOfMeeting(HttpServletRequest request, String meetingId) {
+
         Meeting meeting = meetingService.getMeetingById(request, meetingId);
         if (meeting == null) {
 
@@ -95,7 +97,6 @@ public class NotificationServiceImpl implements NotificationService {
         if (currentAppointment == null) {
             newAppointment = appointmentRepository.save(newAppointmentWithoutIndexes);
         } else {
-
             Appointment newAppointmentWithIndexes = indexesUpdater.updateIndexesBasedOnSessionsDifferences(newAppointmentWithoutIndexes, currentAppointment);
             Appointment determinedAppointment = appointmentDeterminer.determineNewAppointmentByIndexes(newAppointmentWithIndexes, currentAppointment);
             newAppointment = appointmentRepository.save(determinedAppointment);

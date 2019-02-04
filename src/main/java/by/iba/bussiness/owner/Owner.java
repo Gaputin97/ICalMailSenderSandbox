@@ -7,10 +7,22 @@ import java.util.Objects;
 
 @Document(collection = "owner")
 public class Owner {
-    private String email;
-    private String name;
+
     @Id
     private long id;
+    private String email;
+    private String name;
+
+    public Owner() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getEmail() {
         return email;
@@ -26,17 +38,6 @@ public class Owner {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Owner() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     @Override
