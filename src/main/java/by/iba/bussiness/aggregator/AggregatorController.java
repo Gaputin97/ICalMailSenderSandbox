@@ -2,7 +2,7 @@ package by.iba.bussiness.kakoetoimya;
 
 import by.iba.bussiness.calendar.learner.Learner;
 import by.iba.bussiness.enrollment.EnrollRequestWrapper;
-import by.iba.bussiness.kakoetoimya.service.ImyaService;
+import by.iba.bussiness.kakoetoimya.service.AggregatorService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,21 +14,21 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-public class ImyaController {
+public class AggregatorController {
 
-    private ImyaService imyaService;
+    private AggregatorService aggregatorService;
 
     @Autowired
-    public ImyaController(ImyaService imyaService) {
-        this.imyaService = imyaService;
+    public AggregatorController(AggregatorService aggregatorService) {
+        this.aggregatorService = aggregatorService;
     }
 
     @ApiOperation(value = "Enroll users and send notifications. ")
-    @RequestMapping(value = "/imya/imya", method = RequestMethod.GET)
-    public ImyaResponseStatus sendCalendar(@RequestBody EnrollRequestWrapper enrollRequestWrapper,
-                                           HttpServletRequest request) {
+    @RequestMapping(value = "/aggregator/", method = RequestMethod.GET)
+    public AggregatorResponseStatus sendCalendar(@RequestBody EnrollRequestWrapper enrollRequestWrapper, HttpServletRequest request) {
+
         String meetingId = enrollRequestWrapper.getMeetingId();
         List<Learner> learners = enrollRequestWrapper.getLearners();
-        return imyaService.imyaMethoda(request, meetingId, learners);
+        return aggregatorService.aggregateEnrollAndSend(request, meetingId, learners);
     }
 }
