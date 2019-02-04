@@ -1,12 +1,9 @@
 package by.iba.bussiness.enrollment;
 
-import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.appointment.handler.IndexDeterminer;
+import by.iba.bussiness.appointment.repository.AppointmentRepository;
 import by.iba.bussiness.calendar.learner.Learner;
-import by.iba.bussiness.calendar.status.EnrollmentCalendarStatusDefiner;
 import by.iba.bussiness.enroll.EnrollLearnerResponseStatus;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
-import by.iba.bussiness.enrollment.status.EnrollmentStatusChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,19 +16,13 @@ import java.util.List;
 public class EnrollmentsInstaller {
     private static final Logger logger = LoggerFactory.getLogger(EnrollmentsInstaller.class);
     private EnrollmentService enrollmentService;
-    private EnrollmentStatusChecker enrollmentStatusChecker;
-    private EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner;
-    private IndexDeterminer indexDeterminer;
+    private AppointmentRepository appointmentRepository;
 
     @Autowired
     public EnrollmentsInstaller(EnrollmentService enrollmentService,
-                                EnrollmentStatusChecker enrollmentStatusChecker,
-                                EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner,
-                                IndexDeterminer indexDeterminer) {
+                                AppointmentRepository appointmentRepository) {
         this.enrollmentService = enrollmentService;
-        this.enrollmentStatusChecker = enrollmentStatusChecker;
-        this.enrollmentCalendarStatusDefiner = enrollmentCalendarStatusDefiner;
-        this.indexDeterminer = indexDeterminer;
+        this.appointmentRepository = appointmentRepository;
     }
 
     public List<EnrollLearnerResponseStatus> installEnrollments(List<Learner> learners, String meetingId) {

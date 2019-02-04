@@ -37,6 +37,7 @@ public class EnrollServiceImpl implements EnrollService {
             logger.error("Can't enroll learners to this event, cause can't find some invitation template by meeting id: " + meetingId);
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
         }
+//        if()
         return enrollmentsInstaller.installEnrollments(learners, meetingId);
     }
 }

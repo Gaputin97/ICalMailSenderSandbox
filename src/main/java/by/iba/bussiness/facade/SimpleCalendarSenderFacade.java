@@ -73,7 +73,7 @@ public class SimpleCalendarSenderFacade {
             if (CalendarStatus.CANCELLATION.name().equals(enrollment.getCalendarStatus())
                     && EnrollmentStatus.CANCELLED.name().equals(enrollmentStatus)) {
                 NotificationResponseStatus badResponseStatus =
-                        new NotificationResponseStatus(false,"User already has sanded cancelled calendar notification.", enrollmentEmail);
+                        new NotificationResponseStatus(false, "User already has sanded cancelled calendar notification.", enrollmentEmail);
                 notificationResponseStatusList.add(badResponseStatus);
             } else {
                 String enrollmentCalendarVersion = enrollment.getCalendarVersion();

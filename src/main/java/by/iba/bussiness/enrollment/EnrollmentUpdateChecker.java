@@ -1,8 +1,5 @@
 package by.iba.bussiness.enrollment;
 
-import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.appointment.handler.IndexDeterminer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -28,12 +28,12 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public Enrollment getByEmailAndParentId(BigInteger parentId, String userEmail) {
-        return enrollmentRepository.getByEmailAndParentId(parentId, userEmail);
+        return enrollmentRepository.getByParentIdAndEmail(parentId, userEmail);
     }
 
     @Override
     public Enrollment getByEmailAndParentIdAndType(BigInteger parentId, String userEmail, String enrollmentStatus) {
-        return enrollmentRepository.getByEmailAndParentIdAndType(parentId, userEmail, enrollmentStatus);
+        return enrollmentRepository.getByEmailAndParentIdAndStatus(parentId, userEmail, enrollmentStatus);
     }
 
     @Override

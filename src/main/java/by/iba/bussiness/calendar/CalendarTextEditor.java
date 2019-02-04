@@ -13,12 +13,4 @@ public class  CalendarTextEditor {
         return method.replace("METHOD", "method")
                 .replace(':', '=');
     }
-
-    public String editUserEmail(String email) {
-        if (email.substring(0, 7).equals("mailto:")) {
-            email = email.substring(7);
-        }
-        logger.debug("Recipient string: " + email);
-        return email;
-    }
 }
