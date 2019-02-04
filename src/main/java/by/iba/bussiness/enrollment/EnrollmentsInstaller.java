@@ -1,12 +1,8 @@
 package by.iba.bussiness.enrollment;
 
-import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.appointment.handler.IndexDeterminer;
 import by.iba.bussiness.calendar.learner.Learner;
-import by.iba.bussiness.calendar.status.EnrollmentCalendarStatusDefiner;
 import by.iba.bussiness.enroll.EnrollLearnerResponseStatus;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
-import by.iba.bussiness.enrollment.status.EnrollmentStatusChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,55 +15,45 @@ import java.util.List;
 public class EnrollmentsInstaller {
     private static final Logger logger = LoggerFactory.getLogger(EnrollmentsInstaller.class);
     private EnrollmentService enrollmentService;
-    private EnrollmentStatusChecker enrollmentStatusChecker;
-    private EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner;
-    private IndexDeterminer indexDeterminer;
 
     @Autowired
-    public EnrollmentsInstaller(EnrollmentService enrollmentService,
-                                EnrollmentStatusChecker enrollmentStatusChecker,
-                                EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner,
-                                IndexDeterminer indexDeterminer) {
+    public EnrollmentsInstaller(EnrollmentService enrollmentService) {
         this.enrollmentService = enrollmentService;
-        this.enrollmentStatusChecker = enrollmentStatusChecker;
-        this.enrollmentCalendarStatusDefiner = enrollmentCalendarStatusDefiner;
-        this.indexDeterminer = indexDeterminer;
     }
 
     public List<EnrollLearnerResponseStatus> installEnrollments(List<Learner> learners, String meetingId) {
         List<EnrollLearnerResponseStatus> enrollLearnerResponseStatuses = new ArrayList<>(learners.size());
         BigInteger bigIntegerMeetingId = new BigInteger(meetingId);
         for (Learner learner : learners) {
-            String email = learner.getEmail();
+            String learnerEmail = learner.getEmail();
             String learnerEnrollmentStatus = learner.getEnrollmentStatus();
-            Enrollment currentEnrollment = enrollmentService.getByEmailAndParentId(bigIntegerMeetingId, email);
+            Enrollment currentEnrollment = enrollmentService.getByEmailAndParentId(learnerEmail, bigIntegerMeetingId);
 
             if (currentEnrollment != null) {
                 String enrollmentStatus = currentEnrollment.getStatus();
                 if (!enrollmentStatus.equals(learnerEnrollmentStatus)) {
                     currentEnrollment.setStatus(learnerEnrollmentStatus);
                     currentEnrollment = enrollmentService.save(currentEnrollment);
-                    logger.info("Enrollment " + currentEnrollment.getUserEmail() + " has been saved with new status " + currentEnrollment.getStatus());
+                    logger.info("Enrollment " + currentEnrollment.getUserEmail() + " has been saved with new status " + enrollmentStatus);
                     EnrollLearnerResponseStatus enrollLearnerResponseStatus =
-                            new EnrollLearnerResponseStatus(true, "Enrollment status was modified.", learner.getEmail());
+                            new EnrollLearnerResponseStatus(true, "Enrollment status was modified.", learnerEmail);
                     enrollLearnerResponseStatuses.add(enrollLearnerResponseStatus);
                 } else {
                     EnrollLearnerResponseStatus enrollLearnerResponseStatus =
-                            new EnrollLearnerResponseStatus(false, "Enrollment already exists.", learner.getEmail());
+                            new EnrollLearnerResponseStatus(false, "Enrollment already exists.", learnerEmail);
                     enrollLearnerResponseStatuses.add(enrollLearnerResponseStatus);
                 }
             } else {
                 Enrollment newEnrollment = new Enrollment();
                 newEnrollment.setStatus(learnerEnrollmentStatus);
                 newEnrollment.setParentId(bigIntegerMeetingId);
-                newEnrollment.setUserEmail(email);
+                newEnrollment.setUserEmail(learnerEmail);
                 enrollmentService.save(newEnrollment);
                 logger.info("Enrollment " + newEnrollment.getUserEmail() + " has been saved");
                 EnrollLearnerResponseStatus enrollLearnerResponseStatus =
-                        new EnrollLearnerResponseStatus(true, "Enrollment was created.", learner.getEmail());
+                        new EnrollLearnerResponseStatus(true, "Enrollment was created.", learnerEmail);
                 enrollLearnerResponseStatuses.add(enrollLearnerResponseStatus);
             }
-
         }
         return enrollLearnerResponseStatuses;
     }

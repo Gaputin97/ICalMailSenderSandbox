@@ -8,7 +8,7 @@ import java.util.List;
 public interface EnrollmentRepository {
     Enrollment save(Enrollment enrollment);
 
-    Enrollment getByEmailAndParentId(BigInteger parentId, String userEmail);
+    Enrollment getByEmailAndParentId(String userEmail, BigInteger parentId);
 
     Enrollment getByEmailAndParentIdAndType(BigInteger parentId, String userEmail, String enrollmentStatus);
 

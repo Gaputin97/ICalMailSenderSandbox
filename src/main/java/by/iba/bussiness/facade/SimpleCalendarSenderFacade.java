@@ -2,6 +2,7 @@ package by.iba.bussiness.facade;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.handler.IndexDeterminer;
+import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.enrollment.EnrollmentUpdateChecker;
 import by.iba.bussiness.calendar.creator.vevent.CalendarCreator;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
@@ -13,6 +14,7 @@ import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.enrollment.status.EnrollmentStatus;
+import by.iba.bussiness.enrollment.status.EnrollmentStatusChecker;
 import by.iba.bussiness.notification.NotificationResponseStatus;
 import by.iba.bussiness.sender.MessageSender;
 import net.fortuna.ical4j.model.Calendar;
@@ -37,6 +39,7 @@ public class SimpleCalendarSenderFacade {
     private RruleDefiner rruleDefiner;
     private IndexDeterminer indexDeterminer;
     private EnrollmentsInstaller enrollmentsInstaller;
+    private EnrollmentStatusChecker enrollmentStatusChecker;
 
     @Autowired
     public SimpleCalendarSenderFacade(CalendarAttendeesInstaller calendarAttendeeInstaller,
@@ -47,7 +50,8 @@ public class SimpleCalendarSenderFacade {
                                       EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner,
                                       RruleDefiner rruleDefiner,
                                       IndexDeterminer indexDeterminer,
-                                      EnrollmentsInstaller enrollmentsInstaller) {
+                                      EnrollmentsInstaller enrollmentsInstaller,
+                                      EnrollmentStatusChecker enrollmentStatusChecker) {
         this.calendarAttendeeInstaller = calendarAttendeeInstaller;
         this.messageSender = messageSender;
         this.enrollmentService = enrollmentService;
@@ -57,14 +61,21 @@ public class SimpleCalendarSenderFacade {
         this.rruleDefiner = rruleDefiner;
         this.indexDeterminer = indexDeterminer;
         this.enrollmentsInstaller = enrollmentsInstaller;
+        this.enrollmentStatusChecker = enrollmentStatusChecker;
     }
 
     public List<NotificationResponseStatus> sendCalendar(Appointment newAppointment, Appointment currentAppointment) {
         BigInteger meetingId = newAppointment.getMeetingId();
-        List<Enrollment> enrollmentList = enrollmentService.getAllByParentId(meetingId);
+        List<Session> sessionList = newAppointment.getSessionList();
 
-        Rrule rrule = rruleDefiner.defineRrule(newAppointment.getSessionList());
-        Calendar invitationCalendar = calendarCreator.createCalendarTemplate(rrule, newAppointment);
+        List<Enrollment> enrollmentList = enrollmentService.getAllByParentId(meetingId);
+        Calendar cancellationCalendar = calendarCreator.createCancellationTemplate(currentAppointment);
+        Calendar invitationCalendar = null;
+
+        if (enrollmentStatusChecker.isAnyEnrollmentHasConfirmedStatus(enrollmentList)) {
+            Rrule rrule = rruleDefiner.defineRrule(sessionList);
+            invitationCalendar = calendarCreator.createCalendarTemplate(rrule, newAppointment);
+        }
 
         List<NotificationResponseStatus> notificationResponseStatusList = new ArrayList<>();
         for (Enrollment enrollment : enrollmentList) {
@@ -87,7 +98,7 @@ public class SimpleCalendarSenderFacade {
                 } else {
                     Calendar calendarWithoutAttendee;
                     if (EnrollmentStatus.CANCELLED.name().equals(enrollmentStatus)) {
-                        calendarWithoutAttendee = calendarCreator.createCancellationTemplate(currentAppointment);
+                        calendarWithoutAttendee = cancellationCalendar;
                     } else {
                         calendarWithoutAttendee = invitationCalendar;
                     }
