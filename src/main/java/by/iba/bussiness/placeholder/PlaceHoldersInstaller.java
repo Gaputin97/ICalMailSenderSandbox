@@ -1,5 +1,6 @@
 package by.iba.bussiness.placeholder;
 
+import by.iba.bussiness.location.Location;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.type.MeetingLocationType;
 import org.springframework.stereotype.Component;
@@ -10,27 +11,27 @@ import java.util.Map;
 @Component
 public class PlaceHoldersInstaller {
 
-    public Map<String, String> installPlaceHoldersMap(Meeting meeting) {
+    public Map<String, String> installPlaceHoldersMap(Meeting meeting, Location location) {
         String type = meeting.getType();
         MeetingLocationType meetingLocationType = MeetingLocationType.valueOf(type);
         Map<String, String> placeHolders = null;
         switch (meetingLocationType) {
             case CON:
-                placeHolders = installCONPlaceholdersMap(meeting);
+                placeHolders = installCONPlaceholdersMap(meeting, location);
                 break;
             case LVC:
                 placeHolders = installLVCPlaceHoldersMap(meeting);
                 break;
             case ILT:
-                placeHolders = installILTPlaceHoldersMap(meeting);
+                placeHolders = installILTPlaceHoldersMap(meeting, location);
                 break;
         }
         return placeHolders;
     }
 
-    private Map<String, String> installILTPlaceHoldersMap(Meeting meeting) {
+    private Map<String, String> installILTPlaceHoldersMap(Meeting meeting, Location location) {
         Map<String, String> placeHolders = installCommonPlaceHoldersMap(meeting);
-        placeHolders.put(PlaceHoldersConstants.LOCATION, meeting.getLocation());
+        placeHolders.put(PlaceHoldersConstants.LOCATION, location.toString());
         placeHolders.put(PlaceHoldersConstants.LOCATION_INFO, meeting.getLocationInfo());
         return placeHolders;
     }
@@ -44,13 +45,13 @@ public class PlaceHoldersInstaller {
         return placeHolders;
     }
 
-    private Map<String, String> installCONPlaceholdersMap(Meeting meeting) {
+    private Map<String, String> installCONPlaceholdersMap(Meeting meeting, Location location) {
         Map<String, String> placeHolders = installCommonPlaceHoldersMap(meeting);
         placeHolders.put(PlaceHoldersConstants.ACTIVITY_PASSCODE, meeting.getActivityPasscode());
         placeHolders.put(PlaceHoldersConstants.ACTIVITY_URL, meeting.getActivityUrl());
         placeHolders.put(PlaceHoldersConstants.JOIN, "MOCK JOIN");
         placeHolders.put(PlaceHoldersConstants.CALLIN_INFO, "CALL-IN INFO MOCK");
-        placeHolders.put(PlaceHoldersConstants.LOCATION, meeting.getLocation());
+        placeHolders.put(PlaceHoldersConstants.LOCATION, location.toString());
         placeHolders.put(PlaceHoldersConstants.LOCATION_INFO, meeting.getLocationInfo());
         return placeHolders;
     }
