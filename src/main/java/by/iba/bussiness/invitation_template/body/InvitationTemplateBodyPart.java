@@ -6,7 +6,6 @@ public class InvitationTemplateBodyPart {
     private String description;
     private String plainDescription;
 
-
     public InvitationTemplateBodyPart(String location, String description, String plainDescription) {
         this.location = location;
         this.description = description;

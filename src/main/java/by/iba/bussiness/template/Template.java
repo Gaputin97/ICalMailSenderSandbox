@@ -1,7 +1,6 @@
 package by.iba.bussiness.template;
 
 public class Template {
-
     private String subject;
     private String description;
     private String location;

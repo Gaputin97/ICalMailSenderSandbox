@@ -1,7 +1,6 @@
 package by.iba.bussiness.facade;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.appointment.AppointmentIndexesUpdater;
 import by.iba.bussiness.appointment.determiner.IndexDeterminer;
 import by.iba.bussiness.calendar.creator.CalendarCreator;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
@@ -21,7 +20,7 @@ import by.iba.bussiness.notification.NotificationResponseStatus;
 import by.iba.bussiness.sender.MessageSender;
 import by.iba.bussiness.template.Template;
 import by.iba.bussiness.template.installer.TemplateInstaller;
-import by.iba.bussiness.template.installer.TemplateStatusInstaller;
+import by.iba.bussiness.template.installer.TemplateStatusDefiner;
 import net.fortuna.ical4j.model.Calendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +42,7 @@ public class ComplexTemplateSenderFacade {
     private MessageSender messageSender;
     private EnrollmentsInstaller enrollmentsInstaller;
     private EnrollmentService enrollmentService;
-    private TemplateStatusInstaller templateStatusInstaller;
+    private TemplateStatusDefiner templateStatusDefiner;
     private TemplateInstaller templateInstaller;
     private CalendarAttendeesInstaller calendarAttendeesInstaller;
     private CalendarCreator CalendarCreator;
@@ -57,7 +56,7 @@ public class ComplexTemplateSenderFacade {
     public ComplexTemplateSenderFacade(MessageSender messageSender,
                                        EnrollmentsInstaller enrollmentsInstaller,
                                        EnrollmentService enrollmentService,
-                                       TemplateStatusInstaller templateStatusInstaller,
+                                       TemplateStatusDefiner templateStatusDefiner,
                                        TemplateInstaller templateInstaller,
                                        CalendarAttendeesInstaller calendarAttendeesInstaller,
                                        CalendarCreator CalendarCreator,
@@ -68,7 +67,7 @@ public class ComplexTemplateSenderFacade {
         this.messageSender = messageSender;
         this.enrollmentsInstaller = enrollmentsInstaller;
         this.enrollmentService = enrollmentService;
-        this.templateStatusInstaller = templateStatusInstaller;
+        this.templateStatusDefiner = templateStatusDefiner;
         this.templateInstaller = templateInstaller;
         this.calendarAttendeesInstaller = calendarAttendeesInstaller;
         this.CalendarCreator = CalendarCreator;
@@ -111,7 +110,7 @@ public class ComplexTemplateSenderFacade {
                         new NotificationResponseStatus(false, "User has cancelled status. ", enrollmentEmail);
                 notificationResponseStatusList.add(badNotificationResponseStatus);
             } else {
-                String templateType = templateStatusInstaller.installTemplateType(enrollment, newAppointmentIndex);
+                String templateType = templateStatusDefiner.defineTemplateType(enrollment, newAppointmentIndex);
                 Template template = new Template(installedTemplate);
                 template.setType(templateType);
 

@@ -43,7 +43,7 @@ public class AppointmentCreator {
         newAppointment.setTitle(meeting.getTitle());
         newAppointment.setPlainDescription(meeting.getPlainDescription());
         newAppointment.setMeetingId(meeting.getId());
-        l
+
         List<TimeSlot> timeSlots = meeting.getTimeSlots();
         newAppointment.setSessionList(sessionParser.timeSlotListToSessionList(timeSlots));
 

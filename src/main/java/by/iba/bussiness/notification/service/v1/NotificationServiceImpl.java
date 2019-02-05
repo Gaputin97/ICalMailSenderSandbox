@@ -93,10 +93,17 @@ public class NotificationServiceImpl implements NotificationService {
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
         }
         InvitationTemplate invitationTemplateWithoutPlaceHolders = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
+
+        //MOCK
+        invitationTemplateWithoutPlaceHolders.setFaceToFacePlainDescription("Plain face to face description");
+        invitationTemplateWithoutPlaceHolders.setBlendedPlainDescription("Plain blended description");
+        invitationTemplateWithoutPlaceHolders.setOnlinePlainDescription("Plain online description");
+
         Location location = locationService.getLocationByCode(request, locationCode);
 
         Map<String, String> placeHoldersMap = placeHoldersInstaller.installPlaceHoldersMap(meeting, location);
         MeetingLocationType meetingLocationType = MeetingLocationType.valueOf(meeting.getType());
+
         InvitationTemplate invitationTemplateWithPlaceHolders = templatePlaceHolderReplacer.replaceTemplatePlaceHolders(
                 placeHoldersMap,
                 invitationTemplateWithoutPlaceHolders,
