@@ -19,7 +19,6 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TemplateInstallerTest {
-
     @Mock
     private TemplateTimeSlotInstaller templateTimeSlotInstaller;
     @Mock
@@ -28,8 +27,7 @@ public class TemplateInstallerTest {
     private TemplateInstaller templateInstaller;
 
     @Test
-    public void installCommonPartsWhenOldAppIsNull() {
-        //given
+    public void testInstallCommonPartsWhenOldAppIsNull() {
         Appointment appointment = new Appointment();
         Session firstSession = new Session(0, new Date().toInstant(), new Date().toInstant());
         Session secondSession = new Session(1, new Date().toInstant(), new Date().toInstant());
@@ -38,18 +36,16 @@ public class TemplateInstallerTest {
         sessions.add(secondSession);
         appointment.setSessionList(sessions);
         String stringSessions = "Sessions";
-        //when
+
         when(templateTimeSlotInstaller.installSessionsIfInvitation(appointment)).thenReturn(stringSessions);
         Template template = templateInstaller.installTemplate(appointment, null);
         String expected = template.getSessions();
-        //then
+
         Assert.assertEquals(expected, stringSessions);
     }
 
-
     @Test
-    public void installCommonPartsWhenOldAppIsNotNull() {
-        //given
+    public void testInstallCommonPartsWhenOldAppIsNotNull() {
         Appointment appointment = new Appointment();
         Appointment currentAppointment = new Appointment();
         TypedSession firstSession = new TypedSession(0, new Date().toInstant(), new Date().toInstant());
@@ -58,25 +54,11 @@ public class TemplateInstallerTest {
         sessions.add(firstSession);
         sessions.add(secondSession);
         String stringSessions = "Sessions";
-        //when
+
         when(templateTimeSlotTypeInstaller.installTypedSessions(appointment, currentAppointment)).thenReturn(sessions);
         when(templateTimeSlotInstaller.installSessionsIfUpdate(sessions)).thenReturn(stringSessions);
         Template template = templateInstaller.installTemplate(appointment, currentAppointment);
-        //then
+
         Assert.assertEquals(template.getSessions(), stringSessions);
-
-
     }
 }
-
-//    public Template installTemplate(Appointment appointment, Appointment currentAppointment) {
-//        if (currentAppointment == null) {
-//            sessions = templateTimeSlotInstaller.installSessionsIfInvitation(appointment);
-//            template.setSessions(sessions);
-//        } else {
-//            List<Session> sessionsWithType = templateTimeSlotInstaller.installTypedSessions(appointment, currentAppointment);
-//            sessions = templateTimeSlotInstaller.installSessionsIfUpdate(sessionsWithType);
-//            template.setSessions(sessions);
-//        }
-//        return template;
-//    }

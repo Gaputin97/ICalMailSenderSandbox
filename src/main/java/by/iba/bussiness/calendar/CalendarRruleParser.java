@@ -1,7 +1,7 @@
 package by.iba.bussiness.calendar;
 
-import by.iba.bussiness.calendar.rrule.RruleCount;
 import by.iba.bussiness.calendar.rrule.Rrule;
+import by.iba.bussiness.calendar.rrule.RruleCount;
 import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 import by.iba.exception.CalendarException;
 import net.fortuna.ical4j.model.Recur;

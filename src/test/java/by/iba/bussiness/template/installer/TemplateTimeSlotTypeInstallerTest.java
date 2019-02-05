@@ -29,7 +29,7 @@ public class TemplateTimeSlotTypeInstallerTest {
     private TemplateTimeSlotTypeInstaller templateTimeSlotTypeInstaller;
 
     @Test
-    public void installTypedSessions() {
+    public void testInstallTypedSessions() {
         //given
         Instant firstSessionStart = Instant.ofEpochMilli(300);
         Instant firstSessionEnd = Instant.ofEpochMilli(310);

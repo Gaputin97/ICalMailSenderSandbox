@@ -4,7 +4,8 @@ public class FrequencyWrapper {
     private Frequency frequency;
     private int amountOfDurationMultipleToFreq;
 
-    public FrequencyWrapper(Frequency frequency, int minimumDuration) {
+    public FrequencyWrapper(Frequency frequency,
+                            int minimumDuration) {
         this.frequency = frequency;
         this.amountOfDurationMultipleToFreq = minimumDuration;
     }

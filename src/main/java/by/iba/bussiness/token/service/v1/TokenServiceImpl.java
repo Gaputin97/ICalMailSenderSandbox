@@ -21,11 +21,10 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 public class TokenServiceImpl implements TokenService {
     private static final Logger logger = LoggerFactory.getLogger(TokenServiceImpl.class);
-
-    @Autowired
     private RestTemplate restTemplate;
     private String getTokenEndpoint;
 
+    @Autowired
     public TokenServiceImpl(RestTemplate restTemplate,
                             @Value("${token_endpoint}") String getTokenEndpoint) {
         this.restTemplate = restTemplate;

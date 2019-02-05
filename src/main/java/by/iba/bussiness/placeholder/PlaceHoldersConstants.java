@@ -1,7 +1,6 @@
 package by.iba.bussiness.placeholder;
 
 public class PlaceHoldersConstants {
-
     public static final String PARENT_TITLE = "${parent.title}";
     public static final String LOCATION = "${location}";
     public static final String LOCATION_INFO = "${locationInfo}";

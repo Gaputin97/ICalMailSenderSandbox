@@ -7,7 +7,6 @@ import java.util.Objects;
 
 @Document(collection = "owner")
 public class Owner {
-
     @Id
     private long id;
     private String email;

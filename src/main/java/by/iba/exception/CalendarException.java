@@ -1,8 +1,6 @@
 package by.iba.exception;
 
 public class CalendarException extends RuntimeException {
-    public CalendarException() {
-    }
 
     public CalendarException(String message) {
         super(message);

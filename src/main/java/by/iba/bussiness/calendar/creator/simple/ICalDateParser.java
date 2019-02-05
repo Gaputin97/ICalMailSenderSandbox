@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ICalDateParser {
+
     public String parseToICalDate(String date) {
         return date.replace("-", "").replace(":", "");
     }

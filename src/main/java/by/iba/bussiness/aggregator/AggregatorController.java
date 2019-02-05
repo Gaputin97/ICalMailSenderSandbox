@@ -1,8 +1,8 @@
 package by.iba.bussiness.aggregator;
 
+import by.iba.bussiness.aggregator.service.AggregatorService;
 import by.iba.bussiness.calendar.learner.Learner;
 import by.iba.bussiness.enrollment.EnrollRequestWrapper;
-import by.iba.bussiness.aggregator.service.AggregatorService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

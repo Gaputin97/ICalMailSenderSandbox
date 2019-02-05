@@ -9,8 +9,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
-
 @RunWith(MockitoJUnitRunner.class)
 public class FieldPlaceHolderReplacerTest {
 
@@ -18,7 +16,7 @@ public class FieldPlaceHolderReplacerTest {
     private FieldPlaceHolderReplacer fieldPlaceHolderReplacer;
 
     @Test
-    public void replaceFieldPlaceHolders() {
+    public void testReplaceFieldPlaceHolders() {
         //given
         String firstPlaceHolder = "${first}";
         String secondPlaceHolder = "${second}";

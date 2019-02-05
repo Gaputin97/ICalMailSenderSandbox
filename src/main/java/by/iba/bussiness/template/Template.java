@@ -1,7 +1,6 @@
 package by.iba.bussiness.template;
 
 public class Template {
-
     private String subject;
     private String description;
     private String location;
@@ -20,7 +19,6 @@ public class Template {
         this.description = template.getDescription();
         this.sessions = template.getSessions();
     }
-
 
     public String getFrom() {
         return from;

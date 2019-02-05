@@ -15,7 +15,6 @@ import java.math.BigInteger;
 
 @Repository
 public class MeetingRepositoryImpl implements MeetingRepository {
-
     private static final Logger logger = LoggerFactory.getLogger(MeetingRepositoryImpl.class);
     private final MongoTemplate mongoTemplate;
 

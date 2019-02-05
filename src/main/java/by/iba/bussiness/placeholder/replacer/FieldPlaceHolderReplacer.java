@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component
-
 public class FieldPlaceHolderReplacer {
 
     public String replaceFieldPlaceHolders(Map<String, String> placeHolders, String field) {

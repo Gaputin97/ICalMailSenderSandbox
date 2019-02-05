@@ -6,9 +6,6 @@ import by.iba.bussiness.calendar.session.SessionType;
 import by.iba.bussiness.calendar.session.TypedSession;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -16,17 +13,12 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-@RunWith(MockitoJUnitRunner.class)
 public class TemplateTimeSlotInstallerTest {
-
     private static final String BR = "<br/>";
-
-    @InjectMocks
-    private TemplateTimeSlotInstaller templateTimeSlotInstaller;
+    private TemplateTimeSlotInstaller templateTimeSlotInstaller = new TemplateTimeSlotInstaller();
 
     @Test
     public void testInstallSessionsIfInvitation() {
-        //given
         String newDateType = SessionType.NEW.getStringType();
         Appointment appointment = new Appointment();
         Instant firstDateStart = new Date().toInstant();
@@ -45,17 +37,14 @@ public class TemplateTimeSlotInstallerTest {
         List<Session> sessions = new ArrayList<>();
         appointment.setSessionList(sessions);
         Collections.addAll(sessions, firstSession, secondSession, thirdSession);
-        //when
+
         String expected = templateTimeSlotInstaller.installSessionsIfInvitation(appointment);
-        //then
+
         Assert.assertEquals(expected, commonSessionsString);
-
-
     }
 
     @Test
     public void installSessionsIfInvitation() {
-        //given
         String deletedDateType = SessionType.DELETED.getStringType();
         String rescheduledDateType = SessionType.RESCHEDULED.getStringType();
         String notChangedDateType = SessionType.NOT_CHANGED.getStringType();
@@ -77,10 +66,9 @@ public class TemplateTimeSlotInstallerTest {
         List<TypedSession> typedSessions = new ArrayList<>();
         Collections.addAll(typedSessions, firstTypedSession, secondTypedSession, thirdTypedSession);
         String commonSessionsString = firstSessionString + secondSessionString + thirdSessionString;
-        //when
-        String expected = templateTimeSlotInstaller.installSessionsIfUpdate(typedSessions);
-        //then
-        Assert.assertEquals(expected, commonSessionsString);
 
+        String expected = templateTimeSlotInstaller.installSessionsIfUpdate(typedSessions);
+
+        Assert.assertEquals(expected, commonSessionsString);
     }
 }

@@ -31,33 +31,33 @@ public class TemplatePlaceHolderReplacer {
         String notModifiedDescription = invitationTemplateBodyPart.getDescription();
         String notModifiedPlainDescription = invitationTemplateBodyPart.getPlainDescription();
 
-        String modifiedPlainDescription = fieldPlaceHolderReplacer.replaceFieldPlaceHolders(placeHolders, notModifiedPlainDescription);
-        String modifiedDescription = fieldPlaceHolderReplacer.replaceFieldPlaceHolders(placeHolders, notModifiedDescription);
-        String modifiedSubject = fieldPlaceHolderReplacer.replaceFieldPlaceHolders(placeHolders, notModifiedSubject);
         String modifiedFrom = fieldPlaceHolderReplacer.replaceFieldPlaceHolders(placeHolders, notModifiedFrom);
         String modifiedFromName = fieldPlaceHolderReplacer.replaceFieldPlaceHolders(placeHolders, notModifiedFromName);
+        String modifiedSubject = fieldPlaceHolderReplacer.replaceFieldPlaceHolders(placeHolders, notModifiedSubject);
         String modifiedLocation = fieldPlaceHolderReplacer.replaceFieldPlaceHolders(placeHolders, notModifiedLocation);
+        String modifiedDescription = fieldPlaceHolderReplacer.replaceFieldPlaceHolders(placeHolders, notModifiedDescription);
+        String modifiedPlainDescription = fieldPlaceHolderReplacer.replaceFieldPlaceHolders(placeHolders, notModifiedPlainDescription);
 
         InvitationTemplate modifiedInvitationTemplate = new InvitationTemplate(invitationTemplate);
-        modifiedInvitationTemplate.setSubject(modifiedSubject);
         modifiedInvitationTemplate.setFrom(modifiedFrom);
         modifiedInvitationTemplate.setFromName(modifiedFromName);
+        modifiedInvitationTemplate.setSubject(modifiedSubject);
 
         switch (meetingLocationType) {
             case ILT:
-                modifiedInvitationTemplate.setFaceToFaceDescription(modifiedDescription);
                 modifiedInvitationTemplate.setLocationILT(modifiedLocation);
+                modifiedInvitationTemplate.setFaceToFaceDescription(modifiedDescription);
                 modifiedInvitationTemplate.setFaceToFacePlainDescription(modifiedPlainDescription);
                 break;
+            case LVC:
+                modifiedInvitationTemplate.setLocationLVC(modifiedLocation);
+                modifiedInvitationTemplate.setOnlineDescription(modifiedDescription);
+                modifiedInvitationTemplate.setOnlinePlainDescription(modifiedPlainDescription);
             case CON:
-                modifiedInvitationTemplate.setBlendedDescription(modifiedDescription);
                 modifiedInvitationTemplate.setLocationBLD(modifiedLocation);
+                modifiedInvitationTemplate.setBlendedDescription(modifiedDescription);
                 modifiedInvitationTemplate.setBlendedPlainDescription(modifiedPlainDescription);
                 break;
-            case LVC:
-                modifiedInvitationTemplate.setOnlineDescription(modifiedDescription);
-                modifiedInvitationTemplate.setLocationLVC(modifiedLocation);
-                modifiedInvitationTemplate.setOnlinePlainDescription(modifiedPlainDescription);
         }
         return modifiedInvitationTemplate;
     }

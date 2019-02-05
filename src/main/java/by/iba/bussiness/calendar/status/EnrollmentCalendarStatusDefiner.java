@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EnrollmentCalendarStatusDefiner {
+
     public String defineEnrollmentCalendarStatus(Enrollment enrollment) {
         String calendarStatus;
         if (enrollment.getCalendarStatus() == null) {

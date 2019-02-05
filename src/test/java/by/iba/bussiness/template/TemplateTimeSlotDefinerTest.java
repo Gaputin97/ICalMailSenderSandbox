@@ -2,60 +2,44 @@ package by.iba.bussiness.template;
 
 import by.iba.bussiness.calendar.session.Session;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
 
 
 public class TemplateTimeSlotDefinerTest {
 
-    @InjectMocks
-    private static TemplateTimeSlotDefiner templateTimeSlotDefiner;
-    private static Session sessionWithHighestId;
-    private static Session sessionWithLowestId;
-    private static Session sessionWithConcreteId;
-    private static int highestId;
-    private static int lowestId;
-    private static int concreteId;
-    private static List<Session> sessionList;
-
-    @BeforeClass
-    public static void setUp() {
-        templateTimeSlotDefiner = new TemplateTimeSlotDefiner();
-        highestId = 10;
-        lowestId = 5;
-        concreteId = 7;
-        Instant firstInstant = new Date().toInstant();
-        Instant secondInstant = new Date().toInstant();
-        sessionWithHighestId = new Session(highestId, firstInstant, secondInstant);
-        sessionWithLowestId = new Session(lowestId, firstInstant, secondInstant);
-        sessionWithConcreteId = new Session(concreteId, firstInstant, secondInstant);
-        sessionList = new ArrayList<>();
-        sessionList.add(sessionWithConcreteId);
-        sessionList.add(sessionWithHighestId);
-        sessionList.add(sessionWithLowestId);
-    }
+    private TemplateTimeSlotDefiner templateTimeSlotDefiner = new TemplateTimeSlotDefiner();
+    private int highestId = 12;
+    private int lowestId = 7;
+    private int concreteId = 10;
+    private Instant firstInstant = Instant.now();
+    private Instant secondInstant = Instant.now();
+    private Session sessionWithHighestId = new Session(highestId, firstInstant, secondInstant);
+    private Session sessionWithLowestId = new Session(lowestId, firstInstant, secondInstant);
+    private Session sessionWithConcreteId = new Session(concreteId, firstInstant, secondInstant);
+    private List<Session> sessionList = Arrays.asList(sessionWithHighestId, sessionWithLowestId, sessionWithConcreteId);
 
     @Test
-    public void defineHighestIdOfSessions() {
+    public void testDefineHighestIdOfSessions() {
         int id = templateTimeSlotDefiner.defineHighestIdOfSessions(sessionList);
-        Assert.assertEquals(id, highestId);
+
+        Assert.assertEquals(12, id);
     }
 
     @Test
-    public void defineLowestIdOfSessions() {
+    public void testDefineLowestIdOfSessions() {
         int id = templateTimeSlotDefiner.defineLowestIdOfSessions(sessionList);
-        Assert.assertEquals(id, lowestId);
+
+        Assert.assertEquals(7, id);
     }
 
     @Test
-    public void defineSessionById() {
+    public void testDefineSessionById() {
         Session session = templateTimeSlotDefiner.defineSessionById(concreteId, sessionList);
+
         Assert.assertEquals(session, sessionWithConcreteId);
     }
 }

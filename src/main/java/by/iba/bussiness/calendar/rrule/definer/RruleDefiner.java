@@ -1,7 +1,7 @@
 package by.iba.bussiness.calendar.rrule.definer;
 
-import by.iba.bussiness.calendar.rrule.RruleCount;
 import by.iba.bussiness.calendar.rrule.Rrule;
+import by.iba.bussiness.calendar.rrule.RruleCount;
 import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 import by.iba.bussiness.calendar.rrule.frequence.FrequencyDefiner;
 import by.iba.bussiness.calendar.rrule.interval.IntervalDefiner;
@@ -25,7 +25,9 @@ public class RruleDefiner {
     private ExDatesDefiner exDatesDefiner;
 
     @Autowired
-    public RruleDefiner(FrequencyDefiner frequencyDefiner, IntervalDefiner intervalDefiner, ExDatesDefiner exDatesDefiner) {
+    public RruleDefiner(FrequencyDefiner frequencyDefiner,
+                        IntervalDefiner intervalDefiner,
+                        ExDatesDefiner exDatesDefiner) {
         this.frequencyDefiner = frequencyDefiner;
         this.intervalDefiner = intervalDefiner;
         this.exDatesDefiner = exDatesDefiner;

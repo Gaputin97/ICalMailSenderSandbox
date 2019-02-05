@@ -20,7 +20,6 @@ public class TemplateTimeSlotTypeInstaller {
         this.templateTimeSlotDefiner = templateTimeSlotDefiner;
     }
 
-
     public List<TypedSession> installTypedSessions(Appointment appointment, Appointment currentAppointment) {
         List<Session> newAppSessions = appointment.getSessionList();
         List<Session> oldAppSessions = currentAppointment.getSessionList();

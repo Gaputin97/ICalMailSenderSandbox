@@ -2,8 +2,6 @@ package by.iba.bussiness.sender;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.CalendarTextEditor;
-
-import by.iba.bussiness.calendar.session.DatePattern;
 import by.iba.bussiness.notification.NotificationResponseStatus;
 import by.iba.bussiness.template.Template;
 import by.iba.exception.MessageSendingException;
@@ -31,9 +29,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
 import java.net.URL;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 
 @org.springframework.stereotype.Component
 public class MessageSender {

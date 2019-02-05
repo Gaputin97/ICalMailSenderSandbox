@@ -1,15 +1,14 @@
 package by.iba.bussiness.calendar.creator.simple;
 
-import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 import by.iba.bussiness.calendar.session.DatePattern;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 @Component
 public class DateIncreaser {
+
     private final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(DatePattern.DATE_FORMAT).withZone(ZoneId.of("UTC"));
 
 //    public String increaseDate(Frequency frequency, long interval, String date) {

@@ -6,17 +6,11 @@ import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
 import by.iba.bussiness.calendar.creator.simple.DateIncreaser;
 import by.iba.bussiness.calendar.creator.simple.DateParser;
 import by.iba.bussiness.calendar.creator.simple.ICalDateParser;
-import by.iba.bussiness.calendar.rrule.RruleCount;
 import by.iba.bussiness.calendar.rrule.Rrule;
-import by.iba.bussiness.calendar.rrule.constants.DateConstants;
-import by.iba.bussiness.calendar.rrule.frequence.Frequency;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.exception.CalendarException;
 import net.fortuna.ical4j.model.*;
-import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.component.VEvent;
-import net.fortuna.ical4j.model.component.VTimeZone;
 import net.fortuna.ical4j.model.parameter.AltRep;
 import net.fortuna.ical4j.model.parameter.FmtType;
 import net.fortuna.ical4j.model.property.*;
@@ -30,7 +24,10 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Component
 public class CalendarCreator {

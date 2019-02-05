@@ -3,8 +3,6 @@ package by.iba.bussiness.template.installer;
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.calendar.session.TypedSession;
-import by.iba.bussiness.template.TemplateTimeSlotDefiner;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,6 +10,7 @@ import java.util.List;
 
 @Component
 public class TemplateTimeSlotInstaller {
+
     public String installSessionsIfUpdate(List<TypedSession> typedSessions) {
         StringBuilder dates = new StringBuilder();
         typedSessions.stream().sorted().forEach(session -> {

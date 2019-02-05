@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 public class NotificationController {
-
     private NotificationService notificationService;
 
     @Autowired

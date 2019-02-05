@@ -2,16 +2,15 @@ package by.iba.bussiness.facade;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.determiner.IndexDeterminer;
-import by.iba.bussiness.calendar.session.DatePattern;
-import by.iba.bussiness.calendar.session.Session;
-import by.iba.bussiness.enrollment.EnrollmentUpdateChecker;
 import by.iba.bussiness.calendar.creator.CalendarCreator;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.definer.RruleDefiner;
+import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.calendar.status.CalendarStatus;
 import by.iba.bussiness.calendar.status.EnrollmentCalendarStatusDefiner;
 import by.iba.bussiness.enrollment.Enrollment;
+import by.iba.bussiness.enrollment.EnrollmentUpdateChecker;
 import by.iba.bussiness.enrollment.EnrollmentsInstaller;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.enrollment.status.EnrollmentStatus;
@@ -27,9 +26,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 

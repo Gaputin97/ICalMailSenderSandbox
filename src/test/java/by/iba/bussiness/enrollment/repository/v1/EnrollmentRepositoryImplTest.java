@@ -3,11 +3,13 @@ package by.iba.bussiness.enrollment.repository.v1;
 import by.iba.Runner;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.status.EnrollmentStatus;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -20,12 +22,18 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class EnrollmentRepositoryImplTest {
 
-    @Autowired
     private EnrollmentRepositoryImpl enrollmentRepository;
-    @Autowired
     private MongoTemplate mongoTemplate;
-    private static final String USER_EMAIL = "shahrai.robert@gmail.com";
-    private static final String SECOND_USER_EMAIL = "robert.shahrai@gmal.com";
+
+    @Autowired
+    public EnrollmentRepositoryImplTest(EnrollmentRepositoryImpl enrollmentRepository,
+                                        MongoTemplate mongoTemplate) {
+        this.enrollmentRepository = enrollmentRepository;
+        this.mongoTemplate = mongoTemplate;
+    }
+
+    private static final String USER_EMAIL = "test_example_first@example.com";
+    private static final String SECOND_USER_EMAIL = "test_example_second@example.com";
     private static final BigInteger PARENT_ID = new BigInteger("1488");
     private static final String ENROLLMENT_STATUS = EnrollmentStatus.CONFIRMED.name();
     private static final BigInteger ENROLLMENT_ID = new BigInteger("1");
@@ -41,7 +49,7 @@ public class EnrollmentRepositoryImplTest {
     }
 
     @Test
-    public void save() {
+    public void testSave() {
         //given
         Enrollment enrollment = new Enrollment();
         enrollment.setUserEmail(USER_EMAIL);
@@ -53,7 +61,7 @@ public class EnrollmentRepositoryImplTest {
     }
 
     @Test
-    public void saveOnExisted() {
+    public void testSaveOnExisted() {
         //given
         Enrollment enrollment = new Enrollment();
         enrollment.setUserEmail(USER_EMAIL);
@@ -69,7 +77,7 @@ public class EnrollmentRepositoryImplTest {
     }
 
     @Test
-    public void getByEmailAndParentId() {
+    public void testGetByEmailAndParentId() {
         //given
         Enrollment enrollment = new Enrollment();
         enrollment.setUserEmail(USER_EMAIL);
@@ -83,7 +91,7 @@ public class EnrollmentRepositoryImplTest {
     }
 
     @Test
-    public void getByEmailAndParentIdAndType() {
+    public void testGetByEmailAndParentIdAndType() {
         //given
         Enrollment enrollment = new Enrollment();
         enrollment.setUserEmail(USER_EMAIL);
@@ -99,7 +107,7 @@ public class EnrollmentRepositoryImplTest {
     }
 
     @Test
-    public void getAllByParentId() {
+    public void testGetAllByParentId() {
         //given
         Enrollment enrollment = new Enrollment();
         enrollment.setUserEmail(USER_EMAIL);

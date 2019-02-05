@@ -17,7 +17,6 @@ import static org.mockito.Mockito.when;
 public class SequenceDefinerTest {
     @Mock
     private IndexDeterminer indexDeterminer;
-
     @InjectMocks
     private SequenceDefiner sequenceDefiner;
 

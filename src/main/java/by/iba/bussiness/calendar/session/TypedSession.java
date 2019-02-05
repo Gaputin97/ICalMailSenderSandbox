@@ -3,7 +3,6 @@ package by.iba.bussiness.calendar.session;
 import java.time.Instant;
 
 public class TypedSession extends Session {
-
     private SessionType sessionType;
 
     public TypedSession(int id, Instant startDateTime, Instant endDateTime) {

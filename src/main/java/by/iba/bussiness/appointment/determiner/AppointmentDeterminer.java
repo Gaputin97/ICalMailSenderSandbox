@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AppointmentDeterminer {
+
     public Appointment determineNewAppointmentByIndexes(Appointment newAppointmentWithIndexes, Appointment currentAppointment) {
         Appointment newAppointment;
         if ((newAppointmentWithIndexes.getUpdateIndex() == 0 && newAppointmentWithIndexes.getRescheduleIndex() == 0) ||

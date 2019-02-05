@@ -1,11 +1,9 @@
 package by.iba.bussiness.invitation_template.body;
 
 public class InvitationTemplateBodyPart {
-
     private String location;
     private String description;
     private String plainDescription;
-
 
     public InvitationTemplateBodyPart(String location, String description, String plainDescription) {
         this.location = location;

@@ -15,7 +15,6 @@ import java.util.List;
 
 @Component
 public class AgendaInstaller {
-
     private SessionParser sessionParser;
     private Configuration freeMarkerConfiguration;
 

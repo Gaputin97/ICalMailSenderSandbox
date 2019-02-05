@@ -10,6 +10,7 @@ import java.util.List;
 
 @Component
 public class ExDatesDefiner {
+
     public List<Instant> defineExDates(Rrule rrule, Instant startDateOfFirstSession, Instant startDateOfLastSession, List<Instant> startDatesOfSessions) {
         LinkedList<Instant> linkedStartDatesOfSessions = new LinkedList<>(startDatesOfSessions);
         List<Instant> exDates = new ArrayList<>();

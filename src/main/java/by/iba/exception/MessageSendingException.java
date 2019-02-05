@@ -1,8 +1,6 @@
 package by.iba.exception;
 
 public class MessageSendingException extends RuntimeException {
-    public MessageSendingException() {
-    }
 
     public MessageSendingException(String message) {
         super(message);

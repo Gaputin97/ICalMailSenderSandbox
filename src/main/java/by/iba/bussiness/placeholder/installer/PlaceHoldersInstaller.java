@@ -1,11 +1,9 @@
 package by.iba.bussiness.placeholder.installer;
 
-import by.iba.bussiness.calendar.session.SessionParser;
 import by.iba.bussiness.location.Location;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.type.MeetingLocationType;
 import by.iba.bussiness.placeholder.PlaceHoldersConstants;
-import freemarker.template.Configuration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
@@ -16,7 +14,6 @@ import java.util.Map;
 @Component
 @PropertySource("link.properties")
 public class PlaceHoldersInstaller {
-
     private String meetingLink;
     private String meetingJoinLink;
     private AgendaInstaller agendaInstaller;

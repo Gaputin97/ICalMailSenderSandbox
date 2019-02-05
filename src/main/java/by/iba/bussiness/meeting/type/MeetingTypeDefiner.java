@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class MeetingTypeDefiner {
+
     private static final Logger logger = LoggerFactory.getLogger(MeetingTypeDefiner.class);
     private FrequencyDefiner frequencyDefiner;
     private SessionChecker sessionChecker;

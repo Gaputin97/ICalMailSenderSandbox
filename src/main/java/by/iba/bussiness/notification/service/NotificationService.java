@@ -6,6 +6,5 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface NotificationService {
-
     List<NotificationResponseStatus> sendCalendarToAllEnrollmentsOfMeeting(HttpServletRequest request, String meetingId);
 }

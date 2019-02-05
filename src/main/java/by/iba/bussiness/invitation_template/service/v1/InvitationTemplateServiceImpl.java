@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -22,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 
 @Service
-@PropertySource("endpoint.properties")
 public class InvitationTemplateServiceImpl implements InvitationTemplateService {
     private static final Logger logger = LoggerFactory.getLogger(InvitationTemplateServiceImpl.class);
     private TokenService tokenService;

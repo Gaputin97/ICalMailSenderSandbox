@@ -2,8 +2,8 @@ package by.iba.bussiness.notification.service.v1;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.AppointmentCreator;
-import by.iba.bussiness.appointment.determiner.AppointmentDeterminer;
 import by.iba.bussiness.appointment.AppointmentIndexesUpdater;
+import by.iba.bussiness.appointment.determiner.AppointmentDeterminer;
 import by.iba.bussiness.appointment.repository.AppointmentRepository;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.facade.ComplexTemplateSenderFacade;
@@ -17,10 +17,10 @@ import by.iba.bussiness.meeting.service.MeetingService;
 import by.iba.bussiness.meeting.type.MeetingLocationType;
 import by.iba.bussiness.meeting.type.MeetingType;
 import by.iba.bussiness.meeting.type.MeetingTypeDefiner;
-import by.iba.bussiness.notification.service.NotificationService;
-import by.iba.bussiness.placeholder.replacer.TemplatePlaceHolderReplacer;
-import by.iba.bussiness.placeholder.installer.PlaceHoldersInstaller;
 import by.iba.bussiness.notification.NotificationResponseStatus;
+import by.iba.bussiness.notification.service.NotificationService;
+import by.iba.bussiness.placeholder.installer.PlaceHoldersInstaller;
+import by.iba.bussiness.placeholder.replacer.TemplatePlaceHolderReplacer;
 import by.iba.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,6 @@ import java.util.Map;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
-
     private static final Logger logger = LoggerFactory.getLogger(NotificationServiceImpl.class);
     private MeetingService meetingService;
     private InvitationTemplateService invitationTemplateService;
@@ -93,13 +92,15 @@ public class NotificationServiceImpl implements NotificationService {
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
         }
         InvitationTemplate invitationTemplateWithoutPlaceHolders = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
-        invitationTemplateWithoutPlaceHolders.setBlendedPlainDescription("Blended plain desc");
-        invitationTemplateWithoutPlaceHolders.setOnlineDescription("Online plain desc");
-        invitationTemplateWithoutPlaceHolders.setFaceToFacePlainDescription("FTF plain desc");
+        invitationTemplateWithoutPlaceHolders.setBlendedPlainDescription("BLD plain desc");
+        invitationTemplateWithoutPlaceHolders.setOnlineDescription("LVC plain desc");
+        invitationTemplateWithoutPlaceHolders.setFaceToFacePlainDescription("ILC plain desc");
+
         Location location = locationService.getLocationByCode(request, locationCode);
 
         Map<String, String> placeHoldersMap = placeHoldersInstaller.installPlaceHoldersMap(meeting, location);
         MeetingLocationType meetingLocationType = MeetingLocationType.valueOf(meeting.getType());
+
         InvitationTemplate invitationTemplateWithPlaceHolders = templatePlaceHolderReplacer.replaceTemplatePlaceHolders(
                 placeHoldersMap,
                 invitationTemplateWithoutPlaceHolders,

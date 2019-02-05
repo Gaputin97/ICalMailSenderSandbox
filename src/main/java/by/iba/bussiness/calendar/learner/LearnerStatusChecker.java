@@ -7,6 +7,7 @@ import java.util.List;
 
 @Component
 public class LearnerStatusChecker {
+
     public boolean isAnyLearnerHasCancelledStatus(List<Learner> learnerList) {
         return learnerList.stream().map(Learner::getEnrollmentStatus).anyMatch(EnrollmentStatus.CANCELLED.name()::equals);
     }
