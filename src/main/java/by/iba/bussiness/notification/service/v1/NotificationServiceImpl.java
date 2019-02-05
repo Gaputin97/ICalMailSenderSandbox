@@ -87,12 +87,13 @@ public class NotificationServiceImpl implements NotificationService {
         }
 
         String invitationTemplateKey = meeting.getInvitationTemplate();
+        String locationCode = meeting.getLocation();
         if (invitationTemplateKey.isEmpty()) {
             logger.error("Can't enroll learners to this event, cause can't find some invitation template by meeting id: " + meetingId);
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
         }
         InvitationTemplate invitationTemplateWithoutPlaceHolders = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
-        Location location = locationService.getLocationByCode(request, meetingId);
+        Location location = locationService.getLocationByCode(request, locationCode);
         Map<String, String> placeHoldersMap = placeHoldersInstaller.installPlaceHoldersMap(meeting, location);
         MeetingLocationType meetingLocationType = MeetingLocationType.valueOf(meeting.getType());
         InvitationTemplate invitationTemplateWithPlaceHolders = templatePlaceHolderReplacer.replaceTemplatePlaceHolders(
@@ -100,6 +101,7 @@ public class NotificationServiceImpl implements NotificationService {
                 invitationTemplateWithoutPlaceHolders,
                 meetingLocationType);
         meeting.setPlainDescription("Plain description");
+        meeting.setLocation(location.toString());
 
         Appointment currentAppointment = appointmentRepository.getByMeetingId(new BigInteger(meetingId));
         Appointment newAppointmentWithoutIndexes = appointmentCreator.createAppointmentWithMainFields(meeting, invitationTemplateWithPlaceHolders);

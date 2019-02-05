@@ -93,6 +93,6 @@ public class Location {
 
     @Override
     public String toString() {
-        return countryName.concat(", ").concat(city);
+        return countryName + ", " + city;
     }
 }

@@ -69,7 +69,11 @@ public class SimpleCalendarSenderFacade {
         List<Session> sessionList = newAppointment.getSessionList();
 
         List<Enrollment> enrollmentList = enrollmentService.getAllByParentId(meetingId);
-        Calendar cancellationCalendar = calendarCreator.createCancellationTemplate(currentAppointment);
+        Calendar cancellationCalendar = null;
+        if(currentAppointment != null) {
+            cancellationCalendar = calendarCreator.createCancellationTemplate(currentAppointment);
+        }
+
         Calendar invitationCalendar = null;
 
         if (enrollmentStatusChecker.isAnyEnrollmentHasConfirmedStatus(enrollmentList)) {
