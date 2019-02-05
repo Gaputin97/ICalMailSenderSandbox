@@ -1,5 +1,6 @@
-package by.iba.bussiness.appointment;
+package by.iba.bussiness.appointment.determiner;
 
+import by.iba.bussiness.appointment.Appointment;
 import org.springframework.stereotype.Component;
 
 @Component

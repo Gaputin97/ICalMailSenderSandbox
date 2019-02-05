@@ -28,7 +28,7 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
 
     @Override
     @Retryable(
-            value = { RepositoryException.class },
+            value = {RepositoryException.class},
             maxAttempts = 10,
             backoff = @Backoff(delay = 1000)
     )

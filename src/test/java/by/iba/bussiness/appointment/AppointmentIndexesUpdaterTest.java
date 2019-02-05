@@ -1,7 +1,6 @@
 package by.iba.bussiness.appointment;
 
-import by.iba.bussiness.appointment.handler.AppointmentIndexesUpdater;
-import by.iba.bussiness.appointment.handler.IndexDeterminer;
+import by.iba.bussiness.appointment.determiner.IndexDeterminer;
 import by.iba.bussiness.calendar.session.Session;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +26,7 @@ public class AppointmentIndexesUpdaterTest {
     public void testUpdateAppointmentWhenAppointmentsEquals() {
         Appointment expectedAppointment = new Appointment();
 
-        Appointment actualAppointment = appointmentHandler.updateIndexesBasedOnSessionsDifferences(expectedAppointment, expectedAppointment);
+        Appointment actualAppointment = appointmentHandler.updateIndexes(expectedAppointment, expectedAppointment);
 
         assertEquals(expectedAppointment, actualAppointment);
     }
@@ -50,7 +49,7 @@ public class AppointmentIndexesUpdaterTest {
 
         when(indexDeterminer.getMaxIndex(currentAppointment)).thenReturn(2);
 
-        Appointment actualAppointment = appointmentHandler.updateIndexesBasedOnSessionsDifferences(newAppointment, currentAppointment);
+        Appointment actualAppointment = appointmentHandler.updateIndexes(newAppointment, currentAppointment);
         int actualUpdateIndex = actualAppointment.getUpdateIndex();
         int actualRescheduleIndex = actualAppointment.getRescheduleIndex();
 
@@ -75,7 +74,7 @@ public class AppointmentIndexesUpdaterTest {
 
         when(indexDeterminer.getMaxIndex(currentAppointment)).thenReturn(2);
 
-        Appointment actualAppointment = appointmentHandler.updateIndexesBasedOnSessionsDifferences(newAppointment, currentAppointment);
+        Appointment actualAppointment = appointmentHandler.updateIndexes(newAppointment, currentAppointment);
         int actualUpdateIndex = actualAppointment.getUpdateIndex();
         int actualRescheduleIndex = actualAppointment.getRescheduleIndex();
 

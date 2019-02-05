@@ -2,6 +2,7 @@ package by.iba.bussiness.sender;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.CalendarTextEditor;
+import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.notification.NotificationResponseStatus;
 import by.iba.bussiness.template.Template;
 import freemarker.template.Configuration;
@@ -57,6 +58,7 @@ public class MessageSender {
         String meetingTitle = appointment.getTitle();
         String ownerMail = appointment.getFrom();
         String ownerName = appointment.getFromName();
+        Meeting
 
         String richDescription = BODY_OPEN_TAG + appointment.getDescription() + BODY_CLOSE_TAG;
         NotificationResponseStatus notificationResponseStatus;

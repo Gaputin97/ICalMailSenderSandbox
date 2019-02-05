@@ -13,22 +13,16 @@ public class Appointment {
     @Id
     private BigInteger id;
     private String title;
-    private String from;
-    private String fromName;
     private BigInteger meetingId;
     private int updateIndex;
     private int rescheduleIndex;
     private String description;
     private String plainDescription;
     private String location;
-    private String locationInfo;
     private String subject;
-    private String summary;
-    private String startDateTime;
-    private String endDateTime;
-    private long duration;
     private List<Session> sessionList;
-    private String timeZone;
+    private String from;
+    private String fromName;
 
     public Appointment() {
     }
@@ -39,22 +33,6 @@ public class Appointment {
 
     public void setPlainDescription(String plainDescription) {
         this.plainDescription = plainDescription;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public String getFromName() {
-        return fromName;
-    }
-
-    public void setFromName(String fromName) {
-        this.fromName = fromName;
     }
 
     public BigInteger getId() {
@@ -105,52 +83,12 @@ public class Appointment {
         this.description = description;
     }
 
-    public long getDuration() {
-        return duration;
-    }
-
-    public void setDuration(long duration) {
-        this.duration = duration;
-    }
-
-    public String getStartDateTime() {
-        return startDateTime;
-    }
-
-    public void setStartDateTime(String startDateTime) {
-        this.startDateTime = startDateTime;
-    }
-
-    public String getEndDateTime() {
-        return endDateTime;
-    }
-
-    public void setEndDateTime(String endDateTime) {
-        this.endDateTime = endDateTime;
-    }
-
     public String getLocation() {
         return location;
     }
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    public String getLocationInfo() {
-        return locationInfo;
-    }
-
-    public void setLocationInfo(String locationInfo) {
-        this.locationInfo = locationInfo;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
     }
 
     public List<Session> getSessionList() {
@@ -161,14 +99,6 @@ public class Appointment {
         this.sessionList = sessionList;
     }
 
-    public String getTimeZone() {
-        return timeZone;
-    }
-
-    public void setTimeZone(String timeZone) {
-        this.timeZone = timeZone;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -177,52 +107,37 @@ public class Appointment {
         this.title = title;
     }
 
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getFromName() {
+        return fromName;
+    }
+
+    public void setFromName(String fromName) {
+        this.fromName = fromName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
 
         if (o == null || getClass() != o.getClass()) return false;
         Appointment that = (Appointment) o;
-        return duration == that.duration &&
-                Objects.equals(meetingId, that.meetingId) &&
+        return Objects.equals(meetingId, that.meetingId) &&
                 Objects.equals(description, that.description) &&
                 Objects.equals(location, that.location) &&
-                Objects.equals(locationInfo, that.locationInfo) &&
-                Objects.equals(summary, that.summary) &&
-                Objects.equals(startDateTime, that.startDateTime) &&
-                Objects.equals(endDateTime, that.endDateTime) &&
-                Objects.equals(from, that.from) &&
-                Objects.equals(fromName, that.fromName) &&
-                Objects.equals(sessionList, that.sessionList) &&
-                Objects.equals(timeZone, that.timeZone);
-
+                Objects.equals(sessionList, that.sessionList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(meetingId, description, location, locationInfo, summary, startDateTime, endDateTime, duration, from, fromName, sessionList, timeZone);
+        return Objects.hash(meetingId, description, location, sessionList);
     }
 
-    @Override
-    public String toString() {
-        return "Appointment{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", from='" + from + '\'' +
-                ", fromName='" + fromName + '\'' +
-                ", meetingId=" + meetingId +
-                ", updateIndex=" + updateIndex +
-                ", rescheduleIndex=" + rescheduleIndex +
-                ", description='" + description + '\'' +
-                ", location='" + location + '\'' +
-                ", locationInfo='" + locationInfo + '\'' +
-                ", subject='" + subject + '\'' +
-                ", summary='" + summary + '\'' +
-                ", startDateTime='" + startDateTime + '\'' +
-                ", endDateTime='" + endDateTime + '\'' +
-                ", duration=" + duration +
-                ", sessionList=" + sessionList +
-                ", timeZone='" + timeZone + '\'' +
-                '}';
-    }
 }

@@ -30,6 +30,7 @@ public class Meeting {
     private Contact contact;
     private String activityUrl;
     private String type;
+    private String activityInfo;
 
     public Meeting() {
     }
@@ -168,6 +169,14 @@ public class Meeting {
 
     public void setActivityUrl(String activityUrl) {
         this.activityUrl = activityUrl;
+    }
+
+    public String getActivityInfo() {
+        return activityInfo;
+    }
+
+    public void setActivityInfo(String activityInfo) {
+        this.activityInfo = activityInfo;
     }
 
     public String getType() {

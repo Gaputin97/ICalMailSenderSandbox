@@ -23,11 +23,10 @@ public class AggregatorController {
     }
 
     @ApiOperation(value = "Enroll users and send notifications. ")
-    @RequestMapping(value = "/aggregator/", method = RequestMethod.GET)
-    public AggregatorResponseStatus sendCalendar(@RequestBody EnrollRequestWrapper enrollRequestWrapper, HttpServletRequest request) {
-
+    @RequestMapping(value = "/aggregator/", method = RequestMethod.POST)
+    public AggregatorResponseStatus enrollLearnersAndSendNotifications(@RequestBody EnrollRequestWrapper enrollRequestWrapper, HttpServletRequest request) {
         String meetingId = enrollRequestWrapper.getMeetingId();
         List<Learner> learners = enrollRequestWrapper.getLearners();
-        return aggregatorService.aggregateEnrollAndSend(request, meetingId, learners);
+        return aggregatorService.enrollLearnerAndSendNotification(request, meetingId, learners);
     }
 }

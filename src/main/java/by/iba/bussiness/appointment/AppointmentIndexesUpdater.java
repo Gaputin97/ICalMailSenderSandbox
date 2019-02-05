@@ -1,6 +1,6 @@
-package by.iba.bussiness.appointment.handler;
+package by.iba.bussiness.appointment;
 
-import by.iba.bussiness.appointment.Appointment;
+import by.iba.bussiness.appointment.determiner.IndexDeterminer;
 import by.iba.bussiness.calendar.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ public class AppointmentIndexesUpdater {
         this.indexDeterminer = indexDeterminer;
     }
 
-    public Appointment updateIndexesBasedOnSessionsDifferences(Appointment newAppointment, Appointment currentAppointment) {
+    public Appointment updateIndexes(Appointment newAppointment, Appointment currentAppointment) {
         if (currentAppointment.equals(newAppointment)) {
             newAppointment = currentAppointment;
         } else {
@@ -37,8 +37,8 @@ public class AppointmentIndexesUpdater {
                 newAppointment.setUpdateIndex(++maximumIndex);
             }
         }
-        BigInteger updatedAppId = currentAppointment.getId();
-        newAppointment.setId(updatedAppId);
+        BigInteger appointmentId = currentAppointment.getId();
+        newAppointment.setId(appointmentId);
         return newAppointment;
     }
 }
