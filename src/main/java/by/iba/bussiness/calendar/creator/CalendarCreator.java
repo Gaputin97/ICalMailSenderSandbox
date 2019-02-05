@@ -3,7 +3,6 @@ package by.iba.bussiness.calendar.creator;
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.CalendarRruleParser;
 import by.iba.bussiness.calendar.creator.definer.SequenceDefiner;
-import by.iba.bussiness.calendar.creator.simple.DateIncreaser;
 import by.iba.bussiness.calendar.creator.simple.DateParser;
 import by.iba.bussiness.calendar.creator.simple.ICalDateParser;
 import by.iba.bussiness.calendar.rrule.Rrule;
@@ -35,8 +34,7 @@ public class CalendarCreator {
     private static final String RICH_TEXT_CID = "rich_description";
     private static final String BODY_OPEN_TAG = "<body>";
     private static final String BODY_CLOSE_TAG = "</body>";
-    private ICalDateParser iСalDateParser;
-    private DateIncreaser dateIncreaser;
+    private ICalDateParser iCalDateParser;
     private SequenceDefiner sequenceDefiner;
     private CalendarRruleParser calendarRruleParser;
     private DateParser dateParser;
@@ -45,14 +43,12 @@ public class CalendarCreator {
 
     @Autowired
     public CalendarCreator(ICalDateParser icalDateParser,
-                           DateIncreaser dateIncreaser,
                            SequenceDefiner sequenceDefiner,
                            CalendarRruleParser calendarRruleParser,
                            DateParser dateParser,
                            @Qualifier("requestCalendar") Calendar requestCalendar,
                            @Qualifier("cancelCalendar") Calendar cancelCalendar) {
-        this.iСalDateParser = icalDateParser;
-        this.dateIncreaser = dateIncreaser;
+        this.iCalDateParser = icalDateParser;
         this.sequenceDefiner = sequenceDefiner;
         this.calendarRruleParser = calendarRruleParser;
         this.dateParser = dateParser;
@@ -67,7 +63,7 @@ public class CalendarCreator {
         Collections.sort(sortedSessions);
 
         String richDescription = BODY_OPEN_TAG + appointment.getDescription() + BODY_CLOSE_TAG;
-        String parsedIncreasedUntilDate = iСalDateParser.parseToICalDate(appointment.getEndDateTime());
+        String parsedIncreasedUntilDate = iCalDateParser.parseToICalDate(appointment.getEndDateTime());
         Recur recurrence = calendarRruleParser.parseToCalendarRrule(rrule, parsedIncreasedUntilDate);
         try {
             Organizer organizer = new Organizer("mailto:" + appointment.getFrom());
@@ -82,7 +78,7 @@ public class CalendarCreator {
             xAltDesc.setValue(richDescription);
 
             RRule rRule = new RRule(recurrence);
-            DateTime startDateTime = new DateTime(iСalDateParser.parseToICalDate(appointment.getStartDateTime()));
+            DateTime startDateTime = new DateTime(iCalDateParser.parseToICalDate(appointment.getStartDateTime()));
 
             Sequence sequence = sequenceDefiner.defineSequence(appointment);
             Uid UID = new Uid(appointment.getId().toString());

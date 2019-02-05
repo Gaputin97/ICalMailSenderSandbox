@@ -25,18 +25,19 @@ public class AppointmentCreator {
     }
 
     public Appointment createAppointment(Meeting meeting, InvitationTemplate invitationTemplate) {
-        Appointment newAppointment = new Appointment();
         MeetingLocationType meetingLocationType = MeetingLocationType.valueOf(meeting.getType());
         InvitationTemplateBodyPart invitationTemplateBodyPart = invitationTemplateBodyPartDefiner.defineBodyPart(invitationTemplate, meetingLocationType);
         String location = invitationTemplateBodyPart.getLocation();
         String description = invitationTemplateBodyPart.getDescription();
         String plainDescription = invitationTemplateBodyPart.getPlainDescription();
-        newAppointment.setDescription(description);
-        newAppointment.setLocation(location);
-        newAppointment.setPlainDescription(plainDescription);
-        newAppointment.setSubject(invitationTemplate.getSubject());
-        newAppointment.setFromName(invitationTemplate.getFromName());
+
+        Appointment newAppointment = new Appointment();
         newAppointment.setFrom(invitationTemplate.getFrom());
+        newAppointment.setFromName(invitationTemplate.getFromName());
+        newAppointment.setSubject(invitationTemplate.getSubject());
+        newAppointment.setDescription(description);
+        newAppointment.setPlainDescription(plainDescription);
+        newAppointment.setLocation(location);
 
         newAppointment.setStartDateTime(meeting.getStartDateTime());
         newAppointment.setEndDateTime(meeting.getEndDateTime());

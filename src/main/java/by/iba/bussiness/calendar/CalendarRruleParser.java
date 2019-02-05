@@ -22,12 +22,11 @@ public class CalendarRruleParser {
         Recur recurrence;
         try {
             if (rruleCount.equals(RruleCount.ZERO)) {
-                recurrence = new Recur("FREQ=" + frequency.toString() + ";" + "INTERVAL="
-                        + interval + ";" + "UNTIL=" + increasedUntilString + ";");
+                recurrence = new Recur("FREQ=" + frequency.toString() + ";" + "INTERVAL=" + interval + ";" +
+                        "UNTIL=" + increasedUntilString);
             } else {
                 int intCount = rruleCount.getIntCount();
-                recurrence = new Recur("FREQ=" + frequency.toString() + ";" + "COUNT="
-                        + intCount + ";");
+                recurrence = new Recur("FREQ=" + frequency.toString() + ";" + "COUNT=" + intCount);
             }
         } catch (ParseException e) {
             logger.error("Cant parse rrule to calendar rrule", e);

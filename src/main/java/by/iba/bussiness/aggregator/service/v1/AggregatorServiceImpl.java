@@ -29,15 +29,15 @@ public class AggregatorServiceImpl implements AggregatorService {
     public AggregatorResponseStatus enrollLearnerAndSendNotification(HttpServletRequest request, String meetingId, List<Learner> learners) {
         AggregatorResponseStatus aggregatorResponseStatus = new AggregatorResponseStatus();
 
+        List<EnrollLearnerResponseStatus> enrollLearnerResponseStatuses = enrollService.enrollLearners(request, meetingId, learners);
+        aggregatorResponseStatus.setEnrollLearnerResponseStatuses(enrollLearnerResponseStatuses);
+
         List<NotificationResponseStatus> notificationResponseStatuses = notificationService.sendCalendarToAllEnrollmentsOfMeeting(request, meetingId);
         List<NotificationResponseStatus> filteredNotificationResponseStatus = notificationResponseStatuses.stream().filter(notification -> {
             boolean doNotificationContainLearner = learners.stream().map(Learner::getEmail).anyMatch(notification.getRecipientEmail()::equals);
             return (notification.isDelivered() || doNotificationContainLearner);
         }).collect(Collectors.toList());
         aggregatorResponseStatus.setNotificationResponseStatuses(filteredNotificationResponseStatus);
-
-        List<EnrollLearnerResponseStatus> enrollLearnerResponseStatuses = enrollService.enrollLearners(request, meetingId, learners);
-        aggregatorResponseStatus.setEnrollLearnerResponseStatuses(enrollLearnerResponseStatuses);
 
         return aggregatorResponseStatus;
     }

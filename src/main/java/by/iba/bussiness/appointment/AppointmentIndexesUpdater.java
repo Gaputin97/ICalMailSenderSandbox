@@ -37,6 +37,7 @@ public class AppointmentIndexesUpdater {
                 newAppointment.setUpdateIndex(++maximumIndex);
             }
         }
+
         BigInteger appointmentId = currentAppointment.getId();
         newAppointment.setId(appointmentId);
         return newAppointment;

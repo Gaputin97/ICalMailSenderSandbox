@@ -48,7 +48,7 @@ public class RruleDefiner {
             Instant startDateOfFirstSession = firstSession.getStartDateTime();
             Instant startDateOfLastSession = lastSession.getEndDateTime();
 
-            List<Instant> startDatesOfSessions = new LinkedList();
+            List<Instant> startDatesOfSessions = new LinkedList<>();
             sortedSessions.forEach(x -> startDatesOfSessions.add(x.getStartDateTime()));
 
             Frequency frequency = frequencyDefiner.defineFrequency(startDatesOfSessions);
@@ -66,7 +66,6 @@ public class RruleDefiner {
             rrule.setExDates(exDates);
             rrule.setRruleCount(RruleCount.ZERO);
             logger.info("Amount of EXDATES is " + rrule.getExDates().size());
-
         }
         return rrule;
     }
