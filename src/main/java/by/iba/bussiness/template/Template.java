@@ -2,7 +2,7 @@ package by.iba.bussiness.template;
 
 public class Template {
 
-    private String summary;
+    private String subject;
     private String description;
     private String location;
     private String sessions;
@@ -14,7 +14,7 @@ public class Template {
     }
 
     public Template(Template template) {
-        this.summary = template.getSummary();
+        this.subject = template.getSubject();
         this.from = template.getFrom();
         this.fromName = template.getFromName();
         this.description = template.getDescription();
@@ -46,12 +46,12 @@ public class Template {
         this.type = type;
     }
 
-    public String getSummary() {
-        return summary;
+    public String getSubject() {
+        return subject;
     }
 
-    public void setSummary(String summary) {
-        this.summary = summary;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public String getDescription() {

@@ -24,7 +24,7 @@ public class TemplateInstaller {
         Template template = new Template();
         template.setDescription(appointment.getDescription());
         template.setLocation(appointment.getLocation());
-        template.setSummary(appointment.getSummary());
+        template.setSubject(appointment.getSubject());
         template.setFrom(appointment.getFrom());
         template.setFromName(appointment.getFromName());
         String sessions;

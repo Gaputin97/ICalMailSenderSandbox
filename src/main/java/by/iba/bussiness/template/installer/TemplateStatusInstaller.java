@@ -1,6 +1,5 @@
 package by.iba.bussiness.template.installer;
 
-import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.determiner.IndexDeterminer;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.status.EnrollmentStatus;
@@ -17,10 +16,9 @@ public class TemplateStatusInstaller {
         this.indexDeterminer = indexDeterminer;
     }
 
-    public String installTemplateType(Enrollment enrollment, Appointment appointment) {
+    public String installTemplateType(Enrollment enrollment, int maximumAppointmentIndex) {
         String enrollmentStatus = enrollment.getStatus();
         String templateType = null;
-        int maximumAppointmentIndex = indexDeterminer.getMaxIndex(appointment);
         if ((enrollmentStatus.equals(EnrollmentStatus.CANCELLED.toString()))) {
             templateType = TemplateType.CANCELLATION.toString();
         } else {

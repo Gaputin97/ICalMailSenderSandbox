@@ -31,15 +31,19 @@ public class AppointmentCreator {
         String location = invitationTemplateBodyPart.getLocation();
         String description = invitationTemplateBodyPart.getDescription();
         String plainDescription = invitationTemplateBodyPart.getPlainDescription();
-        newAppointment.setMeetingId(meeting.getId());
         newAppointment.setDescription(description);
         newAppointment.setLocation(location);
         newAppointment.setPlainDescription(plainDescription);
         newAppointment.setSubject(invitationTemplate.getSubject());
-        // TODO
+        newAppointment.setFromName(invitationTemplate.getFromName());
+        newAppointment.setFrom(invitationTemplate.getFrom());
+
+        newAppointment.setStartDateTime(meeting.getStartDateTime());
+        newAppointment.setEndDateTime(meeting.getEndDateTime());
         newAppointment.setTitle(meeting.getTitle());
         newAppointment.setPlainDescription(meeting.getPlainDescription());
-
+        newAppointment.setMeetingId(meeting.getId());
+        l
         List<TimeSlot> timeSlots = meeting.getTimeSlots();
         newAppointment.setSessionList(sessionParser.timeSlotListToSessionList(timeSlots));
 

@@ -1,6 +1,7 @@
 package by.iba.bussiness.facade;
 
 import by.iba.bussiness.appointment.Appointment;
+import by.iba.bussiness.appointment.AppointmentIndexesUpdater;
 import by.iba.bussiness.appointment.determiner.IndexDeterminer;
 import by.iba.bussiness.calendar.creator.CalendarCreator;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
@@ -94,7 +95,7 @@ public class ComplexTemplateSenderFacade {
             Rrule rrule = rruleDefiner.defineRrule(oldAppSessions);
             calendar = CalendarCreator.createCalendarTemplate(rrule, newAppointment);
         }
-
+        int newAppointmentIndex = indexDeterminer.getMaxIndex(newAppointment);
         for (Enrollment enrollment : enrollmentList) {
             String enrollmentEmail = enrollment.getUserEmail();
             if (isOldMeetingSimple) {
@@ -110,7 +111,7 @@ public class ComplexTemplateSenderFacade {
                         new NotificationResponseStatus(false, "User has cancelled status. ", enrollmentEmail);
                 notificationResponseStatusList.add(badNotificationResponseStatus);
             } else {
-                String templateType = templateStatusInstaller.installTemplateType(enrollment, newAppointment);
+                String templateType = templateStatusInstaller.installTemplateType(enrollment, newAppointmentIndex);
                 Template template = new Template(installedTemplate);
                 template.setType(templateType);
 
