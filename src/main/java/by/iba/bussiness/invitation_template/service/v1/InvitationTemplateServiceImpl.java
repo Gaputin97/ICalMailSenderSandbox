@@ -22,7 +22,6 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 
 @Service
-@PropertySource("endpoint.properties")
 public class InvitationTemplateServiceImpl implements InvitationTemplateService {
     private static final Logger logger = LoggerFactory.getLogger(InvitationTemplateServiceImpl.class);
     private TokenService tokenService;

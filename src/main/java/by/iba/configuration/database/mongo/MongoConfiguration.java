@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 public class MongoConfiguration {
-
     @Bean
     public MongoTemplate testMongoTemplate(@Value("${mongodb.host}") String host,
                                            @Value("${mongodb.port}") int port,

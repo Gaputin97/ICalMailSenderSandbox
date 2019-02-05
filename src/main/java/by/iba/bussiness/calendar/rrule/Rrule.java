@@ -12,7 +12,6 @@ public class Rrule {
     private List<Instant> exDates;
     private RruleCount rruleCount;
 
-
     public Rrule() {
         exDates = new ArrayList<>();
     }
@@ -27,10 +26,6 @@ public class Rrule {
 
     public Long getInterval() {
         return interval;
-    }
-
-    public void setInterval(Long interval) {
-        this.interval = interval;
     }
 
     public List<Instant> getExDates() {

@@ -94,7 +94,7 @@ public class CalendarCreator {
             }
 
             RRule rRule = new RRule(recurrence);
-            DateTime startDateTime = new DateTime(startAppDate.toEpochMilli());
+            DateTime startDateTime = new DateTime(startAppDate.toEpochMilli(), TimeZone.getDefault());
             DateTime endDateTime = new DateTime(endAppointmentDate.toEpochMilli());
 
             Sequence sequence = sequenceDefiner.defineSequence(appointment);

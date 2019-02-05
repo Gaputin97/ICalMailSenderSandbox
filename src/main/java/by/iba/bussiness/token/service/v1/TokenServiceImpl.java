@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,11 +22,10 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 public class TokenServiceImpl implements TokenService {
     private static final Logger logger = LoggerFactory.getLogger(TokenServiceImpl.class);
-
-    @Autowired
     private RestTemplate restTemplate;
     private String getTokenEndpoint;
 
+    @Autowired
     public TokenServiceImpl(RestTemplate restTemplate,
                             @Value("${token_endpoint}") String getTokenEndpoint) {
         this.restTemplate = restTemplate;
