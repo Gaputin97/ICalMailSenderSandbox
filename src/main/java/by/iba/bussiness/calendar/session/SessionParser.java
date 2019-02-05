@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Component
 public class SessionParser {
     private static final Logger logger = LoggerFactory.getLogger(SessionParser.class);
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat(SessionConstants.DATE_FORMAT);
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat(DatePattern.DATE_FORMAT);
 
     public List<Session> timeSlotListToSessionList(List<TimeSlot> timeSlots) {
         return timeSlots.stream().map(timeSlot -> {

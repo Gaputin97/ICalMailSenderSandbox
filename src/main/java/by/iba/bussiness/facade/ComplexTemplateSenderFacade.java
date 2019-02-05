@@ -6,6 +6,7 @@ import by.iba.bussiness.calendar.creator.CalendarCreator;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.definer.RruleDefiner;
+import by.iba.bussiness.calendar.session.DatePattern;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.calendar.status.CalendarStatus;
 import by.iba.bussiness.calendar.status.EnrollmentCalendarStatusDefiner;
@@ -27,12 +28,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class ComplexTemplateSenderFacade {
     private static final Logger logger = LoggerFactory.getLogger(ComplexTemplateSenderFacade.class);
+    private final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(DatePattern.DATE_FORMAT).withZone(ZoneId.of("UTC"));
+
     private MessageSender messageSender;
     private EnrollmentsInstaller enrollmentsInstaller;
     private EnrollmentService enrollmentService;
@@ -114,15 +120,15 @@ public class ComplexTemplateSenderFacade {
                     notificationResponseStatusList.add(badNotificationResponseStatus);
                     logger.info("Not need to send message to " + enrollmentEmail);
                 } else {
-                    String userEmail = enrollmentEmail;
                     String meetingTitle = newAppointment.getTitle();
-                    NotificationResponseStatus notificationResponseStatus = messageSender.sendTemplate(template, userEmail, meetingTitle);
+                    NotificationResponseStatus notificationResponseStatus = messageSender.sendTemplate(template, enrollmentEmail, meetingTitle);
+                    String dateOfSending = dateFormat.format(Instant.now());
                     notificationResponseStatusList.add(notificationResponseStatus);
 
                     if (notificationResponseStatus.isDelivered()) {
                         int maxIndex = indexDeterminer.getMaxIndex(newAppointment);
                         String enrollmentCalendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
-                        Enrollment updatedEnrollment = enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, maxIndex, enrollmentCalendarStatus);
+                        Enrollment updatedEnrollment = enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, maxIndex, dateOfSending, enrollmentCalendarStatus);
                         enrollmentService.save(updatedEnrollment);
                     }
                 }

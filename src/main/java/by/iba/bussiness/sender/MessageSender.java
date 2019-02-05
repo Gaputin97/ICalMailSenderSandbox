@@ -2,7 +2,8 @@ package by.iba.bussiness.sender;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.calendar.CalendarTextEditor;
-import by.iba.bussiness.meeting.Meeting;
+
+import by.iba.bussiness.calendar.session.DatePattern;
 import by.iba.bussiness.notification.NotificationResponseStatus;
 import by.iba.bussiness.template.Template;
 import freemarker.template.Configuration;
@@ -29,10 +30,14 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 @org.springframework.stereotype.Component
 public class MessageSender {
     private static final Logger logger = LoggerFactory.getLogger(MessageSender.class);
+    private final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(DatePattern.DATE_FORMAT).withZone(ZoneId.of("UTC"));
     private JavaMailSender javaMailSender;
     private CalendarTextEditor calendarTextEditor;
     private Configuration freeMarkerConfiguration;
@@ -87,8 +92,10 @@ public class MessageSender {
             multipart.addBodyPart(htmlInline);
             multipart.addBodyPart(iCalInline);
             message.setContent(multipart);
-            javaMailSender.send(message);
+            Instant dateOfSending = Instant.now();
 
+
+            javaMailSender.send(message);
             logger.info("Message was sent to " + userEmail);
             notificationResponseStatus = new NotificationResponseStatus(true, "Calendar was sent successfully", userEmail);
         } catch (MessagingException | IOException e) {
@@ -98,7 +105,7 @@ public class MessageSender {
         return notificationResponseStatus;
     }
 
-    public NotificationResponseStatus sendTemplate(Template template, String userEmail, String meetingTitle) {
+    public NotificationResponseStatus sendTemplate(Template template, String enrollmentEmail, String meetingTitle) {
         MimeMessage message;
         NotificationResponseStatus notificationResponseStatus;
         String from = template.getFrom();
@@ -110,7 +117,7 @@ public class MessageSender {
                     true,
                     "utf-8");
             URL url = new URL("https://preview.ibb.co/hXyhQL/Meeting.jpg");
-            helper.setTo(userEmail);
+            helper.setTo(enrollmentEmail);
             InternetAddress address = new InternetAddress(from, fromName);
             helper.setFrom(address);
             freemarker.template.Template messageTemplate = freeMarkerConfiguration.getTemplate("message.html");
@@ -129,11 +136,11 @@ public class MessageSender {
             message.setContent(multipart);
 
             javaMailSender.send(message);
-            logger.info("Message was sent to " + userEmail);
-            notificationResponseStatus = new NotificationResponseStatus(true, "Message was sent successfully", userEmail);
+            logger.info("Message was sent to " + enrollmentEmail);
+            notificationResponseStatus = new NotificationResponseStatus(true, "Message was sent successfully", enrollmentEmail);
         } catch (MessagingException | TemplateException | IOException e) {
             logger.error("Error while trying to send message", e);
-            notificationResponseStatus = new NotificationResponseStatus(false, "Message was not delivered", userEmail);
+            notificationResponseStatus = new NotificationResponseStatus(false, "Message was not delivered", enrollmentEmail);
         }
         return notificationResponseStatus;
     }

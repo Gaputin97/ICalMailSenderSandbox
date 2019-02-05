@@ -2,6 +2,7 @@ package by.iba.bussiness.facade;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.determiner.IndexDeterminer;
+import by.iba.bussiness.calendar.session.DatePattern;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.enrollment.EnrollmentUpdateChecker;
 import by.iba.bussiness.calendar.creator.CalendarCreator;
@@ -24,12 +25,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class SimpleCalendarSenderFacade {
     private static final Logger logger = LoggerFactory.getLogger(SimpleCalendarSenderFacade.class);
+    private final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(DatePattern.DATE_FORMAT).withZone(ZoneId.of("UTC"));
     private CalendarAttendeesInstaller calendarAttendeeInstaller;
     private MessageSender messageSender;
     private EnrollmentService enrollmentService;
@@ -109,10 +114,14 @@ public class SimpleCalendarSenderFacade {
 
                     Calendar calendarWithAttendee = calendarAttendeeInstaller.installAttendeeToTheCalendar(enrollmentEmail, calendarWithoutAttendee);
                     String enrollmentCalendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
-                    Enrollment updatedEnrollment = enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, maxIndex, enrollmentCalendarStatus);
-                    enrollmentService.save(updatedEnrollment);
                     NotificationResponseStatus notificationResponseStatus = messageSender.sendCalendar(calendarWithAttendee, enrollmentCalendarStatus, newAppointment);
+                    String timeOfSending = dateFormat.format(Instant.now());
                     notificationResponseStatusList.add(notificationResponseStatus);
+
+                    if (notificationResponseStatus.isDelivered()) {
+                        Enrollment updatedEnrollment = enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, maxIndex, timeOfSending, enrollmentCalendarStatus);
+                        enrollmentService.save(updatedEnrollment);
+                    }
                 }
             }
         }

@@ -1,6 +1,6 @@
 package by.iba.bussiness.calendar.creator.simple;
 
-import by.iba.bussiness.calendar.session.SessionConstants;
+import by.iba.bussiness.calendar.session.DatePattern;
 import by.iba.bussiness.calendar.session.SessionParser;
 import by.iba.exception.CalendarException;
 import org.slf4j.Logger;
@@ -14,7 +14,7 @@ import java.time.Instant;
 @Component
 public class DateParser {
     private static final Logger logger = LoggerFactory.getLogger(SessionParser.class);
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat(SessionConstants.DATE_FORMAT);
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat(DatePattern.DATE_FORMAT);
 
     public Instant parseDate(String date) {
         try {

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigInteger;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +66,8 @@ public class EnrollmentsInstaller {
         return enrollLearnerResponseStatuses;
     }
 
-    public Enrollment installEnrollmentCalendarFields(Enrollment enrollment, int maxIndex, String calendarStatus) {
+    public Enrollment installEnrollmentCalendarFields(Enrollment enrollment, int maxIndex, String dateOfSending, String calendarStatus) {
+        enrollment.setCalendarDate(dateOfSending);
         enrollment.setCalendarStatus(calendarStatus);
         enrollment.setCalendarVersion(Integer.toString(maxIndex));
         logger.info("Enrollment " + enrollment.getUserEmail() + " has been saved with new calendar version " + enrollment.getCalendarVersion());
