@@ -14,6 +14,9 @@ public class InvitationTemplate {
     private String blendedDescription;
     private String faceToFaceDescription;
     private String onlineDescription;
+    private String blendedPlainDescription;
+    private String faceToFacePlainDescription;
+    private String onlinePlainDescription;
     private String locationBLD;
     private String locationILT;
     private String locationLVC;
@@ -35,7 +38,6 @@ public class InvitationTemplate {
     }
 
     public InvitationTemplate() {
-
     }
 
     public String getId() {
@@ -132,5 +134,29 @@ public class InvitationTemplate {
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public String getBlendedPlainDescription() {
+        return blendedPlainDescription;
+    }
+
+    public void setBlendedPlainDescription(String blendedPlainDescription) {
+        this.blendedPlainDescription = blendedPlainDescription;
+    }
+
+    public String getFaceToFacePlainDescription() {
+        return faceToFacePlainDescription;
+    }
+
+    public void setFaceToFacePlainDescription(String faceToFacePlainDescription) {
+        this.faceToFacePlainDescription = faceToFacePlainDescription;
+    }
+
+    public String getOnlinePlainDescription() {
+        return onlinePlainDescription;
+    }
+
+    public void setOnlinePlainDescription(String onlinePlainDescription) {
+        this.onlinePlainDescription = onlinePlainDescription;
     }
 }

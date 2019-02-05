@@ -1,7 +1,7 @@
 package by.iba.bussiness.template.installer;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.appointment.handler.IndexDeterminer;
+import by.iba.bussiness.appointment.determiner.IndexDeterminer;
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.status.EnrollmentStatus;
 import by.iba.bussiness.template.TemplateType;

@@ -39,7 +39,7 @@ public class TemplatePlaceHolderReplacerTest {
         when(fieldPlaceHolderReplacer.replaceFieldPlaceHolders(null, fromName)).thenReturn(replaced + fromName);
         when(fieldPlaceHolderReplacer.replaceFieldPlaceHolders(null, location)).thenReturn(replaced + location);
         when(fieldPlaceHolderReplacer.replaceFieldPlaceHolders(null, ftf)).thenReturn(replaced + ftf);
-        InvitationTemplate modifiedInvitationTemplate = templatePlaceHolderReplacer.replaceTemplatePlaceHolders(null, invitationTemplate);
+        InvitationTemplate modifiedInvitationTemplate = templatePlaceHolderReplacer.replaceTemplatePlaceHolders(null, invitationTemplate, );
         //then
         Assert.assertEquals(modifiedInvitationTemplate.getSubject(), replaced + subject);
         Assert.assertEquals(modifiedInvitationTemplate.getFrom(), replaced + from);

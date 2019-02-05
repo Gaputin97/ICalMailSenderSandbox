@@ -27,7 +27,7 @@ public class AggregatorServiceImpl implements AggregatorService {
     }
 
     @Override
-    public AggregatorResponseStatus aggregateEnrollAndSend(HttpServletRequest request, String meetingId, List<Learner> learners) {
+    public AggregatorResponseStatus enrollLearnerAndSendNotification(HttpServletRequest request, String meetingId, List<Learner> learners) {
         AggregatorResponseStatus aggregatorResponseStatus = new AggregatorResponseStatus();
         List<EnrollLearnerResponseStatus> enrollLearnerResponseStatuses = enrollService.enrollLearners(request, meetingId, learners);
         List<NotificationResponseStatus> notificationResponseStatuses = notificationService.sendCalendarToAllEnrollmentsOfMeeting(request, meetingId);

@@ -1,6 +1,6 @@
 package by.iba.bussiness.appointment;
 
-import by.iba.bussiness.appointment.handler.IndexDeterminer;
+import by.iba.bussiness.appointment.determiner.IndexDeterminer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

@@ -7,5 +7,5 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface AggregatorService {
-    AggregatorResponseStatus aggregateEnrollAndSend(HttpServletRequest request, String meetingId, List<Learner> learners);
+    AggregatorResponseStatus enrollLearnerAndSendNotification(HttpServletRequest request, String meetingId, List<Learner> learners);
 }

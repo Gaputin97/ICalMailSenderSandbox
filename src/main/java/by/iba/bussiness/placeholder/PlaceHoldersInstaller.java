@@ -15,6 +15,7 @@ public class PlaceHoldersInstaller {
         String type = meeting.getType();
         MeetingLocationType meetingLocationType = MeetingLocationType.valueOf(type);
         Map<String, String> placeHolders = null;
+
         switch (meetingLocationType) {
             case CON:
                 placeHolders = installCONPlaceholdersMap(meeting, location);
@@ -50,7 +51,7 @@ public class PlaceHoldersInstaller {
         placeHolders.put(PlaceHoldersConstants.ACTIVITY_PASSCODE, meeting.getActivityPasscode());
         placeHolders.put(PlaceHoldersConstants.ACTIVITY_URL, meeting.getActivityUrl());
         placeHolders.put(PlaceHoldersConstants.JOIN, "MOCK JOIN");
-        placeHolders.put(PlaceHoldersConstants.CALLIN_INFO, "CALL-IN INFO MOCK");
+        placeHolders.put(PlaceHoldersConstants.CALLIN_INFO, meeting.getActivityInfo());
         placeHolders.put(PlaceHoldersConstants.LOCATION, location.toString());
         placeHolders.put(PlaceHoldersConstants.LOCATION_INFO, meeting.getLocationInfo());
         return placeHolders;

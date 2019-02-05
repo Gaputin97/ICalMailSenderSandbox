@@ -1,7 +1,7 @@
 package by.iba.bussiness.facade;
 
 import by.iba.bussiness.appointment.Appointment;
-import by.iba.bussiness.appointment.handler.IndexDeterminer;
+import by.iba.bussiness.appointment.determiner.IndexDeterminer;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.enrollment.EnrollmentUpdateChecker;
 import by.iba.bussiness.calendar.creator.CalendarCreator;
@@ -109,13 +109,10 @@ public class SimpleCalendarSenderFacade {
 
                     Calendar calendarWithAttendee = calendarAttendeeInstaller.installAttendeeToTheCalendar(enrollmentEmail, calendarWithoutAttendee);
                     String enrollmentCalendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
+                    Enrollment updatedEnrollment = enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, maxIndex, enrollmentCalendarStatus);
+                    enrollmentService.save(updatedEnrollment);
                     NotificationResponseStatus notificationResponseStatus = messageSender.sendCalendar(calendarWithAttendee, enrollmentCalendarStatus, newAppointment);
                     notificationResponseStatusList.add(notificationResponseStatus);
-
-                    if (notificationResponseStatus.isDelivered()) {
-                        Enrollment updatedEnrollment = enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, maxIndex, enrollmentCalendarStatus);
-                        enrollmentService.save(updatedEnrollment);
-                    }
                 }
             }
         }

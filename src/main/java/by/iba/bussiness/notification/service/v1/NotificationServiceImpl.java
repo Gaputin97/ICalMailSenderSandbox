@@ -2,8 +2,8 @@ package by.iba.bussiness.notification.service.v1;
 
 import by.iba.bussiness.appointment.Appointment;
 import by.iba.bussiness.appointment.AppointmentCreator;
-import by.iba.bussiness.appointment.AppointmentDeterminer;
-import by.iba.bussiness.appointment.handler.AppointmentIndexesUpdater;
+import by.iba.bussiness.appointment.determiner.AppointmentDeterminer;
+import by.iba.bussiness.appointment.AppointmentIndexesUpdater;
 import by.iba.bussiness.appointment.repository.AppointmentRepository;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.facade.ComplexTemplateSenderFacade;
@@ -94,6 +94,7 @@ public class NotificationServiceImpl implements NotificationService {
         }
         InvitationTemplate invitationTemplateWithoutPlaceHolders = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
         Location location = locationService.getLocationByCode(request, locationCode);
+
         Map<String, String> placeHoldersMap = placeHoldersInstaller.installPlaceHoldersMap(meeting, location);
         MeetingLocationType meetingLocationType = MeetingLocationType.valueOf(meeting.getType());
         InvitationTemplate invitationTemplateWithPlaceHolders = templatePlaceHolderReplacer.replaceTemplatePlaceHolders(
@@ -104,12 +105,12 @@ public class NotificationServiceImpl implements NotificationService {
         meeting.setLocation(location.toString());
 
         Appointment currentAppointment = appointmentRepository.getByMeetingId(new BigInteger(meetingId));
-        Appointment newAppointmentWithoutIndexes = appointmentCreator.createAppointmentWithMainFields(meeting, invitationTemplateWithPlaceHolders);
+        Appointment newAppointmentWithoutIndexes = appointmentCreator.createAppointment(meeting, invitationTemplateWithPlaceHolders);
         Appointment newAppointment;
         if (currentAppointment == null) {
             newAppointment = appointmentRepository.save(newAppointmentWithoutIndexes);
         } else {
-            Appointment newAppointmentWithIndexes = indexesUpdater.updateIndexesBasedOnSessionsDifferences(newAppointmentWithoutIndexes, currentAppointment);
+            Appointment newAppointmentWithIndexes = indexesUpdater.updateIndexes(newAppointmentWithoutIndexes, currentAppointment);
             Appointment determinedAppointment = appointmentDeterminer.determineNewAppointmentByIndexes(newAppointmentWithIndexes, currentAppointment);
             newAppointment = appointmentRepository.save(determinedAppointment);
         }
