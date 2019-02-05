@@ -15,7 +15,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.math.BigInteger;
 import java.util.List;
 
-@ActiveProfiles("test")
 @TestPropertySource(locations = "classpath:application-test.properties")
 @ContextConfiguration(classes = Runner.class)
 @RunWith(SpringJUnit4ClassRunner.class)

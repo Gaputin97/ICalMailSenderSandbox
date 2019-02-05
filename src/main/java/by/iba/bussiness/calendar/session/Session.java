@@ -1,5 +1,7 @@
 package by.iba.bussiness.calendar.session;
 
+import by.iba.bussiness.calendar.rrule.constants.DateConstants;
+
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -11,12 +13,14 @@ public class Session implements Comparable<Session> {
     private Instant startDateTime;
     private Instant endDateTime;
     private long duration;
+    private long minuteDuration;
 
     public Session(int id, Instant startDateTime, Instant endDateTime) {
         this.id = id;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         duration = endDateTime.toEpochMilli() - startDateTime.toEpochMilli();
+        minuteDuration = duration/ DateConstants.MILLISECONDS_IN_MINUTE;
     }
 
     public int getId() {
@@ -49,6 +53,14 @@ public class Session implements Comparable<Session> {
 
     public void setDuration(long duration) {
         this.duration = duration;
+    }
+
+    public long getMinuteDuration() {
+        return minuteDuration;
+    }
+
+    public void setMinuteDuration(long minuteDuration) {
+        this.minuteDuration = minuteDuration;
     }
 
     @Override

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.Date;
 
 @Component
 public class DateParser {
@@ -18,7 +19,10 @@ public class DateParser {
 
     public Instant parseDate(String date) {
         try {
-            return dateFormat.parse(date).toInstant();
+            Date date1 = dateFormat.parse(date);
+            Instant instant = date1.toInstant();
+            return instant;
+
         } catch (ParseException e) {
             logger.error("Can't parse string date to instant", e);
             throw new CalendarException("Error caused with dates");

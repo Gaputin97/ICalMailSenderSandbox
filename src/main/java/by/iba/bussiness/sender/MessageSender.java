@@ -6,6 +6,7 @@ import by.iba.bussiness.calendar.CalendarTextEditor;
 import by.iba.bussiness.calendar.session.DatePattern;
 import by.iba.bussiness.notification.NotificationResponseStatus;
 import by.iba.bussiness.template.Template;
+import by.iba.exception.MessageSendingException;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import net.fortuna.ical4j.model.Calendar;
@@ -37,7 +38,6 @@ import java.time.format.DateTimeFormatter;
 @org.springframework.stereotype.Component
 public class MessageSender {
     private static final Logger logger = LoggerFactory.getLogger(MessageSender.class);
-    private final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(DatePattern.DATE_FORMAT).withZone(ZoneId.of("UTC"));
     private JavaMailSender javaMailSender;
     private CalendarTextEditor calendarTextEditor;
     private Configuration freeMarkerConfiguration;
@@ -92,15 +92,13 @@ public class MessageSender {
             multipart.addBodyPart(htmlInline);
             multipart.addBodyPart(iCalInline);
             message.setContent(multipart);
-            Instant dateOfSending = Instant.now();
-
 
             javaMailSender.send(message);
             logger.info("Message was sent to " + userEmail);
             notificationResponseStatus = new NotificationResponseStatus(true, "Calendar was sent successfully", userEmail);
-        } catch (MessagingException | IOException e) {
+        } catch (Exception e) {
             logger.error("Error while trying to send a message", e);
-            notificationResponseStatus = new NotificationResponseStatus(false, "Calendar was not delivered", userEmail);
+            throw new MessageSendingException(e);
         }
         return notificationResponseStatus;
     }

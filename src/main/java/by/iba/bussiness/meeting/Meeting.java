@@ -22,7 +22,6 @@ public class Meeting {
     private String locationInfo;
     private Owner owner;
     private String activityPasscode;
-    private String plainDescription;
     private String summary;
     private List<TimeSlot> timeSlots;
     private String timeZone;
@@ -33,14 +32,6 @@ public class Meeting {
     private String activityInfo;
 
     public Meeting() {
-    }
-
-    public String getPlainDescription() {
-        return plainDescription;
-    }
-
-    public void setPlainDescription(String plainDescription) {
-        this.plainDescription = plainDescription;
     }
 
     public BigInteger getId() {

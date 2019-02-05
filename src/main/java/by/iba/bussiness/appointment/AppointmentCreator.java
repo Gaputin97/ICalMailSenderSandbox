@@ -41,9 +41,8 @@ public class AppointmentCreator {
         newAppointment.setStartDateTime(meeting.getStartDateTime());
         newAppointment.setEndDateTime(meeting.getEndDateTime());
         newAppointment.setTitle(meeting.getTitle());
-        newAppointment.setPlainDescription(meeting.getPlainDescription());
         newAppointment.setMeetingId(meeting.getId());
-        l
+
         List<TimeSlot> timeSlots = meeting.getTimeSlots();
         newAppointment.setSessionList(sessionParser.timeSlotListToSessionList(timeSlots));
 

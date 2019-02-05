@@ -18,11 +18,13 @@ import by.iba.bussiness.enrollment.status.EnrollmentStatus;
 import by.iba.bussiness.enrollment.status.EnrollmentStatusChecker;
 import by.iba.bussiness.notification.NotificationResponseStatus;
 import by.iba.bussiness.sender.MessageSender;
+import by.iba.exception.MessageSendingException;
 import net.fortuna.ical4j.model.Calendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.time.Instant;
@@ -34,7 +36,6 @@ import java.util.List;
 @Component
 public class SimpleCalendarSenderFacade {
     private static final Logger logger = LoggerFactory.getLogger(SimpleCalendarSenderFacade.class);
-    private final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(DatePattern.DATE_FORMAT).withZone(ZoneId.of("UTC"));
     private CalendarAttendeesInstaller calendarAttendeeInstaller;
     private MessageSender messageSender;
     private EnrollmentService enrollmentService;
@@ -69,13 +70,14 @@ public class SimpleCalendarSenderFacade {
         this.enrollmentStatusChecker = enrollmentStatusChecker;
     }
 
+    @Transactional(rollbackFor = {MessageSendingException.class})
     public List<NotificationResponseStatus> sendCalendar(Appointment newAppointment, Appointment currentAppointment) {
         BigInteger meetingId = newAppointment.getMeetingId();
         List<Session> sessionList = newAppointment.getSessionList();
 
         List<Enrollment> enrollmentList = enrollmentService.getAllByParentId(meetingId);
         Calendar cancellationCalendar = null;
-        if(currentAppointment != null) {
+        if (currentAppointment != null) {
             cancellationCalendar = calendarCreator.createCancellationTemplate(currentAppointment);
         }
 
@@ -114,14 +116,10 @@ public class SimpleCalendarSenderFacade {
 
                     Calendar calendarWithAttendee = calendarAttendeeInstaller.installAttendeeToTheCalendar(enrollmentEmail, calendarWithoutAttendee);
                     String enrollmentCalendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
+                    Enrollment updatedEnrollment = enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, maxIndex, enrollmentCalendarStatus);
+                    enrollmentService.save(updatedEnrollment);
                     NotificationResponseStatus notificationResponseStatus = messageSender.sendCalendar(calendarWithAttendee, enrollmentCalendarStatus, newAppointment);
-                    String timeOfSending = dateFormat.format(Instant.now());
                     notificationResponseStatusList.add(notificationResponseStatus);
-
-                    if (notificationResponseStatus.isDelivered()) {
-                        Enrollment updatedEnrollment = enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, maxIndex, timeOfSending, enrollmentCalendarStatus);
-                        enrollmentService.save(updatedEnrollment);
-                    }
                 }
             }
         }

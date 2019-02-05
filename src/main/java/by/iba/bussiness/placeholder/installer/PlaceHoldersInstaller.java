@@ -1,15 +1,33 @@
-package by.iba.bussiness.placeholder;
+package by.iba.bussiness.placeholder.installer;
 
+import by.iba.bussiness.calendar.session.SessionParser;
 import by.iba.bussiness.location.Location;
 import by.iba.bussiness.meeting.Meeting;
 import by.iba.bussiness.meeting.type.MeetingLocationType;
+import by.iba.bussiness.placeholder.PlaceHoldersConstants;
+import freemarker.template.Configuration;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Component
+@PropertySource("link.properties")
 public class PlaceHoldersInstaller {
+
+    private String meetingLink;
+    private String meetingJoinLink;
+    private AgendaInstaller agendaInstaller;
+
+    public PlaceHoldersInstaller(@Value("meeting_link") String meetingLink,
+                                 @Value("meeting_join_link") String meetingJoinLink,
+                                 AgendaInstaller agendaInstaller) {
+        this.meetingLink = meetingLink;
+        this.meetingJoinLink = meetingJoinLink;
+        this.agendaInstaller = agendaInstaller;
+    }
 
     public Map<String, String> installPlaceHoldersMap(Meeting meeting, Location location) {
         String type = meeting.getType();
@@ -41,8 +59,8 @@ public class PlaceHoldersInstaller {
         Map<String, String> placeHolders = installCommonPlaceHoldersMap(meeting);
         placeHolders.put(PlaceHoldersConstants.ACTIVITY_PASSCODE, meeting.getActivityPasscode());
         placeHolders.put(PlaceHoldersConstants.ACTIVITY_URL, meeting.getActivityUrl());
-        placeHolders.put(PlaceHoldersConstants.JOIN, "MOCK JOIN");
-        placeHolders.put(PlaceHoldersConstants.CALLIN_INFO, "CALL-IN INFO MOCK");
+        placeHolders.put(PlaceHoldersConstants.JOIN, meetingJoinLink + meeting.getId());
+        placeHolders.put(PlaceHoldersConstants.CALLIN_INFO, meeting.getActivityInfo());
         return placeHolders;
     }
 
@@ -50,7 +68,7 @@ public class PlaceHoldersInstaller {
         Map<String, String> placeHolders = installCommonPlaceHoldersMap(meeting);
         placeHolders.put(PlaceHoldersConstants.ACTIVITY_PASSCODE, meeting.getActivityPasscode());
         placeHolders.put(PlaceHoldersConstants.ACTIVITY_URL, meeting.getActivityUrl());
-        placeHolders.put(PlaceHoldersConstants.JOIN, "MOCK JOIN");
+        placeHolders.put(PlaceHoldersConstants.JOIN, meetingJoinLink + meeting.getId());
         placeHolders.put(PlaceHoldersConstants.CALLIN_INFO, meeting.getActivityInfo());
         placeHolders.put(PlaceHoldersConstants.LOCATION, location.toString());
         placeHolders.put(PlaceHoldersConstants.LOCATION_INFO, meeting.getLocationInfo());
@@ -59,10 +77,11 @@ public class PlaceHoldersInstaller {
 
     private Map<String, String> installCommonPlaceHoldersMap(Meeting meeting) {
         Map<String, String> placeHolders = new HashMap<>();
+        String agenda = agendaInstaller.installMeetingAgenda(meeting);
         placeHolders.put(PlaceHoldersConstants.PARENT_TITLE, "MOCK PARENT TITLE");
         placeHolders.put(PlaceHoldersConstants.PRICE, "MOCK PRICE");
-        placeHolders.put(PlaceHoldersConstants.LINK, "MOCK LINK");
-        placeHolders.put(PlaceHoldersConstants.AGENDA, "MOCK AGENDA");
+        placeHolders.put(PlaceHoldersConstants.LINK, meetingLink + meeting.getId());
+        placeHolders.put(PlaceHoldersConstants.AGENDA, agenda);
         placeHolders.put(PlaceHoldersConstants.CODE, meeting.getInvitationTemplate());
         placeHolders.put(PlaceHoldersConstants.CONTACT_EMAIL, meeting.getContact().getEmail());
         placeHolders.put(PlaceHoldersConstants.CONTACT_NAME, meeting.getContact().getName());

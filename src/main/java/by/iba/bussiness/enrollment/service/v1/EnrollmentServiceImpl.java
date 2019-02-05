@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -21,13 +22,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         this.enrollmentRepository = enrollmentRepository;
     }
 
+    @Transactional
     @Override
     public Enrollment save(Enrollment enrollment) {
         return enrollmentRepository.save(enrollment);
     }
 
     @Override
-    public Enrollment getByEmailAndParentId( String userEmail, BigInteger parentId) {
+    public Enrollment getByEmailAndParentId(String userEmail, BigInteger parentId) {
         return enrollmentRepository.getByEmailAndParentId(userEmail, parentId);
     }
 

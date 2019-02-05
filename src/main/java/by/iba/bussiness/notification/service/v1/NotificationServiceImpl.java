@@ -19,7 +19,7 @@ import by.iba.bussiness.meeting.type.MeetingType;
 import by.iba.bussiness.meeting.type.MeetingTypeDefiner;
 import by.iba.bussiness.notification.service.NotificationService;
 import by.iba.bussiness.placeholder.replacer.TemplatePlaceHolderReplacer;
-import by.iba.bussiness.placeholder.PlaceHoldersInstaller;
+import by.iba.bussiness.placeholder.installer.PlaceHoldersInstaller;
 import by.iba.bussiness.notification.NotificationResponseStatus;
 import by.iba.exception.ServiceException;
 import org.slf4j.Logger;
@@ -93,6 +93,9 @@ public class NotificationServiceImpl implements NotificationService {
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
         }
         InvitationTemplate invitationTemplateWithoutPlaceHolders = invitationTemplateService.getInvitationTemplateByCode(request, invitationTemplateKey);
+        invitationTemplateWithoutPlaceHolders.setBlendedPlainDescription("Blended plain desc");
+        invitationTemplateWithoutPlaceHolders.setOnlineDescription("Online plain desc");
+        invitationTemplateWithoutPlaceHolders.setFaceToFacePlainDescription("FTF plain desc");
         Location location = locationService.getLocationByCode(request, locationCode);
 
         Map<String, String> placeHoldersMap = placeHoldersInstaller.installPlaceHoldersMap(meeting, location);
@@ -101,7 +104,6 @@ public class NotificationServiceImpl implements NotificationService {
                 placeHoldersMap,
                 invitationTemplateWithoutPlaceHolders,
                 meetingLocationType);
-        meeting.setPlainDescription("Plain description");
         meeting.setLocation(location.toString());
 
         Appointment currentAppointment = appointmentRepository.getByMeetingId(new BigInteger(meetingId));

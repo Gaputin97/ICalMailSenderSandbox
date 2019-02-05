@@ -123,13 +123,12 @@ public class ComplexTemplateSenderFacade {
                 } else {
                     String meetingTitle = newAppointment.getTitle();
                     NotificationResponseStatus notificationResponseStatus = messageSender.sendTemplate(template, enrollmentEmail, meetingTitle);
-                    String dateOfSending = dateFormat.format(Instant.now());
                     notificationResponseStatusList.add(notificationResponseStatus);
 
                     if (notificationResponseStatus.isDelivered()) {
                         int maxIndex = indexDeterminer.getMaxIndex(newAppointment);
                         String enrollmentCalendarStatus = enrollmentCalendarStatusDefiner.defineEnrollmentCalendarStatus(enrollment);
-                        Enrollment updatedEnrollment = enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, maxIndex, dateOfSending, enrollmentCalendarStatus);
+                        Enrollment updatedEnrollment = enrollmentsInstaller.installEnrollmentCalendarFields(enrollment, maxIndex, enrollmentCalendarStatus);
                         enrollmentService.save(updatedEnrollment);
                     }
                 }

@@ -32,7 +32,6 @@ public class RruleDefiner {
     }
 
     public Rrule defineRrule(List<Session> sessions) {
-        long startTime = System.nanoTime();
         Rrule rrule = new Rrule();
         if (sessions.size() == 1) {
             Frequency daily = Frequency.DAILY;
@@ -65,9 +64,7 @@ public class RruleDefiner {
             rrule.setExDates(exDates);
             rrule.setRruleCount(RruleCount.ZERO);
             logger.info("Amount of EXDATES is " + rrule.getExDates().size());
-            long endTime = System.nanoTime();
-            long time = endTime - startTime;
-            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: \n " + time);
+
         }
         return rrule;
     }

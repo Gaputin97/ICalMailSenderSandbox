@@ -25,6 +25,7 @@ public class Appointment {
     private String fromName;
     private String startDateTime;
     private String endDateTime;
+    private String timeZone;
 
     public Appointment() {
     }
@@ -139,6 +140,14 @@ public class Appointment {
 
     public void setEndDateTime(String endDateTime) {
         this.endDateTime = endDateTime;
+    }
+
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
     }
 
     @Override

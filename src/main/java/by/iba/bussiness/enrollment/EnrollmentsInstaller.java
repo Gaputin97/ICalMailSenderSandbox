@@ -1,6 +1,7 @@
 package by.iba.bussiness.enrollment;
 
 import by.iba.bussiness.calendar.learner.Learner;
+import by.iba.bussiness.calendar.session.DatePattern;
 import by.iba.bussiness.enroll.EnrollLearnerResponseStatus;
 import by.iba.bussiness.enrollment.service.EnrollmentService;
 import by.iba.bussiness.enrollment.status.EnrollmentStatus;
@@ -10,12 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigInteger;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 @org.springframework.stereotype.Component
 public class EnrollmentsInstaller {
     private static final Logger logger = LoggerFactory.getLogger(EnrollmentsInstaller.class);
+    private final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(DatePattern.DATE_FORMAT).withZone(ZoneId.of("UTC"));
     private EnrollmentService enrollmentService;
 
     @Autowired
@@ -66,8 +70,9 @@ public class EnrollmentsInstaller {
         return enrollLearnerResponseStatuses;
     }
 
-    public Enrollment installEnrollmentCalendarFields(Enrollment enrollment, int maxIndex, String dateOfSending, String calendarStatus) {
-        enrollment.setCalendarDate(dateOfSending);
+    public Enrollment installEnrollmentCalendarFields(Enrollment enrollment, int maxIndex, String calendarStatus) {
+        String timeOfSending = dateFormat.format(Instant.now());
+        enrollment.setCalendarDate(timeOfSending);
         enrollment.setCalendarStatus(calendarStatus);
         enrollment.setCalendarVersion(Integer.toString(maxIndex));
         logger.info("Enrollment " + enrollment.getUserEmail() + " has been saved with new calendar version " + enrollment.getCalendarVersion());
