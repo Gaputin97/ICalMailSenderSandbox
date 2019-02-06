@@ -58,8 +58,8 @@ public class MessageSender {
         String meetingTitle = appointment.getTitle();
         String ownerMail = appointment.getFrom();
         String ownerName = appointment.getFromName();
-
         String richDescription = BODY_OPEN_TAG + appointment.getDescription() + BODY_CLOSE_TAG;
+
         NotificationResponseStatus notificationResponseStatus;
         try {
             message = javaMailSender.createMimeMessage();
@@ -90,10 +90,10 @@ public class MessageSender {
 
             javaMailSender.send(message);
             logger.info("Message was sent to " + userEmail);
-            notificationResponseStatus = new NotificationResponseStatus(true, "Calendar was sent successfully", userEmail);
+            notificationResponseStatus = new NotificationResponseStatus(true, "Calendar was sent successfully. ", userEmail);
         } catch (Exception e) {
             logger.error("Error while trying to send a message", e);
-            throw new MessageSendingException(e);
+            notificationResponseStatus = new NotificationResponseStatus(false, "Calendar wasn't sent. Try again later. ", userEmail);
         }
         return notificationResponseStatus;
     }

@@ -73,9 +73,9 @@ public class CalendarCreator {
             AltRep altRep = new AltRep("CID:" + RICH_TEXT_CID);
             description.getParameters().add(altRep);
 
-            XProperty xAltDesc = new XProperty("X-ALT-DESC");
-            xAltDesc.getParameters().add(new FmtType("text/html"));
-            xAltDesc.setValue(richDescription);
+//            XProperty xAltDesc = new XProperty("X-ALT-DESC");
+//            xAltDesc.getParameters().add(new FmtType("text/html"));
+//            xAltDesc.setValue(richDescription);
 
             RRule rRule = new RRule(recurrence);
             DateTime startDateTime = new DateTime(iCalDateParser.parseToICalDate(appointment.getStartDateTime()));
@@ -92,7 +92,7 @@ public class CalendarCreator {
             }
 
             calendar.getComponents().add(event);
-            event.getProperties().addAll(Arrays.asList(organizer, location, description, xAltDesc, rRule, sequence, UID));
+            event.getProperties().addAll(Arrays.asList(organizer, location, description, /* xAltDesc,*/ rRule, sequence, UID));
 
             return calendar;
         } catch (ParseException | IOException | URISyntaxException e) {

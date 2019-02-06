@@ -5,6 +5,7 @@ public class DateConstants {
     public static final long MILLISECONDS_IN_DAY = 86400000;
     public static final long MILLISECONDS_IN_WEEK = 604800000;
     public static final long MILLISECONDS_IN_MINUTE = 60000;
+    public static final long MILLISECONDS_IN_SECOND = 1000;
     public static final long MINUTES_IN_ONE_HUNDRED_YEARS = 52560000;
     public static final long HOURS_IN_ONE_HUNDRED_YEARS = 876000;
     public static final long DAYS_IN_ONE_HUNDRED_YEARS = 36500;

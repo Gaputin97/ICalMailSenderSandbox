@@ -21,16 +21,10 @@ import java.util.List;
 @ContextConfiguration(classes = Runner.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 public class EnrollmentRepositoryImplTest {
-
-    private EnrollmentRepositoryImpl enrollmentRepository;
-    private MongoTemplate mongoTemplate;
-
     @Autowired
-    public EnrollmentRepositoryImplTest(EnrollmentRepositoryImpl enrollmentRepository,
-                                        MongoTemplate mongoTemplate) {
-        this.enrollmentRepository = enrollmentRepository;
-        this.mongoTemplate = mongoTemplate;
-    }
+    private EnrollmentRepositoryImpl enrollmentRepository;
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     private static final String USER_EMAIL = "test_example_first@example.com";
     private static final String SECOND_USER_EMAIL = "test_example_second@example.com";
