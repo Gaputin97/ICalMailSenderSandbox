@@ -31,6 +31,7 @@ import java.util.List;
 
 @Component
 public class SimpleCalendarSenderFacade {
+
     private static final Logger logger = LoggerFactory.getLogger(SimpleCalendarSenderFacade.class);
     private CalendarAttendeesInstaller calendarAttendeeInstaller;
     private MessageSender messageSender;

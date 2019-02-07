@@ -13,6 +13,7 @@ import java.text.ParseException;
 
 @Component
 public class CalendarRruleParser {
+
     private static final Logger logger = LoggerFactory.getLogger(CalendarRruleParser.class);
 
     public Recur parseToCalendarRrule(Rrule rrule, String increasedUntilString) {

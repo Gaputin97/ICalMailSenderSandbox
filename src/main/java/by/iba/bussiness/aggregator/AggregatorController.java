@@ -5,10 +5,7 @@ import by.iba.bussiness.calendar.learner.Learner;
 import by.iba.bussiness.enrollment.EnrollRequestWrapper;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -22,6 +19,7 @@ public class AggregatorController {
         this.aggregatorService = aggregatorService;
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @ApiOperation(value = "Enroll users and send notifications. ")
     @RequestMapping(value = "/aggregator/", method = RequestMethod.POST)
     public AggregatorResponseStatus enrollLearnersAndSendNotifications(@RequestBody EnrollRequestWrapper enrollRequestWrapper, HttpServletRequest request) {

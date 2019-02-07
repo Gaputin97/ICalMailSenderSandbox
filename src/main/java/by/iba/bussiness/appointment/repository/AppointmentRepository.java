@@ -6,7 +6,7 @@ import java.math.BigInteger;
 
 
 public interface AppointmentRepository {
-    Appointment getByMeetingId(BigInteger code);
 
+    Appointment getByMeetingId(BigInteger code);
     Appointment save(Appointment appointment);
 }

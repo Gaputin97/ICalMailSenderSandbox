@@ -15,6 +15,7 @@ import java.math.BigInteger;
 
 @Repository
 public class AppointmentRepositoryImpl implements AppointmentRepository {
+
     private static final Logger logger = LoggerFactory.getLogger(AppointmentRepositoryImpl.class);
     private final MongoTemplate mongoTemplate;
 

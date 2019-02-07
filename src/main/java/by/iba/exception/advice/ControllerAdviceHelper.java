@@ -1,6 +1,7 @@
 package by.iba.exception.advice;
 
 public class ControllerAdviceHelper {
+
     private String message;
 
     public ControllerAdviceHelper(String message) {

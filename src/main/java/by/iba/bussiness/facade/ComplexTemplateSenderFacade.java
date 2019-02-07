@@ -35,6 +35,7 @@ import java.util.List;
 
 @Component
 public class ComplexTemplateSenderFacade {
+
     private static final Logger logger = LoggerFactory.getLogger(ComplexTemplateSenderFacade.class);
     private final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(DatePattern.DATE_FORMAT).withZone(ZoneId.of("UTC"));
 

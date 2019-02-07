@@ -32,6 +32,7 @@ import java.net.URL;
 
 @org.springframework.stereotype.Component
 public class MessageSender {
+
     private static final Logger logger = LoggerFactory.getLogger(MessageSender.class);
     private JavaMailSender javaMailSender;
     private CalendarTextEditor calendarTextEditor;

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -47,10 +48,6 @@ public class EnrollServiceImpl implements EnrollService {
         if (invitationTemplateKey.isEmpty()) {
             logger.error("Can't enroll learners to this event, cause can't find some invitation template by meeting id: " + meetingId);
             throw new ServiceException("Meeting " + meetingId + " doesn't have learner invitation template");
-        }
-        Appointment currentAppointment = appointmentRepository.getByMeetingId(new BigInteger(meetingId));
-        if (learnerStatusChecker.isAnyLearnerHasCancelledStatus(learners) && currentAppointment == null) {
-            throw new RuntimeException("You try to cancel learner without confirming his before");
         }
         return enrollmentsInstaller.installEnrollments(learners, meetingId);
     }

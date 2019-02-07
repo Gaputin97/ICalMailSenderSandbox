@@ -14,6 +14,7 @@ import java.util.List;
 
 @Component
 public class AppointmentCreator {
+
     private SessionParser sessionParser;
     private InvitationTemplateBodyPartDefiner invitationTemplateBodyPartDefiner;
 
