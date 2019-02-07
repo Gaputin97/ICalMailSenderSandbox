@@ -39,7 +39,7 @@ public class AppointmentCreator {
         newAppointment.setDescription(description);
         newAppointment.setPlainDescription(plainDescription);
         newAppointment.setLocation(location);
-
+        newAppointment.setTimeZone(meeting.getTimeZone());
         newAppointment.setStartDateTime(meeting.getStartDateTime());
         newAppointment.setEndDateTime(meeting.getEndDateTime());
         newAppointment.setTitle(meeting.getTitle());

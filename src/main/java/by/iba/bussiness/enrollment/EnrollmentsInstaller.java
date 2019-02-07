@@ -55,16 +55,16 @@ public class EnrollmentsInstaller {
                             new EnrollLearnerResponseStatus(false, "Learner wasn't confirmed to this meeting before.", learnerEmail);
                     enrollLearnerResponseStatuses.add(enrollLearnerResponseStatus);
                 } else {
+                    Enrollment newEnrollment = new Enrollment();
+                    newEnrollment.setStatus(learnerEnrollmentStatus);
+                    newEnrollment.setParentId(bigIntegerMeetingId);
+                    newEnrollment.setUserEmail(learnerEmail);
+                    enrollmentService.save(newEnrollment);
+                    logger.info("Enrollment " + newEnrollment.getUserEmail() + " has been saved");
+                    EnrollLearnerResponseStatus enrollLearnerResponseStatus =
+                            new EnrollLearnerResponseStatus(true, "Enrollment was created.", learnerEmail);
+                    enrollLearnerResponseStatuses.add(enrollLearnerResponseStatus);
                 }
-                Enrollment newEnrollment = new Enrollment();
-                newEnrollment.setStatus(learnerEnrollmentStatus);
-                newEnrollment.setParentId(bigIntegerMeetingId);
-                newEnrollment.setUserEmail(learnerEmail);
-                enrollmentService.save(newEnrollment);
-                logger.info("Enrollment " + newEnrollment.getUserEmail() + " has been saved");
-                EnrollLearnerResponseStatus enrollLearnerResponseStatus =
-                        new EnrollLearnerResponseStatus(true, "Enrollment was created.", learnerEmail);
-                enrollLearnerResponseStatuses.add(enrollLearnerResponseStatus);
             }
         }
         return enrollLearnerResponseStatuses;

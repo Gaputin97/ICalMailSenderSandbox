@@ -9,11 +9,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.HashMap;
 import java.util.Map;
 
-@RunWith(MockitoJUnitRunner.class)
 public class FieldPlaceHolderReplacerTest {
 
-    @InjectMocks
-    private FieldPlaceHolderReplacer fieldPlaceHolderReplacer;
+    private FieldPlaceHolderReplacer fieldPlaceHolderReplacer = new FieldPlaceHolderReplacer();
 
     @Test
     public void testReplaceFieldPlaceHolders() {
@@ -31,6 +29,5 @@ public class FieldPlaceHolderReplacerTest {
         String expected = fieldPlaceHolderReplacer.replaceFieldPlaceHolders(placeHolders, field);
         //then
         Assert.assertEquals(expected, fieldWithReplacedPlaceHolders);
-
     }
 }

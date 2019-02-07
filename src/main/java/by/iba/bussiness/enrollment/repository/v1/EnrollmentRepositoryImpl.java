@@ -2,6 +2,7 @@ package by.iba.bussiness.enrollment.repository.v1;
 
 import by.iba.bussiness.enrollment.Enrollment;
 import by.iba.bussiness.enrollment.repository.EnrollmentRepository;
+import by.iba.exception.MessageSendingException;
 import by.iba.exception.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.List;

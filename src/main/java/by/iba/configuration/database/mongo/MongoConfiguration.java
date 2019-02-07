@@ -6,6 +6,8 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 public class MongoConfiguration {
@@ -19,5 +21,10 @@ public class MongoConfiguration {
         ServerAddress serverAddress = new ServerAddress(host, port);
         MongoClient mongoClient = new MongoClient(serverAddress, MongoCredential.createCredential(username, database, password.toCharArray()), mongoClientOptions);
         return new MongoTemplate(mongoClient, database);
+    }
+
+    @Bean
+    public MongoTransactionManager transactionManager(MongoDbFactory dbFactory) {
+        return new MongoTransactionManager(dbFactory);
     }
 }

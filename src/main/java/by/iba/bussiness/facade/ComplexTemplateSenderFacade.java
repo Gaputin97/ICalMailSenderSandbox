@@ -6,7 +6,6 @@ import by.iba.bussiness.calendar.creator.CalendarCreator;
 import by.iba.bussiness.calendar.creator.installer.CalendarAttendeesInstaller;
 import by.iba.bussiness.calendar.rrule.Rrule;
 import by.iba.bussiness.calendar.rrule.definer.RruleDefiner;
-import by.iba.bussiness.calendar.session.DatePattern;
 import by.iba.bussiness.calendar.session.Session;
 import by.iba.bussiness.calendar.status.CalendarStatus;
 import by.iba.bussiness.calendar.status.EnrollmentCalendarStatusDefiner;
@@ -28,8 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +34,6 @@ import java.util.List;
 public class ComplexTemplateSenderFacade {
 
     private static final Logger logger = LoggerFactory.getLogger(ComplexTemplateSenderFacade.class);
-    private final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(DatePattern.DATE_FORMAT).withZone(ZoneId.of("UTC"));
 
     private MessageSender messageSender;
     private EnrollmentsInstaller enrollmentsInstaller;
@@ -50,7 +46,6 @@ public class ComplexTemplateSenderFacade {
     private MeetingTypeDefiner meetingTypeDefiner;
     private EnrollmentCalendarStatusDefiner enrollmentCalendarStatusDefiner;
     private IndexDeterminer indexDeterminer;
-
 
     @Autowired
     public ComplexTemplateSenderFacade(MessageSender messageSender,
